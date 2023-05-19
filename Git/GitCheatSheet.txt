@@ -1,0 +1,80 @@
+Creates a new local repository with the specified argument
+$ git init [project-name] 
+
+Lists all new or modified files to be committed 
+$ git status 
+
+Defines the name you want associated with your commit transactions 
+$ git config --global user.name "[user-name]“ 
+
+Defines the email address you want associated with your commit transactions
+$ git config --global user.email "[user-email-address]"
+
+Turns on colorization of command line output
+$ git config --global color.ui auto
+
+Prepares the file for commit by logically moving it to the staged area 
+$ git add [file] 
+
+Lists all the files in the staged area 
+$ git ls-files --stage 
+
+Adds the staged files permanently in version history
+$ git commit -m "[commit message]"
+
+Shows unstaged file differences 
+$ git diff
+
+Shows file differences between staging and the last file version
+$ git diff --staged 
+
+Remove file from local repo and work folder 
+$ git rm <file name>
+
+Remove file from staging 
+$ git rm --cached <filename> 
+
+Lists all branches in the current local repository 
+$ git branch 
+
+Creates a new branch 
+$ git branch [branch-name]
+
+Switches to the specified branch and updates the working directory 
+$ git checkout [branch-name]
+
+Combines the specified branch’s history into the current branch 
+$ git merge [branch-name] 
+
+Deletes the specified branch
+$ git branch -d [branch-name] ; Forcefully: $ git branch -D [branch-name]
+
+Deletes the file from the working directory and the staging area 
+$ git rm [file]
+
+Removes the file from version control but retains the file locally 
+$ git rm --cached [file] 
+
+Lists version history for the current branch 
+$ git log 
+
+Lists version history in one line for the current branch 
+$ git log --oneline 
+
+Lists version history in one line, decorated in graphical form for the current branch
+$ git log --oneline --decorate --graph
+
+Uploads all local branch commits to remote repository 
+$ git push [alias] [branch] 
+
+Downloads from remote repository and incorporates changes
+$ git pull
+
+Temporarily stores all modified tracked files
+$ git stash
+
+Clones an existing repository
+$ git clone [repository-url] 
+
+Rebases your current HEAD onto [branch]
+$ git rebase [branch]

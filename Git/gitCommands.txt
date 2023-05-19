@@ -1,0 +1,66 @@
+git --version
+
+git init
+git add .
+git config color.ui true
+
+git remote add origin <HTTP URL>
+
+git push origin master
+
+
+
+1.Create a directory devops and change to directory devops 
+2.Create files 1.txt,2.txt,3.txt 
+3.Create a git repository with git init 
+4.Check the status with git status command 
+5. Add 1.txt to git staging git add 1.txt 
+6. set the email and user git config --global user.email "XXXX@gmail.com" git config --global user.name "XXXXX@gmail.com" 
+7.Check the status , the 1.txt should be in staging 
+8. add all the files to the staging git add . 
+9. commit all the changes git commit -m "Changes are to be saved" 
+10. create an account in http://GitHub.com and create a repository
+
+
+11. Connect to the remote repository git remote add origin <<clone>> 
+12. push all the files(1.txt,2.txt,3.txt) to Centeral repository git push origin master 
+13. Check the files on GitHub 
+14. modify 2.txt and commit the changes and push it to git hub and check in the github 
+15.Another developer wants to work on this and want to download all files from Centeral repository 
+for that create a directory call test and cloen the project into that git clone <<clone url>> 
+16. check the files and folders in test directory it should have the remote directory 
+17. change to remotedir folder and create a file 4.txt and push it to the remote repository ( no need to add remote origin) 
+18. Create a directory called newTest and use git init and add some files and write git push command<<share the result>> 
+19. change to dir devops and check the files (it should not have 4.txt) 
+20. update the devops dir with Centeral repository git pull origin master after this check files( should have 4.txt) 
+21. create 5.txt file in devops folder and push to GitHub and clone directory will not have the 5.txt until we use the pull command 
+22. For Parallel development create a new branch feature1 git branch feature1 
+23. list all the branches git branch (* prefix means current branch) 
+24. Delete a branch git branch -D feature1 
+25. create again branch feature1 and last commit of your master becomes the first commit for your feature1 
+
+26. Switch to feature1 branch and create a file 6.txt and do the git commit and run ls command (you can see 6.txt)  
+27. Switch to master branch (git checkout master) and run ls command , you will not see 6.txt because it is under feature1 branch  
+28. Switch to feature1 branch and push the changes to remote repository and observer that on GitHub new branch get created  
+29. check the history of all the commands of git git log (it shows the log of current branch)  
+30. Switch to branch feature1 and create file 7.txt and modify file 5.txt and add to staging then go to master branch now you can see the  
+files 7.txt and modified 5.txt in master branch to solve this problem use git stash command in feature1 and to revert back git stash pop  
+31. create a file called 10.txt and commit the changes and then modify the file and donot commit it and to discard the new changes use git checkout -- 10.txt  
+git checkout -- . will discard changes of all uncommited files  
+
+32. modify 10.txt file again and commit the changes to revert back these changes use git revert <<commit id>> , git revert -n command to not commit changes  
+33. reset to a particular commit git reset --hard <<commit id>>  
+34. Find the difference between the different commit git diff <<commit1>> <<commit2>>  
+35. to find the uncommited changes verus commited changes git diff HEAD .  
+
+36.Create a directory called merge_test and intialize git into it, then create 1.txt and do commit after that create 2.txt and commit that as well.  
+37. Write following commands git log , git log --graph, git log --graph --pretty=oneline  
+38. create a branch test and checkout to test branch.  
+39. Create a file 3.txt in test branch commit it.Create 4.txt and commit it  
+40. checkout to branch master and create a file 5.txt and commit the changes.  
+41. merge master branch with test branch using git merge test , check the git log  
+42 create a directory rebase-merge and initialize git and create 1.txt and commit it.  
+43 Create a branch test and create file 2.txt and commit in test branch.  
+44.Create a file 3.txt in master branch and commit it  
+45 checkout to test and now merge the data of master to test using git rebase master  
+46. checkout to master and merge with test branch using git merge test.
