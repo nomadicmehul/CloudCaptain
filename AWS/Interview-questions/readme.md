@@ -231,3 +231,70 @@ A. 1. By default, all newly created security groups "allow all outbound traffic"
 2. Modifying the default outbound rule on security groups increases complexity and is not recommended unless required for compliance.
 3. Most organisations create security groups with "inbound rules" for "each functional tier"(web/app/data/etc) within an application.
 
+##### What is IAM?
+AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. You use IAM to control who is authenticated (signed in) and authorized (has permissions) to use resources.
+
+##### What is S3
+Simple Storage Service of AWS is abbreviated as S3 which is used to store and retrieve data anywhere at any time on the web. With S3, you can make online payments on the go and it is also defined to make the web-scale computing process simpler for the developers.
+
+##### List out the main components in AWS
+The beneficial components involved in AWS are as follows:
+1. Simple Mail Service: Through this users can share emails via SMTP or restful API call.
+2. Route 53: It is declared to a DNS web service.
+3. Simple Storage Device S3: This is one of the leading storage devices used in AWS Identity and Access Management.
+4. Elastic Compute Cloud EC2: It is referred to be an on-demand computing resource used for hosting applications. At the time of unforeseen workloads, EC2 is mainly used.
+5. Elastic Block Store EBS: Here you can store constant data volumes that are being integrated with EC2 and that allows you to persist data.
+6. Cloud Watch: It paves the way to examine all the components of AWS and you can also set an instant reminder to troubleshoot critical AWS instances.
+
+##### Define the difference between an instance and AMI?
+With a single AMI present, you can retrieve or download several instances as required. The hardware of any host computer can be defined by an instance. Every instance created has several features and functionalities with which you can accomplish computational and storage facilities. An instance is also declared to be a traditional host via which we can collaborate in the same manner as we interact with a computer.
+
+##### What is known as EIP in AWS?
+The Elastic IP Address (EIP) offered by AWS is a static ipv4 address which is used to manage and process dynamic cloud computing services. It is essential to connect an AWS account with the EIP because as and when you require an ipv4 static address for any of your instances, you can acquire it from the associated EIP which enables prompt communication with the active internet.
+
+##### What is DevOps ?
+
+DevOps is the combination of cultural philosophies, practices, and tools that increases an organization’s ability to deliver applications and services at high velocity: evolving and improving products at a faster pace than organizations using traditional software development and infrastructure management processes. This speed enables organizations to better serve their customers and compete more effectively in the market.
+
+DevOps process can be visualized as an infinite loop, comprising these steps: plan, code, build, test, release, deploy, operate, monitor.
+
+
+
+##### What is CodeBuild in AWS DevOps?
+AWS provides CodeBuild, which is a fully managed in-house build service, thereby helping in the compilation of source code, testing, and the production of software packages that are ready to deploy. There is no need for management, allocation, or provision to scale the build servers as this is automatically scaled.
+
+Build operations occur concurrently in servers, thereby providing the biggest advantage of not having to leave any builds waiting in a queue.
+
+##### How can you handle continuous integration and deployment in AWS DevOps?
+One must use AWS Developer tools to help get started with storing and versioning an application’s source code. This is followed by using the services to automatically build, test, and deploy the application to a local environment or to AWS instances.
+
+It is advantageous, to start with the CodePipeline to build the continuous integration and deployment services and later on use CodeBuild and CodeDeploy as per need.
+
+
+##### What is AWS Lambda in AWS DevOps?
+AWS Lambda is a computation service that lets users run their code without having to provision or manage servers explicitly. Using AWS Lambda, the users can run any piece of code for their applications or services without prior integration. It is as simple as uploading a piece of code and letting Lambda take care of everything else required to run and scale the code.
+
+##### Explain Amazon EC2 in brief.
+Amazon EC2, or Elastic Compute Cloud as it is called, is a secure web service that strives to provide scalable computation power in the cloud. It is an integral part of AWS and is one of the most used cloud computation services out there, helping developers by making the process of Cloud Computing straightforward and easy.
+
+##### DevOps and Cloud computing: What is the need?
+Development and Operations are considered to be one single entity in the DevOps practice. This means that any form of Agile development, alongside Cloud Computing, will give it a straight-up advantage in scaling practices and creating strategies to bring about a change in business adaptability. If the cloud is considered to be a car, then DevOps would be its wheels
+
+##### What is CodePipeline in AWS DevOps?
+CodePipeline is a service offered by AWS to provide continuous integration and continuous delivery services. Alongside this, it has provisions of infrastructure updates as well. Operations such as building, testing, and deploying after every single build become very easy with the set release model protocols that are defined by a user. CodePipeline ensures that you can reliably deliver new software updates and features rapidly.
+
+##### What is CodeBuild in AWS DevOps?
+AWS provides CodeBuild, which is a fully managed in-house build service, thereby helping in the compilation of source code, testing, and the production of software packages that are ready to deploy. There is no need for management, allocation, or provision to scale the build servers as this is automatically scaled.
+
+Build operations occur concurrently in servers, thereby providing the biggest advantage of not having to leave any builds waiting in a queue.
+
+##### How can you handle continuous integration and deployment in AWS DevOps?
+One must use AWS Developer tools to help get started with storing and versioning an application’s source code. This is followed by using the services to automatically build, test, and deploy the application to a local environment or to AWS instances.
+It is advantageous to begin with the CodePipeline to build the continuous integration and deployment services and later on using CodeBuild and CodeDeploy as per need.
+
+
+##### What is Amazon S3 in AWS DevOps?
+Amazon S3 or Simple Storage Service is an object storage service that provides users with a simple and easy-to-use interface to store data and effectively retrieve it whenever and wherever needed.
+
+##### What is the function of Amazon RDS in AWS Devops?
+Amazon Relational Database Service (RDS) is a service that helps users in setting up a relational database in the AWS cloud architecture. RDS makes it easy to set up, maintain, and use the database online.
