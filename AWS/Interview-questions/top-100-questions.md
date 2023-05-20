@@ -20,11 +20,12 @@ Answer:S3 stands for Simple Storage Service. It is a storage service that provid
 Q5) What are the pricing models for EC2instances?
 
 Answer:The different pricing model for EC2 instances are as below,
-• On-demand
-• Reserved
-• Spot
-• Scheduled
-• Dedicated
+
+ • On-demand
+ • Reserved
+ • Spot
+ • Scheduled
+ • Dedicated
 
 Q6) What are the types of volumes for EC2 instances?
 
