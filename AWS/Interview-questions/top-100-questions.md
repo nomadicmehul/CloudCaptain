@@ -21,18 +21,18 @@ Q5) What are the pricing models for EC2instances?
 
 Answer:The different pricing model for EC2 instances are as below,
 
- • On-demand
- • Reserved
- • Spot
- • Scheduled
- • Dedicated
+ * On-demand
+ * Reserved
+ * Spot
+ * Scheduled
+ * Dedicated
 
 Q6) What are the types of volumes for EC2 instances?
 
 Answer:
-• There are two types of volumes,
-• Instance store volumes
-• EBS – Elastic Block Stores
+* There are two types of volumes,
+* Instance store volumes
+* EBS – Elastic Block Stores
 
 Q7) What are EBS volumes?
 
@@ -42,21 +42,21 @@ your instance store volumes where the data is deleted when you stop the instance
 Q8) What are the types of volumes in EBS?
 
 Answer:Following are the types of volumes in EBS,
-• General purpose
-• Provisioned IOPS
-• Magnetic
-• Cold HDD
-• Throughput optimized
+* General purpose
+* Provisioned IOPS
+* Magnetic
+* Cold HDD
+* Throughput optimized
 
 
 Q9) What are the different types of instances?
 
 Answer: Following are the types of instances,
-• General purpose
-• Computer Optimized
-• Storage Optimized
-• Memory Optimized
-• Accelerated Computing
+* General purpose
+* Computer Optimized
+* Storage Optimized
+* Memory Optimized
+* Accelerated Computing
 
 Q10) What is an auto-scaling and what are the components?
 
@@ -93,11 +93,11 @@ Answer: The minimum size of individual objects that you can store in S3 is 0 byt
 Q18) What are the different storage classes in S3?
 
 Answer: Following are the types of storage classes inS3,
-• Standard frequently accessed
-• Standard infrequently accessed
- • One-zone infrequently accessed.
-• Glacier
-• RRS – reduced redundancy storage
+* Standard frequently accessed
+* Standard infrequently accessed
+ * One-zone infrequently accessed.
+* Glacier
+* RRS – reduced redundancy storage
 
 Q19) What is the default storage class in S3?
 
@@ -110,23 +110,23 @@ Answer: Glacier is the back up or archival tool that you use to back up your dat
 Q21) How can you secure the access to your S3 bucket?
 
 Answer: There are two ways that you can control the access to your S3 buckets,
-• ACL – Access Control List
-• Bucket polices
+* ACL – Access Control List
+* Bucket polices
 
 Q22) How can you encrypt data in S3?
 
 Answer: You can encrypt the data by using the below methods,
-• Server Side Encryption – S3 (AES 256 encryption)
-• Server Side Encryption – KMS (Key management Service)
+* Server Side Encryption – S3 (AES 256 encryption)
+* Server Side Encryption – KMS (Key management Service)
 
 Q23) What are the parameters for S3 pricing?
 
 Answer: The pricing model for S3 is as below,
-• Storage used
-• Number of requests you make
-• Storage management
-• Data transfer
-• Transfer acceleration
+* Storage used
+* Number of requests you make
+* Storage management
+* Data transfer
+* Transfer acceleration
 
 Q24) What is the pre-requisite to work with Cross region replication in S3?
 
@@ -139,8 +139,8 @@ Answer: Roles are used to provide permissions to entities that you trust within 
 Q26) What are policies and what are the types of policies?
 
 Answer: Policies are permissions that you can attach to the users that you create. These policies will contain that access that you have provided to the users that you have created. There are 2 types of policies.
-• Managed policies
-• Inline policies
+* Managed policies
+* Inline policies
 
 Q27) What is cloudfront?
 
@@ -173,9 +173,9 @@ Answer: You can use security groups and NACL (Network Access Control List) to co
 Q34) What are the different types of storage gateway?
 
 Answer: Following are the types of storage gateway.
-• File gateway
-• Volume gateway
-• Tape gateway
+* File gateway
+* Volume gateway
+* Tape gateway
 
 Q35) What is a snowball?
 
@@ -184,12 +184,12 @@ Answer: Snowball is a data transport solution that used source appliances to tra
 Q36) What are the database types in RDS?
 
 Answer: Following are the types of databases in RDS,
-• Aurora
-• Oracle
-• MYSQL server
-• Postgresql
-• MariaDB
-• SQL server
+* Aurora
+* Oracle
+* MYSQL server
+* Postgresql
+* MariaDB
+* SQL server
 
 Q37) What is a redshift?
 
@@ -203,12 +203,12 @@ Answer: SNS stands for Simple Notification Service. SNS is a web service that ma
 Q39) What are the types of routing polices in route53?
 
 Answer: Following are the types of routing policies in route53,
-• Simple routing
-• Latency routing
-• Failover routing
-• Geolocation routing
-• Weighted routing
-• Multivalue answer
+* Simple routing
+* Latency routing
+* Failover routing
+* Geolocation routing
+* Weighted routing
+* Multivalue answer
 
 Q40) What is the maximum size of messages in SQS?
 
@@ -217,8 +217,8 @@ Answer: The maximum size of messages in SQS is 256 KB.
 Q41) What are the types of queues in SQS?
 
 Answer: There are 2 types of queues in SQS.
-• Standard queue
-• FIFO (First In First Out)
+* Standard queue
+* FIFO (First In First Out)
 
 Q42) What is multi-AZ RDS?
 
@@ -227,8 +227,8 @@ Answer: Multi-AZ (Availability Zone) RDS allows you to have a replica of your pr
 Q43) What are the types of backups in RDS database?
 
 Answer: There are 2 types of backups in RDS database.
-• Automated backups
-• Manual backups which are known as snapshots.
+* Automated backups
+* Manual backups which are known as snapshots.
 
 Q44) What is the difference between security groups and network access control list?
 
@@ -249,9 +249,9 @@ Network access control list:
 Q45) What are the types of load balancers in EC2?
 
 Answer: There are 3 types of load balancers,
-• Application load balancer
-• Network load balancer
-• Classic load balancer
+* Application load balancer
+* Network load balancer
+* Classic load balancer
 
 Q46) What is and ELB?
 
@@ -260,15 +260,15 @@ Answer: ELB stands for Elastic Load balancing. ELB automatically distributes the
 Q47) What are the two types of access that you can provide when you are creating users?
 
 Answer: Following are the two types of access that you can create.
-• Programmatic access
-• Console access
+* Programmatic access
+* Console access
 
 Q48) What are the benefits of auto scaling?
 
 Answer: Following are the benefits of auto scaling
-• Better fault tolerance
-• Better availability
-• Better cost management
+* Better fault tolerance
+* Better availability
+* Better cost management
 
 Q49) What are security groups?
 
@@ -365,21 +365,21 @@ Answer:Cloud computing means it provides services to access programs, applicatio
 Q97) Why we go for Cloud Computing?
 
 Answer:
-• Lower computing cost
-• Improved Performance
-• No IT Maintenance
-• Business connectivity
-• Easily upgraded
-• Device Independent
+* Lower computing cost
+* Improved Performance
+* No IT Maintenance
+* Business connectivity
+* Easily upgraded
+* Device Independent
 
 Q98) What are the deployment models using in Cloud?
 
 Answer:
 
-• Private Cloud
-• Public Cloud
-• Hybrid cloud
-• Community cloud 4
+* Private Cloud
+* Public Cloud
+* Hybrid cloud
+* Community cloud 4
 
 Q99) Explain Cloud Service Models?
 
@@ -393,9 +393,9 @@ Q100) What are the advantage of Cloud Computing?
 
 Answer:
 
-• Pay per use
-• Scalability
-• Elasticity
-• High Availability
-• Increase speed and Agility
-• Go global in Minutes
+* Pay per use
+* Scalability
+* Elasticity
+* High Availability
+* Increase speed and Agility
+* Go global in Minutes
