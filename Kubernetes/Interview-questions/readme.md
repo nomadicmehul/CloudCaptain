@@ -149,11 +149,13 @@ An ingress controller is a pod that acts as an inbound traffic handler. It is re
 ##### Explain the Load balancer in Kubernetes?
 The load balancer is a way of distributing the loads, which is easy to implement at the dispatch level. Each load balancer sits between the client devices and the backend servers. It receives and distributes the incoming requests to all available servers.
 Explain the two different types of load balancers.
+
 The two different load balancers are one is an internal load balancer that balances the load and allocates the pods automatically with the required configuration. And the other is the External load balancer that directs the traffic from external loads to the backend pods.
 
 ##### What is Minikube?
 Minikube is a type of tool that helps to run Kubernetes locally. It runs on a single-node Kubernetes cluster inside a Virtual machine (VM).
-Explain Prometheus in Kubernetes.
+
+##### Explain Prometheus in Kubernetes.
 Prometheus is an open-source toolkit that is used for metric-based monitoring and alerting the application. It provides a data model and a query language and can provide details and actions of metrics. It supports the instrumental application of language for many languages. The Prometheus operator provides easy monitoring for deployments and k8s services, besides Alertmanager and Grafana.
 
 ##### What is the role of clusters in Kubernetes?
@@ -173,8 +175,9 @@ The Kubernetes architecture provides a flexible, coupled mechanism for the servi
 ##### What are the main components of Kubernetes architecture?
 The two main components of the Kubernetes architecture are as follows:
 
-Master node
-Worker node
+1. Master node
+2. Worker node
+
 Each node contains the individual components in it
 
 ##### Define Kube-api server?
