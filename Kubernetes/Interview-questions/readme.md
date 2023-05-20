@@ -99,9 +99,10 @@ A node is a worker machine or VM depending on the cluster. Each node contains se
 ##### What are the services that a node gives and its responsibilities?
 The services that include in a node are as follows:
 
-Container run-time
-Kubelet
-Kube-proxy
+* Container run-time
+* Kubelet
+* Kube-proxy
+
 The Container run-time is responsible to start and manage the containers. The kubelet is responsible for running the state of each node and receives commands from the master to work on it and it is also responsible for the metric collection of pods. The Kube-proxy is a component that manages the subnets and makes services available for all other components.
 
 ##### What is a master node in Kubernetes?
@@ -109,23 +110,24 @@ A master node is a node that controls and manages the set of worker nodes and re
 What are the main components of the master node?
 The main components of the master node that help to manage worker nodes are as follows:
 
-Kube-server: It acts as a front end of the cluster and communicates with the cluster through the API server.
-Kube controller: It implements governance across the cluster and runs the set of controllers for the running cluster.
-Kube scheduler: It schedules the activities of the nodes and holds the node resource to determine the proper action for triggering events.
+* Kube-server: It acts as a front end of the cluster and communicates with the cluster through the API server.
+* Kube controller: It implements governance across the cluster and runs the set of controllers for the running cluster.
+* Kube scheduler: It schedules the activities of the nodes and holds the node resource to determine the proper action for triggering events.
 
 ##### What is a pod and what does it do?
 A pod is a group of containers that are deployed together on the same host. It is the basic execution unit of the Kubernetes application that can create or deploy the Kubernetes unit of object models.
 
 Kubernetes pods can be used in two ways. they are as follows:
 
-Pods that can run in a single container
-Pods that can run with multiple containers when it is required to work together
-What are the different types of multiple-container pods?
+1. Pods that can run in a single container
+2. Pods that can run with multiple containers when it is required to work together
+
+##### What are the different types of multiple-container pods?
 There are three different types of multi-container pods. They are as follows:
 
-Sidecar: The Sidecar pattern is a single node pattern made of two containers of the application. It contains the core logic of the application and it sends the logic files to the bucket.
-Adapter: It is used to standardize and normalize the output application or monitor data for aggregation. It performs restructuring, and reformatting and can write the correct formatted output for the application.
-Ambassador: It is a proxy pattern that allows connecting other containers with a port on the localhost.
+* Sidecar: The Sidecar pattern is a single node pattern made of two containers of the application. It contains the core logic of the application and it sends the logic files to the bucket.
+* Adapter: It is used to standardize and normalize the output application or monitor data for aggregation. It performs restructuring, and reformatting and can write the correct formatted output for the application.
+* Ambassador: It is a proxy pattern that allows connecting other containers with a port on the localhost.
 
 ##### What is the Namespace? How many namespaces are there in Kubernetes?
 A namespace is used to work with multiple teams or projects spread across. It is used to divide the cluster resources for multiple users.
@@ -133,8 +135,8 @@ Mention different kinds of Namespaces in Kubernetes.
 The namespaces are of three kinds. They are:
 
 Default: The default namespace that when the cluster comes out of the box with no other namespaces
-Kube-system: The namespace for objects created by Kubernetes.
-Kune-public: The namespace that can create automatically and is visible and readable publicly throughout the whole cluster. The public aspect of this namespace is only convenient and reserved for cluster usage.
+* Kube-system: The namespace for objects created by Kubernetes.
+* Kune-public: The namespace that can create automatically and is visible and readable publicly throughout the whole cluster. The public aspect of this namespace is only convenient and reserved for cluster usage.
 
 ##### Explain the Replica set?
 A Replica set is used to maintain a stable set of replica pods. It is used to specify the available number of identical pods. It was also considered as a replacement for the replication controller sometimes.
@@ -155,10 +157,10 @@ Prometheus is an open-source toolkit that is used for metric-based monitoring an
 ##### What is the role of clusters in Kubernetes?
 Kubernetes allows the required state management by cluster services of a specified configuration. These cluster services run the configurations in the infrastructure. The following are steps that are involved in this process as follows:
 
-The deployment file contains all the configuration that is fed into the cluster
-These deployments are fed into the API server
-The cluster services will schedule the pods in the environment
-It also ensures the right number of pods were running
+* The deployment file contains all the configuration that is fed into the cluster
+* These deployments are fed into the API server
+* The cluster services will schedule the pods in the environment
+* It also ensures the right number of pods were running
 
 ##### What is the Cluster IP?
 The cluster Ip is a default Kubernetes service that provides a link between the pods or map container port and the host ports. It provides the services within the cluster and gives access to other apps which are inside the same cluster.
@@ -179,18 +181,18 @@ The Kube-API is the frontend of the master node that exposes all the components 
 ##### What are the advantages of Kubernetes?
 The advantages of Kubernetes are as follows:
 Kubernetes is open-source and free
-It is highly scalable and runs in any operating system
-It provides more concepts and is more powerful than Docker swarm
-It provides a scheduler, auto-scaling, rolling upgrades, and health checks
-It has a flat network space and customized functionalities
-It is easy to make effective CI/CD pipelines
-It can improve productivity
+* It is highly scalable and runs in any operating system
+* It provides more concepts and is more powerful than Docker swarm
+* It provides a scheduler, auto-scaling, rolling upgrades, and health checks
+* It has a flat network space and customized functionalities
+* It is easy to make effective CI/CD pipelines
+* It can improve productivity
 
 ##### What are the disadvantages of Kubernetes?
-The disadvantages of Kubernetes are as follows:
-The installation process and configuration is highly difficult
-It is not easy to manage the services
-It takes a lot of time to run and compile
-It is more expensive than the other alternatives
-It can be overkill for simple application
+* The disadvantages of Kubernetes are as follows:
+* The installation process and configuration is highly difficult
+* It is not easy to manage the services
+* It takes a lot of time to run and compile
+* It is more expensive than the other alternatives
+* It can be overkill for simple application
 
