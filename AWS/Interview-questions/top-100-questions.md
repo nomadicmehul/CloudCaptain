@@ -374,6 +374,7 @@ Answer:
 Q98) What are the deployment models using in Cloud?
 
 Answer:
+
 • Private Cloud
 • Public Cloud
 • Hybrid cloud
@@ -390,6 +391,7 @@ IAAS (Infrastructure as a Service): It provides virtualized computing resources 
 Q100) What are the advantage of Cloud Computing?
 
 Answer:
+
 • Pay per use
 • Scalability
 • Elasticity
