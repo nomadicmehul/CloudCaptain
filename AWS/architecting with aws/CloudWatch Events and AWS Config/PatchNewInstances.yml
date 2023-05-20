@@ -1,0 +1,23 @@
+---
+schemaVersion: '0.3'
+description: Executes the AWS-RunPatchBaseline command document against an instance.
+assumeRole: "arn:aws:iam::xxxxxxxxxxxx:role/SSM-PatchNewInstanceRole"
+parameters:
+  InstanceId:
+    type: String
+    description: "(Required) ID of EC2 instance to patch"
+mainSteps:
+- name: sleep
+  action: aws:sleep
+  inputs:
+    Duration: PT4M
+- name: scan
+  action: aws:runCommand
+  maxAttempts: 1
+  onFailure: Continue
+  inputs:
+    DocumentName: AWS-RunPatchBaseline
+    InstanceIds:
+    - "{{InstanceId}}"
+    Parameters:
+      Operation: Install

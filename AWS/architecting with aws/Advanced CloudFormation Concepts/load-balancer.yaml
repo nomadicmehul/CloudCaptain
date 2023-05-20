@@ -1,0 +1,91 @@
+Description: >
+  AWS CloudFormation Template that creates an application load balancer,
+  listener, and target group. Requires network stack name as a parameter.
+
+Parameters:
+  VPCStackName:
+    Description: >
+      Name of an active CloudFormation stack that contains the VPC
+      resources to be used by this stack.
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: "^[a-zA-Z][-a-zA-Z0-9]*$"
+
+Resources:
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow inbound HTTP from the load balancer"
+      SecurityGroupIngress:
+        -
+          IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: "0.0.0.0/0"
+      VpcId:
+        Fn::ImportValue:
+          Fn::Sub: "${VPCStackName}-VPC"
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets:
+      - Fn::ImportValue:
+          !Sub "${VPCStackName}-PublicSubnet1"
+      - Fn::ImportValue:
+          !Sub "${VPCStackName}-PublicSubnet2"
+      SecurityGroups:
+      - Ref: ALBSecurityGroup
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn:
+        Ref: ApplicationLoadBalancer
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn:
+          !Ref ALBTargetGroup
+      Port: '80'
+      Protocol: HTTP
+
+  ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${VPCStackName}-VPC"
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      TargetGroupAttributes:
+      - Key: deregistration_delay.timeout_seconds
+        Value: '20'
+      - Key: stickiness.enabled
+        Value: 'true'
+      - Key: stickiness.type
+        Value: lb_cookie
+      - Key: stickiness.lb_cookie.duration_seconds
+        Value: '30'
+
+Outputs:
+  ALBTargetGroup:
+    Description: Target group ARN
+    Value: !Ref ALBTargetGroup
+    Export:
+      Name:
+        !Sub "${AWS::StackName}-TargetGroup"
+
+  WebsiteURL:
+    Description: URL for ALB
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt:
+          - ApplicationLoadBalancer
+          - DNSName

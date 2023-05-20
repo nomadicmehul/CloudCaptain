@@ -1,0 +1,21 @@
+version: 0.0
+os: linux
+files:
+  - source: index.html
+    destination: /var/www/html
+hooks:
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 180
+      runas: root
+  AfterInstall:
+    - location: scripts/change_index.sh
+      timeout: 30
+      runas: root
+    - location: scripts/start_server.sh
+      timeout: 60
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 60
+      runas: root
