@@ -1,0 +1,21 @@
+{
+  "Statement" : [
+    {
+      "Effect" : "Allow",
+      "Action" : "Update:*",
+      "Principal": "*",
+      "Resource" : "*"
+    },
+    {
+      "Effect" : "Deny",
+      "Action" : "Update:Replace",
+      "Principal": "*",
+      "Resource" : "LogicalResourceId/VPC",
+      "Condition" : {
+        "StringLike" : {
+            "ResourceType" : ["AWS::EC2::VPC"]
+        }
+      }
+    }
+  ]
+}
