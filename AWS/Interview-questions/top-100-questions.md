@@ -390,11 +390,11 @@ IAAS (Infrastructure as a Service): It provides virtualized computing resources 
 
 Q100) What are the advantage of Cloud Computing?
 
-    Answer:
+Answer:
 
-    • Pay per use
-    • Scalability
-    • Elasticity
-    • High Availability
-    • Increase speed and Agility
-    • Go global in Minutes
+• Pay per use
+• Scalability
+• Elasticity
+• High Availability
+• Increase speed and Agility
+• Go global in Minutes
