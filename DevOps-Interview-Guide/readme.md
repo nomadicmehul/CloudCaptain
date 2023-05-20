@@ -66,3 +66,11 @@ Nginx is a dedicated web server that has solved efficiency issues and provided u
 6. Reduces wait time for the client.
 7. Upgrades can be done while Nginx is hosting a website without any downtime.
 
+##### What is CI/CD, and how does AWS play a role in it?
+
+The combined processes of continuous integration and continuous delivery, also known as a continuous deployment (CD), are known as CI/CD in the field of software engineering. By mandating automation in creating, testing, and deploying applications, CI/CD fills the gaps between production and operational activities and teams. The progressive code changes made by programmers are compiled, linked, and packaged into software deliverables via CI/CD services.
+
+##### How would you define Continuous Testing in DevOps?
+A. Continuous testing is the execution of automated tests every time a piece of code is merged. This makes it possible for engineers to get immediate feedback on the most recent merging of code. Automation of tests is encouraged throughout the development cycle through principles of continuous testing.
+
+
