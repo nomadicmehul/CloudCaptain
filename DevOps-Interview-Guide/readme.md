@@ -73,4 +73,137 @@ The combined processes of continuous integration and continuous delivery, also k
 ##### How would you define Continuous Testing in DevOps?
 A. Continuous testing is the execution of automated tests every time a piece of code is merged. This makes it possible for engineers to get immediate feedback on the most recent merging of code. Automation of tests is encouraged throughout the development cycle through principles of continuous testing.
 
+##### Mention the various container resource monitoring tools.
+The various container monitoring tools are as follows:
 
+1.Grafana
+2. Heapster
+3. CAdvisor
+4. InfluxDB
+5. Prometheus
+
+##### What is the use of SSH?
+SSH stands for Secure Shell and is an administrative protocol that lets users have access and control the remote servers over the Internet to work using the command line.
+
+SSH is a secured encrypted version of the previously known Telnet which was unencrypted and not secure. This ensured that the communication with the remote server occurs in an encrypted form.
+
+SSH also has a mechanism for remote user authentication, input communication between the client and the host, and sending the output back to the client.
+
+##### Explain the term "Infrastructure as Code" (IaC) as it relates to configuration management.
+• Writing code to manage configuration, deployment, and automatic provisioning.
+• Managing data centers with machine-readable definition files, rather than physical hardware configuration.
+• Ensuring all your servers and other infrastructure components are provisioned consistently and effortlessly.
+• Administering cloud computing environments, also known as infrastructure as a service (IaaS).
+
+##### How is IaC implemented using AWS?
+Start by talking about the age-old mechanisms of writing commands onto script files and testing them in a separate environment before deployment and how this approach is being replaced by IaC. Similar to the codes written for other services, with the help of AWS, IaC allows developers to write, test, and maintain infrastructure entities in a descriptive manner, using formats such as JSON or YAML. This enables easier development and faster deployment of infrastructure changes.
+
+##### Explain the difference between a centralized and distributed version control system (VCS).
+Centralized Version Control System
+• All file versions are stored on a central server
+• No developer has a copy of all files on a local system
+• If the central server crashes, all data from the project will be lost
+ 
+##### Distributed Control System
+• Every developer has a copy of all versions of the code on their systems
+• Enables team members to work offline and does not rely on a single location for backups
+• There is no threat, even if the server crashes
+
+##### What is Jenkinsfile?
+Jenkinsfile contains the definition of a Jenkins pipeline and is checked into the source control repository. It is a text file.
+• It allows code review and iteration on the pipeline.
+• It permits an audit trail for the pipeline.
+• There is a single source of truth for the pipeline, which can be viewed and edited.
+
+##### What concepts are key aspects of the Jenkins pipeline?
+• Pipeline: User-defined model of a CD pipeline. The pipeline's code defines the entire build process, which includes building, testing and delivering an application
+• Node: A machine that is part of the Jenkins environment and capable of executing a pipeline
+• Step: A single task that tells Jenkins what to do at a particular point in time
+• Stage: Defines a conceptually distinct subset of tasks performed through the entire pipeline (build, test, deploy stages)
+
+##### How can you copy Jenkins from one server to another?
+ 
+• Move the job from one Jenkins installation to another by copying the corresponding job directory.
+• Create a copy of an existing job by making a clone of a job directory with a different name.
+• Rename an existing job by renaming a directory.
+
+##### Explain the architecture of Docker.
+• Docker uses a client-server architecture.
+• Docker Client is a service that runs a command. The command is translated using the REST API and is sent to the Docker Daemon (server).
+• Docker Daemon accepts the request and interacts with the operating system to build Docker images and run Docker containers.
+• A Docker image is a template of instructions, which is used to create containers.
+• Docker container is an executable package of an application and its dependencies together.
+• Docker registry is a service to host and distribute Docker images among users.
+
+##### Explain the two types of pipeline in Jenkins, along with their syntax.
+Jenkins provides two ways of developing a pipeline code: Scripted and Declarative.
+A. Scripted Pipeline: It is based on Groovy script as their Domain Specific Language. One or more node blocks do the core work throughout the entire pipeline.
+Syntax:
+1. Executes the pipeline or any of its stages on any available agent
+2. Defines the build stage
+3. Performs steps related to building stage
+4. Defines the test stage
+5. Performs steps related to the test stage
+6. Defines the deploy stage
+7. Performs steps related to the deploy stage
+ 
+B. Declarative Pipeline: It provides a simple and friendly syntax to define a pipeline. Here, the pipeline block defines the work done throughout the pipeline.
+Syntax:
+1. Executes the pipeline or any of its stages on any available agent
+2. Defines the build stage
+3. Performs steps related to building stage
+4. Defines the test stage
+5. Performs steps related to the test stage
+6. Defines the deploy stage
+7. Performs steps related to the deploy stage
+
+##### What are the ways in which a build can be scheduled/run in Jenkins?
+• By source code management commits.
+• After completion of other builds.
+• Scheduled to run at a specified time.
+• Manual build requests.
+
+##### What is an Ansible role?
+An Ansible role is an independent block of tasks, variables, files, and templates embedded inside a playbook.
+How do you run multiple containers using a single service?
+• It is possible to run multiple containers as a single service with Docker Compose.
+• Here, each container runs in isolation but can interact with each other.
+• All Docker Compose files are YAML files.
+
+##### What is a Dockerfile used for?
+• A Dockerfile is used for creating Docker images using the build command.
+• With a Docker image, any user can run the code to create Docker containers.
+• Once a Docker image is built, it's uploaded in a Docker registry.
+• From the Docker registry, users can get the Docker image and build new containers whenever they want.
+Instead of YAML, what can you use as an alternate file for building Docker compose?
+To build a Docker compose, a user can use a JSON file instead of YAML. In case a user wants to use a JSON file, he/she should specify the filename as given:
+Docker-compose -f Docker-compose.json up
+
+##### How do you create a Docker container?
+Task: Create a MySQL Docker container
+A user can either build a Docker image or pull an existing Docker image (like MySQL) from Docker Hub.
+Now, Docker creates a new container MySQL from the existing Docker image. Simultaneously, the container layer of the read-write filesystem is also created on top of the image layer.
+• Command to create a Docker container: Docker run -t –i MySQL
+• Command to list down the running containers: Docker ps
+
+##### What are the cloud platforms that support Docker?
+The following are the cloud platforms that Docker runs on:
+• Amazon Web Services
+• Microsoft Azure
+• Google Cloud Platform
+• Rackspace
+
+
+##### What is the purpose of the expose and publish commands in Docker?
+Expose
+• Expose is an instruction used in Dockerfile.
+• It is used to expose ports within a Docker network.
+• It is a documenting instruction used at the time of building an image and running a container.
+• Expose is the command used in Docker.
+• Example: Expose 8080
+Publish
+• Publish is used in a Docker run command.
+• It can be used outside a Docker environment.
+• It is used to map a host port to a running container port.
+• --publish or –p is the command used in Docker.
+• Example: docker run –d –p 0.0.0.80:80
