@@ -98,3 +98,136 @@ It includes the following information such as
 
 ##### What is AWS LoT?
 AWS LoT is a cloud management platform that adds provisions for connected devices for interacting with all the cloud applications smoothly and securely.
+
+##### what is the difference between security groups and NSCLs?
+1. SG acts at instance level.
+ NACLs acts at subnet level
+2. SG allows to add or remove rules for both ingress and egress traffic to the instance.
+A network ACLs is a layer of security for the VPC that acts as a firewall for controlling trarric in and out of one or more subnets.
+3. SG comes with default allow all eg or ess and no ingress traffic.
+Default ACL allows all inbound and outbound traffic . Newly created ACL denies all in and out traffic.
+
+##### How many IAM keys can a user have ?
+At a time user can have only 2 active IAM access and secret key 
+
+##### How will you revoke the access keys?
+Console> IAM Consoles>User>Security credentials>make inactive
+
+##### How do you configure a public and private subnet in VPC?
+1. Create VPC, Create 2 subnets, create internet gateway and assign IGW to the VPC.
+2. To create a public subnet: Create a route table associate the subnet and a route using IGW ARN.
+3. To create a private subnet: Create a NAT gateway, create a route table, associate the subnet and create a route using NAT ARN.
+
+##### Route53 routing policy use cases
+AWS Route53 is a fully managed DNS service, it allows to host/buy domain with AWS. Route53 support different routing policy to direct your traffic to your resources.
+http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html
+
+##### What are the types of pricing models for EC2 instances and what is the difference between them?
+Reserved, Spot and On-demand instances.
+https://aws.amazon.com/ec2/pricing/
+
+##### How will you configure a password less access between two servers?
+1. Create a key pair on both the servers using ssh-keygen -t rsa
+2. Create a .ssh/authorized_keys on both the servers
+3. Copy the key of server A on the above path of server B and vice versa
+4. Give permission chmod -R 700 TO .ssh directory
+5. Give permission chmod -R 600 to authorized _keys file
+
+##### How will you configure password login on your AWS EC2 instance?
+1. Create a user, assign a password to it.
+2. Make entry in /etc/sudoers.d/
+3. Edit /etc/sshdconfig file and uncomment password authentication Yes
+
+##### You have two servers (A and B) in your AWS account and you have allowed ssh between both of them, but you are not able to ping each other. What could be issue and how do you resolved it?
+ICMP protocol is not allowed between them allow the same in security group. In case ICMP are allowed in security groups. Then allow ICMP on the NACLs.
+
+##### Where do you define your subnets while configuring autoscaling?
+You neither define subnets while configuring launch nor while configuring auto-scaling. Subnets are defined while creating ELB.
+
+##### How do you see and retreive the files from Glacier?
+Amazon Glacier provides a management console, which you can use to create and delete vaults. However, you cannot download archives from archives from Amazon Glacier by using the management console. To download data, such as photos, videos and other documents, you must either use the AWS CLI or write code to make requests, by using either the REST API directly or by using the AWS SDKs.
+
+##### What is Bastion host?
+Bastion are like jump servers to allow access to the host in the private subnet.
+The configurations usually work like below:
+1. Bastion needs to configured to allow inbound ssh access (TCP -22) only from restricted ips (103.252.24.158/32, 32 here indicates exact IP address)
+
+##### What is DR, its important aspect you consider while implementing DR strategy and what are the kind of DR strategies available?
+This article covers almost almost everything.
+
+##### What is a VPC subnet?
+Ans:
+A VPC is a virtual private cloud (VPC) that spans an AWS region. There are two or more availability zones in a region. Subnets within a VPC are used to logically isolate resources within a region. A subnet can't be shared by more than one availability region. Depending on its accessibility from outside of VPC and whether it can access resources outside of VPC, a subnet can be classified as either a private or public subnet.
+
+In VPC, a subnet is an important part. A VPC may contain all public subnets (or a mix of public and private subnets). A subnet that does not have a route to the internet gateway is known as a private subnet. By routing traffic via a virtual private gateway, a subnet can be configured as a VPN-only subnet.
+
+##### Where do you define subnets while configuring autoscaling?
+You neither define subnets while configuring launch configuration nor while configuring auto-scaling. Subnets are defined while creating ELB
+
+##### What is cloud computing?
+Cloud computing refers to the on-demand delivery of IT resources and applications via the internet with pay as you go.
+If we need we can get it right way. If we dont we can give it away.
+Cloud computing is the practice of using a network of remote servers hosted on the Internet to store, manage and process data rather than a local server or a personal computer.
+Features:
+1. On demand provisioning
+2. Scalability in minutes: We can scale out, or scale in
+Cloud models:
+Public
+Private
+Hybrid
+Community
+
+##### What are the default users to login to EC2?
+EC2 user
+ubuntu
+centos
+root
+Admin
+
+##### EC2 instances
+When you launch an EC2 instance, you receive a public IP address by which that instance is reachable.
+Once you stop that instance and restart you get a new public IP for the same instances.
+So public IP gets changed every time for an instance after stop/start.
+To overcome with this problem, we attach an elastic IP to an instance which doesnt change after you stop/start the instance as many times.
+
+##### Advantages of having elastic IP
+It is kind of static IP for your instance.
+Doesn't change after stop/start.
+
+##### EC2 load balancer
+It is simply a software to manage the load of application.
+For ex: If there are 10 web servers, we have public ip for one web servers, the traffic flow to one web server will be balanced across the 10 webservers using load balancer. To automatically distribute incoming web traffic across multiple ec2 instances. Add and remove ec2 instances without changing the inflow. If one of the instance fails, AWS ELB will automatically redirect the traffic to another running instance. If the failed instance is restored, ELB restores the traffic to that instance. ELB is like a traffic manager, it minimizes the risk of overloading one single instance and provides continuous monitoring of the health of AWS instances.
+
+
+##### Elastic block storage
+EBS is a virtual hard drive that can be used with ec2 instances.
+Can attach it to ec2 instance.
+Can place file system on it.
+It appears as a mounted device.
+
+##### S3-EBS-EFS
+S3: Simple storage service can be used when the requirement is for WORM- write once and read many times.
+EBS: Elastic block storage works better as server disks- high performance in terms of read and write.
+EFS: Elastic file system is used to share the file system across different servers.
+
+
+##### Relational database service:
+1. RDS allows to create mysql, mariadb, oracle sql, postgresql, Aurora db(Amazon's database)
+2. Easy administration
+3. RDS db instances are preconfigured with appropriate settings.
+MAIN BENEFITS
+1. AWS takes care of underlying platform, so automatic updates
+2. Automatic backups.
+3. Automatic recovery in case of failures.
+
+##### DNS/ROUTE 53: Domain Management Service
+Key fatures:
+1. Domain registration
+2. DNS - Domain Name System Service
+3. Health Checking
+
+##### How Security Groups are configured?
+A. 1. By default, all newly created security groups "allow all outbound traffic" to all destinations.
+2. Modifying the default outbound rule on security groups increases complexity and is not recommended unless required for compliance.
+3. Most organisations create security groups with "inbound rules" for "each functional tier"(web/app/data/etc) within an application.
+
