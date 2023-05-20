@@ -28,7 +28,8 @@ The Kube-proxy is a component that manages the subnets and makes services availa
 
 ##### What is a master node in Kubernetes?
 A master node is a node that controls and manages the set of worker nodes and resembles a cluster in Kubernetes.
-Q6. What are the main components of the master node?
+
+##### What are the main components of the master node?
 The main components of the master node that help to manage worker nodes are as follows:
 
 ###### Kube-server: It acts as a front end of the cluster and communicates with the cluster through the API server.
@@ -40,19 +41,20 @@ A pod is a group of containers that are deployed together on the same host. It i
 
 Kubernetes pods can be used in two ways. they are as follows:
 
-Pods that can run in a single container
-Pods that can run with multiple containers when it is required to work together
+1. Pods that can run in a single container
+2. Pods that can run with multiple containers when it is required to work together
 
 ##### What are the different types of multiple-container pods?
 There are three different types of multi-container pods. They are as follows:
 
-Sidecar: The Sidecar pattern is a single node pattern made of two containers of the application. It contains the core logic of the application and it sends the logic files to the bucket.
-Adapter: It is used to standardize and normalize the output application or monitor data for aggregation. It performs restructuring, and reformatting and can write the correct formatted output for the application.
-Ambassador: It is a proxy pattern that allows connecting other containers with a port on the localhost.
+1. Sidecar: The Sidecar pattern is a single node pattern made of two containers of the application. It contains the core logic of the application and it sends the logic files to the bucket.
+2. Adapter: It is used to standardize and normalize the output application or monitor data for aggregation. It performs restructuring, and reformatting and can write the correct formatted output for the application.
+3. Ambassador: It is a proxy pattern that allows connecting other containers with a port on the localhost.
 
 ##### What is the Namespace? How many namespaces are there in Kubernetes?
 A namespace is used to work with multiple teams or projects spread across. It is used to divide the cluster resources for multiple users.
-Q. What is kubectl?
+
+##### What is kubectl?
 Kubectl is the command-line tool used to control the Kubernetes clusters. It provides the CLI to run the command against clusters to create and manage the Kubernetes components.
 
 ##### What are the different types of services in Kubernetes?
