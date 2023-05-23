@@ -14,6 +14,7 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
 - Clone the repository to your local machine using Git.
 - Join our vibrant community on Telegram (https://t.me/CloudCaptains) for questions, idea sharing, and collaboration with fellow contributors.
 - Contribute to the project by submitting pull requests, adding resources, or sharing learning materials.
+- You can also [fork this project](https://help.github.com/articles/fork-a-repo/) and send a [pull request](https://help.github.com/articles/using-pull-requests/) to add a resources here. 
 
 We hope you find this project both informative and engaging.
 
@@ -26,3 +27,7 @@ Let's set sail and explore the boundless possibilities of the cloud together!
 <a href="https://github.com/nomadicmehul/CloudCaptain/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nomadicmehul/CloudCaptain/" />
 </a>
+
+## 🛡️ License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
