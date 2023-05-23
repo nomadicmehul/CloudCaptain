@@ -18,6 +18,17 @@
 | A Guide to Test Automation Types, Tools, and Benefits   | https://dzone.com/articles/a-guide-to-test-automation-types-tools-and-benefits | 
 | Zero Downtime Jenkins Continuous Deployment with Terraform on AWS  | https://www.toptal.com/devops/terraform-jenkins-continuous-deployment |
 | Kubernetes vs Docker Swarm. Who’s the bigger and better?  | https://faun.pub/kubernetes-vs-docker-swarm-whos-the-bigger-and-better-53bbe76b9d11  | 
+| Various Deployment Strategies In Cloud Environment | https://www.devopszone.info/post/various-deployment-strategies-in-cloud-environment | 
+| Top Questions for Getting Started with Docker   | https://www.docker.com/blog/top-questions-for-getting-started-with-docker/ |
+| Example: Setting Up an Ingress Controller on a Cluster  | https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengsettingupingresscontroller.htm  |
+| 5 Reasons DevOps Loves Linux | https://medium.com/devops-dudes/5-reasons-devops-loves-linux-257ad2cfca45  | 
+| Test and Merge new developer's code in Master Branch for Production using Automation with Devops Practices  | https://www.linkedin.com/pulse/test-merge-new-developers-code-master-branch-using-devops-saxena  |
+| Configure Path-Based Routing On Application Load Balancer  | https://fitdevops.in/configure-path-based-routing-on-application-load-balancer/  |
+| How Internet Protocol works? | https://www.learnsteps.com/how-internet-protocol-works/  | 
+| Cloud-Native API Gateway Services  |   https://www.cherryservers.com/blog/cloud-native-api-gateway-services  |
+| Why I use YAML for AWS CloudFormation  |  https://markrichman.com/yaml-for-aws-cloudformation/  |
+| True Facts About Kubernetes vs. Docker  | https://faun.pub/true-facts-about-kubernetes-vs-docker-bba6a7e5a839  |
+| Scaling Applications in the Cloud  |  https://faun.pub/scaling-applications-in-the-cloud-52bb6dfbac4e  |
  
  
 

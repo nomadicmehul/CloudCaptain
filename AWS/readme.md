@@ -18,3 +18,9 @@
 | Move an EC2 Instance to Another Region | https://theithollow.com/2017/10/23/move-ec2-instance-another-region/ |
 | How to setup SFTP server on Ubuntu(AWS-EC2) | https://qiita.com/alokrawat050/items/709d3c777407ab658aa9  | 
 |  What is Amazon CloudWatch? AWS CloudWatch Tutorial  | https://intellipaat.com/blog/what-is-cloudwatch-in-aws/ | 
+| Create/Launch Application using Terraform In AWS  | https://www.linkedin.com/pulse/createlaunch-application-using-terraform-aws-ritik-agarwal | 
+| Why I use YAML for AWS CloudFormation  |  https://markrichman.com/yaml-for-aws-cloudformation/  |
+| CloudFormation coding using YAML  |  https://stories.schubergphilis.com/cloudformation-coding-using-yaml-9127025813bb  |
+| AWS EC2 Instance Types    |   https://codebabel.com/aws-ec2-instance-types/  |
+| ALB Ingress Controller on Amazon EKS | https://teletype.in/@sindhu/1Nx7MIVG  |
+ 
