@@ -1,4 +1,6 @@
+Welcome to our comprehensive collection of learning resources for **DevOps**! Here, you'll discover a curated list of the best learning materials we've assembled just for you.
 
+Take a moment to explore these valuable resources, handpicked to enhance your understanding of **DevOps**. We strive to provide the most up-to-date and informative content available.
 
 
 | TITILE  | RESOURCE LINK |
@@ -31,5 +33,10 @@
 | Scaling Applications in the Cloud  |  https://faun.pub/scaling-applications-in-the-cloud-52bb6dfbac4e  |
  
  
+If you have any additional resources or links that you believe would benefit others, please feel free to contribute. Our goal is to create a repository of the best learning materials, ensuring everyone has access to top-notch content.
+
+We appreciate your visit to this repository. If you find our initiatives valuable, kindly star this repository to show your support.
+
+Thank you once again, and happy learning!
 
 
