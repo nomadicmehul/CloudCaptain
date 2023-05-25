@@ -252,14 +252,6 @@ With a single AMI present, you can retrieve or download several instances as req
 ##### What is known as EIP in AWS?
 The Elastic IP Address (EIP) offered by AWS is a static ipv4 address which is used to manage and process dynamic cloud computing services. It is essential to connect an AWS account with the EIP because as and when you require an ipv4 static address for any of your instances, you can acquire it from the associated EIP which enables prompt communication with the active internet.
 
-##### What is DevOps ?
-
-DevOps is the combination of cultural philosophies, practices, and tools that increases an organization’s ability to deliver applications and services at high velocity: evolving and improving products at a faster pace than organizations using traditional software development and infrastructure management processes. This speed enables organizations to better serve their customers and compete more effectively in the market.
-
-DevOps process can be visualized as an infinite loop, comprising these steps: plan, code, build, test, release, deploy, operate, monitor.
-
-
-
 ##### What is CodeBuild in AWS DevOps?
 AWS provides CodeBuild, which is a fully managed in-house build service, thereby helping in the compilation of source code, testing, and the production of software packages that are ready to deploy. There is no need for management, allocation, or provision to scale the build servers as this is automatically scaled.
 
