@@ -1,6 +1,6 @@
-Welcome to our comprehensive collection of learning resources for **Azure**! Here, you'll discover a curated list of the best learning materials we've assembled just for you.
+Welcome to our comprehensive collection of learning resources for **Chef**! Here, you'll discover a curated list of the best learning materials we've assembled just for you.
 
-Take a moment to explore these valuable resources, handpicked to enhance your understanding of **Azure**. We strive to provide the most up-to-date and informative content available.
+Take a moment to explore these valuable resources, handpicked to enhance your understanding of **Chef**. We strive to provide the most up-to-date and informative content available.
 
 | TITILE  | RESOURCE LINK |
 | ------------- | -------------  |
