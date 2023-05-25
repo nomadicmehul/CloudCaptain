@@ -13,7 +13,7 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
 | How to Host a Static Website on AWS S3 | https://linuxhint.com/static-website-on-aws-s3/ |
 | An Introduction to the AWS Application Load Balancer | https://www.sumologic.com/blog/aws-application-load-balancer/ |
 | Build Your First Kubernetes Application with AWS EKS  | https://aws.plainenglish.io/building-your-first-kubernetes-application-with-aws-eks-bc2f1e84118  |
-| How to Deploy Applications using Helm in Kubernetes |AWS| | https://medium.com/avmconsulting-blog/deploying-applications-using-helm-in-kubernetes-b5c8b609e4b5  |
+| How to Deploy Applications using Helm in Kubernetes on AWS | https://medium.com/avmconsulting-blog/deploying-applications-using-helm-in-kubernetes-b5c8b609e4b5  |
 | Setup VPC peering on AWS with Qovery  |  https://hub.qovery.com/guides/tutorial/aws-vpc-peering-with-qovery/  |
 | 28 Essential AWS S3 CLI Command Examples to Manage Buckets and Objects | https://www.thegeekstuff.com/2019/04/aws-s3-cli-examples/ |
 | Hosting a static website with HTTPS on AWS, using S3 and CloudFront | https://medium.com/avmconsulting-blog/hosting-a-static-website-with-https-on-aws-using-s3-and-cloudfront-d32655fc0dab  |
