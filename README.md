@@ -22,14 +22,34 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
 </table>
 </center>
 
+### DevOps Roadmap
+
+  * The following path is opinionated. You can find alternative paths in [ Coming soon....]
+  * Do NOT attempt to learn everything, especially if you are a complete beginner (the burnout will make you regret you ever heard the word DevOps)
+  * Learn enough to say "Hey, I know what is DevOps and I can build anything out of it 😎". You can learn everything else by demand or when you feel ready
+
+#### The must list
+
+Topic | What to learn | Alternatives | Description
+:------|:------|:------|:------:
+Version Control | [Git](./Git/) | - | Version Control is used everywhere and Git is the leading version control technology
+Programming | At least one programming language | None. Don't settle for learning only shell scripting  | Anyone who practice DevOps should know programming to some extent
+Operating System | [Linux](./Linux/) | Other distribution of Linux :D | Operating Systems is another must when it comes to DevOps
+Protocols | DHCP, UDP, TCP, HTTP, SSH | Not as an alternative, you can simply learn later: NFS, NTP, FTP | Learn how these protocols work and what they are used for
+Applications | Web Server, Load Balancer, Cache, Database | | Learn how they work and try out some implementations (e.g. MySQL for databases and httpd for web servers)
+[System Design](https://github.com/bregman-arie/system-design-notebook) | Availability, Reliability, Scalability, Performance | Learn how to design infrastructure and systems
+
+The second must list :)
+Seriously though, don't try to master everything in this list and start with something that you are interested in. The order has no meaning in this case.
+
 ## Interactive practice and learning sites
 
 Learning by doing proved to be a very effective way to learn new things. If you are at a point where you don't feel comfortable enough to do it by yourself and you look for some guidance, the following sites might assist you
 
 Name | Description
 :------|:------:
-[Kodekloud Engineer](https://www.kodekloud-engineer.com/) | perform real tasks by working in a fictional organization
-[QWIKLBAS](https://www.qwiklabs.com) | AWS, GCP, ... lab practice
+[Kodekloud Engineer](https://www.kodekloud-engineer.com/) | Perform real tasks by working in a fictional organization | 
+[QWIKLBAS](https://www.qwiklabs.com) | AWS, GCP, ect | 
 
 ## Community
 
