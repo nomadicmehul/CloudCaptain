@@ -18,8 +18,7 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
     <td align="center"><a href="./Linux" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="75px" height="75px"/><br /><b>Linux</b></a></td>
     <td align="center"><a href="./TERRAFORM" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/terraform/terraform-original-wordmark.svg" alt="Terraform" width="75px" height="75px"/><br /><b>Terraform</b></a></td>
     <td align="center"><a href="./Docker" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="Docker" width="75px" height="75px"/><br /><b>Docker</b></a></td>
-    <td align="center"><a href="./Kubernetes" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain-wordmark.svg
-" alt="Kubernetes" width="75px" height="75px"/><br /><b>Kubernetes</b></a></td>
+    <td align="center"><a href="./Kubernetes" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain-wordmark.svg" alt="Kubernetes" width="75px" height="75px"/><br /><b>Kubernetes</b></a></td>
   </tr>
 </table>
 </center>
