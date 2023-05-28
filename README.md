@@ -28,6 +28,17 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
     <td align="center"><a href="./Kubernetes" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain-wordmark.svg" alt="Kubernetes" width="75px" height="75px"/><br /><b>Kubernetes</b></a></td>
   </tr>
 </table>
+
+<table>
+  <tr>
+    <td align="center"><a href="./Azure" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/azure/azure-original-wordmark.svg" alt="azure" width="75px" height="75px"/><br /> <b> Azure</b></a></td>
+    <td align="center"><a href="./Bash" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-original.svg" alt="bash" width="75px" height="75px"/><br /><b>Bash</b></a></td>
+    <td align="center"><a href="./Google Cloud Provider" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/googlecloud/googlecloud-original-wordmark.svg" alt="google cloud provider" width="75px" height="75px"/><br /><b>Google Cloud Provider</b></a></td>
+    <td align="center"><a href="./Gradle" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/gradle/gradle-plain-wordmark.svg" alt="gradle" width="75px" height="75px"/> <br /><b>Gradle</b></a></td>
+    <td align="center"><a href="./Nginx" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nginx/nginx-original.svg" alt="nginx" width="75px" height="75px"/><br /><b>Nginx</b></a></td>
+    <td align="center"><a href="./Python" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original-wordmark.svg" alt="python" width="75px" height="75px"/><br /><b>Python</b></a></td>
+  </tr>
+</table>
 </center>
 
 ### DevOps Roadmap
