@@ -86,7 +86,7 @@ Name | Comments
   - [ ] [Argo CD](https://argoproj.github.io/argo-cd)
   - [ ] [werf](https://werf.io/)
 
-Note: "Provisioning" tools can be used to perform configuration management to some extent. The same applies for configuration management tools, which can be used for pprovisioning.
+Note: "Provisioning" tools can be used to perform configuration management to some extent. The same applies for configuration management tools, which can be used for provisioning.
 
 - [ ] Provisioning
   - [ ] Terraform (Open Source)
