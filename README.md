@@ -226,6 +226,8 @@ Let's set sail and explore the boundless possibilities of the cloud together!
   <img src="https://contrib.rocks/image?repo=nomadicmehul/CloudCaptain" />
 </a>
 
+## 🙌 [Credits](credits.md) 
+
 ## 🛡️ License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
