@@ -37,6 +37,7 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
     <td align="center"><a href="./Gradle" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/gradle/gradle-plain-wordmark.svg" alt="gradle" width="75px" height="75px"/> <br /><b>Gradle</b></a></td>
     <td align="center"><a href="./Nginx" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nginx/nginx-original.svg" alt="nginx" width="75px" height="75px"/><br /><b>Nginx</b></a></td>
     <td align="center"><a href="./Python" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original-wordmark.svg" alt="python" width="75px" height="75px"/><br /><b>Python</b></a></td>
+    <td align="center"><a href="./DigitalOcean" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/digitalocean/digitalocean-original-wordmark.svg" alt="DigitalOcean" width="75px" height="75px"/><br /><b>DigitalOcean</b></a></td>
   </tr>
 </table>
 </center>
