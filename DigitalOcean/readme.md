@@ -2,12 +2,9 @@
 
 [<img src="https://raw.githubusercontent.com/jonleibowitz/awesome-digitalocean/master/media/DO_Logo.png" align="right" width="100">](https://www.digitalocean.com/)
 
-> A curated list of [DigitalOcean](https://www.digitalocean.com) resources.
+Welcome to our comprehensive collection of learning resources for **Prometheus**! Here, you'll discover a curated list of the best learning materials we've assembled just for you.
 
-DigitalOcean's tagline is it is a simple and robust cloud computing platform, designed for developers. With DigitalOcean you can easily spin up cloud compute and storage resources either indivdually or with a team. 
-
-Contributions welcome. Add links through pull requests or create an issue to start a discussion.
-
+Take a moment to explore these valuable resources, handpicked to enhance your understanding of **Prometheus**. We strive to provide the most up-to-date and informative content available.
 
 ## Contents
 
@@ -98,3 +95,9 @@ Contributions welcome. Add links through pull requests or create an issue to sta
 - [Engineering Code of Conduct](https://github.com/digitalocean/engineering-code-of-conduct)
 - [User Scripts](https://github.com/digitalocean/do_user_scripts) - User data scripts to help provision apps on a Droplet.
 - [Hacktoberfest](https://hacktoberfest.digitalocean.com/) - Month-long celebration of open source software in partnership with GitHub.
+
+If you have any additional resources or links that you believe would benefit others, please feel free to contribute. Our goal is to create a repository of the best learning materials, ensuring everyone has access to top-notch content.
+
+We appreciate your visit to this repository. If you find our initiatives valuable, kindly star this repository to show your support.
+
+Thank you once again, and happy learning!
