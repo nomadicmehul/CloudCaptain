@@ -220,13 +220,11 @@ Don't forget to star this project to show your support for our initiatives. Shar
 
 Let's set sail and explore the boundless possibilities of the cloud together!
 
-## 🤝 Contributors
+## 🤝 Contributors && 🙌 [Credits](credits.md) 
 
 <a href="https://github.com/nomadicmehul/CloudCaptain/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nomadicmehul/CloudCaptain" />
 </a>
-
-## 🙌 [Credits](credits.md) 
 
 ## 🛡️ License
 
