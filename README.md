@@ -1,10 +1,6 @@
 ## Welcome to CloudCaptain!
 
-<h1 align="center">
-  <br>
-  <a href=""><img src="./Images/image.jpg" alt="" width="200px;"></a>
-  <br>
-</h1>
+[<img src="./Images/image.jpg" align="right" width="100">]
 
 CloudCaptain is a dynamic community initiative dedicated to deepening your understanding of cloud technology and its applications. Our mission is to equip individuals with the knowledge and skills they need to become cloud computing experts, fostering a collaborative environment for learning and networking.
 
