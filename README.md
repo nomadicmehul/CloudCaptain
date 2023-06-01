@@ -1,5 +1,7 @@
 ## Welcome to CloudCaptain!
 
+![](./Images/image.jpg)
+
 CloudCaptain is a dynamic community initiative dedicated to deepening your understanding of cloud technology and its applications. Our mission is to equip individuals with the knowledge and skills they need to become cloud computing experts, fostering a collaborative environment for learning and networking.
 
 At CloudCaptain, we believe in empowering individuals with accessible tools for success in the cloud industry. Our community comprises passionate professionals from diverse backgrounds, eager to share expertise and engage in mutual learning.
