@@ -75,6 +75,15 @@ Name | Description
 [Play with Docker](https://labs.play-with-docker.com/) | Docker Lab | 
 [Play with Kubernetes](https://labs.play-with-k8s.com/) | Kubernetes Lab |
 
+- Useful softwares for Window users
+  - [Git Bash](https://gitforwindows.org/)
+  - [Window Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701?activetab=pivot:overviewtab)
+  -[WSL](https://docs.microsoft.com/en-us/windows/wsl/)
+
+- Useful softwares for Mac users
+  - [Oh My Z](https://ohmyz.sh)
+  - [homebrew](https://brew.sh)
+
 ## Community
 
 Another great way to learn is to learn from the experience of others. For that, the are some excellent DevOps communities.
