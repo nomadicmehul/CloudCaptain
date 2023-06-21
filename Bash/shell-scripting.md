@@ -1,6 +1,5 @@
-Welcome to our comprehensive collection of learning resources for **Bash**! Here, you'll discover a curated list of the best learning materials we've assembled just for you.
+# Shell Scripting
 
-Take a moment to explore these valuable resources, handpicked to enhance your understanding of **Bash**. We strive to provide the most up-to-date and informative content available.
 
 ### What is Shell?
 
@@ -30,6 +29,7 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
 - cat /etc/shells displays list of login shells available in the current Linux distro
 - echo $SHELL path of current user's login shell
 
+
 ### Further Reading
 
 - [Comparison of command shells](https://en.wikipedia.org/wiki/Comparison_of_command_shells)
@@ -41,8 +41,8 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
     - [MinGW](http://www.mingw.org/)
     - [Linux Subsystem for Windows](http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/)
 - [Shell, choosing shell and changing default shells](https://wiki.ubuntu.com/ChangingShells)
-- [shell scripting and important linux questions and answers](https://ashwikatech.blogspot.com/2021/12/shell-scripting.html?m=1)
-- [shell-scripting-cheatsheet](./shell-scripting-cheatsheet.md)
+
+
 
  
 ## [Shell Customization](https://learnbyexample.gitbooks.io/linux-command-line/content/Shell_Customization.html)
@@ -57,9 +57,3 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
 
 - [Shell - learnbyexample.gitbooks.io](https://learnbyexample.gitbooks.io/linux-command-line/content/Shell.html)
 - [github.com/learnbyexample/Linux_command_line](https://github.com/learnbyexample/Linux_command_line/blob/master/Shell_Scripting.md) - Shell Scripting Cheatsheet
-
-If you have any additional resources or links that you believe would benefit others, please feel free to contribute. Our goal is to create a repository of the best learning materials, ensuring everyone has access to top-notch content.
-
-We appreciate your visit to this repository. If you find our initiatives valuable, kindly star this repository to show your support.
-
-Thank you once again, and happy learning!
