@@ -56,7 +56,7 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
 
 ### DevOps Roadmap
 
-  * The following path is opinionated. You can find alternative paths in [ Coming soon....]
+  * The following path is opinionated. You can find alternative paths in **[ Coming soon....]**
   * Do NOT attempt to learn everything, especially if you are a complete beginner (the burnout will make you regret you ever heard the word DevOps)
   * Learn enough to say "Hey, I know what is DevOps and I can build anything out of it 😎". You can learn everything else by demand or when you feel ready
 
