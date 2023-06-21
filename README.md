@@ -46,6 +46,9 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
 <table>
   <tr>
     <td align="center"><a href="./Vagrant" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vagrant/vagrant-original-wordmark.svg" alt="Vagrant" width="75px" height="75px"/><br /> <b> Vagrant</b></a></td>
+    <td align="center"><a href="./Packer" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/packer/packer-original-wordmark.svg" alt="Packer" width="75px" height="75px"/><br /> <b> Packer</b></a></td>
+     <td align="center"><a href="./Podman" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/podman/podman-original-wordmark.svg" alt="Podman" width="75px" height="75px"/><br /> <b> Podman</b></a></td>
+     <td align="center"><a href="./Terminal/vim.md" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vim/vim-original.svg" alt="vim" width="75px" height="75px"/><br /> <b> vim</b></a></td>
     
   </tr>
 </table>
