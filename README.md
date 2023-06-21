@@ -240,7 +240,7 @@ Let's set sail and explore the boundless possibilities of the cloud together!
 
 ## 🙌 [Credits](credits.md)
 
-## 🤝 Contributors && 
+## 🤝 Contributors 
 
 <a href="https://github.com/nomadicmehul/CloudCaptain/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nomadicmehul/CloudCaptain" />
