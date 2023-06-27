@@ -14,7 +14,7 @@ Join us today and embark on a transformative journey to become a CloudCaptain!
   <img src="https://img.shields.io/badge/PRs-welcome-blue">
   <img src="https://img.shields.io/github/last-commit/nomadicmehul/CloudCaptain">
   <a href="https://twitter.com/intent/follow?screen_name=nomadicmehul"><img src="https://img.shields.io/twitter/follow/nomadicmehul?style=flat&logo=twitter"></a>
-  <a href="https://github.com/nomadicmehul"><img src="https://img.shields.io/github/stars/nomadicmehul?style=flat&logo=github"></a>
+  <a href="https://github.com/nomadicmehul"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github"></a>
 </h1>
 
 <center>
