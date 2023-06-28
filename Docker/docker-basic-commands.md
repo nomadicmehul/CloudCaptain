@@ -1,5 +1,4 @@
-<h1 align="center">Docker Basic Commands</h1>
-
+<h1 align="center">Docker Basic Commands</h1> 
 ## Build Images
 
 - Create image using current directory’s Dockerfile <br>
@@ -131,3 +130,74 @@
 
 - Remove all unused containers, networks, dangling and unreferenced images<br>
    ``` docker system prune ```
+
+  ******************************************************
+
+### Docker Swarm 
+- Initialize
+
+``` docker swarm init ```
+
+- Join Docker Cluster
+
+```` docker swarm join --token SWMTKN-1-3pu6hszjas19xyp7ghgosyx9k8atbfcr8p2is99znpy26u2lkl-1awxwuwd3z9j1z3puu7rcgdbx <manager/worker>:2377 ```
+
+- List Docker Nodes in Swarm Cluster
+
+``` docker node ls ```
+
+- List all running applications on this Docker host
+
+``` docker stack ls ```
+
+- Run the specified Compose file
+
+``` docker stack deploy -c <composefile> <STACK_NAME> ```
+
+- List the services associated with an app
+
+``` docker stack services <appname> ```
+
+- List the running containers associated with an app
+
+``` docker stack ps <appname> ```
+
+- Tear down an application
+
+``` docker stack rm <STACK_NAME>alias dstr='docker stack rm' ```
+
+- Docker Swarm Service list
+
+``` docker service ls ```
+``` alias dsls='docker service ls' ```
+
+- List the tasks of one or more services
+
+``` docker service ps <service_name>  ```
+``` alias dsp='docker service ps' ```
+
+- Docker Swarm Service logs
+
+``` alias dsl='docker service logs' ```
+
+- Remove specific docker swarm service
+
+``` alias dsr='docker service rm' ```
+
+- Remove unused Containers, Images, Network, etc.
+
+``` alias sprune='docker system prune' ```
+
+- Remove unused Volumes
+
+``` alias vprune='docker volume prune' ```
+
+- Create Secret
+
+``` docker secret create <SECRET_NAME> <SECRET_PATH> ```
+
+- Create Config
+
+``` docker config create <CONFIG_NAME> <CONFIG_FILE_PATH> ```
+
+
