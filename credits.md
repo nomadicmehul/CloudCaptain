@@ -8,6 +8,7 @@
 * [awesome-vagrant ](https://github.com/iJackUA/awesome-vagrant) as the template used to create this [folder](./Vagrant)
 * [Tikam Singh Alma](https://github.com/Tikam02/DevOps-Guide)
 * [TaptuIT](https://github.com/TaptuIT/awesome-devsecops)
+* [veggiemonk](https://github.com/veggiemonk/awesome-docker)
 
 
 ### Images
