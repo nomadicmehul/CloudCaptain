@@ -237,7 +237,9 @@ Note: "Provisioning" tools can be used to perform configuration management to so
 
 We hope you find this project both informative and engaging.
 
-Don't forget to star this project to show your support for our initiatives. Share your love on social media and proudly proclaim, *"Hey, I am a Cloud Captain! #BeaCloudCaptain!"*
+Don't forget to star this project to show your support for our initiatives. 
+
+Share your love on social media and proudly proclaim, *"Hey, I am a Cloud Captain! #BeaCloudCaptain!"* and included me in your journey by tagging me on [Twitter](https://twitter.com/NomadicMehul). 
 
 Let's set sail and explore the boundless possibilities of the cloud together!
 
