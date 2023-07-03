@@ -9,6 +9,7 @@
 * [Tikam Singh Alma](https://github.com/Tikam02/DevOps-Guide)
 * [TaptuIT](https://github.com/TaptuIT/awesome-devsecops)
 * [veggiemonk](https://github.com/veggiemonk/awesome-docker)
+* [ahmedtariq0](https://github.com/ahmedtariq01/Cloud-DevOps-Learning-Resources)
 
 
 ### Images
