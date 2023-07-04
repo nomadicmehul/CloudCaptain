@@ -826,6 +826,8 @@ Services to securely store your Docker images.
 | The life cycle of a container | https://www-learnsteps-com.cdn.ampproject.org/c/s/www.learnsteps.com/the-life-cycle-of-a-container/amp/ | 
 | How to Name or Rename Docker Containers | https://www.tecmint.com/name-docker-containers/  | 
 | 4 Reasons Why Your Docker Containers Can't Talk to Each Other  | https://maximorlov.com/4-reasons-why-your-docker-containers-cant-talk-to-each-other/  |
+|  Graceful Shutdowns for containerized Spring Boot applications  | https://dev.to/niksta/graceful-shutdowns-for-containerized-spring-boot-applications-5a8n | 
+|  Dockerize your Next.js application on Spheron Compute | https://dev.to/davidsalexande3/dockerize-your-nextjs-application-on-spheron-compute-2l48 |
 
 ### Articles
 
