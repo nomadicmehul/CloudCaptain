@@ -11,6 +11,8 @@
 * [veggiemonk](https://github.com/veggiemonk/awesome-docker)
 * [ahmedtariq0](https://github.com/ahmedtariq01/Cloud-DevOps-Learning-Resources)
 * [4ndersonLin](https://github.com/4ndersonLin/awesome-cloud-security)
+* [jivoi EK_](https://github.com/jivoi) as the template and resources used to create this [folder](./OSINT/)
+* [spmedia](https://github.com/spmedia) as the template and resources used to create this [folder](./OSINT/)
 
 
 ### Images
