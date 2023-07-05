@@ -13,6 +13,7 @@
 * [4ndersonLin](https://github.com/4ndersonLin/awesome-cloud-security)
 * [jivoi EK_](https://github.com/jivoi) as the template and resources used to create this [folder](./OSINT/)
 * [spmedia](https://github.com/spmedia) as the template and resources used to create this [folder](./OSINT/)
+* [myugan](https://github.com/myugan/awesome-cicd-security) as the template and resources used to create this [folder](./CI%3ACD%20Security/)
 
 
 ### Images
