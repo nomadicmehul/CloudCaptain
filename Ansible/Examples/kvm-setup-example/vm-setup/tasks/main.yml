@@ -1,0 +1,34 @@
+
+- name: Getting server Template
+  command: mv /root/DevOps-Homework/VM_IMAGE/centos7-minimal.qcow2 /home/kvm/images/
+
+- name: System preparation is running on Template
+  command: virt-sysprep -a /home/kvm/images/centos7-minimal.qcow2
+
+- name: provisioning Server
+  command: virt-install -n {{ KVMHostname }}
+           --ram 2048 \
+           --vcpus 2 \
+           --os-type linux \
+           --os-variant rhel7 \
+           --import \
+           --disk path=/home/kvm/images/centos7-minimal.qcow2,device=disk,bus=virtio,format=qcow2 \
+           --network bridge=br0 \
+           --graphics none \
+           --serial tcp,host=127.0.0.1:7001,mode=bind,protocol=telnet
+
+- name: "Starting {{ KVMHostname }} Server"
+  pause:
+    seconds: 40
+
+- name: Configuring {{ KVMHostname }}
+  ignore_errors: yes
+  expect:
+    command: telnet 127.0.0.1 7001
+    timeout: 30
+    responses:
+      "Escape character is": "root"
+      "Password: ": "abc123+"
+      "# ":              
+        - cd /root/DevOps-Homework/
+        - docker-compose up -d --build

@@ -1,0 +1,8 @@
+---
+- name: ipconfig module
+  hosts: win_hosts
+  tasks:
+    - name: run ipconfig
+      raw: ipconfig
+      register: ipconfig
+    - debug: var=ipconfig

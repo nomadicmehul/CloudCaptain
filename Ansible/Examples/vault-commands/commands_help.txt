@@ -1,0 +1,30 @@
+# Ansible Vault is a feature that allows users to encrypt values and data structures within Ansible projects. This provides the ability to secure any sensitive data that is necessary to successfully run Ansible plays but should not be publicly visible, like passwords or private keys.
+
+
+# create new encrypted files with vault.
+
+$ ansible-vault create file.yml
+
+# command to encrypt any yml file.
+
+$ ansible-vault encrypt file.yml
+
+# For Viewing encrypted file, Password will again be asked for encryption.
+
+$ ansible-vault view file.yml
+
+# Editing encrypted files
+
+$ ansible-vault edit file.yml
+
+# Change password of the encrypted files
+
+$ ansible-vault rekey file.yml
+
+# Execute an encrypted Ansible playbook
+
+$ ansible-playbook file.yml --ask-vault-pass
+
+# Manually decrypting the encrypted files
+
+$ ansible-vault decrypt file.yml

@@ -1,0 +1,36 @@
+---
+#declare variable name with value hellowolrd. The output will be helloworld.
+- hosts: all
+  vars:
+ name: hellowolrd
+  tasks:
+  - name: Variable Example Basic
+    debug:
+     msg: "{{ name }}"
+
+#Array of variables Example.
+#output in the given example will be helloworld.
+
+- hosts: all
+  vars:
+ name:
+   - helloworld
+   - pythonworld
+ tasks:
+ - name: Ansible Array Example
+   debug:
+    msg: "{{ name[1] }}"
+
+
+#Register Variables
+#capture the output of any task to a register variable.
+
+- hosts: all
+  tasks:
+  - name: Ansible register variable basic example
+    shell: "find *.txt"
+    args:
+     chdir: "/home/Ansible"
+    register: reg_output
+  - debug:
+     var: reg_output

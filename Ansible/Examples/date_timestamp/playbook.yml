@@ -1,0 +1,21 @@
+---
+- hosts:
+  become: true
+  tasks:
+
+#task for displaying the date.
+
+  - name: Date and Time Display
+    debug:
+     var=ansible_date_time.date
+
+#displays the time.
+
+  - name: Date and Time Example in Ansible
+  debug:
+   var=ansible_date_time.time
+
+#Dile based on the current date (helloworld2018-07-15.log)
+
+  - name: Timestamp example with file
+    command: touch helloworld{{ansible_date_time.date}}.log
