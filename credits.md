@@ -15,6 +15,7 @@
 * [spmedia](https://github.com/spmedia) as the template and resources used to create this [folder](./OSINT/)
 * [myugan](https://github.com/myugan/awesome-cicd-security) as the template and resources used to create this [folder](./CI%3ACD%20Security/)
 * [ruanyf](https://github.com/ruanyf/simple-bash-scripts) for this [folder](./bash/scripts/)
+* [syedsaadahmed](https://github.com/syedsaadahmed/Ansible-Playbook-Samples)
 
 
 ### Images
