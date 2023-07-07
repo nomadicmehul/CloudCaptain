@@ -114,7 +114,6 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
 ## Original Content and Authors
 
 - [Shell - learnbyexample.gitbooks.io](https://learnbyexample.gitbooks.io/linux-command-line/content/Shell.html)
-- [github.com/learnbyexample/Linux_command_line](https://github.com/learnbyexample/Linux_command_line/blob/master/Shell_Scripting.md) - Shell Scripting Cheatsheet
 
 If you have any additional resources or links that you believe would benefit others, please feel free to contribute. Our goal is to create a repository of the best learning materials, ensuring everyone has access to top-notch content.
 
