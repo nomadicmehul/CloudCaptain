@@ -828,6 +828,12 @@ Services to securely store your Docker images.
 | 4 Reasons Why Your Docker Containers Can't Talk to Each Other  | https://maximorlov.com/4-reasons-why-your-docker-containers-cant-talk-to-each-other/  |
 |  Graceful Shutdowns for containerized Spring Boot applications  | https://dev.to/niksta/graceful-shutdowns-for-containerized-spring-boot-applications-5a8n | 
 |  Dockerize your Next.js application on Spheron Compute | https://dev.to/davidsalexande3/dockerize-your-nextjs-application-on-spheron-compute-2l48 |
+| Supercharging AI/ML Development with JupyterLab and Docker | https://www.docker.com/blog/supercharging-ai-ml-development-with-jupyterlab-and-docker/ |
+| Conversational AI Made Easy: Developing an ML FAQ Model Demo from Scratch Using Rasa and Docker | https://www.docker.com/blog/developing-using-rasa-and-docker/ | 
+|  Kubernetes CRUD Operation using Go on Docker Desktop  | https://dev.to/docker/kubernetes-crud-operation-using-go-on-docker-desktop-3l6a |
+|  Telegraf Deployment Strategies with Docker Compose  | https://dev.to/shandesai/telegraf-deployment-strategies-with-docker-compose-5chl |  Ship smaller Docker images - Best practices | https://dev.to/shandesai/telegraf-deployment-strategies-with-docker-compose-5chl | 
+
+ 
 
 ### Articles
 
