@@ -1,10 +1,12 @@
 # ReactJS GitHub Action
 
-This GitHub Action has been thoroughly tested and is known to perform effectively in your use case, provided you follow the correct syntax, supply the required credentials for the deployment server, use the appropriate build command, and specify the correct Node.js version. Please ensure you refer to the README for guidance on where to securely add your GitHub secrets.
+With the help of this GitHub Action file, you can automate the CI/CD process for React.js technology on any target server. You need to place this file in the repository path: `.github/workflows/*.yaml`
+
+This GitHub Action has been thoroughly tested and is known to perform effectively in your use case, provided you follow the correct syntax, supply the required credentials for the deployment server, use the appropriate build command, and specify the correct Node.js version. Please make sure to refer to the README for guidance on securely adding your GitHub secrets.
 
 ## Overview
 
-This GitHub Action workflow automatically builds and deploys a ReactJS application to a remote server using SFTP. The workflow is triggered on a `push` event to specific branches.
+This GitHub Action workflow automatically builds and deploys a ReactJS application to a remote server using SFTP Action. The workflow is triggered on a `push` event to specific branches.
 
 ## Workflow Configuration
 
@@ -46,7 +48,7 @@ HOST: The IP address or hostname of the target server. (IPv4 or Elastic IP)
 KEY: The SSH private key file (in .pem or SSH format) used for server authentication.
 ```
 
-### Acknowledgments
+### Must Follow
 
 - Replace `branch-1` with your branch name.
 - Adjust `node-version: [16.x]` to match your desired Node.js version.
@@ -56,4 +58,4 @@ KEY: The SSH private key file (in .pem or SSH format) used for server authentica
 - Make sure to `maintain proper indentation` for the actions in the workflow.
 - Ensure that the target server's `port 22` is open for GitHub Action artifact deployment.
 - Set the necessary secrets in your GitHub repository for secure configuration.
-- Set Secret in Repo `Setting` ->> `Secrets and variable` ->> `Action` ->> `secrets` ->> `New repository secret`.
+- Set Secret in Repo `Settings` ->> `Secrets and Variables` ->> `Actions` ->> `New repository secret` (for add secret need admin access of github repo.).
