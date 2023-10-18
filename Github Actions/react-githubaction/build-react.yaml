@@ -1,0 +1,34 @@
+name: reactjs-githubaction                                # Your workflow name
+on: 
+  push:                                                   # Github action triiger when Push event perfome
+    branches: 
+      - branch-1                                          # Declare Branches name 
+      
+jobs:
+  ubuntu-build:
+    runs-on: ubuntu-latest                                # Build machine in this case Ubuntu with latest version
+
+    strategy:
+      matrix:
+        node-version: [16.x]                              # Node version with matrix formate we can use 18.x, 20.x . . . 
+    steps:
+    - name: checking out latest code                      # Action name
+      uses: actions/checkout@v3                           # Take latest code from branch
+
+    - name: Use Node.js ${{ matrix.node-version }}        # Action name 
+      uses: actions/setup-node@v1                     
+      with:
+        node-version: ${{ matrix.node-version }}          # Install Node-js based on matrix version
+    - run: npm i                                          # Install node dependencies      
+    - run: npm run build                                  # for Build code
+    - run: ls -lah && pwd                                 # For test created artifects created 
+
+    - name: deploy latest build to server                 # Action name 
+      uses: bunyod545/SB.SftpDeployAction@v1.0            # Action for SFTP
+      with:   
+          username: ${{ secrets.USERNAME }}               # Server User name from secrets
+          server: ${{ secrets.HOST }}                     # Server IP from secrets
+          ssh_private_key: ${{ secrets.KEY }}             # Server .pem file or SSH key for login in server from secrets
+          local_path: './build/*'                         # Artifacts name folder 
+          remote_path: '/var/www/project-name/build'      # Deployment path of target server
+          args: '-o ConnectTimeout=5'                     # Connection timeout on 5 sec.
