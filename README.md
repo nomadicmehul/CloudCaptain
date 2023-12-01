@@ -232,7 +232,7 @@ Note: "Provisioning" tools can be used to perform configuration management to so
 
 - Fork this repository to your GitHub account.
 - Clone the repository to your local machine using Git.
-- Join our vibrant community on [Telegram](https://t.me/CloudCaptains), [What's app] (https://chat.whatsapp.com/FY1t4tdDkdJ0eHumqfnUdG) for questions, idea sharing, and collaboration with fellow contributors.
+- Join our vibrant community on [Telegram](https://t.me/CloudCaptains) for questions, idea sharing, and collaboration with fellow contributors.
 - Contribute to the project by submitting pull requests, adding resources, or sharing learning materials.
 - You can also [fork this project](https://help.github.com/articles/fork-a-repo/) and send a [pull request](https://help.github.com/articles/using-pull-requests/) to add a resources here. 
 
