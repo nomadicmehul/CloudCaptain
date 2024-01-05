@@ -102,7 +102,7 @@ Name | Comments
 :------|:------:
 [Reddit DevOps](https://www.reddit.com/r/devops) | Reddit DevOps Community 
 [Linkedin DevOps](https://www.linkedin.com/groups/2825397) | Linkedin DevOps Community
-[Linkedin Cloud ](https://www.linkedin.com/groups/9502832) | Linkedin DevOps & Cloud Community
+[Linkedin Cloud ](https://www.linkedin.com/groups/9510015) | Linkedin DevOps & Cloud Community
 
 ## DevOps Tooling
 
