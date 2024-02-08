@@ -4,7 +4,7 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
 
 | TITILE  | RESOURCE LINK |
 | ------------- | -------------  |
-|    |    | t/
+|  AZ-900  | [https://github.com/nomadicmehul/AZ-900](https://github.com/nomadicmehul/AZ-900)   | t/
 
 If you have any additional resources or links that you believe would benefit others, please feel free to contribute. Our goal is to create a repository of the best learning materials, ensuring everyone has access to top-notch content.
 
