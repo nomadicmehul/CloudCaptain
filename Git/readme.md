@@ -16,6 +16,7 @@ Take a moment to explore these valuable resources, handpicked to enhance your un
   - [Brian Yu's introduction to Git](https://www.youtube.com/watch?v=eulnSXkhE7I)
   - [Git](https://git-scm.com/docs)
     - [Git Stash](https://www.atlassian.com/git/tutorials/saving-changes/git-stash)
+    - [Git on Mac](Git-on-Mac.md)
     - [Working with forks](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/working-with-forks)
     - [Syncing a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)
     - [Learn Git Branching](https://learngitbranching.js.org/)
