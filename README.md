@@ -84,6 +84,7 @@ Name | Description
 [QWIKLBAS](https://www.qwiklabs.com) | AWS, GCP, ect | 
 [Play with Docker](https://labs.play-with-docker.com/) | Docker Lab | 
 [Play with Kubernetes](https://labs.play-with-k8s.com/) | Kubernetes Lab |
+[LabEx](https://labex.io) | Alibaba Cloud, Linux, Docker, Kubernetes Labs |
 
 - Useful softwares for Window users
   - [Git Bash](https://gitforwindows.org/)
