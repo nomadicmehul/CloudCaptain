@@ -1,0 +1,13 @@
+---
+- hosts:
+  become: true
+  tasks:
+
+  - name: restart server
+    shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+    async: 1
+    poll: 0
+    ignore_errors: true
+
+  - name: waiting for the server to come back
+    local_action: wait_for host=testcentos state=started delay=30 timeout=300

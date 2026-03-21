@@ -1,0 +1,33 @@
+
+#pre_tasks and post_tasks are mostly used to run tasks before or after running the main task.
+#usually multiple tasks are to be executed. but if we need to execute a certain task
+#then we use tags
+
+---
+- hosts:
+  become: true
+  name: Post, Pre tasks and Tags
+  tags:
+     - helloworld
+  pre_tasks:
+  - debug: msg="task with tag - helloworld.
+  tasks:
+   - name: Execute of main task
+     debug: msg="now in our node"
+  post_tasks:
+  - debug: msg="task with tag - helloworld.
+  - name: Go without tags
+    hosts: localhost
+    become: true
+    tasks:
+    - name: Command for files list
+      shell: ls -lrt > helloworld.txt
+
+
+#In the example part-1 has a tag helloworld but part-2 does not have any tags.
+
+#$ ansible-playbook preposttagseg.yml --list-tags
+
+#If we want to execute the tasks with tag helloworld, then it would be:
+
+#$ ansible-playbook preposttagseg.yml --tags helloworld

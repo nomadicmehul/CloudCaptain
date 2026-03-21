@@ -1,0 +1,9 @@
+---
+- hosts: 
+  become: true
+  tasks:
+  - name: Creating the User
+    user: name=testuser password=testuser123 groups=ansible shell=/bin/bash
+
+  - name: Removing the User
+    user: name=testuser state=absent remove=yes force=yes
