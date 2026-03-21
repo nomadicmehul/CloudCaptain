@@ -137,8 +137,8 @@ function HeroSection() {
 /* ─── STATS ─── */
 function StatsSection() {
   const stats = [
-    { number: '40+', label: 'Topics Covered', icon: '📚' },
-    { number: '476+', label: 'PDFs & Books', icon: '📖' },
+    { number: '150+', label: 'Guides & Docs', icon: '📚' },
+    { number: '49', label: 'Architecture Diagrams', icon: '📐' },
     { number: '8', label: 'Career Paths', icon: '🗺️' },
     { number: '100%', label: 'Free & Open', icon: '💙' },
   ];
@@ -219,7 +219,7 @@ function LearningPathsSection() {
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <Link className="btn-secondary" to="/docs/learning-paths/career-paths">
+          <Link className="btn-secondary" to="/career-paths">
             Explore All 8 Career Paths →
           </Link>
         </div>
@@ -254,7 +254,7 @@ function CaptainSection() {
               navigate the cloud alone.
             </p>
             <div className="captain-cta">
-              <Link className="btn-primary" to="/docs/learning-paths/career-paths">
+              <Link className="btn-primary" to="/career-paths">
                 Explore Career Paths →
               </Link>
               <Link className="btn-secondary" to="/docs/learning-paths/devops">

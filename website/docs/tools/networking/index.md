@@ -229,49 +229,42 @@ gated
 | `/etc/exports` | NFS export points |
 | `/etc/mtab` | Current mount table |
 
+## Learning Path
+
+Start with fundamentals and progress through intermediate and advanced topics:
+
+### Beginner Path
+1. **Fundamentals** — Master OSI/TCP-IP models, IP addressing, subnetting, DNS, DHCP, ARP
+2. **Routing & Switching** — Understand basic routing, VLANs, spanning tree
+3. **Cheatsheet** — Reference essential commands
+
+### Intermediate Path
+4. **Routing & Switching (Advanced)** — Deep dive into OSPF, BGP, MPLS
+5. **Security** — Firewalls, IPsec, VPN, 802.1X
+
+### Advanced Path
+6. **Interview Questions** — Scenario-based troubleshooting and design
+7. **Security (Advanced)** — Network attacks, defense strategies
+
+---
+
+## Documentation
+
+### Reference by Topic
+
+| Topic | Location |
+|:------|:---------|
+| OSI Model, IP addressing, Subnetting | [Fundamentals](/docs/tools/networking/fundamentals) |
+| Routing protocols (OSPF, BGP, RIP, EIGRP, IS-IS) | [Routing & Switching](/docs/tools/networking/routing-switching) |
+| VLANs, Spanning Tree, NAT, MPLS, WAN | [Routing & Switching](/docs/tools/networking/routing-switching) |
+| Firewalls, IPsec, VPN, 802.1X, ACLs | [Security](/docs/tools/networking/security) |
+| Network attacks and defense strategies | [Security](/docs/tools/networking/security) |
+| 100+ commands (netstat, tcpdump, dig, nmap) | [Cheatsheet](/docs/tools/networking/cheatsheet) |
+| Protocol quick reference (TCP/IP, DNS, ICMP) | [Cheatsheet](/docs/tools/networking/cheatsheet) |
+| 40+ interview questions with answers | [Interview Q&A](/docs/tools/networking/interview-questions) |
+
+---
+
 ## Contributing
 
 Know great Networking resources? Submit a PR to help the community learn!
-
-## Books & PDFs
-
-### Core Networking Books
-
-| Book | Link |
-|:-----|:-----|
-| Computer Networking | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/Books/Computer_Networking.pdf) |
-| HTTP Caching | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/Books/HTTP%20Caching.pdf) |
-| Network Attacks and Exploitation | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/Books/Network%20Attacks%20and%20Exploitation.pdf) |
-| Kurose 7 | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/Books/Kurose-7.pdf) |
-
-### Networking Cheatsheets
-
-| Cheatsheet | Link |
-|:-----------|:-----|
-| BGP | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/BGP.pdf) |
-| Cisco IOS Versions | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/Cisco_IOS_Versions.pdf) |
-| EIGRP | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/EIGRP.pdf) |
-| First Hop Redundancy | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/First_Hop_Redundancy.pdf) |
-| Frame Mode MPLS | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/Frame_Mode_MPLS.pdf) |
-| IEEE 802.11 WLAN | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IEEE_802.11_WLAN.pdf) |
-| IEEE 802.1X | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IEEE_802.1X.pdf) |
-| IOS IPv4 Access Lists | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IOS_IPv4_Access_Lists.pdf) |
-| IOS Interior Routing Protocols | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IOS_Interior_Routing_Protocols.pdf) |
-| IOS Zone-Based Firewall | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IOS_Zone-Based_Firewall.pdf) |
-| IPsec | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IPsec.pdf) |
-| IPv4 Multicast | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IPv4_Multicast.pdf) |
-| IPv4 Subnetting | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IPv4_Subnetting.pdf) |
-| IPv6 | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IPv6.pdf) |
-| IS-IS | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/IS-IS.pdf) |
-| NAT | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/NAT.pdf) |
-| OSPF | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/OSPF.pdf) |
-| QoS | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/QoS.pdf) |
-| RIP | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/RIP.pdf) |
-| RIPng | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/RIPng.pdf) |
-| Spanning Tree | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/Spanning_Tree.pdf) |
-| Static Routing | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/Static_Routing.pdf) |
-| Subinterfaces | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/Subinterfaces.pdf) |
-| VLAN and Trunking | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/VLAN_and_Trunking.pdf) |
-| VPN | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/VPN.pdf) |
-| WAN Technologies | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/WAN_Technologies.pdf) |
-| Wireless | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Networking/cheatsheet/Wireless.pdf) |

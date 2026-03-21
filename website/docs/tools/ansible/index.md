@@ -1,11 +1,22 @@
 ---
 title: "Ansible"
-description: "Configuration management and automation"
+sidebar_label: "Ansible Overview"
+description: "Comprehensive Ansible learning resources — playbooks, roles, modules, automation patterns, and interview prep"
+sidebar_position: 0
 ---
 
 # Ansible
 
 Agentless automation for configuration management, application deployment, and orchestration.
+
+## Documentation
+
+| Guide | Description |
+|:------|:------------|
+| [Ansible Fundamentals](/docs/tools/ansible/fundamentals) | Inventory, playbooks, roles, modules, Vault, Jinja2, Galaxy, exercises |
+| [Playbook Examples](/docs/tools/ansible/examples) | Real-world playbooks: nginx, Docker, KVM, Windows, Vault, Vagrant |
+| [Command Cheat Sheet](/docs/tools/ansible/cheatsheet) | 80+ commands and modules — ad-hoc, playbook, vault, galaxy, debugging |
+| [Interview Questions](/docs/tools/ansible/interview-questions) | 38 questions from beginner to advanced with detailed answers |
 
 ## Why Ansible?
 
@@ -14,22 +25,25 @@ Agentless automation for configuration management, application deployment, and o
 - **Idempotent** — Safe to run multiple times
 - **Extensible** — 3000+ modules available
 
+## Learning Path
+
+1. [Start with fundamentals](/docs/tools/ansible/fundamentals) — inventory, playbooks, roles, modules, Vault
+2. [Keep the cheat sheet handy](/docs/tools/ansible/cheatsheet) — 80+ commands and modules
+3. [Practice interview questions](/docs/tools/ansible/interview-questions) — 38 Q&A with detailed explanations
+
 ## Key Concepts
 
 | Concept | Description |
 |:--------|:------------|
-| **Inventory** | INI file with server information |
+| **Inventory** | INI/YAML file with server information |
 | **Playbook** | YAML file defining automation tasks |
 | **Role** | Reusable collection of tasks, vars, templates |
 | **Module** | Unit of work (e.g., `apt`, `copy`, `service`) |
 | **Vault** | Encrypt sensitive data |
-| **Control Node** | Machine where Ansible is installed |
-| **Task** | Single procedure to execute (e.g., install package) |
-| **Play** | Full provisioning execution from start to finish |
 | **Handler** | Trigger service status changes |
 | **Facts** | Global variables about the system |
 
-## Example Playbook
+## Quick Start
 
 ```yaml
 ---
@@ -47,21 +61,7 @@ Agentless automation for configuration management, application deployment, and o
         name: nginx
         state: started
         enabled: yes
-
-    - name: Deploy configuration
-      template:
-        src: nginx.conf.j2
-        dest: /etc/nginx/nginx.conf
-      notify: restart nginx
-
-  handlers:
-    - name: restart nginx
-      service:
-        name: nginx
-        state: restarted
 ```
-
-## Essential Commands
 
 ```bash
 # Run a playbook
@@ -70,73 +70,20 @@ ansible-playbook site.yml
 # Check mode (dry run)
 ansible-playbook site.yml --check
 
-# Limit to specific hosts
-ansible-playbook site.yml --limit webservers
-
-# Use vault
-ansible-vault encrypt secrets.yml
-ansible-playbook site.yml --ask-vault-pass
-
 # Ad-hoc commands
 ansible all -m ping
 ansible webservers -m shell -a "uptime"
+
+# Vault
+ansible-vault encrypt secrets.yml
 ```
 
-## Learning Resources
-
-### Official Documentation
+## External Resources
 
 | Resource | Description |
 |:---------|:------------|
 | [Ansible Documentation](https://docs.ansible.com/) | Official Ansible docs |
-| [Ansible Modules](https://docs.ansible.com/ansible/latest/collections/) | Complete module reference |
-
-### Tutorials and Guides
-
-| Resource | Description |
-|:---------|:------------|
+| [Ansible Modules Index](https://docs.ansible.com/ansible/latest/collections/) | Complete module reference |
 | [Configuration Management 101](https://www.digitalocean.com/community/tutorials/configuration-management-101-writing-ansible-playbooks) | Writing Ansible Playbooks |
-| [Why You Might Need Ansible](https://www.freecodecamp.org/news/why-you-might-need-ansible-and-not-even-know-it-d33b6e4b2ebe/) | Use cases and benefits |
-| [Ansible Roles & Jenkins Integration](https://www.softwaretestinghelp.com/ansible-roles-jenkins-integration-ec2-modules/) | Ansible with Jenkins and EC2 |
 | [Ansible with Docker](https://mklein.io/2018/02/23/ansible-docker/) | Using Ansible on Docker |
-
-## Getting Started
-
-### Basic Workflow
-
-1. **Prepare inventory** — Define your managed nodes in INI format
-2. **Connect** — Ansible connects via SSH (no agents needed)
-3. **Copy modules** — Ansible copies modules to remote machines
-4. **Execute** — Modules run on remote systems
-
-### Working with Modules
-
-- Ansible ships with a module library for system resources
-- Control services, packages, files, and more
-- Handle executing system commands
-- Create custom modules for specific needs
-
-## Features
-
-- **Radically simple** — YAML-based playbooks anyone can read
-- **Agentless** — No agents to install or manage
-- **Cloud-ready** — Manage cloud instances immediately
-- **Idempotent** — Safe to run multiple times
-- **IT Orchestration** — Zero-downtime updates, hotfixes
-- **Extensible** — 3000+ built-in modules
-
-## Books & PDFs
-
-| Book | Link |
-|:-----|:-----|
-| Ansible Automation | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20Automation.pdf) |
-| Ansible from Beginner to Pro | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20From%20Beginner%20To%20Pro.pdf) |
-| Ansible Full Course | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20Full%20Course.pdf) |
-| Ansible Playbook Essentials | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20Playbook%20Essentials.pdf) |
-| Ansible Playbook | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20Playbook.pdf) |
-| Ansible for AWS | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20for%20AWS.pdf) |
-| Expertise in Ansible Automation | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Expertise%20in%20Ansible%20Automation.pdf) |
-| How to Manage Remote Servers with Ansible | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/How%20to%20manage%20remote%20servers%20with%20Ansible.pdf) |
-| Learn Ansible Quickly | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Learn%20Ansible%20Quickly.pdf) |
-| Learning Ansible | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Learning%20Ansible.pdf) |
-| Ansible Tutorial | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Ansible/Books/Ansible%20tutorial.pdf) |
+| [Ansible Roles & Jenkins](https://www.softwaretestinghelp.com/ansible-roles-jenkins-integration-ec2-modules/) | Integration with Jenkins and EC2 |

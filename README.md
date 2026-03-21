@@ -1,258 +1,160 @@
-## Welcome to CloudCaptain!
+<div align="center">
+  <img src="./website/static/img/cloudcaptain-logo.jpg" width="200" />
+  <h1>CloudCaptain</h1>
+  <p><strong>The Open-Source Learning Hub for Cloud, DevOps, AI & Operations</strong></p>
+  <p>
+    <a href="https://cloudcaptain.io"><img src="https://img.shields.io/badge/Website-Live-1E9BD7?style=flat&logo=docusaurus" /></a>
+    <img src="https://img.shields.io/badge/PRs-welcome-blue" />
+    <img src="https://img.shields.io/github/last-commit/nomadicmehul/CloudCaptain" />
+    <a href="https://twitter.com/intent/follow?screen_name=nomadicmehul"><img src="https://img.shields.io/twitter/follow/nomadicmehul?style=flat&logo=twitter" /></a>
+    <a href="https://github.com/nomadicmehul"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github" /></a>
+  </p>
+</div>
 
-<img src="./Images/image.jpg" align="right" width="200">
+---
 
-CloudCaptain is a dynamic community initiative dedicated to deepening your understanding of cloud technology and its applications. Our mission is to equip individuals with the knowledge and skills they need to become cloud computing experts, fostering a collaborative environment for learning and networking.
+## What is CloudCaptain?
 
-At CloudCaptain, we believe in empowering individuals with accessible tools for success in the cloud industry. Our community comprises passionate professionals from diverse backgrounds, eager to share expertise and engage in mutual learning.
+CloudCaptain is a community-driven, open-source learning platform with **150+ comprehensive documentation pages**, **49 architecture diagrams**, **8 career paths**, and **7 structured learning roadmaps** covering Cloud, DevOps, AI, and Operations — all free, forever.
 
-Through this project, you'll gain access to valuable resources that enhance your learning journey. Whether you're a beginner entering the cloud industry or an experienced professional seeking to expand your knowledge, CloudCaptain offers something for everyone.
+Every page includes hands-on exercises, command cheat sheets, interview Q&A, and exam prep guides. Whether you're a complete beginner or a seasoned professional, CloudCaptain has something for you.
 
-Join us today and embark on a transformative journey to become a CloudCaptain!
+**[Visit the Website →](https://cloudcaptain.io)**
 
-<h1 align="center">
-  <img src="https://img.shields.io/badge/PRs-welcome-blue">
-  <img src="https://img.shields.io/github/last-commit/nomadicmehul/CloudCaptain">
-  <a href="https://twitter.com/intent/follow?screen_name=nomadicmehul"><img src="https://img.shields.io/twitter/follow/nomadicmehul?style=flat&logo=twitter"></a>
-  <a href="https://github.com/nomadicmehul"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github"></a>
-</h1>
+## What's Inside
 
-<center>
-<table>
-  <tr>
-    <td align="center"><a href="./AWS" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="aws" width="75px" height="75px"/><br /> <b> AWS</b></a></td>
-    <td align="center"><a href="./Jenkins" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/jenkins/jenkins-icon.svg" alt="jenkins" width="75px" height="75px"/><br /><b>Jenkins</b></a></td>
-    <td align="center"><a href="./Git" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="75px" height="75px"/><br /><b>Git</b></a></td>
-    <td align="center"><a href="./Ansible" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/ansible/ansible-original-wordmark.svg" alt="ansible" width="75px" height="75px"/> <br /><b>Ansible</b></a></td>
-    <td align="center"><a href="./Linux" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="linux" width="75px" height="75px"/><br /><b>Linux</b></a></td>
-    <td align="center"><a href="./TERRAFORM" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/terraform/terraform-original-wordmark.svg" alt="Terraform" width="75px" height="75px"/><br /><b>Terraform</b></a></td>
-    <td align="center"><a href="./Docker" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="Docker" width="75px" height="75px"/><br /><b>Docker</b></a></td>
-    <td align="center"><a href="./Kubernetes" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain-wordmark.svg" alt="Kubernetes" width="75px" height="75px"/><br /><b>Kubernetes</b></a></td>
-  </tr>
-</table>
+### Tools & Technology (28 categories)
 
-<table>
-  <tr>
-    <td align="center"><a href="./Azure" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/azure/azure-original-wordmark.svg" alt="azure" width="75px" height="75px"/><br /> <b> Azure</b></a></td>
-    <td align="center"><a href="./Bash" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-original.svg" alt="bash" width="75px" height="75px"/><br /><b>Bash</b></a></td>
-    <td align="center"><a href="./Google Cloud Provider" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/googlecloud/googlecloud-original-wordmark.svg" alt="google cloud provider" width="75px" height="75px"/><br /><b>Google Cloud Provider</b></a></td>
-    <td align="center"><a href="./Gradle" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/gradle/gradle-plain-wordmark.svg" alt="gradle" width="75px" height="75px"/> <br /><b>Gradle</b></a></td>
-    <td align="center"><a href="./Nginx" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nginx/nginx-original.svg" alt="nginx" width="75px" height="75px"/><br /><b>Nginx</b></a></td>
-    <td align="center"><a href="./Python" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original-wordmark.svg" alt="python" width="75px" height="75px"/><br /><b>Python</b></a></td>
-    <td align="center"><a href="./DigitalOcean" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/digitalocean/digitalocean-original-wordmark.svg" alt="DigitalOcean" width="75px" height="75px"/><br /><b>DigitalOcean</b></a></td>
-  </tr>
-</table>
+| Category | Topics Covered |
+|:---------|:---------------|
+| **Containers** | Docker (8 guides), Podman |
+| **Orchestration** | Kubernetes (9 guides), Helm |
+| **Infrastructure as Code** | Terraform (5 guides), Ansible (4 guides + playbook examples), CloudFormation, Packer, Vagrant |
+| **CI/CD** | Jenkins (3 guides), CI/CD Pipelines (4 guides), GitHub Actions, CircleCI, GitOps |
+| **Languages & Scripting** | Linux (6 guides), Git (4 guides), Bash (5 guides + 90 script examples), Python (4 guides), YAML |
+| **Networking** | Fundamentals, Routing & Switching, Security, 100+ commands cheat sheet |
+| **Security** | DevSecOps (3 guides) |
+| **Cloud** | AWS (9 guides + CloudFormation examples), Azure (6 guides), GCP (5 guides) |
+| **Web & Build** | Nginx, Chef, Gradle |
 
-<table>
-  <tr>
-    <td align="center"><a href="./Vagrant" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vagrant/vagrant-original-wordmark.svg" alt="Vagrant" width="75px" height="75px"/><br /> <b> Vagrant</b></a></td>
-    <td align="center"><a href="./Packer" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/packer/packer-original-wordmark.svg" alt="Packer" width="75px" height="75px"/><br /> <b> Packer</b></a></td>
-     <td align="center"><a href="./Podman" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/podman/podman-original-wordmark.svg" alt="Podman" width="75px" height="75px"/><br /> <b> Podman</b></a></td>
-     <td align="center"><a href="./Terminal/vim.md" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vim/vim-original.svg" alt="vim" width="75px" height="75px"/><br /> <b> vim</b></a></td>
-    
-  </tr>
-</table>
-</center>
+### Cloud Concepts
 
-### DevOps Roadmap
+| Topic | Coverage |
+|:------|:---------|
+| **Cloud Computing** | Fundamentals, Architecture, Migration, Interview Q&A |
+| **Multi-Cloud** | Strategy, Fundamentals, Interview Q&A |
+| **Cloud Security** | Fundamentals, Best Practices, Interview Q&A |
+| **FinOps** | Cost Optimization, Frameworks, Interview Q&A |
 
-  * The following path is opinionated. You can find alternative paths in **[ Coming soon....]**
-  * Do NOT attempt to learn everything, especially if you are a complete beginner (the burnout will make you regret you ever heard the word DevOps)
-  * Learn enough to say "Hey, I know what is DevOps and I can build anything out of it 😎". You can learn everything else by demand or when you feel ready
+### Learning Paths
 
-#### The must list
+| Path | Description |
+|:-----|:------------|
+| DevOps | Culture, practices, tools landscape, DORA metrics |
+| Cloud | Multi-provider cloud fundamentals |
+| Containers | Docker to Kubernetes journey |
+| AI/ML Ops | Machine learning infrastructure |
+| SRE | Reliability engineering practices |
+| Platform Engineering | Internal developer platforms |
+| Linux Master | Deep systems expertise |
 
-Topic | What to learn | Alternatives | Description
-:------|:------|:------|:------:
-Version Control | [Git](./Git/) | - | Version Control is used everywhere and Git is the leading version control technology
-Programming | At least one programming language | None. Don't settle for learning only shell scripting  | Anyone who practice DevOps should know programming to some extent
-Operating System | [Linux](./Linux/) | Other distribution of Linux :D | Operating Systems is another must when it comes to DevOps
-Protocols | DHCP, UDP, TCP, HTTP, SSH | Not as an alternative, you can simply learn later: NFS, NTP, FTP | Learn how these protocols work and what they are used for
-Applications | Web Server, Load Balancer, Cache, Database | | Learn how they work and try out some implementations (e.g. MySQL for databases and httpd for web servers)
-[System Design](https://github.com/bregman-arie/system-design-notebook) | Availability, Reliability, Scalability, Performance | Learn how to design infrastructure and systems
+### Career Paths (AI Era)
 
-The second must list :)
-Seriously though, don't try to master everything in this list and start with something that you are interested in. The order has no meaning in this case.
+Eight high-demand roles with salary ranges, skills roadmaps, and certification recommendations: DevOps Engineer, Cloud Architect, Platform Engineer, AI/ML Infrastructure Engineer, Site Reliability Engineer, Linux Systems Master, DevSecOps Engineer, FinOps Practitioner.
 
-## Interactive practice and learning sites
+**[Explore Career Paths →](https://cloudcaptain.io/career-paths)**
 
-Learning by doing proved to be a very effective way to learn new things. If you are at a point where you don't feel comfortable enough to do it by yourself and you look for some guidance, the following sites might assist you
+### Interview Preparation
 
-Name | Description
-:------|:------:
-[Kodekloud Engineer](https://www.kodekloud-engineer.com/) | Perform real tasks by working in a fictional organization | 
-[QWIKLBAS](https://www.qwiklabs.com) | AWS, GCP, ect | 
-[Play with Docker](https://labs.play-with-docker.com/) | Docker Lab | 
-[Play with Kubernetes](https://labs.play-with-k8s.com/) | Kubernetes Lab |
-[LabEx](https://labex.io) | Alibaba Cloud, Linux, Docker, Kubernetes Labs |
+Dedicated interview prep with 40-50+ questions per topic: DevOps, Docker, Kubernetes, Terraform, AWS, Azure, GCP, Linux, Git, Python, Bash, Networking, CI/CD, Cloud Computing, Multi-Cloud, Cloud Security, FinOps, and more.
 
-- Useful softwares for Window users
-  - [Git Bash](https://gitforwindows.org/)
-  - [Window Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701?activetab=pivot:overviewtab)
-  -[WSL](https://docs.microsoft.com/en-us/windows/wsl/)
+### Architecture Diagrams
 
-- Useful softwares for Mac users
-  - [Oh My Z](https://ohmyz.sh)
-  - [homebrew](https://brew.sh)
+49 Mermaid diagrams for visual learning — Docker architecture, Kubernetes cluster components, CI/CD pipeline flows, AWS VPC design, cloud service models, and more. All rendered natively in the browser.
 
-## Community
+## Getting Started
 
-Another great way to learn is to learn from the experience of others. For that, the are some excellent DevOps communities.
+### Browse Online
 
-Name | Comments
-:------|:------:
-[Reddit DevOps](https://www.reddit.com/r/devops) | Reddit DevOps Community 
-[Linkedin DevOps](https://www.linkedin.com/groups/2825397) | Linkedin DevOps Community
-[Linkedin Cloud ](https://www.linkedin.com/groups/9510015) | Linkedin DevOps & Cloud Community
+Visit **[cloudcaptain.io](https://cloudcaptain.io)** to start learning immediately.
 
-## DevOps Tooling
+### Run Locally
 
-- [ ] CI/CD
-  - [ ] [Jenkins](https://www.jenkins.io/) (Managed & on-premise, Containers supported, Plugins)
-  - [ ] [GitHub Actions](https://docs.github.com/en/actions) (Hosted service)
-  - [ ] [Travis](https://travis-ci.org/) (Hosted service)
-  - [ ] [CircleCI](https://circleci.com/) (Hosted service)
-  - [ ] [GitLab CI](https://docs.gitlab.com/ee/ci/) (Hosted service and on-premise)
-  - [ ] [Bamboo](https://www.atlassian.com/software/bamboo) (Managed service and on-premise)
-  - [ ] [BuildKite](https://buildkite.com) (Hosted)
-  - [ ] [Zuul](https://zuul-ci.org/docs/zuul) (Hosted and on-premise)
-  - [ ] [Drone](https://www.drone.io)
-  - [ ] [Tekton](https://cloud.google.com/tekton)
-  - [ ] [Argo CD](https://argoproj.github.io/argo-cd)
-  - [ ] [werf](https://werf.io/)
+```bash
+git clone https://github.com/nomadicmehul/CloudCaptain.git
+cd CloudCaptain/website
+npm install
+npm start         # Dev server at localhost:3000
+```
 
-Note: "Provisioning" tools can be used to perform configuration management to some extent. The same applies for configuration management tools, which can be used for provisioning.
+### Build for Production
 
-- [ ] Provisioning
-  - [ ] Terraform (Open Source)
-  - [ ] CloudFormation (Available only on AWS)
-  - [ ] Pulumi (Open Source)
+```bash
+npm run build     # Production build
+npm run serve     # Preview production build
+```
 
-- [ ] Configuration Management (all Open Source)
-  - [ ] Ansible (Agentless, Mutable Infrastructure, Procedural)
-  - [ ] Puppet (Agent, Mutable Infrastructure, Procedural)
-  - [ ] Chef (Mutable Infrastructure)
-  - [ ] Saltstack (Mutable Infrastructure)
-  - [ ] [Spacelift](https://spacelift.io/)
+## Tech Stack
 
-- [ ] Images
-  - [ ] [diskimage-builder](https://github.com/openstack/diskimage-builder)
-  - [ ] [Packer](https://www.packer.io)
+| Component | Technology |
+|:----------|:-----------|
+| Framework | Docusaurus 3 (TypeScript) |
+| Hosting | GitHub Pages + Custom Domain |
+| CI/CD | GitHub Actions (auto-deploy on push to main) |
+| Diagrams | Mermaid (rendered natively in browser) |
+| Search | Local search plugin |
+| Content | Markdown / MDX |
 
-- [ ] Cloud
-  - [ ] AWS
-  - [ ] Azure
-  - [ ] GCP
-  - [ ] OpenStack
- 
-- [ ] Monitoring
-  - [ ] [AppDynamics](https://www.appdynamics.com/product/infrastructure-monitoring)
-  - [ ] [Datadog](https://www.datadoghq.com/)
-  - [ ] [Dynatrace](https://www.dynatrace.com/platform/infrastructure-monitoring/)
-  - [ ] [Monit](https://mmonit.com/monit/)
-  - [ ] [Nagios](https://www.nagios.org/)
-  - [ ] [Centreon](https://www.centreon.com/centreon-editions/centreon-open-source/)
-  - [ ] [New Relic](https://newrelic.com/)
-  - [ ] [Prometheus](https://prometheus.io)
-  - [ ] [Sensu](https://sensu.io/)
-  - [ ] [SolarWinds](https://www.solarwinds.com/server-application-monitor)
-  - [ ] [Statuscake](https://www.statuscake.com) - Website Uptime & Performance
-  - [ ] [VictoriaMetrics](https://victoriametrics.com/) - a fast, cost-effective and scalable monitoring solution and time series database.
-  - [ ] [Zabbix](https://www.zabbix.com/)
+## Contributing
 
-- [ ] Collector of Metrics by agent
-  - [ ] [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/)
+We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
- Monitoring
+1. Fork the repository
+2. Create a branch: `git checkout -b add/my-resource`
+3. Make your changes in the `website/docs/` directory
+4. Run `npm run build` locally to verify
+5. Submit a Pull Request
 
-- [ ] Log Management
-  - [ ] Logstash
-  - [ ] Graylog
-  - [ ] Papertrail
-  - [ ] Fluentd
-  - [ ] [Splunk](https://www.splunk.com)
-  - [ ] [SumoLogic](https://www.sumologic.com)
+### Content Guidelines
 
-- [ ] Log aggregation system
-  - [ ] [Loki](https://grafana.com/oss/loki/)
+- All content goes in `website/docs/` under the appropriate subdirectory
+- Use Markdown with front matter (`title`, `description`, `sidebar_position`)
+- Keep descriptions concise and include practical examples
+- Add exercises, cheat sheets, or interview questions where relevant
+- Use Mermaid diagrams for architecture visuals
 
-- [ ] Dashboards
-  - [ ] Grafana
-  - [ ] Kibana (Elastic)
-  - [ ] Report Portal (Mostly for Test Automation)
+## Project Structure
 
-- [ ] Security
-  - [ ] [Vault](https://www.vaultproject.io) - "Secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets..."
-  - [ ] [Open Policy Agent](https://www.openpolicyagent.org) - "Flexible, fine-grained control for administrators across the stack"
+```
+CloudCaptain/
+  website/                    # Docusaurus site
+    docs/
+      learning-paths/         # Structured learning roadmaps
+      interview-prep/         # Interview preparation guides
+      tools/                  # Tool-specific documentation (25+ categories)
+        docker/               # 8 Docker guides
+        kubernetes/           # 9 Kubernetes guides
+        terraform/            # 5 Terraform guides
+        bash/                 # 5 Bash guides + 90 script examples
+        ansible/              # 4 Ansible guides + playbook examples
+        ...
+      cloud/                  # Cloud provider guides
+        aws/                  # 9 AWS guides + CloudFormation examples
+        azure/                # 6 Azure guides
+        gcp/                  # 5 GCP guides
+        ...                   # Cloud Computing, Multi-Cloud, Security, FinOps
+    src/pages/                # Custom pages (homepage, career paths, contribute)
+    static/img/               # Logo, favicon, social card
+  .github/workflows/          # GitHub Actions deployment
+```
 
-- [ ] Code review 
-  - [ ] Gerrit - Code Review system
-  - [ ] PullPanda - A collection of Tools such as reminder & analytics
-  - [ ] Review Board
+## License
 
-- [ ] Issue Tracking
-  - [ ] Jira
-  - [ ] Bugzilla
+This project is licensed under the MIT License — see [LICENSE](./LICENSE) for details.
 
-- [ ] Code coverage
-  - [ ] Cobertura
-  - [ ] Clover
-  - [ ] JaCoCo
+---
 
-- [ ] Data Processors
-  - [ ] Spark
-  - [ ] Apache Hadoop
-  - [ ] Apache Airflow
-  - [ ] Presto
-
-- [ ] Analytics Engines
-  - [ ] Druid
-  - [ ] Dremio
-  - [ ] Snowflake
-
-- [ ] Operations Data
-  - [ ] Salesforce
-  - [ ] Zuora
-
-- [ ] Containers Orchestration
-  - [ ] Kubernetes
-  - [ ] OpenShift
-  - [ ] Nomad
-
-- [ ] Alerting
-  - [ ] PagerDuty
-  - [ ] ServiceNow
-  - [ ] Slack (Mostly used for IM)
-
-- [ ] Metric Storage
-  - [ ] InfluxDB
-  - [ ] Splunk
-  - [ ] Cloud Storage services and Databases
-
-### To get started Contributing:
-
-- Fork this repository to your GitHub account.
-- Clone the repository to your local machine using Git.
-- Join our vibrant community on [Telegram](https://t.me/CloudCaptains) for questions, idea sharing, and collaboration with fellow contributors.
-- Contribute to the project by submitting pull requests, adding resources, or sharing learning materials.
-- You can also [fork this project](https://help.github.com/articles/fork-a-repo/) and send a [pull request](https://help.github.com/articles/using-pull-requests/) to add a resources here. 
-
-We hope you find this project both informative and engaging.
-
-Don't forget to star this project to show your support for our initiatives. 
-
-Share your love on social media and proudly proclaim, *"Hey, I am a Cloud Captain! #BeaCloudCaptain!"* and included me in your journey by tagging me on [Twitter](https://twitter.com/NomadicMehul). 
-
-Let's set sail and explore the boundless possibilities of the cloud together!
-
-## 🙌 [Credits](credits.md)
-
-## 🤝 Contributors 
-
-<a href="https://github.com/nomadicmehul/CloudCaptain/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nomadicmehul/CloudCaptain" />
-</a>
-
-## 🛡️ License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+<div align="center">
+  <p>Built with love by <a href="https://github.com/nomadicmehul">Mehul Patel</a> and the open-source community</p>
+  <p><a href="https://cloudcaptain.io">cloudcaptain.io</a></p>
+</div>

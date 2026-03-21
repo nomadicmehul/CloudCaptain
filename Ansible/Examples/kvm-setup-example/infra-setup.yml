@@ -1,6 +1,0 @@
----
-
-- hosts: "{{ host }}"
-  roles:
-        - { role: initial-server-setup }
-        - { role: vm-setup }        
