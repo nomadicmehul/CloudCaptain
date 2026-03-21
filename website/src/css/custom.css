@@ -72,7 +72,7 @@ body { font-feature-settings: 'liga' 1, 'calt' 1; }
   height: 60px;
 }
 .navbar__title {
-  font-weight: 800; font-size: 1.25rem;
+  font-weight: 800; font-size: 1.1rem;
   background: linear-gradient(135deg, #fff 30%, #38BDF8 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   white-space: nowrap;
@@ -88,8 +88,10 @@ body { font-feature-settings: 'liga' 1, 'calt' 1; }
   .navbar__logo img { width: 30px; height: 30px; }
 }
 .navbar__link {
-  font-weight: 600; font-size: 0.875rem; letter-spacing: 0.01em;
+  font-weight: 600; font-size: 0.82rem; letter-spacing: 0.01em;
   transition: color 0.2s;
+  white-space: nowrap;
+  padding: 0.25rem 0.6rem !important;
 }
 .navbar__link:hover { color: #38BDF8 !important; }
 
@@ -1012,6 +1014,11 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   border-left-color: #CBD5E1;
 }
 
+/* ═══ NAVBAR RIGHT ITEMS SPACING ═══ */
+.navbar__items--right {
+  gap: 0.6rem !important;
+}
+
 /* ═══ NAVBAR SPONSOR LINK ═══ */
 .navbar__link--sponsor {
   font-weight: 700 !important;
@@ -1021,6 +1028,7 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   border: 1.5px solid rgba(56,189,248,0.25) !important;
   background: rgba(56,189,248,0.06) !important;
   transition: all 0.25s ease !important;
+  margin-left: 0.15rem !important;
 }
 .navbar__link--sponsor:hover {
   background: rgba(56,189,248,0.15) !important;

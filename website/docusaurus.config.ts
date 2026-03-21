@@ -87,7 +87,6 @@ const config: Config = {
           position: 'left',
           label: 'Cloud Providers',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
         {to: '/contribute', label: 'Contribute', position: 'left'},
         {
           href: 'https://buymeacoffee.com/nomadicmehul',
@@ -141,7 +140,6 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {label: 'Blog', to: '/blog'},
             {label: 'Roadmap', to: '/docs/learning-paths/devops'},
             {label: 'Credits', href: 'https://github.com/nomadicmehul/CloudCaptain/blob/main/credits.md'},
           ],
