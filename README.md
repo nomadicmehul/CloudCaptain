@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <p><strong>The Open-Source Learning Hub for Cloud, DevOps, AI & Operations</strong></p>
   <p>
-    <a href="https://nomadicmehul.github.io/CloudCaptain/"><img src="https://img.shields.io/badge/Website-Live-1E9BD7?style=flat&logo=docusaurus" /></a>
+    <a href="https://cloudcaptain.io"><img src="https://img.shields.io/badge/Website-Live-1E9BD7?style=flat&logo=docusaurus" /></a>
     <img src="https://img.shields.io/badge/PRs-welcome-blue" />
     <img src="https://img.shields.io/github/last-commit/nomadicmehul/CloudCaptain" />
     <a href="https://twitter.com/intent/follow?screen_name=nomadicmehul"><img src="https://img.shields.io/twitter/follow/nomadicmehul?style=flat&logo=twitter" /></a>
@@ -15,11 +15,11 @@
 
 ## What is CloudCaptain?
 
-CloudCaptain is a community-driven, open-source learning platform with **130+ comprehensive documentation pages**, **49 architecture diagrams**, **8 career paths**, and **7 structured learning roadmaps** covering Cloud, DevOps, AI, and Operations — all free, forever.
+CloudCaptain is a community-driven, open-source learning platform with **150+ comprehensive documentation pages**, **49 architecture diagrams**, **8 career paths**, and **7 structured learning roadmaps** covering Cloud, DevOps, AI, and Operations — all free, forever.
 
 Every page includes hands-on exercises, command cheat sheets, interview Q&A, and exam prep guides. Whether you're a complete beginner or a seasoned professional, CloudCaptain has something for you.
 
-**[Visit the Website](https://nomadicmehul.github.io/CloudCaptain/)**
+**[Visit the Website →](https://cloudcaptain.io)**
 
 ## What's Inside
 
@@ -29,21 +29,22 @@ Every page includes hands-on exercises, command cheat sheets, interview Q&A, and
 |:---------|:---------------|
 | **Containers** | Docker (8 guides), Podman |
 | **Orchestration** | Kubernetes (9 guides), Helm |
-| **Infrastructure as Code** | Terraform (5 guides), Ansible (3 guides), CloudFormation, Packer, Vagrant |
+| **Infrastructure as Code** | Terraform (5 guides), Ansible (4 guides + playbook examples), CloudFormation, Packer, Vagrant |
 | **CI/CD** | Jenkins (3 guides), CI/CD Pipelines (4 guides), GitHub Actions, CircleCI, GitOps |
-| **Languages & Scripting** | Linux (6 guides), Git (4 guides), Bash (4 guides), Python (4 guides), YAML |
+| **Languages & Scripting** | Linux (6 guides), Git (4 guides), Bash (5 guides + 90 script examples), Python (4 guides), YAML |
 | **Networking** | Fundamentals, Routing & Switching, Security, 100+ commands cheat sheet |
 | **Security** | DevSecOps (3 guides) |
+| **Cloud** | AWS (9 guides + CloudFormation examples), Azure (6 guides), GCP (5 guides) |
 | **Web & Build** | Nginx, Chef, Gradle |
 
-### Cloud Providers
+### Cloud Concepts
 
-| Provider | Topics Covered |
-|:---------|:---------------|
-| **AWS** | Fundamentals, Compute & Networking, Security & IAM, DevOps & CI/CD, Databases & Storage, Exam Prep, Cheat Sheet, Interview Q&A |
-| **Azure** | Fundamentals, Security & Identity, DevOps, Exam Prep (AZ-900, AZ-104), Cheat Sheet, Interview Q&A |
-| **GCP** | Fundamentals, Architecture & DevOps, Exam Prep, Cheat Sheet, Interview Q&A |
-| **Cloud Concepts** | Cloud Computing (4 guides), Multi-Cloud, Cloud Security, FinOps |
+| Topic | Coverage |
+|:------|:---------|
+| **Cloud Computing** | Fundamentals, Architecture, Migration, Interview Q&A |
+| **Multi-Cloud** | Strategy, Fundamentals, Interview Q&A |
+| **Cloud Security** | Fundamentals, Best Practices, Interview Q&A |
+| **FinOps** | Cost Optimization, Frameworks, Interview Q&A |
 
 ### Learning Paths
 
@@ -57,31 +58,25 @@ Every page includes hands-on exercises, command cheat sheets, interview Q&A, and
 | Platform Engineering | Internal developer platforms |
 | Linux Master | Deep systems expertise |
 
+### Career Paths (AI Era)
+
+Eight high-demand roles with salary ranges, skills roadmaps, and certification recommendations: DevOps Engineer, Cloud Architect, Platform Engineer, AI/ML Infrastructure Engineer, Site Reliability Engineer, Linux Systems Master, DevSecOps Engineer, FinOps Practitioner.
+
+**[Explore Career Paths →](https://cloudcaptain.io/career-paths)**
+
 ### Interview Preparation
 
 Dedicated interview prep with 40-50+ questions per topic: DevOps, Docker, Kubernetes, Terraform, AWS, Azure, GCP, Linux, Git, Python, Bash, Networking, CI/CD, Cloud Computing, Multi-Cloud, Cloud Security, FinOps, and more.
 
-### Career Paths (AI Era)
+### Architecture Diagrams
 
-Eight high-demand roles with salary ranges and skills roadmaps: DevOps Engineer, Cloud Architect, Platform Engineer, AI/ML Infrastructure Engineer, Site Reliability Engineer, Linux Systems Master, DevSecOps Engineer, FinOps Practitioner.
-
-## Architecture Diagrams
-
-All documentation includes Mermaid diagrams for visual learning — Docker architecture, Kubernetes cluster components, CI/CD pipeline flows, AWS VPC design, cloud service models, and more (49 diagrams total).
-
-## Script Examples
-
-The repo includes practical script examples you can run immediately:
-
-- `Bash/basic-scripts/` — 42 ready-to-use Bash scripts (system checks, installers, utilities)
-- `AWS/architecting with aws/` — Sample application with CodeDeploy, CloudFormation templates
-- `Ansible/Examples/` — Playbook examples for Nginx, Docker, Vagrant, and more
+49 Mermaid diagrams for visual learning — Docker architecture, Kubernetes cluster components, CI/CD pipeline flows, AWS VPC design, cloud service models, and more. All rendered natively in the browser.
 
 ## Getting Started
 
 ### Browse Online
 
-Visit **[nomadicmehul.github.io/CloudCaptain](https://nomadicmehul.github.io/CloudCaptain/)** to start learning immediately.
+Visit **[cloudcaptain.io](https://cloudcaptain.io)** to start learning immediately.
 
 ### Run Locally
 
@@ -104,7 +99,7 @@ npm run serve     # Preview production build
 | Component | Technology |
 |:----------|:-----------|
 | Framework | Docusaurus 3 (TypeScript) |
-| Hosting | GitHub Pages |
+| Hosting | GitHub Pages + Custom Domain |
 | CI/CD | GitHub Actions (auto-deploy on push to main) |
 | Diagrams | Mermaid (rendered natively in browser) |
 | Search | Local search plugin |
@@ -136,21 +131,20 @@ CloudCaptain/
     docs/
       learning-paths/         # Structured learning roadmaps
       interview-prep/         # Interview preparation guides
-      tools/                  # Tool-specific documentation
-        docker/               # 8 comprehensive Docker guides
+      tools/                  # Tool-specific documentation (25+ categories)
+        docker/               # 8 Docker guides
         kubernetes/           # 9 Kubernetes guides
         terraform/            # 5 Terraform guides
-        ...                   # 25+ more tool categories
+        bash/                 # 5 Bash guides + 90 script examples
+        ansible/              # 4 Ansible guides + playbook examples
+        ...
       cloud/                  # Cloud provider guides
-        aws/                  # 8 AWS guides
+        aws/                  # 9 AWS guides + CloudFormation examples
         azure/                # 6 Azure guides
         gcp/                  # 5 GCP guides
         ...                   # Cloud Computing, Multi-Cloud, Security, FinOps
-    src/pages/                # Custom pages (homepage, contribute)
-    static/img/               # Logo, favicon, images
-  Bash/basic-scripts/         # 42 ready-to-use Bash scripts
-  Ansible/Examples/           # Ansible playbook examples
-  AWS/                        # AWS sample apps & CloudFormation templates
+    src/pages/                # Custom pages (homepage, career paths, contribute)
+    static/img/               # Logo, favicon, social card
   .github/workflows/          # GitHub Actions deployment
 ```
 
@@ -161,6 +155,6 @@ This project is licensed under the MIT License — see [LICENSE](./LICENSE) for 
 ---
 
 <div align="center">
-  <p>Built with love by the open-source community</p>
-  <p>Founded by <a href="https://github.com/nomadicmehul">@nomadicmehul</a></p>
+  <p>Built with love by <a href="https://github.com/nomadicmehul">Mehul Patel</a> and the open-source community</p>
+  <p><a href="https://cloudcaptain.io">cloudcaptain.io</a></p>
 </div>
