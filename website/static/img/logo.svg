@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E9BD7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="capGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1B2A4A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#243656;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Cloud -->
+  <path d="M75,60 Q85,60 85,50 Q85,40 75,38 Q75,25 62,25 Q52,25 48,35 Q42,30 35,35 Q25,35 25,45 Q15,45 15,55 Q15,65 25,65 L75,65 Z" fill="url(#cloudGrad)" opacity="0.9"/>
+  <!-- Captain Hat Brim -->
+  <ellipse cx="58" cy="28" rx="20" ry="5" fill="url(#capGrad)"/>
+  <!-- Captain Hat Top -->
+  <path d="M43,28 Q43,12 58,12 Q73,12 73,28" fill="url(#capGrad)"/>
+  <!-- Hat Badge -->
+  <circle cx="58" cy="20" r="5" fill="none" stroke="#38BDF8" stroke-width="1.5"/>
+  <circle cx="58" cy="20" r="2" fill="#38BDF8"/>
+  <!-- Hat Brim Shine -->
+  <line x1="42" y1="27" x2="74" y2="27" stroke="#7DD3FC" stroke-width="1.5" opacity="0.6"/>
+  <!-- Cloud C letter -->
+  <text x="42" y="58" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="900" fill="white" opacity="0.95">C</text>
+</svg>
