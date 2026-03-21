@@ -147,7 +147,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright \u00A9 ${new Date().getFullYear()} CloudCaptain Community. Built with love by <a href="https://github.com/nomadicmehul" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a> and the open-source community.`,
+      copyright: `Copyright \u00A9 ${new Date().getFullYear()} CloudCaptain Community. Built with love by <a href="https://nomadicmehul.dev/" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a> and the open-source community.`,
     },
     prism: {
       theme: prismThemes.github,
