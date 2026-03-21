@@ -1,9 +1,0 @@
----
-- name: Add a user
-  hosts: win_host
-  tasks:
-  - name: Add User
-    win_user:
-      name: testuser
-      password: "test123"
-      state: present

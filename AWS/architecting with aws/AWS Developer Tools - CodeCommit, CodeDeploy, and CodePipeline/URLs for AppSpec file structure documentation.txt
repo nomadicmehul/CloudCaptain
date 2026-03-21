@@ -1,3 +1,0 @@
-https://benpiper.com/aws-cd-leh
-
-https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#reference-appspec-file-structure-hooks-availability
