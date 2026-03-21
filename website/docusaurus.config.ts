@@ -6,8 +6,8 @@ const config: Config = {
   title: 'CloudCaptain',
   tagline: 'Your Open-Source Learning Hub for Cloud, DevOps, AI & Beyond',
   favicon: 'img/favicon.ico',
-  url: 'https://nomadicmehul.github.io',
-  baseUrl: '/CloudCaptain/',
+  url: 'https://cloudcaptain.io',
+  baseUrl: '/',
   organizationName: 'nomadicmehul',
   projectName: 'CloudCaptain',
   trailingSlash: false,
@@ -107,7 +107,7 @@ const config: Config = {
         {
           title: 'Learn',
           items: [
-            {label: 'Career Paths', to: '/docs/learning-paths/career-paths'},
+            {label: 'Career Paths', to: '/career-paths'},
             {label: 'DevOps Path', to: '/docs/learning-paths/devops'},
             {label: 'Linux Master', to: '/docs/learning-paths/linux-master'},
             {label: 'AI/ML Ops', to: '/docs/learning-paths/ai-ml'},
@@ -139,7 +139,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright \u00A9 ${new Date().getFullYear()} CloudCaptain Community. Built with love by the open-source community.`,
+      copyright: `Copyright \u00A9 ${new Date().getFullYear()} CloudCaptain Community. Built with love by <a href="https://github.com/nomadicmehul" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a> and the open-source community.`,
     },
     prism: {
       theme: prismThemes.github,
