@@ -102,13 +102,7 @@ const config: Config = {
           className: 'navbar__link--sponsor',
         },
         {
-          href: 'https://github.com/nomadicmehul/CloudCaptain',
-          label: 'GitHub',
-          position: 'right',
-        },
-        {
-          href: 'https://twitter.com/nomadicmehul',
-          label: 'Twitter',
+          type: 'custom-githubStars',
           position: 'right',
         },
       ],
