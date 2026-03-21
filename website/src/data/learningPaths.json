@@ -1,0 +1,29 @@
+[
+  {
+    "level": "beginner",
+    "color": "#10B981",
+    "title": "Foundation Track",
+    "desc": "Start your cloud-native journey with Linux, Git, networking, and basic scripting.",
+    "steps": ["Linux Fundamentals", "Git & Version Control", "Networking Basics", "Bash Scripting", "Cloud Concepts"],
+    "duration": "4-6 weeks",
+    "link": "/docs/learning-paths/devops"
+  },
+  {
+    "level": "intermediate",
+    "color": "#F59E0B",
+    "title": "DevOps Engineer Track",
+    "desc": "Master CI/CD pipelines, containers, IaC, and configuration management.",
+    "steps": ["Docker & Containers", "CI/CD Pipelines", "Terraform / IaC", "Ansible", "Cloud Provider"],
+    "duration": "8-12 weeks",
+    "link": "/docs/learning-paths/devops"
+  },
+  {
+    "level": "advanced",
+    "color": "#F43F5E",
+    "title": "Cloud Architect Track",
+    "desc": "Design scalable systems with Kubernetes, service mesh, GitOps, and SRE.",
+    "steps": ["Kubernetes & Helm", "Service Mesh", "GitOps & ArgoCD", "SRE & Observability", "Platform Eng"],
+    "duration": "12-16 weeks",
+    "link": "/docs/learning-paths/containers"
+  }
+]

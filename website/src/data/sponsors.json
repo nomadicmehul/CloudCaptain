@@ -1,0 +1,18 @@
+[
+  {
+    "emoji": "☕",
+    "title": "Supporter",
+    "desc": "Buy us a coffee. Every bit helps keep the content free and the servers running.",
+    "link": "https://buymeacoffee.com/nomadicmehul",
+    "btnText": "Buy Me a Coffee",
+    "btnClass": "btn-sponsor--coffee"
+  },
+  {
+    "emoji": "🚀",
+    "title": "Backer",
+    "desc": "Become a GitHub Sponsor. Get your name on the README and priority issue support.",
+    "link": "https://github.com/sponsors/nomadicmehul",
+    "btnText": "Sponsor on GitHub",
+    "btnClass": "btn-sponsor--github"
+  }
+]

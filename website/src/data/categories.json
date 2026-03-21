@@ -1,0 +1,14 @@
+[
+  { "icon": "🐳", "title": "Docker", "desc": "Containers, Dockerfile, Compose, networking & security.", "link": "/docs/tools/docker/", "count": "15+ resources", "accent": "#2496ED" },
+  { "icon": "☸️", "title": "Kubernetes", "desc": "Orchestration, Helm, operators, service mesh & autoscaling.", "link": "/docs/tools/kubernetes/", "count": "40+ resources", "accent": "#326CE5" },
+  { "icon": "🏗️", "title": "Terraform", "desc": "IaC, modules, state management & CI/CD integration.", "link": "/docs/tools/terraform/", "count": "20+ resources", "accent": "#7B42BC" },
+  { "icon": "☁️", "title": "AWS", "desc": "EC2, S3, Lambda, EKS, CloudFormation & architecture.", "link": "/docs/cloud/aws/", "count": "25+ resources", "accent": "#FF9900" },
+  { "icon": "🔷", "title": "Azure", "desc": "Azure DevOps, AKS, Functions & cloud architecture.", "link": "/docs/cloud/azure/", "count": "10+ resources", "accent": "#0078D4" },
+  { "icon": "🌐", "title": "Google Cloud", "desc": "GKE, Cloud Functions, BigQuery & GCP practices.", "link": "/docs/cloud/gcp/", "count": "10+ resources", "accent": "#4285F4" },
+  { "icon": "🔧", "title": "Ansible", "desc": "Playbooks, roles, Vault & automation patterns.", "link": "/docs/tools/ansible/", "count": "10+ resources", "accent": "#EE0000" },
+  { "icon": "🚀", "title": "CI/CD", "desc": "Jenkins, GitHub Actions, CircleCI & GitOps pipelines.", "link": "/docs/tools/cicd/", "count": "15+ resources", "accent": "#10B981" },
+  { "icon": "🐧", "title": "Linux", "desc": "System admin, shell scripting & performance tuning.", "link": "/docs/tools/linux/", "count": "10+ resources", "accent": "#FCC624" },
+  { "icon": "🔒", "title": "DevSecOps", "desc": "SAST/DAST, compliance, auditing & shift-left security.", "link": "/docs/tools/devsecops/", "count": "8+ resources", "accent": "#F43F5E" },
+  { "icon": "📊", "title": "Observability", "desc": "Prometheus, Grafana, SRE & monitoring strategies.", "link": "/docs/tools/observability/", "count": "8+ resources", "accent": "#F59E0B" },
+  { "icon": "🤖", "title": "AI / ML Ops", "desc": "ML pipelines, model serving & AI infrastructure.", "link": "/docs/learning-paths/ai-ml", "count": "New!", "accent": "#8B5CF6" }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "text": "CloudCaptain helped me go from zero to landing my first DevOps role in 6 months. The structured paths are incredibly well thought out.",
+    "name": "Priya S.",
+    "role": "DevOps Engineer",
+    "initial": "P"
+  },
+  {
+    "text": "The Kubernetes and Terraform guides are the best free resources I've found. Saved me hours compared to piecing together random blog posts.",
+    "name": "Alex T.",
+    "role": "Cloud Architect",
+    "initial": "A"
+  },
+  {
+    "text": "I use CloudCaptain to onboard new team members. The learning paths give them a clear roadmap and the interview prep section is gold.",
+    "name": "Marcus L.",
+    "role": "Engineering Manager",
+    "initial": "M"
+  }
+]
