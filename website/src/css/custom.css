@@ -520,6 +520,52 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
 [data-theme='light'] .section--contribute .section__title,
 [data-theme='light'] .hero-cloudcaptain .section__title { -webkit-text-fill-color: transparent; }
 
+/* ═══ GITHUB STARS BUTTON ═══ */
+.github-stars-btn {
+  display: inline-flex; align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  border: 1.5px solid rgba(56,189,248,0.2);
+  background: rgba(56,189,248,0.06);
+  color: #E2E8F0 !important;
+  font-size: 0.82rem; font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.25s ease;
+  gap: 0;
+  line-height: 1;
+}
+.github-stars-btn:hover {
+  background: rgba(56,189,248,0.15);
+  border-color: #38BDF8;
+  color: #fff !important;
+  transform: translateY(-1px);
+  text-decoration: none !important;
+}
+.github-stars-label {
+  font-weight: 700;
+}
+.github-stars-count {
+  margin-left: 6px;
+  padding-left: 6px;
+  border-left: 1px solid rgba(56,189,248,0.25);
+  font-weight: 800;
+  color: #38BDF8;
+}
+[data-theme='light'] .github-stars-btn {
+  color: #1E293B !important;
+  border-color: #CBD5E1;
+  background: #F1F5F9;
+}
+[data-theme='light'] .github-stars-btn:hover {
+  background: #E2E8F0;
+  border-color: #94A3B8;
+  color: #0F172A !important;
+}
+[data-theme='light'] .github-stars-count {
+  color: #1E9BD7;
+  border-left-color: #CBD5E1;
+}
+
 /* ═══ NAVBAR SPONSOR LINK ═══ */
 .navbar__link--sponsor {
   font-weight: 700 !important;
