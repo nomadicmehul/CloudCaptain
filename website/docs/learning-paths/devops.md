@@ -60,46 +60,18 @@ Focus on one topic at a time. The goal is to say "I know what DevOps is and I ca
 - Azure DevOps Engineer Expert
 - Google Professional Cloud DevOps Engineer
 
-## Books & PDFs
+## Recommended Reading
 
-### DevOps Core Books
+| Book | Author |
+|:-----|:-------|
+| The DevOps Handbook | Gene Kim, Jez Humble, Patrick Debois, John Willis |
+| The Phoenix Project | Gene Kim, Kevin Behr, George Spafford |
+| Accelerate | Nicole Forsgren, Jez Humble, Gene Kim |
+| Site Reliability Engineering | Google (Betsy Beyer et al.) |
+| Release It! | Michael Nygard |
 
-| Book | Link |
-|:-----|:-----|
-| How to DevOps | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/How%20to%20DevOps.pdf) |
-| DevOps Teams | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/DevOps_Teams.pdf) |
-| DevOps Essential Concepts | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Devops%20Essential%20Concepts.pdf) |
-| Everything About DevOps | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Everything_About_DevOps.pdf) |
-| Complete Guide to DevOps | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Complete%20guide%20to%20devops.pdf) |
-| The DevOps Handbook | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/The%20DevOps%20handBook.pdf) |
-| The Complete Guide to DevOps | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/The%20Complete%20Guide%20to%20DevOps.pdf) |
-
-### DevOps Learning & Practice
-
-| Book | Link |
-|:-----|:-----|
-| A Practical Guide to Getting Started with DevOps | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/A%20Practical%20Guide%20to%20Getting%20Started%20with%20DevOp.pdf) |
-| DevOps Basic: A Beginner's Guide | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/DevOps%20Basic%20A%20Beginner's%20Guide.pdf) |
-| DevOps Tutorials | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/DevOps%20tutorials.pdf) |
-| Learn DevOps from Scratch | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Learn%20DevOps%20from%20Scratch.pdf) |
-| Simple DevOps Projects | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Simple%20DevOps%20Projects.pdf) |
-
-### Advanced DevOps Topics
-
-| Book | Link |
-|:-----|:-----|
-| Cloud Native Observability for DevOps Teams | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Cloud%20Native%20Observability%20for%20DevOps%20Teams.pdf) |
-| Containerization with Docker & Kubernetes | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/Containerisation%20with%20docker%20%26%20Kubernetes.pdf) |
-| DevOps with Kubernetes | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/DevOps%20with%20Kubernetes.pdf) |
-| DevOps with Atlassian | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/DevOps%20with%20Atlassian.pdf) |
-| DevOps for Networking | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Books/DEVOPS_FOR_NETWORKING.pdf) |
-
-### Interview Preparation
-
-| Resource | Link |
-|:---------|:-----|
-| DevOps Engineer Interview Prep | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Interview%20Prep/DevOps%20Engineer%20Interview%20Prep.pdf) |
-| Advance DevOps Interview | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Interview%20Prep/Advance%20DevOps%20Interview.pdf) |
-| DevOps Interview Guide | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Interview%20Prep/DevOps%20Interview%20Guide.pdf) |
-| DevOps Engineer Interview Questions | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Interview%20Prep/DevOps%20Engineer%20Interview%20Questions.pdf) |
-| DevOps Q&A | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevOps/Interview%20Prep/DevOps%20Q%26A.pdf) |
+All DevOps content has been integrated into our comprehensive guides:
+- [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals) — Culture, CALMS, Three Ways, DORA metrics
+- [DevOps Practices](/docs/learning-paths/devops-practices) — CI/CD, deployment strategies, observability, incident management
+- [DevOps Tools Overview](/docs/learning-paths/devops-tools-overview) — Tool landscape and selection
+- [DevOps Interview Prep](/docs/interview-prep/devops) — Comprehensive interview Q&A

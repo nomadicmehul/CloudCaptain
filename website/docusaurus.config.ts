@@ -13,6 +13,9 @@ const config: Config = {
   trailingSlash: false,
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    mermaid: true,
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -155,6 +158,7 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   themes: [
+    '@docusaurus/theme-mermaid',
     [
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {
