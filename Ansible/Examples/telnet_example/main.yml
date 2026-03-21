@@ -1,0 +1,15 @@
+---
+- name: Telnet {{ hostname }}
+  ignore_errors: yes
+  expect:
+    timeout: 10
+    command: telnet 127.0.0.1 10896
+    responses:  
+     "Escape character is": "\n"
+     "login:": "root"
+     "password: ": "admin123"
+     "# ":
+       - conf
+       - hostname {{ hostname }}
+       - exit
+       - save all

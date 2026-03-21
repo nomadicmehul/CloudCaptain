@@ -3,8 +3,8 @@
 # CloudCaptain PDF Cleanup Script
 # ============================================================
 # All PDF content has been converted to native Markdown pages.
-# This script removes the original PDF directories to reduce
-# repo size from ~3.9GB to under 50MB.
+# This script ONLY removes .pdf files, preserving scripts,
+# YAML examples, markdown docs, and other non-PDF resources.
 #
 # Run from the CloudCaptain repo root:
 #   chmod +x cleanup-pdfs.sh
@@ -13,81 +13,46 @@
 
 set -euo pipefail
 
-echo "🧹 CloudCaptain PDF Cleanup"
-echo "=========================="
+echo "CloudCaptain PDF Cleanup"
+echo "========================"
 echo ""
 
 # Count before
-pdf_count=$(find . -name "*.pdf" -type f | wc -l)
-pdf_size=$(find . -name "*.pdf" -type f -exec du -ch {} + 2>/dev/null | tail -1 | cut -f1)
+pdf_count=$(find . -name "*.pdf" -type f -not -path "./.git/*" | wc -l)
+pdf_size=$(find . -name "*.pdf" -type f -not -path "./.git/*" -exec du -ch {} + 2>/dev/null | tail -1 | cut -f1)
 echo "Found $pdf_count PDF files ($pdf_size total)"
 echo ""
 
-# Directories containing PDFs (all content converted to Markdown)
-dirs_to_remove=(
-  "AWS"
-  "Ansible"
-  "Azure"
-  "Bash"
-  "CI-CD"
-  "Chef"
-  "Cloud Computing"
-  "Cloud Security"
-  "DevOps"
-  "DevSecOps"
-  "Docker"
-  "FinOps"
-  "Git"
-  "GitOps"
-  "Github Actions"
-  "Google Cloud Provider"
-  "Gradle"
-  "Jenkins"
-  "Kubernetes"
-  "Linux"
-  "Multi Cloud"
-  "Nephio"
-  "Networking"
-  "Nginx"
-  "Podman"
-  "Python"
-  "SRE"
-  "TERRAFORM"
-  "Yaml"
-)
-
-echo "The following directories will be removed:"
-for dir in "${dirs_to_remove[@]}"; do
-  if [ -d "$dir" ]; then
-    size=$(du -sh "$dir" 2>/dev/null | cut -f1)
-    echo "  📁 $dir ($size)"
-  fi
-done
-
+# Show breakdown by directory
+echo "PDF files by directory:"
+find . -name "*.pdf" -type f -not -path "./.git/*" | sed 's|^\./||' | cut -d'/' -f1 | sort | uniq -c | sort -rn
 echo ""
-read -p "Proceed with deletion? (y/N) " confirm
+
+read -p "Delete all $pdf_count PDF files? Non-PDF files (scripts, YAML, markdown) will be preserved. (y/N) " confirm
 if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
   echo "Aborted."
   exit 0
 fi
 
 echo ""
-for dir in "${dirs_to_remove[@]}"; do
-  if [ -d "$dir" ]; then
-    echo "Removing: $dir"
-    rm -rf "$dir"
-  fi
-done
+echo "Removing PDF files..."
+find . -name "*.pdf" -type f -not -path "./.git/*" -delete
+echo ""
+
+# Clean up empty directories left behind
+echo "Cleaning up empty directories..."
+find . -type d -empty -not -path "./.git/*" -delete 2>/dev/null || true
 
 echo ""
-echo "✅ Done! PDF directories removed."
+remaining=$(find . -name "*.pdf" -type f -not -path "./.git/*" | wc -l)
+echo "Done! $remaining PDF files remaining (should be 0)."
 echo ""
 echo "Next steps:"
 echo "  1. git add -A"
-echo "  2. git commit -m 'Remove PDF files — all content converted to native Markdown'"
+echo "  2. git commit -m 'Remove PDF files - all content converted to native Markdown'"
 echo "  3. git push"
 echo ""
-echo "Optional — to also remove PDFs from git history (saves space on clone):"
-echo "  git filter-branch --tree-filter 'rm -rf AWS Ansible Azure Bash CI-CD Chef \"Cloud Computing\" \"Cloud Security\" DevOps DevSecOps Docker FinOps Git GitOps \"Github Actions\" \"Google Cloud Provider\" Gradle Jenkins Kubernetes Linux \"Multi Cloud\" Nephio Networking Nginx Podman Python SRE TERRAFORM Yaml' HEAD"
+echo "Optional - to also remove PDFs from git history (saves clone size):"
+echo "  git filter-repo --path-glob '*.pdf' --invert-paths"
 echo "  git push --force"
-echo "  ⚠️  Force push rewrites history — coordinate with contributors first!"
+echo "  Warning: Force push rewrites history - coordinate with contributors first!"

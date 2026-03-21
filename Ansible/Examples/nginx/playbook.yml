@@ -1,0 +1,33 @@
+---
+- hosts:
+  become: true
+  tasks:
+
+  - name: Checking nginx is at the latest version
+    apt: name=nginx state=latest
+
+  - name: starting nginx service
+    service:
+      name: nginx
+      state: started
+          
+  - name: nginx config file copy and service restart
+    copy:
+      src: /home/foo/static_site.cfg
+      dest: /etc/nginx/sites-available/static_site.cfg
+        
+  - name: creating symbolic-link
+    file:
+      src: /etc/nginx/sites-available/static_site.cfg
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+        
+  - name: Copying the content of the web site of just copy index.html
+    copy:
+      src: /home/foo/static-site-src/
+      dest: /home/foo/static-site
+        
+  - name: restarting the nginx service
+    service:
+      name: nginx
+      state: restarted
