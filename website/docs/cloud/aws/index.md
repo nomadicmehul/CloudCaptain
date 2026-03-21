@@ -19,6 +19,7 @@ The world's most comprehensive and broadly adopted cloud platform, offering 200+
 | [DevOps & CI/CD](/docs/cloud/aws/devops-cicd) | CodePipeline, CodeBuild, CodeDeploy, CloudFormation, Terraform, containers |
 | [Databases & Storage](/docs/cloud/aws/databases-storage) | S3, EBS, RDS, DynamoDB, Aurora, Redshift, ElastiCache |
 | [Exam Prep](/docs/cloud/aws/exam-prep) | Cloud Practitioner, Solutions Architect, SysOps, DevOps Engineer certs |
+| [CloudFormation Examples](/docs/cloud/aws/cloudformation-examples) | Real CloudFormation templates, CodeDeploy configs, and automation examples |
 | [CLI & Services Cheat Sheet](/docs/cloud/aws/cheatsheet) | Complete AWS CLI reference and 50+ services quick-reference |
 | [Interview Questions](/docs/cloud/aws/interview-questions) | 60+ questions from beginner to advanced with detailed answers |
 
