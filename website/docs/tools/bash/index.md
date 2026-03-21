@@ -14,8 +14,9 @@ Start with the fundamentals and progress through advanced topics:
 
 1. **[Fundamentals](/docs/tools/bash/fundamentals)** — Variables, quoting, control flow, functions, arrays
 2. **[Advanced](/docs/tools/bash/advanced)** — Process substitution, here documents, traps, debugging, sed/awk, cron
-3. **[Cheatsheet](/docs/tools/bash/cheatsheet)** — 100+ commands and one-liners for quick reference
-4. **[Interview Questions](/docs/tools/bash/interview-questions)** — 35+ questions with detailed answers
+3. **[Script Examples](/docs/tools/bash/examples)** — 90+ real-world scripts: sysadmin, networking, math, automation
+4. **[Cheatsheet](/docs/tools/bash/cheatsheet)** — 100+ commands and one-liners for quick reference
+5. **[Interview Questions](/docs/tools/bash/interview-questions)** — 35+ questions with detailed answers
 
 ## Quick Start
 

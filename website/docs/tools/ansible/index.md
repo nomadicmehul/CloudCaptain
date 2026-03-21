@@ -14,6 +14,7 @@ Agentless automation for configuration management, application deployment, and o
 | Guide | Description |
 |:------|:------------|
 | [Ansible Fundamentals](/docs/tools/ansible/fundamentals) | Inventory, playbooks, roles, modules, Vault, Jinja2, Galaxy, exercises |
+| [Playbook Examples](/docs/tools/ansible/examples) | Real-world playbooks: nginx, Docker, KVM, Windows, Vault, Vagrant |
 | [Command Cheat Sheet](/docs/tools/ansible/cheatsheet) | 80+ commands and modules — ad-hoc, playbook, vault, galaxy, debugging |
 | [Interview Questions](/docs/tools/ansible/interview-questions) | 38 questions from beginner to advanced with detailed answers |
 

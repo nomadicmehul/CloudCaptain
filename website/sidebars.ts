@@ -130,6 +130,7 @@ const sidebars: SidebarsConfig = {
           link: { type: 'doc', id: 'tools/ansible/index' },
           items: [
             'tools/ansible/fundamentals',
+            'tools/ansible/examples',
             'tools/ansible/cheatsheet',
             'tools/ansible/interview-questions',
           ],
@@ -217,6 +218,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'tools/bash/fundamentals',
             'tools/bash/advanced',
+            'tools/bash/examples',
             'tools/bash/cheatsheet',
             'tools/bash/interview-questions',
           ],
@@ -332,6 +334,7 @@ const sidebars: SidebarsConfig = {
             'cloud/aws/devops-cicd',
             'cloud/aws/databases-storage',
             'cloud/aws/exam-prep',
+            'cloud/aws/cloudformation-examples',
             'cloud/aws/cheatsheet',
             'cloud/aws/interview-questions',
           ],
