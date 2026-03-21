@@ -7,7 +7,7 @@ const config: Config = {
   tagline: 'Your Open-Source Learning Hub for Cloud, DevOps, AI & Beyond',
   favicon: 'img/favicon.ico',
   url: 'https://nomadicmehul.github.io',
-  baseUrl: '/CloudCaptain/',
+  baseUrl: '/',
   organizationName: 'nomadicmehul',
   projectName: 'CloudCaptain',
   trailingSlash: false,
