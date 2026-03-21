@@ -1,21 +1,48 @@
 ---
 title: "Cloud Security"
-description: "Cloud security best practices"
+description: "Cloud security best practices, IAM, encryption, compliance, and incident response"
 ---
 
 # Cloud Security
 
-Secure your cloud infrastructure with industry best practices.
+Secure your cloud infrastructure with industry best practices and proven frameworks.
 
-## Resources
+## Core Topics
 
-Check back soon for curated resources, or [contribute](https://github.com/nomadicmehul/CloudCaptain) to help build this section!
+| Topic | Description |
+|:------|:------------|
+| [Fundamentals](fundamentals.md) | Shared responsibility, IAM, encryption, network security, compliance (SOC2, HIPAA, PCI-DSS) |
+| [Interview Questions](interview-questions.md) | 25+ Q&A covering IAM, encryption, compliance, incident response, and real scenarios |
 
-## Books & PDFs
+## Key Concepts
 
-| Book | Link |
-|:-----|:-----|
-| Cloud Security Technical Reference Architecture | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Cloud%20Security/Books/Cloud%20Secuirty%20Technical%20Reference%20Architecture.pdf) |
-| Network Infrastructure Security Guidance | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Cloud%20Security/Books/Network%20Infra%20Security%20Guidenace.pdf) |
-| Security Guidance for Critical Areas of Focus in Cloud Computing | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Cloud%20Security/Books/Security%20Guidance%20for%20Critical%20Areas%20of%20Focus%20in%20Cloud%20Computing.pdf) |
-| The Comprehensive Playbook for Implementing Zero Trust Security | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/Cloud%20Security/Books/The%20Comprehensice%20Playbook%20for%20Implementing%20Zero%20Trust%20Security.pdf) |
+- **Shared Responsibility Model** — Understand what cloud providers vs. customers secure
+- **Identity & Access Management** — Principle of least privilege, MFA, role-based access
+- **Encryption** — Data at rest and in transit (AES-256, TLS 1.2+)
+- **Network Security** — Security groups, network segmentation, DDoS protection
+- **Compliance** — SOC 2, ISO 27001, HIPAA, PCI-DSS frameworks and requirements
+- **Cloud Security Posture Management** — Continuous monitoring and misconfiguration detection
+- **Zero Trust Security** — Never trust, always verify approach
+- **Incident Response** — Preparation, detection, investigation, and remediation
+
+## Common Use Cases
+
+- Build secure cloud infrastructure that passes audits
+- Protect sensitive customer data with encryption and access controls
+- Implement compliance frameworks (SOC2, HIPAA, PCI-DSS)
+- Detect and respond to security incidents quickly
+- Meet regulatory and industry requirements
+
+## Popular Resources
+
+| Resource | Topic |
+|:---------|:------|
+| [OWASP Top 10](https://owasp.org/www-project-top-ten/) | Web application security risks |
+| [AWS Security Best Practices](https://aws.amazon.com/security/best-practices/) | AWS-specific security guidance |
+| [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework/) | Industry-standard security framework |
+| [Cloud Security Alliance](https://cloudsecurityalliance.org/) | Cloud-specific security guidance |
+| [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) | Configuration standards and best practices |
+
+## Contributing
+
+Know great cloud security resources? Submit a PR to help the community learn!

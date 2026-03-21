@@ -1,29 +1,48 @@
 ---
 title: "CI/CD"
 description: "Continuous Integration and Deployment"
+sidebar_position: 1
 ---
 
 # CI/CD
 
 Automate your software delivery pipeline — build, test, and deploy with confidence.
 
-## Resources
+## Learning Path
 
-Check back soon for curated resources, or [contribute](https://github.com/nomadicmehul/CloudCaptain) to add content!
+| Topic | Description |
+|-------|-------------|
+| [Fundamentals](/docs/tools/cicd/fundamentals) | Core concepts, pipeline stages, deployment strategies, and best practices |
+| [Cheatsheet](/docs/tools/cicd/cheatsheet) | Quick reference for GitHub Actions, Jenkins, GitLab CI, and CircleCI syntax |
+| [Interview Questions](/docs/tools/cicd/interview-questions) | 30+ interview questions and answers for CI/CD roles |
+| [GitOps](/docs/tools/cicd/gitops) | GitOps principles, ArgoCD, Flux, and pull-based deployment |
 
-## Books & PDFs
+## Key Concepts
 
-| Book | Link |
-|:-----|:-----|
-| CI/CD Best Practices | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/CI-CD%20Best%20Practices.pdf) |
-| CI/CD Pipeline as Code with Jenkins and Docker | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/CI-CD%20Pipleline%20as%20code%20with%20Jenkins%20and%20Docker.pdf) |
-| CICD Short Notes | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/CICD%20Short%20Notes.pdf) |
-| CI/CD with Docker and Kubernetes | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/CICd%20with%20Docker%20and%20Kubernetes.pdf) |
-| Continuous Delivery - Reliable Software Releases | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/Continuous%20Delivery%20-%20Reliable%20Software%20Releases%20Through%20Build%2C%20Test%20And%20Deployment%20Automation.pdf) |
-| Enterprise CI-CD Best Practices | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/Enterprise%20CI-CD%20Best%20Practices.pdf) |
-| How to Setup CI/CD Pipeline | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/How%20to%20setup%20CI%20CD%20pipeline.pdf) |
-| Practical Guide to CI/CD | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/Practical%20Guide%20to%20CI-CD.pdf) |
-| Guide to DevOps Continuous Delivery Automation | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/CI-CD/Books/guide-to-devops-continuous-delivery-automation.pdf) |
+- **Continuous Integration** — Automatically build and test code on every commit
+- **Continuous Delivery** — Keep code in a state ready for production release
+- **Continuous Deployment** — Automatically deploy to production after tests pass
+- **Pipeline-as-Code** — Define pipelines as code in your repository
+- **Quality Gates** — Automated checkpoints ensuring code meets standards
+- **Blue-Green Deployment** — Zero-downtime deployment with instant rollback
+- **Canary Deployment** — Gradually roll out changes to a subset of users
+- **Artifact Management** — Version and trace build outputs through pipeline
+
+## Popular Tools
+
+- **Jenkins** — Self-hosted CI/CD server with extensive plugins
+- **GitHub Actions** — CI/CD integrated with GitHub
+- **GitLab CI** — CI/CD built into GitLab
+- **CircleCI** — Cloud-based CI/CD platform
+- **Docker** — Containerization for consistent environments
+- **Kubernetes** — Container orchestration for deployments
+
+## Getting Started
+
+1. Start with [Fundamentals](/docs/tools/cicd/fundamentals) to understand core concepts
+2. Reference the [Cheatsheet](/docs/tools/cicd/cheatsheet) for platform-specific syntax
+3. Prepare for interviews with [Interview Questions](/docs/tools/cicd/interview-questions)
+4. Learn [GitOps](/docs/tools/cicd/gitops) for declarative infrastructure
 
 ## Contributing
 

@@ -1,6 +1,0 @@
----
-- name: Execute powershell script
-  hosts: win_host
-  tasks:
-  - name: Running powershell script
-    script: hello.ps1

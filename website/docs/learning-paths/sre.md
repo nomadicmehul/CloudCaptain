@@ -47,13 +47,14 @@ Build and operate reliable, scalable, and efficient systems.
 | Implementing Service Level Objectives | Alex Hidalgo |
 | Observability Engineering | Charity Majors et al. |
 
-## Books & PDFs
+## Recommended Reading
 
-| Book | Link |
-|:-----|:-----|
-| Site Reliability Engineering (2016) | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/SRE/Books/Site.Reliability.Engineering.2016.3.pdf) |
-| Training Site Reliability Engineers | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/SRE/Books/Training_Site_Reliability_Engineers.pdf) |
-| Building Secure and Reliable Systems | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/SRE/Books/building_secure_and_reliable_systems.pdf) |
-| Case Studies - Infrastructure Change Management | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/SRE/Books/case-studies-infrastructure-change-management.pdf) |
-| Google Site Reliability Engineering | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/SRE/Books/google-site-reliability-engineering.pdf) |
-| The Site Reliability Workbook | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/SRE/Books/the-site-reliability-workbook-next18.pdf) |
+| Book | Author |
+|:-----|:-------|
+| Site Reliability Engineering | Google (Betsy Beyer et al.) |
+| The Site Reliability Workbook | Google (Betsy Beyer et al.) |
+| Building Secure and Reliable Systems | Google (Heather Adkins et al.) |
+| Training Site Reliability Engineers | Google |
+| Implementing Service Level Objectives | Alex Hidalgo |
+
+All SRE content from these books has been integrated into the [SRE Practices](/docs/learning-paths/sre-practices) guide above.

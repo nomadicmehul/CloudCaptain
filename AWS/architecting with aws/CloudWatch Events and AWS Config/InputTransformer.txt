@@ -1,5 +1,0 @@
-InputTemplate
-"{"InstanceId":[<instance>]}"
-
-InputPathsMap
-"instance": "$.detail.EC2InstanceId"

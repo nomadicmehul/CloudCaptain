@@ -1,27 +1,60 @@
 ---
 title: "DevSecOps"
 description: "Security in the DevOps pipeline"
+sidebar_position: 1
 ---
 
 # DevSecOps
 
 Integrate security practices into every stage of the software development lifecycle.
 
-## Resources
+## Learning Path
 
-Check back soon for curated resources, or [contribute](https://github.com/nomadicmehul/CloudCaptain) to add content!
+| Topic | Description |
+|-------|-------------|
+| [Fundamentals](/docs/tools/devsecops/fundamentals) | Shift-left, SAST/DAST/SCA, container security, secrets management, compliance-as-code |
+| [Cheatsheet](/docs/tools/devsecops/cheatsheet) | Quick reference for security tools: Trivy, Snyk, Semgrep, GitLeaks, and more |
+| [Interview Questions](/docs/tools/devsecops/interview-questions) | 30+ interview questions with answers for DevSecOps roles |
+
+## Key Concepts
+
+- **Shift-Left Security** — Move security checks earlier in the development process
+- **SAST** — Static Application Security Testing (analyze source code)
+- **DAST** — Dynamic Application Security Testing (test running application)
+- **SCA** — Software Composition Analysis (check dependencies for vulnerabilities)
+- **Container Scanning** — Find vulnerabilities in Docker images before deployment
+- **Secrets Management** — Never store credentials in code
+- **Supply Chain Security** — Secure the entire software development process
+- **Compliance-as-Code** — Enforce security and compliance automatically
+
+## Popular Tools
+
+- **Scanning**: Trivy, Semgrep, Snyk, SonarQube, GitLeaks
+- **Container Security**: Docker Scout, Aqua, Harbor, Clair
+- **Infrastructure**: Checkov, Terraform Validate, tflint
+- **DAST**: OWASP ZAP, Burp Suite, Nuclei
+- **Cloud**: Prowler (AWS), ScoutSuite, CloudMapper
+
+## Getting Started
+
+1. Start with [Fundamentals](/docs/tools/devsecops/fundamentals) to understand core concepts
+2. Reference the [Cheatsheet](/docs/tools/devsecops/cheatsheet) for tool commands
+3. Prepare for interviews with [Interview Questions](/docs/tools/devsecops/interview-questions)
+
+## OWASP Top 10
+
+The 10 most critical web application security risks:
+1. Injection
+2. Broken Authentication
+3. Sensitive Data Exposure
+4. XML External Entities
+5. Broken Access Control
+6. Security Misconfiguration
+7. Cross-Site Scripting (XSS)
+8. Insecure Deserialization
+9. Using Known Vulnerable Components
+10. Insufficient Logging & Monitoring
 
 ## Contributing
 
 Know great DevSecOps resources? Submit a PR to help the community learn!
-
-## Books & PDFs
-
-| Book | Link |
-|:-----|:-----|
-| DevSecOps - Protecting the Modern Software Factory | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevSecOps/Books/DeevSecOps%20protecting%20The%20Modern%20Software%20Factory.pdf) |
-| DevOpsSec - Secure Your CI/CD | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevSecOps/Books/DevOpsSec%20Secure%20your%20CI-CD.pdf) |
-| Implementing DevSecOps in AWS | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevSecOps/Books/Implementing%20DecSecOps%20in%20AWS.pdf) |
-| Modernize and Secure Your Application Life Cycles | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevSecOps/Books/Modernize%20and%20Secure%20your%20application%20life%20cycles%20with%20DevSecOps.pdf) |
-| Securing DevOps | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevSecOps/Books/securing-devops.pdf) |
-| PROWLER Audit Tool | [View PDF](https://github.com/nomadicmehul/CloudCaptain/blob/main/DevSecOps/Audit/Audit%20Tools/PROWLER.pdf) |
