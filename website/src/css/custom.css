@@ -520,6 +520,90 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
 [data-theme='light'] .section--contribute .section__title,
 [data-theme='light'] .hero-cloudcaptain .section__title { -webkit-text-fill-color: transparent; }
 
+/* ═══ NAVBAR SPONSOR LINK ═══ */
+.navbar__link--sponsor {
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  padding: 0.3rem 0.8rem !important;
+  border-radius: 8px !important;
+  border: 1.5px solid rgba(56,189,248,0.25) !important;
+  background: rgba(56,189,248,0.06) !important;
+  transition: all 0.25s ease !important;
+}
+.navbar__link--sponsor:hover {
+  background: rgba(56,189,248,0.15) !important;
+  border-color: #38BDF8 !important;
+  transform: translateY(-1px);
+}
+
+/* ═══ SPONSOR SECTION ═══ */
+.section--sponsor {
+  background: linear-gradient(160deg, #0A1628 0%, #0F1D32 50%, #0A1628 100%);
+  padding: 5rem 0;
+  border-top: 1px solid rgba(56,189,248,0.05);
+}
+.sponsor-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+  max-width: 750px; margin: 0 auto;
+}
+.sponsor-card {
+  background: rgba(15,29,50,0.6);
+  border: 1px solid rgba(56,189,248,0.1); border-radius: 16px;
+  padding: 2.5rem 2rem; text-align: center;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; overflow: hidden;
+}
+.sponsor-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #38BDF8, #06B6D4, #38BDF8);
+  opacity: 0; transition: opacity 0.3s;
+}
+.sponsor-card:hover {
+  border-color: rgba(56,189,248,0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.25), 0 0 40px rgba(56,189,248,0.08);
+}
+.sponsor-card:hover::before { opacity: 1; }
+.sponsor-card__emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+.sponsor-card__title {
+  font-size: 1.25rem; font-weight: 700; color: #F1F5F9;
+  margin: 0 0 0.5rem;
+}
+.sponsor-card__desc {
+  font-size: 0.88rem; color: #64748B; line-height: 1.6;
+  margin-bottom: 1.5rem; max-width: 280px;
+}
+.sponsor-card__btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.7rem 1.5rem; border-radius: 10px;
+  font-weight: 700; font-size: 0.88rem;
+  transition: all 0.25s ease;
+}
+.btn-sponsor--coffee {
+  background: linear-gradient(135deg, #FFDD00, #FF6600);
+  color: #1a1a1a !important;
+}
+.btn-sponsor--coffee:hover { box-shadow: 0 4px 20px rgba(255,221,0,0.3); }
+.btn-sponsor--github {
+  background: linear-gradient(135deg, #EA4AAA, #DB61A2);
+  color: white !important;
+}
+.btn-sponsor--github:hover { box-shadow: 0 4px 20px rgba(234,74,170,0.3); }
+
+/* Sponsor light mode */
+[data-theme='light'] .section--sponsor { background: #F8FAFC; border-color: #E2E8F0; }
+[data-theme='light'] .sponsor-card { background: white; border-color: #E2E8F0; }
+[data-theme='light'] .sponsor-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+[data-theme='light'] .sponsor-card__title { color: #1E293B; }
+[data-theme='light'] .section--sponsor .section__title { -webkit-text-fill-color: transparent; }
+
+/* Sponsor responsive */
+@media (max-width: 600px) {
+  .sponsor-grid { grid-template-columns: 1fr; max-width: 400px; }
+}
+
 /* ═══ CAREER PATHS PAGE ═══ */
 .career-hero {
   background: linear-gradient(160deg, #0A1628 0%, #122240 35%, #0C3553 65%, #0A1628 100%);

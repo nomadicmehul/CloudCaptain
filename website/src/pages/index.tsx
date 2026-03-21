@@ -331,6 +331,49 @@ function ContributeSection() {
   );
 }
 
+/* ─── SPONSOR ─── */
+function SponsorSection() {
+  const tiers = [
+    {
+      emoji: '☕',
+      title: 'Supporter',
+      desc: 'Buy us a coffee. Every bit helps keep the content free and the servers running.',
+      link: 'https://buymeacoffee.com/nomadicmehul',
+      btnText: 'Buy Me a Coffee',
+      btnClass: 'btn-sponsor--coffee',
+    },
+    {
+      emoji: '🚀',
+      title: 'Backer',
+      desc: 'Become a GitHub Sponsor. Get your name on the README and priority issue support.',
+      link: 'https://github.com/sponsors/nomadicmehul',
+      btnText: 'Sponsor on GitHub',
+      btnClass: 'btn-sponsor--github',
+    },
+  ];
+  return (
+    <div className="section section--sponsor">
+      <div className="container">
+        <h2 className="section__title">Support CloudCaptain</h2>
+        <p className="section__subtitle">
+          CloudCaptain is 100% free and open source. If it helped you learn, land a job, or ace an interview,
+          consider supporting the project so we can keep building.
+        </p>
+        <div className="sponsor-grid">
+          {tiers.map((tier, i) => (
+            <a key={i} className="sponsor-card" href={tier.link} target="_blank" rel="noopener noreferrer">
+              <div className="sponsor-card__emoji">{tier.emoji}</div>
+              <h3 className="sponsor-card__title">{tier.title}</h3>
+              <p className="sponsor-card__desc">{tier.desc}</p>
+              <span className={`sponsor-card__btn ${tier.btnClass}`}>{tier.btnText} →</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── MAIN ─── */
 export default function Home(): React.ReactElement {
   const { siteConfig } = useDocusaurusContext();
@@ -345,6 +388,7 @@ export default function Home(): React.ReactElement {
       <CaptainSection />
       <HowItWorksSection />
       <ContributeSection />
+      <SponsorSection />
     </Layout>
   );
 }
