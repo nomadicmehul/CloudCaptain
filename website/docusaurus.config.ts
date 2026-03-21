@@ -90,19 +90,8 @@ const config: Config = {
         {to: '/blog', label: 'Blog', position: 'left'},
         {to: '/contribute', label: 'Contribute', position: 'left'},
         {
-          href: 'https://buymeacoffee.com/nomadicmehul',
-          label: '☕ Buy Me a Coffee',
-          position: 'right',
-          className: 'navbar__link--sponsor',
-        },
-        {
-          href: 'https://github.com/sponsors/nomadicmehul',
-          label: '❤️ Sponsor',
-          position: 'right',
-          className: 'navbar__link--sponsor',
-        },
-        {
-          type: 'custom-githubStars',
+          href: 'https://github.com/nomadicmehul/CloudCaptain',
+          label: 'GitHub',
           position: 'right',
         },
         {
@@ -139,8 +128,6 @@ const config: Config = {
             {label: 'GitHub', href: 'https://github.com/nomadicmehul/CloudCaptain'},
             {label: 'Twitter', href: 'https://twitter.com/nomadicmehul'},
             {label: 'Contributing Guide', to: '/contribute'},
-            {label: '☕ Buy Me a Coffee', href: 'https://buymeacoffee.com/nomadicmehul'},
-            {label: '❤️ Sponsor on GitHub', href: 'https://github.com/sponsors/nomadicmehul'},
           ],
         },
         {
