@@ -141,7 +141,6 @@ const config: Config = {
           title: 'More',
           items: [
             {label: 'Roadmap', to: '/docs/learning-paths/devops'},
-            {label: 'Credits', href: 'https://github.com/nomadicmehul/CloudCaptain/blob/main/credits.md'},
           ],
         },
       ],
