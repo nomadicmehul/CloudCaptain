@@ -2,80 +2,8 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 
-const allPaths = [
-  {
-    level: 'beginner', color: '#10B981', levelLabel: 'Beginner',
-    title: 'DevOps Engineer',
-    desc: 'Automate the entire software lifecycle with CI/CD, containers, IaC, and configuration management.',
-    salary: '$100K–$180K',
-    steps: ['Linux & Networking', 'Git & Version Control', 'Docker & Containers', 'CI/CD Pipelines', 'Terraform / IaC', 'Ansible'],
-    certs: ['AWS DevOps Engineer Pro', 'CKA', 'Terraform Associate'],
-    link: '/docs/learning-paths/devops',
-  },
-  {
-    level: 'beginner', color: '#10B981', levelLabel: 'Beginner',
-    title: 'Linux Systems Master',
-    desc: 'Go deep on the OS that powers every cloud server, container, and AI training node.',
-    salary: '$100K–$180K',
-    steps: ['Linux Internals', 'Bash & Python', 'Networking (deep)', 'Kernel Tuning', 'Storage (LVM, ZFS)', 'Security Hardening'],
-    certs: ['LFCS', 'RHCSA', 'LPIC-2'],
-    link: '/docs/learning-paths/linux-master',
-  },
-  {
-    level: 'intermediate', color: '#F59E0B', levelLabel: 'Intermediate',
-    title: 'Cloud Engineer / Architect',
-    desc: 'Design multi-region, highly available cloud architectures and optimize costs at scale.',
-    salary: '$110K–$200K',
-    steps: ['One Cloud Deeply', 'Well-Architected Framework', 'Terraform Modules', 'Kubernetes', 'Serverless Patterns', 'Cost Optimization'],
-    certs: ['AWS Solutions Architect', 'Azure AZ-305', 'GCP Professional Cloud Architect'],
-    link: '/docs/learning-paths/cloud',
-  },
-  {
-    level: 'intermediate', color: '#F59E0B', levelLabel: 'Intermediate',
-    title: 'SRE (Site Reliability)',
-    desc: 'Keep the internet running — define SLOs, build observability, lead incident response.',
-    salary: '$120K–$210K',
-    steps: ['Linux (deep)', 'Python or Go', 'Kubernetes', 'Prometheus / Grafana', 'Incident Management', 'Chaos Engineering'],
-    certs: ['CKA', 'AWS DevOps Engineer', 'Google SRE Certificate'],
-    link: '/docs/learning-paths/sre',
-  },
-  {
-    level: 'intermediate', color: '#F59E0B', levelLabel: 'Intermediate',
-    title: 'Cloud Security / DevSecOps',
-    desc: 'Implement shift-left security, manage IAM, and ensure compliance across cloud workloads.',
-    salary: '$120K–$200K',
-    steps: ['DevSecOps Practices', 'IAM & RBAC', 'OWASP Top 10', 'Supply Chain Security', 'Vault & Secrets', 'Compliance Frameworks'],
-    certs: ['AWS Security Specialty', 'CompTIA Security+', 'CCSP'],
-    link: '/docs/tools/devsecops/',
-  },
-  {
-    level: 'advanced', color: '#F43F5E', levelLabel: 'Advanced',
-    title: 'Platform Engineer',
-    desc: 'Build Internal Developer Platforms — golden paths, self-service infra, and developer experience.',
-    salary: '$130K–$220K',
-    steps: ['Kubernetes (deep)', 'Terraform Modules', 'Backstage / Port', 'ArgoCD / FluxCD', 'OPA / Kyverno', 'DORA Metrics'],
-    certs: ['CKA + CKAD', 'Terraform Associate', 'GitOps Certified'],
-    link: '/docs/learning-paths/platform-engineering',
-  },
-  {
-    level: 'advanced', color: '#F43F5E', levelLabel: 'Advanced',
-    title: 'AI/ML Infrastructure Engineer',
-    desc: 'Build and operate GPU clusters, ML training pipelines, and LLM serving infrastructure.',
-    salary: '$140K–$250K+',
-    steps: ['Linux (deep)', 'Kubernetes + Ray', 'GPU Orchestration', 'Kubeflow / MLflow', 'vLLM / TensorRT', 'Distributed Training'],
-    certs: ['CKA', 'AWS ML Specialty', 'NVIDIA DLI Certification'],
-    link: '/docs/learning-paths/ai-ml',
-  },
-  {
-    level: 'advanced', color: '#8B5CF6', levelLabel: 'Specialist',
-    title: 'FinOps Practitioner',
-    desc: 'Optimize cloud spend for AI/ML workloads — reserved instances, right-sizing, and cost governance.',
-    salary: '$100K–$170K',
-    steps: ['Cloud Billing Tools', 'Terraform (cost-aware)', 'K8s Resource Mgmt', 'FinOps Framework', 'Data Analysis', 'Forecasting'],
-    certs: ['FinOps Certified Practitioner', 'AWS Cloud Financial Mgmt', 'Azure Cost Mgmt'],
-    link: '/docs/cloud/finops/',
-  },
-];
+/* ─── Data (loaded from JSON — edit the JSON file to update content) ─── */
+import allPaths from '../data/careerPaths.json';
 
 function PathCard({ path }: { path: typeof allPaths[0] }) {
   return (

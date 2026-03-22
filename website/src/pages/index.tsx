@@ -3,69 +3,14 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 
-/* ─── Data ─── */
-const categories = [
-  { icon: '🐳', title: 'Docker', desc: 'Containers, Dockerfile, Compose, networking & security.', link: '/docs/tools/docker/', count: '15+ resources', accent: '#2496ED' },
-  { icon: '☸️', title: 'Kubernetes', desc: 'Orchestration, Helm, operators, service mesh & autoscaling.', link: '/docs/tools/kubernetes/', count: '40+ resources', accent: '#326CE5' },
-  { icon: '🏗️', title: 'Terraform', desc: 'IaC, modules, state management & CI/CD integration.', link: '/docs/tools/terraform/', count: '20+ resources', accent: '#7B42BC' },
-  { icon: '☁️', title: 'AWS', desc: 'EC2, S3, Lambda, EKS, CloudFormation & architecture.', link: '/docs/cloud/aws/', count: '25+ resources', accent: '#FF9900' },
-  { icon: '🔷', title: 'Azure', desc: 'Azure DevOps, AKS, Functions & cloud architecture.', link: '/docs/cloud/azure/', count: '10+ resources', accent: '#0078D4' },
-  { icon: '🌐', title: 'Google Cloud', desc: 'GKE, Cloud Functions, BigQuery & GCP practices.', link: '/docs/cloud/gcp/', count: '10+ resources', accent: '#4285F4' },
-  { icon: '🔧', title: 'Ansible', desc: 'Playbooks, roles, Vault & automation patterns.', link: '/docs/tools/ansible/', count: '10+ resources', accent: '#EE0000' },
-  { icon: '🚀', title: 'CI/CD', desc: 'Jenkins, GitHub Actions, CircleCI & GitOps pipelines.', link: '/docs/tools/cicd/', count: '15+ resources', accent: '#10B981' },
-  { icon: '🐧', title: 'Linux', desc: 'System admin, shell scripting & performance tuning.', link: '/docs/tools/linux/', count: '10+ resources', accent: '#FCC624' },
-  { icon: '🔒', title: 'DevSecOps', desc: 'SAST/DAST, compliance, auditing & shift-left security.', link: '/docs/tools/devsecops/', count: '8+ resources', accent: '#F43F5E' },
-  { icon: '📊', title: 'Observability', desc: 'Prometheus, Grafana, SRE & monitoring strategies.', link: '/docs/tools/observability/', count: '8+ resources', accent: '#F59E0B' },
-  { icon: '🤖', title: 'AI / ML Ops', desc: 'ML pipelines, model serving & AI infrastructure.', link: '/docs/learning-paths/ai-ml', count: 'New!', accent: '#8B5CF6' },
-];
-
-const learningPaths = [
-  {
-    level: 'beginner', color: '#10B981',
-    title: 'Foundation Track',
-    desc: 'Start your cloud-native journey with Linux, Git, networking, and basic scripting.',
-    steps: ['Linux Fundamentals', 'Git & Version Control', 'Networking Basics', 'Bash Scripting', 'Cloud Concepts'],
-    duration: '4-6 weeks',
-    link: '/docs/learning-paths/devops',
-  },
-  {
-    level: 'intermediate', color: '#F59E0B',
-    title: 'DevOps Engineer Track',
-    desc: 'Master CI/CD pipelines, containers, IaC, and configuration management.',
-    steps: ['Docker & Containers', 'CI/CD Pipelines', 'Terraform / IaC', 'Ansible', 'Cloud Provider'],
-    duration: '8-12 weeks',
-    link: '/docs/learning-paths/devops',
-  },
-  {
-    level: 'advanced', color: '#F43F5E',
-    title: 'Cloud Architect Track',
-    desc: 'Design scalable systems with Kubernetes, service mesh, GitOps, and SRE.',
-    steps: ['Kubernetes & Helm', 'Service Mesh', 'GitOps & ArgoCD', 'SRE & Observability', 'Platform Eng'],
-    duration: '12-16 weeks',
-    link: '/docs/learning-paths/containers',
-  },
-];
-
-const testimonials = [
-  {
-    text: 'CloudCaptain helped me go from zero to landing my first DevOps role in 6 months. The structured paths are incredibly well thought out.',
-    name: 'Priya S.',
-    role: 'DevOps Engineer',
-    initial: 'P',
-  },
-  {
-    text: 'The Kubernetes and Terraform guides are the best free resources I\'ve found. Saved me hours compared to piecing together random blog posts.',
-    name: 'Alex T.',
-    role: 'Cloud Architect',
-    initial: 'A',
-  },
-  {
-    text: 'I use CloudCaptain to onboard new team members. The learning paths give them a clear roadmap and the interview prep section is gold.',
-    name: 'Marcus L.',
-    role: 'Engineering Manager',
-    initial: 'M',
-  },
-];
+/* ─── Data (loaded from JSON — edit the JSON files to update content) ─── */
+import categories from '../data/categories.json';
+import learningPaths from '../data/learningPaths.json';
+import testimonials from '../data/testimonials.json';
+import howItWorksSteps from '../data/howItWorks.json';
+import sponsorTiers from '../data/sponsors.json';
+import contributeActions from '../data/contributeActions.json';
+import techBadges from '../data/techBadges.json';
 
 /* ─── GitHub Stats Hook ─── */
 function useGitHubStats() {
@@ -349,7 +294,7 @@ function HeroSection() {
             </Link>
           </div>
           <div className="hero-tech-badges">
-            {['Docker', 'Kubernetes', 'Terraform', 'AWS', 'Azure', 'GCP', 'Ansible', 'Jenkins', 'Git', 'Linux', 'Python'].map(tech => (
+            {techBadges.map(tech => (
               <span key={tech} className="tech-badge">{tech}</span>
             ))}
           </div>
@@ -519,19 +464,13 @@ function CaptainSection({ ghStats }: { ghStats: { stars: number; forks: number; 
 /* ─── HOW IT WORKS — Enhanced ─── */
 function HowItWorksSection() {
   const sectionRef = useScrollReveal();
-  const steps = [
-    { num: '01', icon: '🎯', title: 'Pick a Path', desc: 'Choose a learning path based on your experience level and goals.' },
-    { num: '02', icon: '⚡', title: 'Learn & Practice', desc: 'Follow structured resources, run hands-on labs, and build real projects.' },
-    { num: '03', icon: '🚀', title: 'Level Up', desc: 'Prepare for interviews, earn certifications, and advance your career.' },
-    { num: '04', icon: '🤝', title: 'Give Back', desc: 'Share your knowledge — contribute resources and help fellow learners.' },
-  ];
   return (
     <div className="section section--how" ref={sectionRef}>
       <div className="container">
         <h2 className="section__title reveal">How It Works</h2>
         <p className="section__subtitle reveal">Four steps from zero to cloud-native expert.</p>
         <div className="how-grid">
-          {steps.map((step, i) => (
+          {howItWorksSteps.map((step, i) => (
             <div key={i} className="how-step reveal">
               <div className="how-step__icon">{step.icon}</div>
               <div className="how-step__num">{step.num}</div>
@@ -608,13 +547,7 @@ function ContributeSection() {
           </Link>
         </div>
         <div className="contribute-actions reveal">
-          {[
-            { icon: '📝', text: 'Add Resources' },
-            { icon: '🐛', text: 'Fix Issues' },
-            { icon: '📚', text: 'Write Guides' },
-            { icon: '🎨', text: 'Improve Design' },
-            { icon: '🌍', text: 'Translate' },
-          ].map((item, i) => (
+          {contributeActions.map((item, i) => (
             <div key={i} className="contribute-tag">
               <span>{item.icon}</span> {item.text}
             </div>
@@ -628,24 +561,6 @@ function ContributeSection() {
 /* ─── SPONSOR ─── */
 function SponsorSection() {
   const sectionRef = useScrollReveal();
-  const tiers = [
-    {
-      emoji: '☕',
-      title: 'Supporter',
-      desc: 'Buy us a coffee. Every bit helps keep the content free and the servers running.',
-      link: 'https://buymeacoffee.com/nomadicmehul',
-      btnText: 'Buy Me a Coffee',
-      btnClass: 'btn-sponsor--coffee',
-    },
-    {
-      emoji: '🚀',
-      title: 'Backer',
-      desc: 'Become a GitHub Sponsor. Get your name on the README and priority issue support.',
-      link: 'https://github.com/sponsors/nomadicmehul',
-      btnText: 'Sponsor on GitHub',
-      btnClass: 'btn-sponsor--github',
-    },
-  ];
   return (
     <div className="section section--sponsor" ref={sectionRef}>
       <div className="container">
@@ -655,7 +570,7 @@ function SponsorSection() {
           consider supporting the project so we can keep building.
         </p>
         <div className="sponsor-grid">
-          {tiers.map((tier, i) => (
+          {sponsorTiers.map((tier, i) => (
             <a key={i} className="sponsor-card reveal" href={tier.link} target="_blank" rel="noopener noreferrer">
               <div className="sponsor-card__emoji">{tier.emoji}</div>
               <h3 className="sponsor-card__title">{tier.title}</h3>
@@ -683,7 +598,8 @@ export default function Home(): React.ReactElement {
       <LearningPathsSection />
       <CaptainSection ghStats={ghStats} />
       <HowItWorksSection />
-      <TestimonialsSection ghStats={ghStats} />
+      {/* Testimonials hidden for now — uncomment when real testimonials are added to testimonials.json */}
+      {/* <TestimonialsSection ghStats={ghStats} /> */}
       <ContributeSection />
       <SponsorSection />
     </Layout>

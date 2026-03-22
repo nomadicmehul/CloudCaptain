@@ -33,6 +33,7 @@ website/                    # Docusaurus project root
       ...
   blog/                     # Blog posts
   src/
+    data/                   # JSON data files for homepage sections
     pages/                  # Custom pages (home, contribute)
     css/                    # Custom CSS with CloudCaptain branding
   static/img/               # Static assets, logo
@@ -69,6 +70,7 @@ npm run serve       # Serve production build locally
 
 - Fork → Branch → PR workflow
 - Commit messages use imperative mood: "Add: ...", "Update: ...", "Fix: ..."
+- **Do NOT include `Co-Authored-By` lines in commit messages**
 - Run `npm run build` locally before submitting PR
 - All content goes in the appropriate `docs/` subdirectory
 
