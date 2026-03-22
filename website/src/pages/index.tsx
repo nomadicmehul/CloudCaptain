@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 
+/* ─── Data ─── */
 const categories = [
   { icon: '🐳', title: 'Docker', desc: 'Containers, Dockerfile, Compose, networking & security.', link: '/docs/tools/docker/', count: '15+ resources', accent: '#2496ED' },
   { icon: '☸️', title: 'Kubernetes', desc: 'Orchestration, Helm, operators, service mesh & autoscaling.', link: '/docs/tools/kubernetes/', count: '40+ resources', accent: '#326CE5' },
@@ -45,20 +46,214 @@ const learningPaths = [
   },
 ];
 
-/* ─── Floating orbs for hero background ─── */
-function FloatingOrbs() {
-  return (
-    <div className="hero-orbs" aria-hidden="true">
-      <div className="orb orb--1" />
-      <div className="orb orb--2" />
-      <div className="orb orb--3" />
-      <div className="orb orb--4" />
-    </div>
-  );
+const testimonials = [
+  {
+    text: 'CloudCaptain helped me go from zero to landing my first DevOps role in 6 months. The structured paths are incredibly well thought out.',
+    name: 'Priya S.',
+    role: 'DevOps Engineer',
+    initial: 'P',
+  },
+  {
+    text: 'The Kubernetes and Terraform guides are the best free resources I\'ve found. Saved me hours compared to piecing together random blog posts.',
+    name: 'Alex T.',
+    role: 'Cloud Architect',
+    initial: 'A',
+  },
+  {
+    text: 'I use CloudCaptain to onboard new team members. The learning paths give them a clear roadmap and the interview prep section is gold.',
+    name: 'Marcus L.',
+    role: 'Engineering Manager',
+    initial: 'M',
+  },
+];
+
+/* ─── GitHub Stats Hook ─── */
+function useGitHubStats() {
+  const [stats, setStats] = useState({
+    stars: 0,
+    forks: 0,
+    contributors: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [repoRes, contribRes] = await Promise.all([
+          fetch('https://api.github.com/repos/nomadicmehul/CloudCaptain'),
+          fetch('https://api.github.com/repos/nomadicmehul/CloudCaptain/contributors?per_page=1&anon=true'),
+        ]);
+
+        if (repoRes.ok) {
+          const repo = await repoRes.json();
+          let contribCount = 0;
+          if (contribRes.ok) {
+            const linkHeader = contribRes.headers.get('Link') || '';
+            const lastPageMatch = linkHeader.match(/page=(\d+)>;\s*rel="last"/);
+            contribCount = lastPageMatch ? parseInt(lastPageMatch[1], 10) : 1;
+          }
+
+          setStats({
+            stars: repo.stargazers_count || 0,
+            forks: repo.forks_count || 0,
+            contributors: contribCount,
+          });
+        }
+      } catch {
+        // Silently fail — will show fallback values
+      }
+    };
+    fetchStats();
+  }, []);
+
+  return stats;
 }
 
-/* ─── Animated terminal graphic ─── */
-function TerminalGraphic() {
+function formatNumber(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+  return String(n);
+}
+
+/* ─── Hooks ─── */
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    const targets = el.querySelectorAll('.reveal');
+    targets.forEach((t) => observer.observe(t));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
+function useCountUp(target: number, suffix = '', duration = 1500) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !started) {
+          setStarted(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [started]);
+
+  useEffect(() => {
+    if (!started) return;
+    const startTime = performance.now();
+    const step = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [started, target, duration]);
+
+  return { ref, display: `${count}${suffix}` };
+}
+
+/* ─── Typing Terminal ─── */
+function TypingTerminal() {
+  const lines = [
+    { type: 'cmd', text: 'kubectl get pods' },
+    {
+      type: 'output',
+      text: 'NAME              READY  STATUS\nweb-app-7d4f     1/1    Running\napi-server-3b    1/1    Running\nredis-cache-9    1/1    Running',
+    },
+    { type: 'cmd', text: 'docker build -t app:v2 .' },
+    { type: 'output', text: 'Successfully built 4a2f8e3c1d' },
+  ];
+
+  // Phase: 'idle' (waiting before next line), 'typing' (typing a cmd), 'done' (all lines shown)
+  const [completedLines, setCompletedLines] = useState<number>(0);
+  const [typedChars, setTypedChars] = useState(0);
+  const [phase, setPhase] = useState<'idle' | 'typing' | 'done'>('idle');
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  useEffect(() => {
+    if (completedLines >= lines.length) {
+      // All lines done — show idle cursor, then reset
+      setPhase('done');
+      setShowPrompt(true);
+      const timer = setTimeout(() => {
+        setCompletedLines(0);
+        setTypedChars(0);
+        setPhase('idle');
+        setShowPrompt(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+
+    const currentLine = lines[completedLines];
+
+    if (phase === 'idle') {
+      if (currentLine.type === 'cmd') {
+        // Show the $ prompt first, then start typing after a short pause
+        setShowPrompt(true);
+        const timer = setTimeout(() => {
+          setPhase('typing');
+          setTypedChars(0);
+        }, 400);
+        return () => clearTimeout(timer);
+      } else {
+        // Output line — show it after a brief delay
+        const timer = setTimeout(() => {
+          setCompletedLines((c) => c + 1);
+          setShowPrompt(false);
+        }, 300);
+        return () => clearTimeout(timer);
+      }
+    }
+
+    if (phase === 'typing' && currentLine.type === 'cmd') {
+      if (typedChars < currentLine.text.length) {
+        const timer = setTimeout(
+          () => setTypedChars((c) => c + 1),
+          45 + Math.random() * 35
+        );
+        return () => clearTimeout(timer);
+      } else {
+        // Finished typing this command — brief pause then move on
+        const timer = setTimeout(() => {
+          setCompletedLines((c) => c + 1);
+          setPhase('idle');
+          setShowPrompt(false);
+          setTypedChars(0);
+        }, 500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [completedLines, typedChars, phase]);
+
+  const renderOutput = useCallback((text: string) => {
+    return text.split('\n').map((line, i) => {
+      const highlighted = line.replace(/Running/g, '<span style="color:#10B981">Running</span>');
+      const successHighlighted = highlighted.replace(/Successfully/g, '<span style="color:#38BDF8">Successfully</span>');
+      return <div key={i} dangerouslySetInnerHTML={{ __html: successHighlighted }} />;
+    });
+  }, []);
+
   return (
     <div className="hero-terminal animate-float">
       <div className="terminal__header">
@@ -68,28 +263,61 @@ function TerminalGraphic() {
         <span className="terminal__title">cloudcaptain ~ terminal</span>
       </div>
       <div className="terminal__body">
-        <div className="terminal__line">
-          <span className="terminal__prompt">$</span>
-          <span className="terminal__cmd"> kubectl get pods</span>
-        </div>
-        <div className="terminal__output">
-          NAME{'              '}READY{'  '}STATUS<br/>
-          web-app-7d4f{'     '}1/1{'    '}<span style={{color:'#10B981'}}>Running</span><br/>
-          api-server-3b{'    '}1/1{'    '}<span style={{color:'#10B981'}}>Running</span><br/>
-          redis-cache-9{'    '}1/1{'    '}<span style={{color:'#10B981'}}>Running</span>
-        </div>
-        <div className="terminal__line">
-          <span className="terminal__prompt">$</span>
-          <span className="terminal__cmd"> docker build -t app:v2 .</span>
-        </div>
-        <div className="terminal__output">
-          <span style={{color:'#38BDF8'}}>Successfully</span> built 4a2f8e3c1d
-        </div>
-        <div className="terminal__line">
-          <span className="terminal__prompt">$</span>
-          <span className="terminal__cursor">|</span>
-        </div>
+        {/* Completed lines */}
+        {lines.slice(0, completedLines).map((line, i) => {
+          if (line.type === 'cmd') {
+            return (
+              <div key={i} className="terminal__line">
+                <span className="terminal__prompt">$ </span>
+                <span className="terminal__cmd">{line.text}</span>
+              </div>
+            );
+          }
+          return (
+            <div key={i} className="terminal__output">
+              {renderOutput(line.text)}
+            </div>
+          );
+        })}
+
+        {/* Currently typing line — only show when prompt is ready */}
+        {completedLines < lines.length && lines[completedLines].type === 'cmd' && showPrompt && (
+          <div className="terminal__line">
+            <span className="terminal__prompt">$ </span>
+            <span className="terminal__cmd">
+              {phase === 'typing' ? (
+                <>
+                  {lines[completedLines].text.slice(0, typedChars)}
+                  <span className="terminal__cursor">|</span>
+                </>
+              ) : (
+                <span className="terminal__cursor">|</span>
+              )}
+            </span>
+          </div>
+        )}
+
+        {/* Idle cursor after all lines done */}
+        {phase === 'done' && showPrompt && (
+          <div className="terminal__line">
+            <span className="terminal__prompt">$ </span>
+            <span className="terminal__cursor">|</span>
+          </div>
+        )}
       </div>
+    </div>
+  );
+}
+
+/* ─── Floating orbs ─── */
+function FloatingOrbs() {
+  return (
+    <div className="hero-orbs" aria-hidden="true">
+      <div className="orb orb--1" />
+      <div className="orb orb--2" />
+      <div className="orb orb--3" />
+      <div className="orb orb--4" />
+      <div className="orb orb--5" />
     </div>
   );
 }
@@ -127,50 +355,54 @@ function HeroSection() {
           </div>
         </div>
         <div className="hero-right">
-          <TerminalGraphic />
+          <TypingTerminal />
         </div>
       </div>
     </div>
   );
 }
 
-/* ─── STATS ─── */
+/* ─── STATS with count-up ─── */
+function StatCard({ number, suffix, label, icon }: { number: number; suffix: string; label: string; icon: string }) {
+  const { ref, display } = useCountUp(number, suffix);
+  return (
+    <div ref={ref} className="stat-card">
+      <div className="stat-icon">{icon}</div>
+      <div className="stat-number">{display}</div>
+      <div className="stat-label">{label}</div>
+    </div>
+  );
+}
+
 function StatsSection() {
-  const stats = [
-    { number: '150+', label: 'Guides & Docs', icon: '📚' },
-    { number: '49', label: 'Architecture Diagrams', icon: '📐' },
-    { number: '8', label: 'Career Paths', icon: '🗺️' },
-    { number: '100%', label: 'Free & Open', icon: '💙' },
-  ];
+  const sectionRef = useScrollReveal();
   return (
-    <div className="stats-wrapper">
+    <div className="stats-wrapper" ref={sectionRef}>
       <div className="container">
-        <div className="stats-section">
-          {stats.map((stat, i) => (
-            <div key={i} className="stat-card">
-              <div className="stat-icon">{stat.icon}</div>
-              <div className="stat-number">{stat.number}</div>
-              <div className="stat-label">{stat.label}</div>
-            </div>
-          ))}
+        <div className="stats-section reveal">
+          <StatCard number={150} suffix="+" label="Guides & Docs" icon="📚" />
+          <StatCard number={49} suffix="" label="Architecture Diagrams" icon="📐" />
+          <StatCard number={8} suffix="" label="Career Paths" icon="🗺️" />
+          <StatCard number={100} suffix="%" label="Free & Open" icon="💙" />
         </div>
       </div>
     </div>
   );
 }
 
-/* ─── CATEGORIES ─── */
+/* ─── CATEGORIES with stagger ─── */
 function CategoriesSection() {
+  const sectionRef = useScrollReveal();
   return (
-    <div className="section section--dark">
+    <div className="section section--dark" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title">Explore by Technology</h2>
-        <p className="section__subtitle">
+        <h2 className="section__title reveal">Explore by Technology</h2>
+        <p className="section__subtitle reveal">
           Deep dives with curated resources, cheatsheets, interview prep, and hands-on exercises.
         </p>
         <div className="category-grid">
           {categories.map((cat, i) => (
-            <Link key={i} className="category-card" to={cat.link} style={{ '--card-accent': cat.accent } as React.CSSProperties}>
+            <Link key={i} className="category-card reveal" to={cat.link} style={{ '--card-accent': cat.accent } as React.CSSProperties}>
               <div className="category-card__header">
                 <span className="category-card__icon">{cat.icon}</span>
                 <span className="category-card__count">{cat.count}</span>
@@ -187,16 +419,17 @@ function CategoriesSection() {
 
 /* ─── LEARNING PATHS ─── */
 function LearningPathsSection() {
+  const sectionRef = useScrollReveal();
   return (
-    <div className="section section--paths">
+    <div className="section section--paths" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title">Structured Learning Paths</h2>
-        <p className="section__subtitle">
+        <h2 className="section__title reveal">Structured Learning Paths</h2>
+        <p className="section__subtitle reveal">
           Don't know where to start? Follow our curated roadmaps from beginner to expert.
         </p>
         <div className="paths-grid">
           {learningPaths.map((path, i) => (
-            <Link key={i} className="path-card" to={path.link} style={{ '--path-color': path.color } as React.CSSProperties}>
+            <Link key={i} className="path-card reveal" to={path.link} style={{ '--path-color': path.color } as React.CSSProperties}>
               <div className="path-card__top">
                 <span className={`path-card__level path-card__level--${path.level}`}>{path.level}</span>
                 <span className="path-card__duration">{path.duration}</span>
@@ -218,8 +451,8 @@ function LearningPathsSection() {
             </Link>
           ))}
         </div>
-        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <Link className="btn-secondary" to="/career-paths">
+        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+          <Link className="btn-secondary reveal" to="/career-paths">
             Explore All 8 Career Paths →
           </Link>
         </div>
@@ -229,11 +462,12 @@ function LearningPathsSection() {
 }
 
 /* ─── CAPTAIN'S CALL ─── */
-function CaptainSection() {
+function CaptainSection({ ghStats }: { ghStats: { stars: number; forks: number; contributors: number } }) {
+  const sectionRef = useScrollReveal();
   return (
-    <div className="section section--captain">
+    <div className="section section--captain" ref={sectionRef}>
       <div className="container">
-        <div className="captain-content">
+        <div className="captain-content reveal">
           <div className="captain-image-wrapper">
             <div className="captain-image-glow" />
             <img
@@ -261,6 +495,20 @@ function CaptainSection() {
                 Start the DevOps Path
               </Link>
             </div>
+            <div className="captain-social-proof">
+              <div className="captain-social-stat">
+                <div className="captain-social-stat__number">{ghStats.stars ? `${formatNumber(ghStats.stars)}+` : '2K+'}</div>
+                <div className="captain-social-stat__label">GitHub Stars</div>
+              </div>
+              <div className="captain-social-stat">
+                <div className="captain-social-stat__number">{ghStats.contributors ? `${ghStats.contributors}+` : '100+'}</div>
+                <div className="captain-social-stat__label">Contributors</div>
+              </div>
+              <div className="captain-social-stat">
+                <div className="captain-social-stat__number">{ghStats.forks ? `${ghStats.forks}+` : '500+'}</div>
+                <div className="captain-social-stat__label">Forks</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -268,22 +516,24 @@ function CaptainSection() {
   );
 }
 
-/* ─── HOW IT WORKS ─── */
+/* ─── HOW IT WORKS — Enhanced ─── */
 function HowItWorksSection() {
+  const sectionRef = useScrollReveal();
   const steps = [
-    { num: '01', title: 'Pick a Path', desc: 'Choose a learning path based on your experience level and goals.' },
-    { num: '02', title: 'Learn & Practice', desc: 'Follow structured resources, run hands-on labs, and build real projects.' },
-    { num: '03', title: 'Level Up', desc: 'Prepare for interviews, earn certifications, and advance your career.' },
-    { num: '04', title: 'Give Back', desc: 'Share your knowledge — contribute resources and help fellow learners.' },
+    { num: '01', icon: '🎯', title: 'Pick a Path', desc: 'Choose a learning path based on your experience level and goals.' },
+    { num: '02', icon: '⚡', title: 'Learn & Practice', desc: 'Follow structured resources, run hands-on labs, and build real projects.' },
+    { num: '03', icon: '🚀', title: 'Level Up', desc: 'Prepare for interviews, earn certifications, and advance your career.' },
+    { num: '04', icon: '🤝', title: 'Give Back', desc: 'Share your knowledge — contribute resources and help fellow learners.' },
   ];
   return (
-    <div className="section section--how">
+    <div className="section section--how" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title">How It Works</h2>
-        <p className="section__subtitle">Four steps from zero to cloud-native expert.</p>
+        <h2 className="section__title reveal">How It Works</h2>
+        <p className="section__subtitle reveal">Four steps from zero to cloud-native expert.</p>
         <div className="how-grid">
           {steps.map((step, i) => (
-            <div key={i} className="how-step">
+            <div key={i} className="how-step reveal">
+              <div className="how-step__icon">{step.icon}</div>
               <div className="how-step__num">{step.num}</div>
               <h3 className="how-step__title">{step.title}</h3>
               <p className="how-step__desc">{step.desc}</p>
@@ -295,17 +545,61 @@ function HowItWorksSection() {
   );
 }
 
+/* ─── TESTIMONIALS ─── */
+function TestimonialsSection({ ghStats }: { ghStats: { stars: number; forks: number; contributors: number } }) {
+  const sectionRef = useScrollReveal();
+  return (
+    <div className="section section--testimonials" ref={sectionRef}>
+      <div className="container">
+        <h2 className="section__title reveal">Community Voices</h2>
+        <p className="section__subtitle reveal">
+          Hear from engineers who used CloudCaptain to level up their careers.
+        </p>
+        <div className="testimonials-grid">
+          {testimonials.map((t, i) => (
+            <div key={i} className="testimonial-card reveal">
+              <p className="testimonial-card__text">{t.text}</p>
+              <div className="testimonial-card__author">
+                <div className="testimonial-card__avatar">{t.initial}</div>
+                <div>
+                  <div className="testimonial-card__name">{t.name}</div>
+                  <div className="testimonial-card__role">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="community-banner reveal">
+          <div className="community-stat">
+            <div className="community-stat__number">{ghStats.stars ? `${formatNumber(ghStats.stars)}+` : '2K+'}</div>
+            <div className="community-stat__label">GitHub Stars</div>
+          </div>
+          <div className="community-stat">
+            <div className="community-stat__number">{ghStats.contributors ? `${ghStats.contributors}+` : '100+'}</div>
+            <div className="community-stat__label">Contributors</div>
+          </div>
+          <div className="community-stat">
+            <div className="community-stat__number">{ghStats.forks ? `${formatNumber(ghStats.forks)}+` : '500+'}</div>
+            <div className="community-stat__label">Forks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── CONTRIBUTE ─── */
 function ContributeSection() {
+  const sectionRef = useScrollReveal();
   return (
-    <div className="section section--contribute">
+    <div className="section section--contribute" ref={sectionRef}>
       <div className="container" style={{ textAlign: 'center' }}>
-        <h2 className="section__title">Join the Crew</h2>
-        <p className="section__subtitle">
+        <h2 className="section__title reveal">Join the Crew</h2>
+        <p className="section__subtitle reveal">
           CloudCaptain is built by the community, for the community.
           Every contribution matters — from fixing a typo to adding a learning path.
         </p>
-        <div className="hero-buttons" style={{ justifyContent: 'center' }}>
+        <div className="hero-buttons reveal" style={{ justifyContent: 'center' }}>
           <Link className="btn-primary" href="https://github.com/nomadicmehul/CloudCaptain/pulls">
             Submit a PR →
           </Link>
@@ -313,7 +607,7 @@ function ContributeSection() {
             Contribution Guide
           </Link>
         </div>
-        <div className="contribute-actions">
+        <div className="contribute-actions reveal">
           {[
             { icon: '📝', text: 'Add Resources' },
             { icon: '🐛', text: 'Fix Issues' },
@@ -333,6 +627,7 @@ function ContributeSection() {
 
 /* ─── SPONSOR ─── */
 function SponsorSection() {
+  const sectionRef = useScrollReveal();
   const tiers = [
     {
       emoji: '☕',
@@ -352,16 +647,16 @@ function SponsorSection() {
     },
   ];
   return (
-    <div className="section section--sponsor">
+    <div className="section section--sponsor" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title">Support CloudCaptain</h2>
-        <p className="section__subtitle">
+        <h2 className="section__title reveal">Support CloudCaptain</h2>
+        <p className="section__subtitle reveal">
           CloudCaptain is 100% free and open source. If it helped you learn, land a job, or ace an interview,
           consider supporting the project so we can keep building.
         </p>
         <div className="sponsor-grid">
           {tiers.map((tier, i) => (
-            <a key={i} className="sponsor-card" href={tier.link} target="_blank" rel="noopener noreferrer">
+            <a key={i} className="sponsor-card reveal" href={tier.link} target="_blank" rel="noopener noreferrer">
               <div className="sponsor-card__emoji">{tier.emoji}</div>
               <h3 className="sponsor-card__title">{tier.title}</h3>
               <p className="sponsor-card__desc">{tier.desc}</p>
@@ -377,6 +672,7 @@ function SponsorSection() {
 /* ─── MAIN ─── */
 export default function Home(): React.ReactElement {
   const { siteConfig } = useDocusaurusContext();
+  const ghStats = useGitHubStats();
   return (
     <Layout
       title={`${siteConfig.title} — Learn Cloud, DevOps & AI`}
@@ -385,8 +681,9 @@ export default function Home(): React.ReactElement {
       <StatsSection />
       <CategoriesSection />
       <LearningPathsSection />
-      <CaptainSection />
+      <CaptainSection ghStats={ghStats} />
       <HowItWorksSection />
+      <TestimonialsSection ghStats={ghStats} />
       <ContributeSection />
       <SponsorSection />
     </Layout>
