@@ -40,7 +40,7 @@ From your first container to production-grade Kubernetes clusters.
 4. **Security** — Pod Security, OPA/Gatekeeper, Falco
 5. **Multi-cluster** — Federation, Kubefed
 
-## Hands-On Labs
+## Hands-On Exercises
 
 | Lab | Platform |
 |:----|:---------|

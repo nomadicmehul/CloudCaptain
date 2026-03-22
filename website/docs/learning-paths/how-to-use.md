@@ -34,7 +34,7 @@ Provider-specific guides for AWS, Azure, GCP, and DigitalOcean. Includes archite
 | 📚 | Resources | Curated articles, videos, and tutorials |
 | 📋 | Cheatsheets | Quick reference command guides |
 | 🎯 | Interview Prep | Common questions and answers |
-| 🔬 | Exercises | Hands-on labs and projects |
+| 🔬 | Exercises | Hands-on exercises and projects |
 | 📖 | Books | Recommended reading materials |
 
 ## Interactive Practice Sites

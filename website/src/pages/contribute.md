@@ -22,7 +22,7 @@ Fix errors, update outdated links, improve descriptions, or reorganize content.
 Share interview questions and answers from your experience.
 
 ### Create Exercises
-Design hands-on labs, projects, or challenges for learners.
+Design hands-on exercises, projects, or challenges for learners.
 
 ### Update Homepage Content
 Homepage sections are powered by JSON files in `website/src/data/`. Edit the JSON to update content — no code changes needed:

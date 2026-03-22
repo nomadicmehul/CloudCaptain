@@ -283,7 +283,7 @@ function HeroSection() {
           </h1>
           <p className="hero__subtitle">
             The open-source, community-driven learning platform for Cloud, DevOps, AI & Operations.
-            Curated paths, hands-on labs, interview prep — <strong style={{color:'#38BDF8'}}>all free, forever</strong>.
+            Curated paths, hands-on exercises, interview prep — <strong style={{color:'#38BDF8'}}>all free, forever</strong>.
           </p>
           <div className="hero-buttons">
             <Link className="btn-primary" to="/docs/learning-paths/devops">
@@ -429,7 +429,7 @@ function CaptainSection({ ghStats }: { ghStats: { stars: number; forks: number; 
             </h2>
             <p className="captain-tagline">
               Then follow this path. I've spent 3+ years curating the best resources,
-              building hands-on labs, and charting learning roadmaps — so you don't have to
+              building hands-on exercises, and charting learning roadmaps — so you don't have to
               navigate the cloud alone.
             </p>
             <div className="captain-cta">

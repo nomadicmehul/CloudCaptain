@@ -25,7 +25,7 @@ Before your interview, make sure you are comfortable with these topics:
 
 If you're targeting a Kubernetes certification, see our dedicated guide:
 
-**[CKA / CKAD / CKS Exam Prep](/docs/tools/kubernetes/exam-prep)** — Exam domains, practice questions, study resources, and hands-on labs.
+**[CKA / CKAD / CKS Exam Prep](/docs/tools/kubernetes/exam-prep)** — Exam domains, practice questions, study resources, and hands-on exercises.
 
 ## Practice Resources
 
