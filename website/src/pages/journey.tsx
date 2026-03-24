@@ -325,29 +325,29 @@ export default function JourneyPage(): React.ReactElement {
               year="2019"
               icon="&#x1F30D;"
               title="Going Global"
-              desc="Crossed 100+ sessions across multiple countries. Recognized as an AWS Community Builder and started mentoring developers worldwide."
-              tags={['AWS Community Builder', 'Mentoring', 'Global']}
+              desc="Crossed 100+ sessions across multiple countries. Started mentoring developers worldwide and evangelizing cloud-native tech on the global stage."
+              tags={['Public Speaking', 'Mentoring', 'Global']}
             />
             <TimelineEntry
               year="2021"
               icon="&#x1F527;"
               title="AWS Community Builder"
-              desc="Recognized as an AWS Community Builder for Cloud Architecture & Containers. Deepened expertise in container orchestration and cloud-native patterns."
+              desc="Recognized as an AWS Community Builder for Containers. Deepened expertise in container orchestration, cloud-native patterns, and ECS/EKS architectures."
               tags={['AWS Community Builder', 'Containers', 'Cloud Architecture']}
             />
             <TimelineEntry
               year="2022"
               icon="&#x1F3DB;"
               title="Building Local Communities"
-              desc="Founded CNCF Gandhinagar, HashiCorp Gandhinagar, and GDG Cloud Gandhinagar chapters — bringing cloud-native communities together on the ground."
-              tags={['CNCF', 'HashiCorp', 'GDG Cloud', 'Gandhinagar']}
+              desc="Started organizing local tech communities — bringing developers together through meetups, workshops, and hackathons to learn and build in the open."
+              tags={['Community', 'Meetups', 'Workshops', 'Hackathons']}
             />
             <TimelineEntry
               year="2023"
               icon="&#x2693;"
-              title="CloudCaptain Sets Sail"
-              desc="Launched CloudCaptain as a free, open-source learning platform for Cloud and DevOps. What started as curated notes grew into a community-driven resource hub."
-              tags={['CloudCaptain', 'Open Source', 'Community']}
+              title="CloudCaptain & Community Chapters"
+              desc="Launched CloudCaptain as a free, open-source learning platform. Founded CNCF Gandhinagar, HashiCorp Gandhinagar, and GDG Cloud Gandhinagar chapters — scaling community impact."
+              tags={['CloudCaptain', 'CNCF', 'HashiCorp', 'GDG Cloud']}
             />
             <TimelineEntry
               year="2024"
