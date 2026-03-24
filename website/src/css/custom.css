@@ -108,8 +108,17 @@ body { font-feature-settings: 'liga' 1, 'calt' 1; }
 [data-theme='light'] .navbar__link { color: #334155 !important; }
 [data-theme='light'] .navbar__link:hover { color: #0284C7 !important; }
 
-/* ═══ ANNOUNCEMENT BAR ═══ */
-div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spacing: 0.02em; }
+/* ═══ ANNOUNCEMENT BAR — Terminal Style ═══ */
+div[class*='announcementBar'] {
+  font-weight: 600; font-size: 0.82rem; letter-spacing: 0.02em;
+  font-family: 'JetBrains Mono', monospace;
+  border-bottom: 1px solid rgba(16,185,129,0.15);
+}
+div[class*='announcementBar'] a {
+  color: #38BDF8 !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
 /* ═══ HERO — Animated Gradient Mesh ═══ */
 .hero-cloudcaptain {
@@ -786,26 +795,84 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
 .footer--dark {
   background: #080E1C !important;
   border-top: 2px solid transparent;
-  border-image: linear-gradient(90deg, transparent, rgba(56,189,248,0.3), rgba(6,182,212,0.2), transparent) 1;
+  border-image: linear-gradient(90deg, transparent, rgba(16,185,129,0.3), rgba(56,189,248,0.2), rgba(16,185,129,0.3), transparent) 1;
   position: relative;
 }
+.footer__title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #10B981 !important;
+}
+.footer__link-item {
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.footer__link-item:hover {
+  color: #10B981 !important;
+}
+.footer__copyright {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
 
-/* ═══ DOC PAGES ═══ */
+/* ═══ DOC PAGES — Terminal Enhanced ═══ */
 .markdown h1 { font-size: 2rem; font-weight: 800; }
+.markdown h1::before {
+  content: '# ';
+  color: rgba(16,185,129,0.35);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+}
 .markdown h2 {
   font-size: 1.4rem; font-weight: 700;
-  border-bottom: 1px solid rgba(56,189,248,0.1);
+  border-bottom: 1px solid rgba(16,185,129,0.1);
   padding-bottom: 0.4rem;
 }
-.markdown th { background: rgba(56,189,248,0.06); font-weight: 700; }
-.alert--info { --ifm-alert-background-color: rgba(56,189,248,0.06); --ifm-alert-border-color: rgba(56,189,248,0.2); }
+.markdown h2::before {
+  content: '## ';
+  color: rgba(16,185,129,0.25);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+}
+.markdown th {
+  background: rgba(16,185,129,0.06); font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+.alert--info { --ifm-alert-background-color: rgba(16,185,129,0.04); --ifm-alert-border-color: rgba(16,185,129,0.2); }
 .prism-code { border-radius: 10px !important; }
 
-/* ═══ SCROLLBAR ═══ */
+/* Breadcrumb — path-style */
+.breadcrumbs__link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+}
+.breadcrumbs__item--active .breadcrumbs__link {
+  color: #10B981;
+}
+
+/* TOC — terminal-style active */
+.table-of-contents__link--active {
+  color: #10B981 !important;
+  font-weight: 600;
+}
+.table-of-contents__link--active::before {
+  content: '> ';
+  color: rgba(16,185,129,0.5);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ═══ SCROLLBAR — Terminal Green ═══ */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0A1628; }
-::-webkit-scrollbar-thumb { background: #1B2A4A; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #243656; }
+::-webkit-scrollbar-thumb { background: rgba(16,185,129,0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.45); }
+[data-theme='light'] ::-webkit-scrollbar-track { background: #F8FAFC; }
+[data-theme='light'] ::-webkit-scrollbar-thumb { background: rgba(5,150,105,0.2); }
+[data-theme='light'] ::-webkit-scrollbar-thumb:hover { background: rgba(5,150,105,0.35); }
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 996px) {
@@ -1203,9 +1270,17 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
 .picker-item:hover {
   border-color: rgba(56,189,248,0.2); background: rgba(15,29,50,0.8);
 }
-.picker-item__like { color: #94A3B8; font-size: 0.88rem; font-weight: 500; flex: 1; }
-.picker-item__arrow { color: #38BDF8; font-weight: 700; }
-.picker-item__path { color: #38BDF8; font-size: 0.88rem; font-weight: 700; }
+.picker-item__like { color: #94A3B8; font-size: 0.85rem; font-weight: 500; flex: 1; }
+.picker-item__arrow {
+  color: #10B981; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  opacity: 0.6;
+}
+.picker-item__path {
+  color: #10B981; font-size: 0.85rem; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
 
 /* Career paths light mode */
 [data-theme='light'] .career-hero { background: linear-gradient(160deg, #0A1628 0%, #122240 35%, #0C3553 65%, #0A1628 100%); }
@@ -1608,11 +1683,102 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   .journey-terminal { font-size: 0.72rem; }
 }
 
+/* ═══ NEOFETCH TERMINAL DISPLAY ═══ */
+.neofetch-output {
+  margin-top: 0.5rem;
+}
+.neofetch-grid {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.neofetch-ascii {
+  color: #10B981;
+  font-size: 0.55rem;
+  line-height: 1.2;
+  margin: 0;
+  flex-shrink: 0;
+  opacity: 0.85;
+  font-family: 'JetBrains Mono', monospace;
+}
+.neofetch-info {
+  font-size: 0.7rem;
+  line-height: 1.6;
+  min-width: 0;
+}
+.neofetch-title {
+  font-weight: 700;
+}
+.nf-user { color: #10B981; }
+.nf-at { color: #475569; }
+.nf-host { color: #38BDF8; }
+.neofetch-sep {
+  color: #334155;
+  margin-bottom: 0.1rem;
+}
+.nf-row {
+  color: #94A3B8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nf-key {
+  color: #10B981;
+  font-weight: 600;
+}
+.neofetch-colors {
+  display: flex;
+  gap: 4px;
+  margin-top: 0.4rem;
+}
+.nf-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* ═══ HERO MOTD ═══ */
+.hero-motd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: #64748B;
+  margin-bottom: 1.25rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(16,185,129,0.04);
+  border-left: 2px solid rgba(16,185,129,0.3);
+  border-radius: 0 6px 6px 0;
+}
+.motd-prefix {
+  color: #10B981;
+  font-weight: 700;
+  margin-right: 0.4rem;
+}
+.hero-motd em {
+  color: #94A3B8;
+}
+
+/* ═══ CONTRIBUTE LICENSE TAG ═══ */
+.contribute-license-tag {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem !important;
+  color: #10B981 !important;
+  background: rgba(16,185,129,0.06) !important;
+  border: 1px solid rgba(16,185,129,0.15);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
 /* ═══ LINUX & OPEN SOURCE FLAVOR ═══ */
 /* Terminal-style $ prompt for section titles */
 .section-prompt {
   font-family: 'JetBrains Mono', monospace;
   color: #10B981;
+  -webkit-text-fill-color: #10B981;
+  background: none;
   font-weight: 700;
   opacity: 0.7;
   margin-right: 0.3rem;
@@ -1620,6 +1786,7 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
 }
 [data-theme='light'] .section-prompt {
   color: #059669;
+  -webkit-text-fill-color: #059669;
 }
 
 /* Terminal-style border for code blocks site-wide */
@@ -1713,11 +1880,13 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   position: relative;
 }
 
-/* Terminal cursor blink for section titles on hover */
+/* Terminal cursor blink for section titles */
 .section__title::after {
   content: '_';
   font-family: 'JetBrains Mono', monospace;
   color: #10B981;
+  -webkit-text-fill-color: #10B981;
+  background: none;
   animation: blink 1s step-end infinite;
   margin-left: 0.15rem;
   font-weight: 400;
@@ -1854,4 +2023,72 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   background: rgba(16,185,129,0.12) !important;
   color: #34D399 !important;
   border-color: rgba(16,185,129,0.3) !important;
+}
+
+/* ═══ SEARCH BAR — Terminal Style ═══ */
+.navbar__search-input,
+[class*='searchBox'] input {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.82rem;
+}
+[class*='searchBox'] input::placeholder {
+  opacity: 0.5;
+}
+
+/* ═══ TECH BADGES — Package Style ═══ */
+.tech-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem !important;
+  letter-spacing: -0.01em;
+  background: rgba(16,185,129,0.04) !important;
+  border-color: rgba(16,185,129,0.1) !important;
+  color: #64748B !important;
+}
+.tech-badge:hover {
+  background: rgba(16,185,129,0.1) !important;
+  color: #10B981 !important;
+  border-color: rgba(16,185,129,0.25) !important;
+}
+
+/* ═══ HERO BUTTONS — Terminal Monospace ═══ */
+.hero-buttons .btn-primary,
+.hero-buttons .btn-secondary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  letter-spacing: -0.01em;
+}
+
+/* ═══ PAGINATION — Terminal Style ═══ */
+.pagination-nav__link {
+  border-color: rgba(16,185,129,0.1) !important;
+  transition: all 0.25s;
+}
+.pagination-nav__link:hover {
+  border-color: rgba(16,185,129,0.3) !important;
+}
+.pagination-nav__sublabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #10B981;
+}
+
+/* ═══ TABS — Terminal Theme ═══ */
+.tabs__item--active {
+  border-bottom-color: #10B981 !important;
+  color: #10B981 !important;
+}
+
+/* ═══ ADMONITIONS — Linux Tinted ═══ */
+.alert--info {
+  border-left-color: #10B981 !important;
+}
+.alert--tip {
+  border-left-color: #10B981 !important;
+}
+
+/* ═══ STAT LABELS — Monospace Path Style ═══ */
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.02em;
 }

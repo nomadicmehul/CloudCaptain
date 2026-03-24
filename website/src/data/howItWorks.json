@@ -1,6 +1,6 @@
 [
-  { "num": "01", "icon": "🎯", "title": "Pick a Path", "desc": "Choose a learning path based on your experience level and goals." },
-  { "num": "02", "icon": "⚡", "title": "Learn & Practice", "desc": "Follow structured resources, run hands-on labs, and build real projects." },
-  { "num": "03", "icon": "🚀", "title": "Level Up", "desc": "Prepare for interviews, earn certifications, and advance your career." },
-  { "num": "04", "icon": "🤝", "title": "Give Back", "desc": "Share your knowledge — contribute resources and help fellow learners." }
+  { "num": "01", "icon": "🐧", "title": "Choose Your Distro", "desc": "Pick a learning path based on your experience level and goals — like choosing the right Linux distro." },
+  { "num": "02", "icon": "⚡", "title": "sudo apt install skills", "desc": "Follow structured resources, run hands-on labs, and build real projects in the terminal." },
+  { "num": "03", "icon": "🚀", "title": "chmod +x career.sh", "desc": "Prepare for interviews, earn certifications, and make yourself executable in the job market." },
+  { "num": "04", "icon": "🤝", "title": "fork && contribute", "desc": "Share your knowledge — fork the repo, submit PRs, and help fellow learners level up." }
 ]
