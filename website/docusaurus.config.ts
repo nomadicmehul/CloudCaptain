@@ -22,6 +22,70 @@ const config: Config = {
     locales: ['en'],
   },
 
+  headTags: [
+    // Preconnect to Google Fonts for faster font loading
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+    // Load fonts with display=swap to avoid render blocking
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap',
+      },
+    },
+    // JSON-LD structured data for Organization
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'CloudCaptain',
+        url: 'https://cloudcaptain.io',
+        logo: 'https://cloudcaptain.io/img/cloudcaptain-logo.jpg',
+        description: 'Open-source community learning platform for Cloud, DevOps, AI, and Operations.',
+        sameAs: [
+          'https://github.com/nomadicmehul/CloudCaptain',
+          'https://twitter.com/nomadicmehul',
+        ],
+      }),
+    },
+    // JSON-LD structured data for WebSite (enables Google Sitelinks Search Box)
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'CloudCaptain',
+        url: 'https://cloudcaptain.io',
+        description: 'Free open-source learning hub for Cloud, DevOps, AI & Operations with curated paths, hands-on labs, and interview prep.',
+        publisher: {
+          '@type': 'Organization',
+          name: 'CloudCaptain',
+        },
+      }),
+    },
+  ],
+
   presets: [
     [
       'classic',
@@ -50,9 +114,17 @@ const config: Config = {
   themeConfig: {
     image: 'img/cloudcaptain-social.jpg',
     metadata: [
-      {name: 'keywords', content: 'cloud, devops, kubernetes, docker, aws, azure, gcp, learning, open-source'},
+      {name: 'keywords', content: 'cloud computing, devops, kubernetes, docker, aws, azure, gcp, terraform, ansible, linux, learning platform, open-source, interview prep, career paths, hands-on labs'},
+      {name: 'description', content: 'CloudCaptain is a free, open-source learning platform for Cloud, DevOps, AI & Operations. Curated paths, hands-on labs, interview prep — 100% free, forever.'},
       {name: 'twitter:card', content: 'summary_large_image'},
       {name: 'twitter:site', content: '@nomadicmehul'},
+      {name: 'twitter:creator', content: '@nomadicmehul'},
+      {name: 'og:type', content: 'website'},
+      {name: 'og:site_name', content: 'CloudCaptain'},
+      {name: 'og:locale', content: 'en_US'},
+      {name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'},
+      {name: 'author', content: 'Mehul Patel'},
+      {name: 'theme-color', content: '#0A1628'},
     ],
     announcementBar: {
       id: 'contribute',

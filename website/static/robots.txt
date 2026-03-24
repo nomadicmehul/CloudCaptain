@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cloudcaptain.io/sitemap.xml
+
+# Disallow build artifacts and internal paths
+Disallow: /search
+Disallow: /search/

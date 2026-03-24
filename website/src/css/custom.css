@@ -42,7 +42,7 @@
   --docusaurus-highlighted-code-line-bg: rgba(56, 189, 248, 0.15);
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Fonts loaded via headTags in docusaurus.config.ts with preconnect for faster loading */
 
 html { scroll-behavior: smooth; }
 body { font-feature-settings: 'liga' 1, 'calt' 1; }
@@ -2094,4 +2094,22 @@ div[class*='announcementBar'] a {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem !important;
   letter-spacing: 0.02em;
+}
+
+/* ═══ PERFORMANCE: Reduced Motion ═══ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ═══ PERFORMANCE: Disable heavy animations on mobile ═══ */
+@media (max-width: 768px) {
+  .orb { display: none; }
+  .hero-scanlines { display: none; }
+  .captain-image-glow { animation: none; }
 }
