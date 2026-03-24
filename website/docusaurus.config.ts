@@ -207,18 +207,19 @@ const config: Config = {
             {label: 'GitHub', href: 'https://github.com/nomadicmehul/CloudCaptain'},
             {label: 'Twitter', href: 'https://twitter.com/nomadicmehul'},
             {label: 'Contributing Guide', to: '/contribute'},
-            {label: '☕ Buy Me a Coffee', href: 'https://buymeacoffee.com/nomadicmehul'},
-            {label: '❤️ Sponsor on GitHub', href: 'https://github.com/sponsors/nomadicmehul'},
           ],
         },
         {
           title: 'More',
           items: [
-            {label: 'Roadmap', to: '/docs/learning-paths/devops'},
+            {label: 'Roadmap', to: '/docs/learning-paths/welcome'},
+            {label: 'Blog', to: '/blog'},
+            {label: '☕ Buy Me a Coffee', href: 'https://buymeacoffee.com/nomadicmehul'},
+            {label: '❤️ Sponsor on GitHub', href: 'https://github.com/sponsors/nomadicmehul'},
           ],
         },
       ],
-      copyright: `\u00A9 ${new Date().getFullYear()} CloudCaptain Community &mdash; Licensed under MIT. Built with <span style="color:#10B981;">Linux</span>, <span style="color:#38BDF8;">Open Source</span> & <span style="color:#F59E0B;">Coffee</span> by <a href="https://nomadicmehul.dev/" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a> and 100+ contributors.`,
+      copyright: `\u00A9 ${new Date().getFullYear()} CloudCaptain Community &mdash; For the love of DevOps, Cloud Native & Open Source by <a href="https://nomadicmehul.dev/" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a>`,
     },
     prism: {
       theme: prismThemes.github,

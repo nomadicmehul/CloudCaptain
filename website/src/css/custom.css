@@ -71,11 +71,16 @@ body { font-feature-settings: 'liga' 1, 'calt' 1; }
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   height: 60px;
 }
+.navbar__brand {
+  flex-shrink: 0 !important;
+}
 .navbar__title {
   font-weight: 800; font-size: 1.1rem;
   background: linear-gradient(135deg, #fff 30%, #38BDF8 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   white-space: nowrap;
+  overflow: visible !important;
+  text-overflow: unset !important;
 }
 .navbar__logo img {
   border-radius: 10px;
@@ -88,10 +93,10 @@ body { font-feature-settings: 'liga' 1, 'calt' 1; }
   .navbar__logo img { width: 30px; height: 30px; }
 }
 .navbar__link {
-  font-weight: 600; font-size: 0.82rem; letter-spacing: 0.01em;
+  font-weight: 600; font-size: 0.78rem; letter-spacing: 0.01em;
   transition: color 0.2s;
   white-space: nowrap;
-  padding: 0.25rem 0.6rem !important;
+  padding: 0.25rem 0.45rem !important;
 }
 .navbar__link:hover { color: #38BDF8 !important; }
 
@@ -1901,17 +1906,6 @@ div[class*='announcementBar'] a {
   color: rgba(16,185,129,0.3) !important;
 }
 
-/* Footer — open source tagline style */
-.footer--dark::before {
-  content: 'Powered by Linux, Open Source & Coffee ☕';
-  display: block;
-  text-align: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: rgba(16,185,129,0.25);
-  padding: 0.75rem 0 0;
-  letter-spacing: 0.04em;
-}
 
 /* Stat cards — subtle terminal border bottom */
 .stat-card {
