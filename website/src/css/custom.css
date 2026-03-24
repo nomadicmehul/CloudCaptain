@@ -1259,18 +1259,19 @@ div[class*='announcementBar'] a {
 }
 .picker-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
-  max-width: 800px; margin: 0 auto;
+  max-width: 900px; margin: 0 auto;
 }
 .picker-item {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 1rem 1.25rem; border-radius: 12px;
+  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.75rem;
+  padding: 1rem 1.5rem; border-radius: 12px;
   background: rgba(15,29,50,0.5); border: 1px solid rgba(56,189,248,0.06);
   transition: all 0.2s;
+  min-height: 56px;
 }
 .picker-item:hover {
-  border-color: rgba(56,189,248,0.2); background: rgba(15,29,50,0.8);
+  border-color: rgba(16,185,129,0.2); background: rgba(15,29,50,0.8);
 }
-.picker-item__like { color: #94A3B8; font-size: 0.85rem; font-weight: 500; flex: 1; }
+.picker-item__like { color: #94A3B8; font-size: 0.85rem; font-weight: 500; }
 .picker-item__arrow {
   color: #10B981; font-weight: 700;
   font-family: 'JetBrains Mono', monospace;
@@ -1278,8 +1279,10 @@ div[class*='announcementBar'] a {
   opacity: 0.6;
 }
 .picker-item__path {
-  color: #10B981; font-size: 0.85rem; font-weight: 700;
+  color: #10B981; font-size: 0.82rem; font-weight: 700;
   font-family: 'JetBrains Mono', monospace;
+  text-align: right;
+  white-space: nowrap;
 }
 
 /* Career paths light mode */
