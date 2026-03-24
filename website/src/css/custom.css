@@ -1811,3 +1811,47 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   background: rgba(16,185,129,0.15);
   color: #0F172A;
 }
+
+/* Linux category card — special green glow */
+.category-card[href*="linux"]:hover,
+.category-card[href*="Linux"]:hover {
+  border-color: rgba(16,185,129,0.4) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 40px rgba(16,185,129,0.12) !important;
+}
+.category-card[href*="linux"]::before,
+.category-card[href*="Linux"]::before {
+  background: linear-gradient(90deg, #10B981, rgba(16,185,129,0.3), transparent) !important;
+}
+
+/* Contribute section — terminal-style border */
+.section--contribute .contribute-actions {
+  background: rgba(8,14,28,0.6);
+  border: 1px solid rgba(16,185,129,0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+}
+.section--contribute .contribute-actions::before {
+  content: '~/cloudcaptain$';
+  position: absolute;
+  top: -0.7rem;
+  left: 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: #10B981;
+  background: #0F1D32;
+  padding: 0 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+/* Contribute tags — CLI command style */
+.contribute-tag {
+  background: rgba(16,185,129,0.06) !important;
+  border-color: rgba(16,185,129,0.15) !important;
+  color: #10B981 !important;
+}
+.contribute-tag:hover {
+  background: rgba(16,185,129,0.12) !important;
+  color: #34D399 !important;
+  border-color: rgba(16,185,129,0.3) !important;
+}
