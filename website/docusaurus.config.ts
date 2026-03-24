@@ -87,6 +87,7 @@ const config: Config = {
           position: 'left',
           label: 'Cloud Providers',
         },
+        {to: '/journey', label: "Captain's Journey", position: 'left'},
         {to: '/contribute', label: 'Contribute', position: 'left'},
         {
           href: 'https://buymeacoffee.com/nomadicmehul',
@@ -130,6 +131,7 @@ const config: Config = {
         {
           title: 'Community',
           items: [
+            {label: "Captain's Journey", to: '/journey'},
             {label: 'GitHub', href: 'https://github.com/nomadicmehul/CloudCaptain'},
             {label: 'Twitter', href: 'https://twitter.com/nomadicmehul'},
             {label: 'Contributing Guide', to: '/contribute'},

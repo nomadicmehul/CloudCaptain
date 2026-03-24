@@ -421,6 +421,9 @@ function CaptainSection({ ghStats }: { ghStats: { stars: number; forks: number; 
               className="captain-image"
             />
             <div className="captain-badge-tag">Founder & Captain</div>
+            <Link to="/journey" className="captain-journey-link">
+              ~/my-journey &rarr;
+            </Link>
           </div>
           <div className="captain-text">
             <h2 className="captain-heading">
