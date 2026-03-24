@@ -271,6 +271,7 @@ function FloatingOrbs() {
 function HeroSection() {
   return (
     <div className="hero-cloudcaptain">
+      <div className="hero-scanlines" aria-hidden="true" />
       <FloatingOrbs />
       <div className="container hero-container">
         <div className="hero-left">
@@ -341,7 +342,7 @@ function CategoriesSection() {
   return (
     <div className="section section--dark" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">Explore by Technology</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$</span>Explore by Technology</h2>
         <p className="section__subtitle reveal">
           Deep dives with curated resources, cheatsheets, interview prep, and hands-on exercises.
         </p>
@@ -368,7 +369,7 @@ function LearningPathsSection() {
   return (
     <div className="section section--paths" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">Structured Learning Paths</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$</span>Structured Learning Paths</h2>
         <p className="section__subtitle reveal">
           Don't know where to start? Follow our curated roadmaps from beginner to expert.
         </p>
@@ -470,7 +471,7 @@ function HowItWorksSection() {
   return (
     <div className="section section--how" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">How It Works</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$</span>How It Works</h2>
         <p className="section__subtitle reveal">Four steps from zero to cloud-native expert.</p>
         <div className="how-grid">
           {howItWorksSteps.map((step, i) => (
@@ -536,7 +537,7 @@ function ContributeSection() {
   return (
     <div className="section section--contribute" ref={sectionRef}>
       <div className="container" style={{ textAlign: 'center' }}>
-        <h2 className="section__title reveal">Join the Crew</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$</span>Join the Crew</h2>
         <p className="section__subtitle reveal">
           CloudCaptain is built by the community, for the community.
           Every contribution matters — from fixing a typo to adding a learning path.
@@ -567,7 +568,7 @@ function SponsorSection() {
   return (
     <div className="section section--sponsor" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">Support CloudCaptain</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$</span>Support CloudCaptain</h2>
         <p className="section__subtitle reveal">
           CloudCaptain is 100% free and open source. If it helped you learn, land a job, or ace an interview,
           consider supporting the project so we can keep building.

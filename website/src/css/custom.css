@@ -1607,3 +1607,207 @@ div[class*='announcementBar'] { font-weight: 600; font-size: 0.85rem; letter-spa
   .journey-timeline-marker { left: -3rem; }
   .journey-terminal { font-size: 0.72rem; }
 }
+
+/* ═══ LINUX & OPEN SOURCE FLAVOR ═══ */
+/* Terminal-style $ prompt for section titles */
+.section-prompt {
+  font-family: 'JetBrains Mono', monospace;
+  color: #10B981;
+  font-weight: 700;
+  opacity: 0.7;
+  margin-right: 0.3rem;
+  font-size: 0.85em;
+}
+[data-theme='light'] .section-prompt {
+  color: #059669;
+}
+
+/* Terminal-style border for code blocks site-wide */
+.prism-code {
+  border: 1px solid rgba(16,185,129,0.15) !important;
+  position: relative;
+}
+.prism-code::before {
+  content: '$ ';
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(16,185,129,0.4);
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Subtle scanline overlay on hero (CRT feel) */
+.hero-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(16,185,129,0.008) 2px,
+    rgba(16,185,129,0.008) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Terminal green glow on hero terminal border */
+.hero-terminal {
+  border-color: rgba(16,185,129,0.15) !important;
+}
+.hero-terminal::before {
+  background: linear-gradient(135deg, rgba(16,185,129,0.15), transparent 40%, transparent 60%, rgba(6,182,212,0.12)) !important;
+}
+
+/* Terminal header enhanced with Linux feel */
+.terminal__title::before {
+  content: 'mehul@cloudcaptain:~';
+  margin-right: 0.3rem;
+  color: #10B981;
+  font-weight: 600;
+}
+.terminal__title {
+  color: #475569 !important;
+}
+
+/* Open Source badge pulse in hero — green accent ring */
+.hero-badge {
+  position: relative;
+}
+.hero-badge::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(56,189,248,0.2));
+  z-index: -1;
+  opacity: 0;
+  animation: ossBadgePulse 4s ease-in-out infinite;
+}
+@keyframes ossBadgePulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+/* Contribute tags — terminal command style */
+.contribute-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem !important;
+  letter-spacing: -0.01em;
+}
+
+/* Tux penguin watermark — subtle background decoration */
+.section--contribute::after {
+  content: '🐧';
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  font-size: 4rem;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.section--contribute {
+  position: relative;
+}
+
+/* Terminal cursor blink for section titles on hover */
+.section__title::after {
+  content: '_';
+  font-family: 'JetBrains Mono', monospace;
+  color: #10B981;
+  animation: blink 1s step-end infinite;
+  margin-left: 0.15rem;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+/* Code block line numbers — green accent */
+.token-line .line-number {
+  color: rgba(16,185,129,0.3) !important;
+}
+
+/* Footer — open source tagline style */
+.footer--dark::before {
+  content: 'Powered by Linux, Open Source & Coffee ☕';
+  display: block;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(16,185,129,0.25);
+  padding: 0.75rem 0 0;
+  letter-spacing: 0.04em;
+}
+
+/* Stat cards — subtle terminal border bottom */
+.stat-card {
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s, all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.stat-card:hover {
+  border-bottom-color: rgba(16,185,129,0.3);
+}
+
+/* Category cards — terminal-style top accent on hover */
+.category-card:hover::before {
+  background: linear-gradient(90deg, rgba(16,185,129,0.4), var(--card-accent, #38BDF8), transparent) !important;
+}
+
+/* How-it-works step numbers — monospace */
+.how-step__num {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Learning path level badges — monospace */
+.path-card__level {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Sponsor section — open source heart */
+.section--sponsor::before {
+  content: '❤️ Open Source';
+  display: block;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(56,189,248,0.3);
+  letter-spacing: 0.06em;
+  padding-bottom: 1rem;
+}
+
+/* Doc sidebar — terminal feel for active item */
+.menu__link--active {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.85rem;
+}
+.menu__link--active::before {
+  content: '> ';
+  color: #10B981;
+  font-weight: 700;
+}
+
+/* Navbar — subtle version indicator */
+.navbar::after {
+  content: 'v3.0-oss';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  color: rgba(16,185,129,0.15);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+/* Selection color — green tinted */
+::selection {
+  background: rgba(16,185,129,0.2);
+  color: #E2E8F0;
+}
+[data-theme='light'] ::selection {
+  background: rgba(16,185,129,0.15);
+  color: #0F172A;
+}
