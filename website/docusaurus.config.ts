@@ -56,9 +56,9 @@ const config: Config = {
     ],
     announcementBar: {
       id: 'contribute',
-      content: 'We are open source! Give us a <a target="_blank" rel="noopener noreferrer" href="https://github.com/nomadicmehul/CloudCaptain">star on GitHub</a> and contribute to the community.',
+      content: '$ echo "We are FOSS!" &mdash; Give us a <a target="_blank" rel="noopener noreferrer" href="https://github.com/nomadicmehul/CloudCaptain">&#9733; star on GitHub</a> and join the open-source crew. &#x1F427;',
       backgroundColor: '#0A1628',
-      textColor: '#38BDF8',
+      textColor: '#10B981',
       isCloseable: true,
     },
     navbar: {
@@ -146,7 +146,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright \u00A9 ${new Date().getFullYear()} CloudCaptain Community. Built with love by <a href="https://nomadicmehul.dev/" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a> and the open-source community.`,
+      copyright: `\u00A9 ${new Date().getFullYear()} CloudCaptain Community &mdash; Licensed under MIT. Built with <span style="color:#10B981;">Linux</span>, <span style="color:#38BDF8;">Open Source</span> & <span style="color:#F59E0B;">Coffee</span> by <a href="https://nomadicmehul.dev/" target="_blank" rel="noopener noreferrer" style="color: #38BDF8;">Mehul Patel</a> and 100+ contributors.`,
     },
     prism: {
       theme: prismThemes.github,

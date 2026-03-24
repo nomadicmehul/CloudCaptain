@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
@@ -118,85 +118,13 @@ function useCountUp(target: number, suffix = '', duration = 1500) {
   return { ref, display: `${count}${suffix}` };
 }
 
-/* ─── Typing Terminal ─── */
-function TypingTerminal() {
-  const lines = [
-    { type: 'cmd', text: 'kubectl get pods' },
-    {
-      type: 'output',
-      text: 'NAME              READY  STATUS\nweb-app-7d4f     1/1    Running\napi-server-3b    1/1    Running\nredis-cache-9    1/1    Running',
-    },
-    { type: 'cmd', text: 'docker build -t app:v2 .' },
-    { type: 'output', text: 'Successfully built 4a2f8e3c1d' },
-  ];
-
-  // Phase: 'idle' (waiting before next line), 'typing' (typing a cmd), 'done' (all lines shown)
-  const [completedLines, setCompletedLines] = useState<number>(0);
-  const [typedChars, setTypedChars] = useState(0);
-  const [phase, setPhase] = useState<'idle' | 'typing' | 'done'>('idle');
-  const [showPrompt, setShowPrompt] = useState(false);
+/* ─── Neofetch-style Terminal ─── */
+function NeofetchTerminal() {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (completedLines >= lines.length) {
-      // All lines done — show idle cursor, then reset
-      setPhase('done');
-      setShowPrompt(true);
-      const timer = setTimeout(() => {
-        setCompletedLines(0);
-        setTypedChars(0);
-        setPhase('idle');
-        setShowPrompt(false);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-
-    const currentLine = lines[completedLines];
-
-    if (phase === 'idle') {
-      if (currentLine.type === 'cmd') {
-        // Show the $ prompt first, then start typing after a short pause
-        setShowPrompt(true);
-        const timer = setTimeout(() => {
-          setPhase('typing');
-          setTypedChars(0);
-        }, 400);
-        return () => clearTimeout(timer);
-      } else {
-        // Output line — show it after a brief delay
-        const timer = setTimeout(() => {
-          setCompletedLines((c) => c + 1);
-          setShowPrompt(false);
-        }, 300);
-        return () => clearTimeout(timer);
-      }
-    }
-
-    if (phase === 'typing' && currentLine.type === 'cmd') {
-      if (typedChars < currentLine.text.length) {
-        const timer = setTimeout(
-          () => setTypedChars((c) => c + 1),
-          45 + Math.random() * 35
-        );
-        return () => clearTimeout(timer);
-      } else {
-        // Finished typing this command — brief pause then move on
-        const timer = setTimeout(() => {
-          setCompletedLines((c) => c + 1);
-          setPhase('idle');
-          setShowPrompt(false);
-          setTypedChars(0);
-        }, 500);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [completedLines, typedChars, phase]);
-
-  const renderOutput = useCallback((text: string) => {
-    return text.split('\n').map((line, i) => {
-      const highlighted = line.replace(/Running/g, '<span style="color:#10B981">Running</span>');
-      const successHighlighted = highlighted.replace(/Successfully/g, '<span style="color:#38BDF8">Successfully</span>');
-      return <div key={i} dangerouslySetInnerHTML={{ __html: successHighlighted }} />;
-    });
+    const timer = setTimeout(() => setVisible(true), 300);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -208,47 +136,52 @@ function TypingTerminal() {
         <span className="terminal__title">cloudcaptain ~ terminal</span>
       </div>
       <div className="terminal__body">
-        {/* Completed lines */}
-        {lines.slice(0, completedLines).map((line, i) => {
-          if (line.type === 'cmd') {
-            return (
-              <div key={i} className="terminal__line">
-                <span className="terminal__prompt">$ </span>
-                <span className="terminal__cmd">{line.text}</span>
+        <div className="terminal__line">
+          <span className="terminal__prompt">$ </span>
+          <span className="terminal__cmd">neofetch</span>
+        </div>
+        {visible && (
+          <div className="neofetch-output">
+            <div className="neofetch-grid">
+              <pre className="neofetch-ascii" aria-hidden="true">{
+`    .----.
+   / .  . \\
+  |  /\\  |
+  |__\\/__|
+ /\\______/\\
+|  ______  |
+ \\________/`
+              }</pre>
+              <div className="neofetch-info">
+                <div className="neofetch-title">
+                  <span className="nf-user">captain</span>
+                  <span className="nf-at">@</span>
+                  <span className="nf-host">cloudcaptain</span>
+                </div>
+                <div className="neofetch-sep">-----------------</div>
+                <div className="nf-row"><span className="nf-key">OS</span>: CloudCaptain Linux x86_64</div>
+                <div className="nf-row"><span className="nf-key">Kernel</span>: 6.1.0-oss</div>
+                <div className="nf-row"><span className="nf-key">Uptime</span>: 3+ years</div>
+                <div className="nf-row"><span className="nf-key">Packages</span>: 150+ (docs)</div>
+                <div className="nf-row"><span className="nf-key">Shell</span>: devops/cloud/ai</div>
+                <div className="nf-row"><span className="nf-key">License</span>: MIT (100% Free)</div>
+                <div className="nf-row"><span className="nf-key">Contributors</span>: 100+</div>
+                <div className="neofetch-colors">
+                  <span className="nf-color" style={{background:'#F43F5E'}} />
+                  <span className="nf-color" style={{background:'#F59E0B'}} />
+                  <span className="nf-color" style={{background:'#10B981'}} />
+                  <span className="nf-color" style={{background:'#38BDF8'}} />
+                  <span className="nf-color" style={{background:'#8B5CF6'}} />
+                  <span className="nf-color" style={{background:'#06B6D4'}} />
+                </div>
               </div>
-            );
-          }
-          return (
-            <div key={i} className="terminal__output">
-              {renderOutput(line.text)}
             </div>
-          );
-        })}
-
-        {/* Currently typing line — only show when prompt is ready */}
-        {completedLines < lines.length && lines[completedLines].type === 'cmd' && showPrompt && (
-          <div className="terminal__line">
-            <span className="terminal__prompt">$ </span>
-            <span className="terminal__cmd">
-              {phase === 'typing' ? (
-                <>
-                  {lines[completedLines].text.slice(0, typedChars)}
-                  <span className="terminal__cursor">|</span>
-                </>
-              ) : (
-                <span className="terminal__cursor">|</span>
-              )}
-            </span>
           </div>
         )}
-
-        {/* Idle cursor after all lines done */}
-        {phase === 'done' && showPrompt && (
-          <div className="terminal__line">
-            <span className="terminal__prompt">$ </span>
-            <span className="terminal__cursor">|</span>
-          </div>
-        )}
+        <div className="terminal__line" style={{marginTop: '0.5rem'}}>
+          <span className="terminal__prompt">$ </span>
+          <span className="terminal__cursor">|</span>
+        </div>
       </div>
     </div>
   );
@@ -271,26 +204,30 @@ function FloatingOrbs() {
 function HeroSection() {
   return (
     <div className="hero-cloudcaptain">
+      <div className="hero-scanlines" aria-hidden="true" />
       <FloatingOrbs />
       <div className="container hero-container">
         <div className="hero-left">
           <div className="hero-badge-row">
             <img src="img/cloudcaptain-logo.jpg" alt="CloudCaptain" className="hero-logo" />
-            <span className="hero-badge">Open Source Community Project</span>
+            <span className="hero-badge">&#x1F427; Open Source &middot; Free as in Freedom</span>
+          </div>
+          <div className="hero-motd">
+            <span className="motd-prefix">[ MOTD ]</span> Welcome to CloudCaptain — <em>your ship, your rules.</em>
           </div>
           <h1 className="hero__title">
             Navigate the Cloud<br />Like a Captain
           </h1>
           <p className="hero__subtitle">
             The open-source, community-driven learning platform for Cloud, DevOps, AI & Operations.
-            Curated paths, hands-on exercises, interview prep — <strong style={{color:'#38BDF8'}}>all free, forever</strong>.
+            Curated paths, hands-on labs, interview prep — <strong style={{color:'#10B981'}}>100% free, forever.</strong>
           </p>
           <div className="hero-buttons">
             <Link className="btn-primary" to="/docs/learning-paths/devops">
-              Start Learning →
+              ./start-learning.sh →
             </Link>
             <Link className="btn-secondary" href="https://github.com/nomadicmehul/CloudCaptain">
-              ★ Star on GitHub
+              git clone &amp;&amp; star ★
             </Link>
           </div>
           <div className="hero-tech-badges">
@@ -300,7 +237,7 @@ function HeroSection() {
           </div>
         </div>
         <div className="hero-right">
-          <TypingTerminal />
+          <NeofetchTerminal />
         </div>
       </div>
     </div>
@@ -325,10 +262,10 @@ function StatsSection() {
     <div className="stats-wrapper" ref={sectionRef}>
       <div className="container">
         <div className="stats-section reveal">
-          <StatCard number={150} suffix="+" label="Guides & Docs" icon="📚" />
-          <StatCard number={49} suffix="" label="Architecture Diagrams" icon="📐" />
-          <StatCard number={8} suffix="" label="Career Paths" icon="🗺️" />
-          <StatCard number={100} suffix="%" label="Free & Open" icon="💙" />
+          <StatCard number={150} suffix="+" label="/usr/share/docs" icon="📖" />
+          <StatCard number={49} suffix="" label="/etc/diagrams" icon="📐" />
+          <StatCard number={8} suffix="" label="/opt/career-paths" icon="🗺️" />
+          <StatCard number={100} suffix="%" label="FOSS Licensed" icon="🐧" />
         </div>
       </div>
     </div>
@@ -341,7 +278,7 @@ function CategoriesSection() {
   return (
     <div className="section section--dark" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">Explore by Technology</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$ ls</span> Explore by Technology</h2>
         <p className="section__subtitle reveal">
           Deep dives with curated resources, cheatsheets, interview prep, and hands-on exercises.
         </p>
@@ -368,7 +305,7 @@ function LearningPathsSection() {
   return (
     <div className="section section--paths" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">Structured Learning Paths</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$ cat</span> Structured Learning Paths</h2>
         <p className="section__subtitle reveal">
           Don't know where to start? Follow our curated roadmaps from beginner to expert.
         </p>
@@ -470,7 +407,7 @@ function HowItWorksSection() {
   return (
     <div className="section section--how" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">How It Works</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$ man</span> How It Works</h2>
         <p className="section__subtitle reveal">Four steps from zero to cloud-native expert.</p>
         <div className="how-grid">
           {howItWorksSteps.map((step, i) => (
@@ -536,17 +473,18 @@ function ContributeSection() {
   return (
     <div className="section section--contribute" ref={sectionRef}>
       <div className="container" style={{ textAlign: 'center' }}>
-        <h2 className="section__title reveal">Join the Crew</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$ git</span> Join the Crew</h2>
         <p className="section__subtitle reveal">
           CloudCaptain is built by the community, for the community.
           Every contribution matters — from fixing a typo to adding a learning path.
+          <br /><code className="contribute-license-tag">LICENSE: MIT | COST: $0 | FREEDOM: Maximum</code>
         </p>
         <div className="hero-buttons reveal" style={{ justifyContent: 'center' }}>
           <Link className="btn-primary" href="https://github.com/nomadicmehul/CloudCaptain/pulls">
-            Submit a PR →
+            git push origin my-feature →
           </Link>
           <Link className="btn-secondary" to="/contribute">
-            Contribution Guide
+            cat CONTRIBUTING.md
           </Link>
         </div>
         <div className="contribute-actions reveal">
@@ -567,10 +505,11 @@ function SponsorSection() {
   return (
     <div className="section section--sponsor" ref={sectionRef}>
       <div className="container">
-        <h2 className="section__title reveal">Support CloudCaptain</h2>
+        <h2 className="section__title reveal"><span className="section-prompt">$ sudo</span> Support CloudCaptain</h2>
         <p className="section__subtitle reveal">
-          CloudCaptain is 100% free and open source. If it helped you learn, land a job, or ace an interview,
-          consider supporting the project so we can keep building.
+          CloudCaptain is 100% free and open source — no paywalls, no premium tiers.
+          If it helped you learn, land a job, or ace an interview,
+          consider fueling the project so we can keep shipping.
         </p>
         <div className="sponsor-grid">
           {sponsorTiers.map((tier, i) => (

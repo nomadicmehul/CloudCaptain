@@ -1,7 +1,7 @@
 [
-  { "icon": "📝", "text": "Add Resources" },
-  { "icon": "🐛", "text": "Fix Issues" },
-  { "icon": "📚", "text": "Write Guides" },
-  { "icon": "🎨", "text": "Improve Design" },
-  { "icon": "🌍", "text": "Translate" }
+  { "icon": "📝", "text": "git add resources" },
+  { "icon": "🐛", "text": "git fix --bugs" },
+  { "icon": "📚", "text": "git commit -m 'guides'" },
+  { "icon": "🎨", "text": "git push design" },
+  { "icon": "🌍", "text": "git merge i18n" }
 ]
