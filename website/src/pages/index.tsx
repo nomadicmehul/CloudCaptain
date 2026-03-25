@@ -12,20 +12,40 @@ import sponsorTiers from '../data/sponsors.json';
 import contributeActions from '../data/contributeActions.json';
 import techBadges from '../data/techBadges.json';
 
-/* ─── GitHub Stats Hook ─── */
+/* ─── GitHub Stats Hook (cached in localStorage for 1 hour) ─── */
+const GH_STATS_CACHE_KEY = 'cc_gh_stats';
+const GH_STATS_TTL = 60 * 60 * 1000; // 1 hour
+
 function useGitHubStats() {
-  const [stats, setStats] = useState({
-    stars: 0,
-    forks: 0,
-    contributors: 0,
+  const [stats, setStats] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem(GH_STATS_CACHE_KEY);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < GH_STATS_TTL) return data;
+        }
+      } catch { /* ignore parse errors */ }
+    }
+    return { stars: 0, forks: 0, contributors: 0 };
   });
 
   useEffect(() => {
+    // Skip fetch if cache is fresh
+    try {
+      const cached = localStorage.getItem(GH_STATS_CACHE_KEY);
+      if (cached) {
+        const { timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < GH_STATS_TTL) return;
+      }
+    } catch { /* proceed to fetch */ }
+
+    const controller = new AbortController();
     const fetchStats = async () => {
       try {
         const [repoRes, contribRes] = await Promise.all([
-          fetch('https://api.github.com/repos/nomadicmehul/CloudCaptain'),
-          fetch('https://api.github.com/repos/nomadicmehul/CloudCaptain/contributors?per_page=1&anon=true'),
+          fetch('https://api.github.com/repos/nomadicmehul/CloudCaptain', { signal: controller.signal }),
+          fetch('https://api.github.com/repos/nomadicmehul/CloudCaptain/contributors?per_page=1&anon=true', { signal: controller.signal }),
         ]);
 
         if (repoRes.ok) {
@@ -37,17 +57,22 @@ function useGitHubStats() {
             contribCount = lastPageMatch ? parseInt(lastPageMatch[1], 10) : 1;
           }
 
-          setStats({
+          const newStats = {
             stars: repo.stargazers_count || 0,
             forks: repo.forks_count || 0,
             contributors: contribCount,
-          });
+          };
+          setStats(newStats);
+          try {
+            localStorage.setItem(GH_STATS_CACHE_KEY, JSON.stringify({ data: newStats, timestamp: Date.now() }));
+          } catch { /* storage full — ignore */ }
         }
       } catch {
-        // Silently fail — will show fallback values
+        // Silently fail — will show cached or fallback values
       }
     };
     fetchStats();
+    return () => controller.abort();
   }, []);
 
   return stats;
@@ -209,7 +234,7 @@ function HeroSection() {
       <div className="container hero-container">
         <div className="hero-left">
           <div className="hero-badge-row">
-            <img src="img/cloudcaptain-logo.jpg" alt="CloudCaptain" className="hero-logo" />
+            <img src="img/cloudcaptain-logo.jpg" alt="CloudCaptain" className="hero-logo" width={56} height={56} />
             <span className="hero-badge">&#x1F427; Open Source &middot; Free as in Freedom</span>
           </div>
           <div className="hero-motd">
@@ -356,6 +381,9 @@ function CaptainSection({ ghStats }: { ghStats: { stars: number; forks: number; 
               src="img/mehul-founder.jpg"
               alt="Mehul Patel — Founder of CloudCaptain"
               className="captain-image"
+              loading="lazy"
+              width={280}
+              height={280}
             />
             <div className="captain-badge-tag">Founder & Captain</div>
             <Link to="/journey" className="captain-journey-link">
