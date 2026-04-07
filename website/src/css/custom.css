@@ -27,6 +27,7 @@
   --ifm-font-size-base: 16px;
   --ifm-heading-font-weight: 700;
   --docusaurus-highlighted-code-line-bg: rgba(30, 155, 215, 0.1);
+  --ifm-navbar-sidebar-window-width: 1200px;
 }
 
 [data-theme='dark'] {
@@ -99,6 +100,24 @@ body { font-feature-settings: 'liga' 1, 'calt' 1; }
   padding: 0.25rem 0.45rem !important;
 }
 .navbar__link:hover { color: #38BDF8 !important; }
+
+/* Responsive navbar spacing for medium screens to prevent overlap */
+@media (max-width: 1450px) and (min-width: 1201px) {
+  .navbar__link {
+    padding: 0.2rem 0.35rem !important;
+    font-size: 0.74rem !important;
+  }
+  .navbar__link--sponsor {
+    padding: 0.25rem 0.6rem !important;
+    font-size: 0.78rem !important;
+  }
+  .navbar__items--right {
+    gap: 0.4rem !important;
+  }
+  .navbar__brand {
+    margin-right: 0.5rem !important;
+  }
+}
 
 /* Light mode navbar */
 [data-theme='light'] .navbar {
