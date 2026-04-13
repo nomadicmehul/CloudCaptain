@@ -93,7 +93,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl: 'https://github.com/nomadicmehul/CloudCaptain/tree/main/website/',
-          showLastUpdateTime: false,
+          showLastUpdateTime: true,
           showLastUpdateAuthor: false,
           breadcrumbs: true,
         },
@@ -103,7 +103,22 @@ const config: Config = {
           blogTitle: 'CloudCaptain Blog',
           blogDescription: 'Latest insights on Cloud, DevOps, AI, and Operations',
           postsPerPage: 10,
+          feedOptions: {
+            type: 'all',
+            title: 'CloudCaptain Blog',
+            description: 'Latest insights on Cloud, DevOps, AI, and Operations',
+            copyright: `Copyright © ${new Date().getFullYear()} CloudCaptain Community`,
+            language: 'en',
+          },
         },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.7,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
+        },
+        // Google Analytics — add your Measurement ID to enable
+        // gtag: { trackingID: 'G-XXXXXXXXXX', anonymizeIP: true },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -236,6 +251,21 @@ const config: Config = {
       maxHeadingLevel: 4,
     },
   } satisfies Preset.ThemeConfig,
+
+  plugins: [
+    // Zoom on images in docs/blog for cheatsheets and diagrams
+    [
+      'plugin-image-zoom',
+      {
+        selector: '.markdown img',
+        options: {
+          margin: 24,
+          background: 'rgba(10, 22, 40, 0.9)',
+          scrollOffset: 0,
+        },
+      },
+    ],
+  ],
 
   themes: [
     '@docusaurus/theme-mermaid',

@@ -1,0 +1,52 @@
+name: 📚 New Resource / Tool Request
+description: Suggest a new tool, learning resource, cheatsheet, or career path to add.
+title: "[Resource]: "
+labels: ["content", "enhancement"]
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Learning Path
+        - Tool (Docker, K8s, Terraform, etc.)
+        - Cloud Provider (AWS, Azure, GCP)
+        - Interview Prep
+        - Cheatsheet
+        - Career Path
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Resource / Tool Name
+      placeholder: e.g., Pulumi, KubeVirt, OpenTofu
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Why should we add this?
+      description: A short pitch — who benefits, why it matters for Cloud/DevOps/AI-Ops learners.
+    validations:
+      required: true
+
+  - type: textarea
+    id: links
+    attributes:
+      label: Key links
+      description: Official docs, good tutorials, GitHub repo, etc.
+      placeholder: |
+        - Official docs: https://...
+        - Quickstart: https://...
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Want to contribute it yourself?
+      options:
+        - label: I'd like to submit a PR for this.
+          required: false

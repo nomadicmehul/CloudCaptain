@@ -23,6 +23,8 @@ jobs:
         working-directory: ./website
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for showLastUpdateTime in docs
 
       - uses: actions/setup-node@v4
         with:
