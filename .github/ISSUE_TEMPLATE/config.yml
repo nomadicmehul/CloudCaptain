@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask a Question / Discussion
+    url: https://github.com/nomadicmehul/CloudCaptain/discussions
+    about: For general questions, ideas, or learning-path discussions, use GitHub Discussions.
+  - name: ☕ Support the Project
+    url: https://buymeacoffee.com/nomadicmehul
+    about: Love CloudCaptain? Consider buying the captain a coffee.
