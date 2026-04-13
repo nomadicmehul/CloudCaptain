@@ -228,6 +228,7 @@ const config: Config = {
           title: 'More',
           items: [
             {label: 'Roadmap', to: '/docs/learning-paths/welcome'},
+            {label: '📖 Your Progress', to: '/progress'},
             {label: 'Blog', to: '/blog'},
             {label: '☕ Buy Me a Coffee', href: 'https://buymeacoffee.com/nomadicmehul'},
             {label: '❤️ Sponsor on GitHub', href: 'https://github.com/sponsors/nomadicmehul'},
