@@ -2108,36 +2108,16 @@ div[class*='announcementBar'] a {
   .captain-image-glow { animation: none; }
 }
 
-/* ═══ CAPTAIN'S BRIDGE — global overrides (scoped to doc pages via body class) ═══ */
+/* ═══ CAPTAIN'S BRIDGE v2 — global overrides for focus mode only ═══
+   The layout itself is owned by the swizzled DocItem/Layout; these rules
+   only handle the body-class-driven focus-mode dimming. */
 
-/* Reserve space for the bottom console so content never hides behind it */
-body.cc-bridge-enabled {
-  padding-bottom: 56px;
-}
-
-/* Hide the stock Docusaurus right-side TOC when the Bridge rail is open — it replaces it */
-@media (min-width: 997px) {
-  body.cc-bridge-enabled.cc-bridge-rail-open .theme-doc-toc-desktop {
-    display: none !important;
-  }
-  /* Let the article breathe into the space freed up by the hidden TOC */
-  body.cc-bridge-enabled.cc-bridge-rail-open .col.col--3 {
-    flex: 0 0 0;
-    max-width: 0;
-    padding: 0;
-  }
-  /* Shift main column right margin so fixed rail doesn't overlap content */
-  body.cc-bridge-enabled.cc-bridge-rail-open main[class*='docMainContainer'] {
-    padding-right: 340px;
-  }
-}
-
-/* Focus mode — dim everything except the active paragraph */
 body.cc-bridge-focus article p,
 body.cc-bridge-focus article li,
 body.cc-bridge-focus article pre,
 body.cc-bridge-focus article blockquote,
-body.cc-bridge-focus article table {
+body.cc-bridge-focus article table,
+body.cc-bridge-focus article .theme-admonition {
   transition: opacity 0.3s ease, filter 0.3s ease;
   opacity: 0.32;
   filter: blur(0.3px);
@@ -2146,7 +2126,8 @@ body.cc-bridge-focus article p.cc-bridge-focus-active,
 body.cc-bridge-focus article li.cc-bridge-focus-active,
 body.cc-bridge-focus article pre.cc-bridge-focus-active,
 body.cc-bridge-focus article blockquote.cc-bridge-focus-active,
-body.cc-bridge-focus article table.cc-bridge-focus-active {
+body.cc-bridge-focus article table.cc-bridge-focus-active,
+body.cc-bridge-focus article .theme-admonition.cc-bridge-focus-active {
   opacity: 1;
   filter: none;
 }
@@ -2157,11 +2138,8 @@ body.cc-bridge-focus article h3 {
   transition: opacity 0.3s ease;
 }
 body.cc-bridge-focus article h2:hover,
-body.cc-bridge-focus article h3:hover {
-  opacity: 1;
-}
+body.cc-bridge-focus article h3:hover { opacity: 1; }
 
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   body.cc-bridge-focus article p,
   body.cc-bridge-focus article li,
