@@ -33,6 +33,8 @@ import BridgeHelp from './BridgeHelp';
 import BridgeGutter from './BridgeGutter';
 import ResumeBanner from './ResumeBanner';
 import ChapterEnhancements from './ChapterEnhancements';
+import CompletionToast from './CompletionToast';
+import SidebarSpine from './SidebarSpine';
 import {useScrollProgress} from './useScrollProgress';
 import {useExtractors} from './useExtractors';
 import {useReadProgress} from './useReadProgress';
@@ -112,7 +114,34 @@ export default function BridgeLayout({children}: Props): JSX.Element {
   const {progress, currentSection, totalSections, sections, readingTimeLeft} =
     useScrollProgress(article);
   const {commands, concepts} = useExtractors(article);
-  const {readSections, toggleRead, isRead} = useReadProgress(location.pathname);
+  const {readSections, toggleRead, isRead, setTotalSections} = useReadProgress(
+    location.pathname
+  );
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  // Persist total section count so SidebarSpine can classify completion
+  useEffect(() => {
+    if (totalSections > 0) setTotalSections(totalSections);
+  }, [totalSections, setTotalSections]);
+
+  // Fire a toast whenever a new section gets marked read (delta detection)
+  const prevReadRef = useRef<string[]>([]);
+  useEffect(() => {
+    const prev = prevReadRef.current;
+    const added = readSections.find((s) => !prev.includes(s));
+    if (added && prev.length > 0) {
+      // Find the title for a nicer toast
+      const sec = sections.find((s) => s.id === added);
+      const title = sec?.title ?? 'Chapter';
+      if (readSections.length === totalSections && totalSections > 0) {
+        setToastMsg(`🏁 Page complete — ${totalSections} / ${totalSections}`);
+      } else {
+        setToastMsg(`🎉 ${title} complete — ${readSections.length} / ${totalSections}`);
+      }
+    }
+    prevReadRef.current = readSections;
+  }, [readSections, sections, totalSections]);
+
 
   // Focus-mode DOM observer
   useEffect(() => {
@@ -351,6 +380,14 @@ export default function BridgeLayout({children}: Props): JSX.Element {
       </footer>
 
       {helpOpen && <BridgeHelp onClose={() => setHelpOpen(false)} />}
+
+      {/* Cross-page sidebar progress dots */}
+      <SidebarSpine />
+
+      {/* Transient toast when a section gets marked complete */}
+      {toastMsg && (
+        <CompletionToast message={toastMsg} onDone={() => setToastMsg(null)} />
+      )}
     </div>
   );
 }

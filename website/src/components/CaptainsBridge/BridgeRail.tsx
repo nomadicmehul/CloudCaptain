@@ -3,6 +3,40 @@ import styles from './styles.module.css';
 import type {Section} from './useScrollProgress';
 import type {Command, Concept} from './useExtractors';
 
+function downloadShellScript(commands: Command[]): void {
+  const pageTitle = (document.title || 'cloudcaptain').replace(/\s*\|.*$/, '').trim();
+  const url = typeof window !== 'undefined' ? window.location.href : '';
+  const date = new Date().toISOString();
+  const header =
+    `#!/usr/bin/env bash\n` +
+    `# CloudCaptain — extracted commands\n` +
+    `# Page:  ${pageTitle}\n` +
+    (url ? `# URL:   ${url}\n` : '') +
+    `# Saved: ${date}\n` +
+    `#\n` +
+    `# Auto-extracted from the page's code blocks. Review before running.\n` +
+    `set -euo pipefail\n\n`;
+  const body = commands.map((c) => `# (${c.language})\n${c.text}\n`).join('\n');
+  const blob = new Blob([header + body], {type: 'text/x-shellscript;charset=utf-8'});
+  const href = URL.createObjectURL(blob);
+  const safeTitle = pageTitle
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 48) || 'cloudcaptain';
+  const a = document.createElement('a');
+  a.href = href;
+  a.download = `${safeTitle}-commands.sh`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(href), 1000);
+}
+
+function copyAll(commands: Command[], copy: (t: string) => void): void {
+  copy(commands.map((c) => c.text).join('\n'));
+}
+
 type Tab = 'contents' | 'commands' | 'concepts';
 
 type Props = {
@@ -101,27 +135,50 @@ export default function BridgeRail({
         )}
 
         {activeTab === 'commands' && (
-          <ol className={styles.railList}>
-            {commands.length === 0 && (
-              <li className={styles.railEmpty}>
-                No CLI commands detected. This page may be prose-only.
-              </li>
-            )}
-            {commands.map((c, i) => (
-              <li key={`${c.text}-${i}`} className={styles.railCmd}>
-                <code className={styles.railCmdText} title={c.text}>
-                  <span className={styles.railCmdPrompt}>$</span> {c.text}
-                </code>
+          <>
+            {commands.length > 0 && (
+              <div className={styles.railToolbar}>
                 <button
                   type="button"
-                  className={styles.railCmdCopy}
-                  onClick={() => copy(c.text)}
-                  aria-label="Copy command">
-                  {copied === c.text ? '✓' : '⎘'}
+                  className={styles.railToolBtn}
+                  onClick={() => downloadShellScript(commands)}
+                  title="Download all commands as a runnable .sh script">
+                  ⬇ .sh
                 </button>
-              </li>
-            ))}
-          </ol>
+                <button
+                  type="button"
+                  className={styles.railToolBtn}
+                  onClick={() => copyAll(commands, (t) => copy(t))}
+                  title="Copy all commands">
+                  ⎘ all
+                </button>
+                <span className={styles.railToolHint}>
+                  {commands.length} command{commands.length === 1 ? '' : 's'}
+                </span>
+              </div>
+            )}
+            <ol className={styles.railList}>
+              {commands.length === 0 && (
+                <li className={styles.railEmpty}>
+                  No CLI commands detected. This page may be prose-only.
+                </li>
+              )}
+              {commands.map((c, i) => (
+                <li key={`${c.text}-${i}`} className={styles.railCmd}>
+                  <code className={styles.railCmdText} title={c.text}>
+                    <span className={styles.railCmdPrompt}>$</span> {c.text}
+                  </code>
+                  <button
+                    type="button"
+                    className={styles.railCmdCopy}
+                    onClick={() => copy(c.text)}
+                    aria-label="Copy command">
+                    {copied === c.text ? '✓' : '⎘'}
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </>
         )}
 
         {activeTab === 'concepts' && (
