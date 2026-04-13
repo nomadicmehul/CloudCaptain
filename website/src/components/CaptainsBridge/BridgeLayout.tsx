@@ -46,7 +46,7 @@ const STORAGE_FOCUS = 'cloudcaptain.bridge.focus';
 const STORAGE_RAIL = 'cloudcaptain.bridge.rail';
 const STORAGE_TAB = 'cloudcaptain.bridge.railTab';
 
-type Tab = 'contents' | 'commands' | 'concepts';
+type Tab = 'contents' | 'commands';
 
 export default function BridgeLayout({children}: Props): JSX.Element {
   const location = useLocation();
@@ -76,7 +76,8 @@ export default function BridgeLayout({children}: Props): JSX.Element {
       const r = localStorage.getItem(STORAGE_RAIL);
       if (r !== null) setRailOpen(r === 'true');
       const t = localStorage.getItem(STORAGE_TAB);
-      if (t === 'contents' || t === 'commands' || t === 'concepts') setRailTab(t);
+      if (t === 'contents' || t === 'commands') setRailTab(t);
+      // Migrate: any previously-persisted 'concepts' value silently resets to 'contents'
     } catch {}
   }, []);
 
@@ -113,7 +114,7 @@ export default function BridgeLayout({children}: Props): JSX.Element {
 
   const {progress, currentSection, totalSections, sections, readingTimeLeft} =
     useScrollProgress(article);
-  const {commands, concepts} = useExtractors(article);
+  const {commands} = useExtractors(article);
   const {readSections, toggleRead, isRead, setTotalSections} = useReadProgress(
     location.pathname
   );
@@ -354,7 +355,6 @@ export default function BridgeLayout({children}: Props): JSX.Element {
           <BridgeRail
             sections={sections}
             commands={commands}
-            concepts={concepts}
             activeTab={railTab}
             onTabChange={setRailTab}
             currentSection={currentSection}

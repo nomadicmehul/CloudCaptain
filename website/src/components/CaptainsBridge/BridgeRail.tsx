@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from './styles.module.css';
 import type {Section} from './useScrollProgress';
-import type {Command, Concept} from './useExtractors';
+import type {Command} from './useExtractors';
 
 function downloadShellScript(commands: Command[]): void {
   const pageTitle = (document.title || 'cloudcaptain').replace(/\s*\|.*$/, '').trim();
@@ -37,12 +37,11 @@ function copyAll(commands: Command[], copy: (t: string) => void): void {
   copy(commands.map((c) => c.text).join('\n'));
 }
 
-type Tab = 'contents' | 'commands' | 'concepts';
+type Tab = 'contents' | 'commands';
 
 type Props = {
   sections: Section[];
   commands: Command[];
-  concepts: Concept[];
   activeTab: Tab;
   onTabChange: (t: Tab) => void;
   currentSection: number;
@@ -53,7 +52,6 @@ type Props = {
 export default function BridgeRail({
   sections,
   commands,
-  concepts,
   activeTab,
   onTabChange,
   currentSection,
@@ -90,15 +88,6 @@ export default function BridgeRail({
           onClick={() => onTabChange('commands')}>
           Commands
           <span className={styles.railTabCount}>{commands.length}</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'concepts'}
-          className={`${styles.railTab} ${activeTab === 'concepts' ? styles.railTabActive : ''}`}
-          onClick={() => onTabChange('concepts')}>
-          Concepts
-          <span className={styles.railTabCount}>{concepts.length}</span>
         </button>
       </div>
 
@@ -179,27 +168,6 @@ export default function BridgeRail({
               ))}
             </ol>
           </>
-        )}
-
-        {activeTab === 'concepts' && (
-          <ul className={styles.railConcepts}>
-            {concepts.length === 0 && (
-              <li className={styles.railEmpty}>
-                No concepts detected. Bolded/inline-code terms will surface here.
-              </li>
-            )}
-            {concepts.map((c) => (
-              <li key={c.text}>
-                <a
-                  href={c.firstSeenId ? `#${c.firstSeenId}` : undefined}
-                  className={styles.railConcept}
-                  title={`Mentioned ${c.count} time${c.count === 1 ? '' : 's'}`}>
-                  <span>{c.text}</span>
-                  <span className={styles.railConceptCount}>×{c.count}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
         )}
       </div>
     </aside>

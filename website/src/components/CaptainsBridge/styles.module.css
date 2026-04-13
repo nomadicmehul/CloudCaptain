@@ -567,30 +567,6 @@
 }
 .railCmdCopy:hover { color: var(--bridge-accent); border-color: var(--bridge-accent); }
 
-.railConcepts {
-  list-style: none;
-  padding: 10px 12px;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.railConcept {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  background: rgba(56, 189, 248, 0.08);
-  border: 1px solid var(--bridge-border);
-  border-radius: 4px;
-  color: var(--bridge-text);
-  font-size: 11px;
-  text-decoration: none;
-  transition: all 0.12s ease;
-}
-.railConcept:hover { border-color: var(--bridge-accent); color: var(--bridge-accent); text-decoration: none; }
-.railConceptCount { color: var(--bridge-muted); font-size: 10px; }
-
 /* =========================================================================
    BOTTOM CONSOLE (fixed)
    ========================================================================= */
