@@ -1,12 +1,20 @@
 /**
  * useLabProvider — picks a live sandbox provider for the current doc based
- * on the pathname. Phase 1 uses KillerCoda playgrounds exclusively (single
- * provider → single attribution, single iframe origin, no CSP complexity).
+ * on the pathname.
  *
- * Returns `null` for pages without a matching playground; the Lab toggle in
- * BridgeTelemetry is hidden in that case.
+ * Phase 1 (current): all providers render as LAUNCHERS, not embedded
+ * iframes. KillerCoda — like most modern sandbox services — sets
+ * X-Frame-Options: DENY / CSP frame-ancestors, which blocks iframe
+ * embedding as an anti-clickjacking measure. Instead of fighting that,
+ * the Lab pane shows a prominent "Launch in new tab" card with provider
+ * attribution and keeps the reading experience undisturbed.
+ *
+ * Phase 3 will introduce truly-embeddable providers on a per-tool basis
+ * (e.g. WebVM for Linux, Pyodide for Python, StackBlitz for Node).
  */
 import {useMemo} from 'react';
+
+export type LabMode = 'launcher' | 'iframe';
 
 export type LabProvider = {
   id: string;
@@ -16,6 +24,17 @@ export type LabProvider = {
   attributionUrl: string;
   /** Short tag shown in the telemetry button, e.g. "K8s" */
   shortLabel: string;
+  /** A short description shown on the launcher card */
+  description: string;
+  /** Rendering mode — most Phase 1 providers are 'launcher' only */
+  mode: LabMode;
+  /** Optional override URL used when mode === 'iframe' */
+  embedUrl?: string;
+};
+
+const KILLERCODA_ATTRIB = {
+  attribution: 'Powered by KillerCoda',
+  attributionUrl: 'https://killercoda.com/',
 };
 
 const PROVIDERS: Array<{match: RegExp; provider: LabProvider}> = [
@@ -25,9 +44,11 @@ const PROVIDERS: Array<{match: RegExp; provider: LabProvider}> = [
       id: 'killercoda-k8s',
       name: 'Kubernetes Playground',
       url: 'https://killercoda.com/playgrounds/scenario/kubernetes',
-      attribution: 'Lab by KillerCoda',
-      attributionUrl: 'https://killercoda.com/',
       shortLabel: 'K8s',
+      description:
+        'A fresh, real Kubernetes cluster (kubeadm) ready to use. kubectl is pre-configured. Session is ephemeral.',
+      mode: 'launcher',
+      ...KILLERCODA_ATTRIB,
     },
   },
   {
@@ -36,9 +57,11 @@ const PROVIDERS: Array<{match: RegExp; provider: LabProvider}> = [
       id: 'killercoda-docker',
       name: 'Docker Playground',
       url: 'https://killercoda.com/playgrounds/scenario/docker',
-      attribution: 'Lab by KillerCoda',
-      attributionUrl: 'https://killercoda.com/',
       shortLabel: 'Docker',
+      description:
+        'A clean Linux host with Docker Engine pre-installed. Build, run, and network containers in a throw-away sandbox.',
+      mode: 'launcher',
+      ...KILLERCODA_ATTRIB,
     },
   },
   {
@@ -47,9 +70,11 @@ const PROVIDERS: Array<{match: RegExp; provider: LabProvider}> = [
       id: 'killercoda-terraform',
       name: 'Terraform Playground',
       url: 'https://killercoda.com/playgrounds/scenario/terraform',
-      attribution: 'Lab by KillerCoda',
-      attributionUrl: 'https://killercoda.com/',
       shortLabel: 'TF',
+      description:
+        'Terraform CLI pre-installed on a Linux host. Run terraform init/plan/apply against local or LocalStack providers.',
+      mode: 'launcher',
+      ...KILLERCODA_ATTRIB,
     },
   },
   {
@@ -58,9 +83,11 @@ const PROVIDERS: Array<{match: RegExp; provider: LabProvider}> = [
       id: 'killercoda-ansible',
       name: 'Ansible Playground',
       url: 'https://killercoda.com/playgrounds/scenario/ansible',
-      attribution: 'Lab by KillerCoda',
-      attributionUrl: 'https://killercoda.com/',
       shortLabel: 'Ansible',
+      description:
+        'Ansible pre-installed on a control node with a managed target. Write playbooks and watch them converge.',
+      mode: 'launcher',
+      ...KILLERCODA_ATTRIB,
     },
   },
   {
@@ -69,9 +96,11 @@ const PROVIDERS: Array<{match: RegExp; provider: LabProvider}> = [
       id: 'killercoda-ubuntu',
       name: 'Ubuntu Playground',
       url: 'https://killercoda.com/playgrounds/scenario/ubuntu',
-      attribution: 'Lab by KillerCoda',
-      attributionUrl: 'https://killercoda.com/',
       shortLabel: 'Linux',
+      description:
+        'A fresh Ubuntu shell. Practice bash, system admin commands, package management — no VM setup required.',
+      mode: 'launcher',
+      ...KILLERCODA_ATTRIB,
     },
   },
 ];
