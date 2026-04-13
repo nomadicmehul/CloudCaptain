@@ -35,9 +35,11 @@ import ResumeBanner from './ResumeBanner';
 import ChapterEnhancements from './ChapterEnhancements';
 import CompletionToast from './CompletionToast';
 import SidebarSpine from './SidebarSpine';
+import LabPane from './LabPane';
 import {useScrollProgress} from './useScrollProgress';
 import {useExtractors} from './useExtractors';
 import {useReadProgress} from './useReadProgress';
+import {useLabProvider} from './useLabProvider';
 
 import styles from './styles.module.css';
 
@@ -45,6 +47,7 @@ const STORAGE_ENABLED = 'cloudcaptain.bridge.enabled';
 const STORAGE_FOCUS = 'cloudcaptain.bridge.focus';
 const STORAGE_RAIL = 'cloudcaptain.bridge.rail';
 const STORAGE_TAB = 'cloudcaptain.bridge.railTab';
+const STORAGE_LAB = 'cloudcaptain.bridge.lab'; // per-pathname key: `${STORAGE_LAB}.${path}`
 
 type Tab = 'contents' | 'commands';
 
@@ -65,6 +68,8 @@ export default function BridgeLayout({children}: Props): JSX.Element {
   const [railOpen, setRailOpen] = useState(true);
   const [helpOpen, setHelpOpen] = useState(false);
   const [railTab, setRailTab] = useState<Tab>('contents');
+  const [labOpen, setLabOpen] = useState(false);
+  const labProvider = useLabProvider(location.pathname);
 
   // Hydrate persisted prefs once
   useEffect(() => {
@@ -80,6 +85,28 @@ export default function BridgeLayout({children}: Props): JSX.Element {
       // Migrate: any previously-persisted 'concepts' value silently resets to 'contents'
     } catch {}
   }, []);
+
+  // Per-pathname lab state (opt-in, remembered per page)
+  useEffect(() => {
+    try {
+      const key = `${STORAGE_LAB}.${location.pathname}`;
+      const v = localStorage.getItem(key);
+      setLabOpen(v === 'true');
+    } catch {
+      setLabOpen(false);
+    }
+  }, [location.pathname]);
+  useEffect(() => {
+    try {
+      const key = `${STORAGE_LAB}.${location.pathname}`;
+      localStorage.setItem(key, String(labOpen));
+    } catch {}
+  }, [labOpen, location.pathname]);
+
+  // Close lab automatically on pages without a provider (no-op if already false)
+  useEffect(() => {
+    if (!labProvider && labOpen) setLabOpen(false);
+  }, [labProvider, labOpen]);
 
   useEffect(() => {
     try {
@@ -242,6 +269,10 @@ export default function BridgeLayout({children}: Props): JSX.Element {
           setRailOpen((v) => !v);
           e.preventDefault();
           break;
+        case 'l':
+          if (labProvider) setLabOpen((v) => !v);
+          e.preventDefault();
+          break;
         case '?':
           setHelpOpen((v) => !v);
           e.preventDefault();
@@ -273,7 +304,7 @@ export default function BridgeLayout({children}: Props): JSX.Element {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [enabled, focus, helpOpen, sections, currentSection, toggleRead, goToDoc]);
+  }, [enabled, focus, helpOpen, sections, currentSection, toggleRead, goToDoc, labProvider]);
 
   // Find first unread section (for Resume banner)
   const firstUnread =
@@ -298,9 +329,16 @@ export default function BridgeLayout({children}: Props): JSX.Element {
     );
   }
 
+  // Right-column: lab takes priority over rail (mutually exclusive)
+  const showLab = labOpen && !!labProvider;
+  const showRail = !showLab && railOpen && !hideToc;
+  const rightColumnActive = showLab || showRail;
+
   return (
     <div
-      className={`${styles.canvas} ${railOpen && !hideToc ? styles.canvasWithRail : ''}`}>
+      className={`${styles.canvas} ${rightColumnActive ? styles.canvasWithRail : ''} ${
+        showLab ? styles.canvasWithLab : ''
+      }`}>
       <header className={styles.canvasHeader}>
         <BridgeTelemetry
           progress={progress}
@@ -308,9 +346,12 @@ export default function BridgeLayout({children}: Props): JSX.Element {
           totalSections={totalSections}
           readingTimeLeft={readingTimeLeft}
           focus={focus}
-          railOpen={railOpen && !hideToc}
+          railOpen={showRail}
+          labProvider={labProvider}
+          labOpen={showLab}
           onToggleFocus={() => setFocus((v) => !v)}
           onToggleRail={() => setRailOpen((v) => !v)}
+          onToggleLab={() => setLabOpen((v) => !v)}
           onDisable={() => setEnabled(false)}
           onHelp={() => setHelpOpen(true)}
         />
@@ -350,7 +391,7 @@ export default function BridgeLayout({children}: Props): JSX.Element {
         </div>
       </main>
 
-      {railOpen && !hideToc && (
+      {showRail && (
         <aside className={styles.canvasRail}>
           <BridgeRail
             sections={sections}
@@ -361,6 +402,12 @@ export default function BridgeLayout({children}: Props): JSX.Element {
             isRead={isRead}
             onToggleRead={toggleRead}
           />
+        </aside>
+      )}
+
+      {showLab && labProvider && (
+        <aside className={styles.canvasRail}>
+          <LabPane provider={labProvider} onClose={() => setLabOpen(false)} />
         </aside>
       )}
 

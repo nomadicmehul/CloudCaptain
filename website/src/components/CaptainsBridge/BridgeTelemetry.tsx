@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.module.css';
+import type {LabProvider} from './useLabProvider';
 
 type Props = {
   progress: number; // 0..1
@@ -8,8 +9,11 @@ type Props = {
   readingTimeLeft: number;
   focus: boolean;
   railOpen: boolean;
+  labProvider: LabProvider | null;
+  labOpen: boolean;
   onToggleFocus: () => void;
   onToggleRail: () => void;
+  onToggleLab: () => void;
   onDisable: () => void;
   onHelp: () => void;
 };
@@ -21,8 +25,11 @@ export default function BridgeTelemetry({
   readingTimeLeft,
   focus,
   railOpen,
+  labProvider,
+  labOpen,
   onToggleFocus,
   onToggleRail,
+  onToggleLab,
   onDisable,
   onHelp,
 }: Props): JSX.Element {
@@ -60,6 +67,17 @@ export default function BridgeTelemetry({
           </span>
         </div>
         <div className={styles.telemetryRight}>
+          {labProvider && (
+            <button
+              type="button"
+              className={`${styles.telemetryBtn} ${styles.telemetryBtnLab} ${
+                labOpen ? styles.telemetryBtnOn : ''
+              }`}
+              onClick={onToggleLab}
+              title={`Toggle live ${labProvider.shortLabel} lab (l)`}>
+              ⚡ {labOpen ? 'close lab' : `open ${labProvider.shortLabel} lab`}
+            </button>
+          )}
           <button
             type="button"
             className={`${styles.telemetryBtn} ${focus ? styles.telemetryBtnOn : ''}`}

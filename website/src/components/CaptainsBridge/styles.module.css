@@ -861,6 +861,224 @@
 :global(.menu__link) { display: flex; align-items: center; }
 
 /* =========================================================================
+   LAB PANE — Phase 1 MVP — iframe-embedded KillerCoda playground
+   ========================================================================= */
+
+/* Make the right-column wider when Lab is open (420px vs 320px rail) */
+.canvasWithLab {
+  grid-template-columns: var(--bridge-gutter-w) minmax(0, 1fr) 460px !important;
+}
+
+.telemetryBtnLab {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.08), rgba(56, 189, 248, 0.08));
+  color: var(--bridge-accent-2) !important;
+  border-color: var(--bridge-accent-2) !important;
+  font-weight: 600;
+}
+.telemetryBtnLab:hover {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(56, 189, 248, 0.18)) !important;
+  color: var(--bridge-text) !important;
+}
+
+.lab {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height, 60px) + 52px);
+  height: calc(100vh - var(--ifm-navbar-height, 60px) - 52px - var(--bridge-console-h));
+  background: var(--bridge-bg);
+  border-left: 1px solid var(--bridge-border);
+  color: var(--bridge-text);
+  font-family: var(--bridge-mono);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.labHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(56, 189, 248, 0.06));
+  border-bottom: 1px solid var(--bridge-border);
+  flex-shrink: 0;
+}
+.labHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.labIcon {
+  font-size: 16px;
+  color: var(--bridge-accent-2);
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  animation: ccLabPulse 2.8s ease-in-out infinite;
+}
+@keyframes ccLabPulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; text-shadow: 0 0 16px rgba(16, 185, 129, 0.9); }
+}
+.labTitleWrap { display: flex; flex-direction: column; line-height: 1.15; }
+.labKicker {
+  color: var(--bridge-accent-2);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+.labTitle {
+  color: var(--bridge-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.labHeaderActions {
+  display: flex;
+  gap: 4px;
+}
+.labIconBtn {
+  background: transparent;
+  border: 1px solid var(--bridge-border);
+  color: var(--bridge-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--bridge-mono);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 1;
+  transition: all 0.12s ease;
+}
+.labIconBtn:hover {
+  color: var(--bridge-accent);
+  border-color: var(--bridge-accent);
+  background: rgba(56, 189, 248, 0.08);
+  text-decoration: none;
+}
+
+.labBody {
+  flex: 1;
+  position: relative;
+  display: flex;
+  min-height: 0;
+  background: #000;
+}
+
+.labFrame {
+  flex: 1;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.labFooter {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  background: var(--bridge-bg-2);
+  border-top: 1px solid var(--bridge-border);
+  font-size: 10px;
+  color: var(--bridge-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.labFooter a { color: var(--bridge-accent); text-decoration: none; }
+.labFooter a:hover { text-decoration: underline; }
+.labFooterBeta {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 2px 6px;
+  border: 1px solid var(--bridge-border);
+  border-radius: 3px;
+  color: var(--bridge-warn);
+}
+
+/* First-run intro screen */
+.labIntro {
+  position: absolute;
+  inset: 0;
+  background: var(--bridge-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+.labIntroBody {
+  max-width: 380px;
+  font-family: var(--bridge-mono);
+  color: var(--bridge-text);
+}
+.labIntroTitle {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: var(--bridge-accent-2);
+  letter-spacing: 0.04em;
+}
+.labIntroText {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+  color: var(--bridge-text);
+}
+.labIntroText a { color: var(--bridge-accent); }
+.labIntroList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--bridge-muted);
+}
+.labIntroList li { padding: 4px 0 4px 18px; position: relative; }
+.labIntroList li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--bridge-accent-2);
+}
+.labIntroActions { display: flex; gap: 8px; flex-wrap: wrap; }
+.labIntroPrimary {
+  background: linear-gradient(135deg, var(--bridge-accent-2), var(--bridge-accent));
+  border: 0;
+  color: var(--bridge-bg);
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--bridge-mono);
+  font-size: 12px;
+}
+.labIntroPrimary:hover { filter: brightness(1.1); }
+.labIntroSecondary {
+  background: transparent;
+  border: 1px solid var(--bridge-border);
+  color: var(--bridge-muted);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--bridge-mono);
+  font-size: 12px;
+}
+.labIntroSecondary:hover { color: var(--bridge-text); border-color: var(--bridge-accent); }
+
+/* Responsive: hide lab entirely under 1100px */
+@media (max-width: 1100px) {
+  .canvasWithLab {
+    grid-template-columns: var(--bridge-gutter-w) minmax(0, 1fr) !important;
+    grid-template-areas:
+      'header header'
+      'gutter main' !important;
+  }
+  .lab { display: none; }
+  .telemetryBtnLab { display: none; }
+}
+
+/* =========================================================================
    RAIL TOOLBAR (download .sh, copy all)
    ========================================================================= */
 .railToolbar {
