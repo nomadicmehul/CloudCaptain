@@ -175,7 +175,6 @@ const config: Config = {
           label: 'Cloud Providers',
         },
         {to: '/journey', label: "Captain's Journey", position: 'left'},
-        {to: '/progress', label: '📖 Progress', position: 'left'},
         {to: '/contribute', label: 'Contribute', position: 'left'},
         {
           href: 'https://buymeacoffee.com/nomadicmehul',
