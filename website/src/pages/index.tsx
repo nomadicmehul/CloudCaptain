@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import ResumeReadingWidget from '@site/src/components/Progress/ResumeReadingWidget';
 
 /* ─── Data (loaded from JSON — edit the JSON files to update content) ─── */
 import categories from '../data/categories.json';
@@ -563,6 +565,7 @@ export default function Home(): React.ReactElement {
       title={`${siteConfig.title} — Learn Cloud, DevOps & AI`}
       description="Open-source community learning platform for Cloud, DevOps, AI, and Operations. Free forever.">
       <HeroSection />
+      <BrowserOnly>{() => <ResumeReadingWidget />}</BrowserOnly>
       <StatsSection />
       <CategoriesSection />
       <LearningPathsSection />
