@@ -1,0 +1,899 @@
+/* ==========================================================================
+   Captain's Bridge v2 — full doc-page replacement layout.
+   Pure CSS Grid. No floating overlays except help modal, console, and FAB.
+   ========================================================================== */
+
+/* CSS variables — all bridge chrome uses bridge-* to stay visually unified */
+.canvas,
+.classicWrap,
+.fab {
+  --bridge-bg: #0a1628;
+  --bridge-bg-2: #0f1e33;
+  --bridge-bg-3: #132a4a;
+  --bridge-border: #1e3558;
+  --bridge-border-light: #2a4770;
+  --bridge-text: #e2e8f0;
+  --bridge-muted: #7a8ba6;
+  --bridge-accent: #38bdf8;
+  --bridge-accent-2: #10b981;
+  --bridge-warn: #f59e0b;
+  --bridge-danger: #ef4444;
+  --bridge-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --bridge-gutter-w: 38px;
+  --bridge-rail-w: 320px;
+  --bridge-console-h: 48px;
+}
+
+:global([data-theme='light']) .canvas {
+  --bridge-bg: #f8fafc;
+  --bridge-bg-2: #ffffff;
+  --bridge-bg-3: #eef2f8;
+  --bridge-border: #d8e1ec;
+  --bridge-border-light: #e7ecf3;
+  --bridge-text: #0f172a;
+  --bridge-muted: #64748b;
+}
+
+/* =========================================================================
+   GRID CANVAS
+   Layout:  [ header spans all ]
+            [ gutter | main | rail ]
+            console is fixed (not in grid) so main can scroll freely
+   ========================================================================= */
+.canvas {
+  display: grid;
+  grid-template-columns: var(--bridge-gutter-w) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    'header header'
+    'gutter main';
+  color: var(--bridge-text);
+  padding-bottom: var(--bridge-console-h);
+  position: relative;
+}
+.canvasWithRail {
+  grid-template-columns: var(--bridge-gutter-w) minmax(0, 1fr) var(--bridge-rail-w);
+  grid-template-areas:
+    'header header header'
+    'gutter main rail';
+}
+
+.canvasHeader {
+  grid-area: header;
+}
+.canvasGutter {
+  grid-area: gutter;
+  position: relative;
+}
+.canvasMain {
+  grid-area: main;
+  min-width: 0;
+}
+.canvasRail {
+  grid-area: rail;
+}
+.canvasFooter {
+  /* console is fixed; canvasFooter just ensures the element renders */
+  position: static;
+}
+
+.mainInner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+
+/* =========================================================================
+   TELEMETRY STRIP
+   ========================================================================= */
+.telemetry {
+  position: sticky;
+  top: var(--ifm-navbar-height, 60px);
+  z-index: 30;
+  background: linear-gradient(180deg, var(--bridge-bg) 0%, var(--bridge-bg-2) 100%);
+  border-bottom: 1px solid var(--bridge-border);
+  color: var(--bridge-text);
+  font-family: var(--bridge-mono);
+  font-size: 12px;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+}
+.telemetryInner {
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.telemetryLeft,
+.telemetryRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.telemetryBadge {
+  padding: 4px 8px;
+  border: 1px solid var(--bridge-accent);
+  border-radius: 4px;
+  color: var(--bridge-accent);
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 11px;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.06);
+}
+.telemetryDivider {
+  width: 1px;
+  height: 16px;
+  background: var(--bridge-border);
+}
+.telemetryCell {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.telemetryLabel {
+  color: var(--bridge-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+}
+.telemetryValue {
+  color: var(--bridge-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.telemetryBtn {
+  background: transparent;
+  color: var(--bridge-muted);
+  border: 1px solid var(--bridge-border);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-family: var(--bridge-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.telemetryBtn:hover {
+  color: var(--bridge-text);
+  border-color: var(--bridge-accent);
+  background: rgba(56, 189, 248, 0.08);
+}
+.telemetryBtnOn {
+  color: var(--bridge-accent-2);
+  border-color: var(--bridge-accent-2);
+  background: rgba(16, 185, 129, 0.1);
+}
+.telemetryBar {
+  height: 2px;
+  width: 100%;
+  background: var(--bridge-border);
+  overflow: hidden;
+}
+.telemetryBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--bridge-accent-2), var(--bridge-accent));
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  transition: width 0.15s ease-out;
+}
+
+/* =========================================================================
+   READING GUTTER (left ribbon)
+   ========================================================================= */
+.gutter {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height, 60px) + 52px);
+  height: calc(100vh - var(--ifm-navbar-height, 60px) - 52px - var(--bridge-console-h));
+  width: var(--bridge-gutter-w);
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.gutterTrack {
+  position: relative;
+  width: 2px;
+  background: var(--bridge-border);
+  border-radius: 1px;
+  height: 100%;
+}
+.gutterFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, var(--bridge-accent), var(--bridge-accent-2));
+  border-radius: 1px;
+  transition: height 0.15s ease-out;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+.gutterMarkers {
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+}
+.gutterMarker {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  text-decoration: none;
+}
+.gutterMarkerDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bridge-bg);
+  border: 2px solid var(--bridge-border);
+  transition: all 0.15s ease;
+}
+.gutterMarker:hover .gutterMarkerDot {
+  background: var(--bridge-accent);
+  border-color: var(--bridge-accent);
+  transform: scale(1.4);
+}
+.gutterMarkerRead .gutterMarkerDot {
+  background: var(--bridge-accent-2);
+  border-color: var(--bridge-accent-2);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+/* =========================================================================
+   RESUME BANNER
+   ========================================================================= */
+.resume {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  column-gap: 14px;
+  align-items: center;
+  padding: 14px 18px;
+  margin: 0 0 1.5rem;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(16, 185, 129, 0.08));
+  border: 1px solid var(--bridge-accent);
+  border-radius: 10px;
+  font-family: var(--bridge-mono);
+  position: relative;
+  overflow: hidden;
+}
+.resumeIcon {
+  font-size: 22px;
+  color: var(--bridge-accent);
+  line-height: 1;
+}
+.resumeBody { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.resumeLine1 {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.resumeLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--bridge-muted);
+  font-weight: 600;
+}
+.resumeMeta { font-size: 11px; color: var(--bridge-muted); }
+.resumeLink {
+  color: var(--bridge-accent);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.resumeLink:hover { color: var(--bridge-accent-2); text-decoration: underline; }
+.resumeBar {
+  grid-column: 1 / -1;
+  height: 3px;
+  margin-top: 10px;
+  background: var(--bridge-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.resumeBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--bridge-accent-2), var(--bridge-accent));
+  transition: width 0.3s ease;
+}
+
+/* =========================================================================
+   CHAPTER CARDS (injected before every H2) — tuned for lower density
+   ========================================================================= */
+:global(.cc-bridge-card-host) {
+  margin-top: 2rem;
+}
+.chapterCard {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 6px;
+  margin: 0 0 0.25rem;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--bridge-border-light);
+  border-radius: 0;
+  font-family: var(--bridge-mono);
+  font-size: 11px;
+  transition: all 0.15s ease;
+  opacity: 0.85;
+}
+.chapterCard:hover {
+  border-left-color: var(--bridge-accent);
+  opacity: 1;
+}
+.chapterCardRead {
+  border-left-color: var(--bridge-accent-2);
+  opacity: 1;
+}
+.chapterBubble {
+  background: transparent;
+  border: 1.5px solid var(--bridge-border-light);
+  color: var(--bridge-muted);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+.chapterBubble:hover {
+  border-color: var(--bridge-accent);
+  color: var(--bridge-accent);
+  transform: scale(1.1);
+}
+.chapterCardRead .chapterBubble {
+  background: var(--bridge-accent-2);
+  border-color: var(--bridge-accent-2);
+  color: #0a1628;
+}
+.chapterMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bridge-muted);
+  flex-wrap: wrap;
+}
+.chapterEta { color: var(--bridge-text); }
+.chapterDot { color: var(--bridge-border-light); }
+.chapterDiff { display: inline-flex; align-items: center; gap: 6px; }
+.chapterDiff[data-level='beginner'] { color: var(--bridge-accent-2); }
+.chapterDiff[data-level='intermediate'] { color: var(--bridge-accent); }
+.chapterDiff[data-level='advanced'] { color: var(--bridge-warn); }
+.chapterDiffDots { letter-spacing: 1px; font-size: 10px; }
+.chapterCode { color: var(--bridge-muted); }
+
+/* =========================================================================
+   MARK-COMPLETE BUTTON (injected after last block of each H2 section)
+   ========================================================================= */
+:global(.cc-bridge-btn-host) {
+  margin: 1.5rem 0 2.5rem;
+}
+.markBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px dashed var(--bridge-border-light);
+  border-radius: 8px;
+  color: var(--bridge-muted);
+  font-family: var(--bridge-mono);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.markBtn:hover {
+  border-style: solid;
+  border-color: var(--bridge-accent-2);
+  color: var(--bridge-accent-2);
+  background: rgba(16, 185, 129, 0.06);
+}
+.markBtnIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 11px;
+  line-height: 1;
+}
+.markBtnRead {
+  border-style: solid;
+  border-color: var(--bridge-accent-2);
+  color: var(--bridge-accent-2);
+  background: rgba(16, 185, 129, 0.08);
+}
+.markBtnRead .markBtnIcon {
+  background: var(--bridge-accent-2);
+  color: var(--bridge-bg);
+  border-color: var(--bridge-accent-2);
+}
+.markBtn em { font-style: normal; opacity: 0.7; font-size: 11px; }
+
+/* =========================================================================
+   RIGHT RAIL
+   ========================================================================= */
+.rail {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height, 60px) + 52px);
+  height: calc(100vh - var(--ifm-navbar-height, 60px) - 52px - var(--bridge-console-h));
+  max-width: var(--bridge-rail-w);
+  background: var(--bridge-bg);
+  border-left: 1px solid var(--bridge-border);
+  color: var(--bridge-text);
+  font-family: var(--bridge-mono);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.railTabs {
+  display: flex;
+  border-bottom: 1px solid var(--bridge-border);
+  background: var(--bridge-bg-2);
+  flex-shrink: 0;
+}
+.railTab {
+  flex: 1;
+  padding: 12px 6px;
+  background: transparent;
+  color: var(--bridge-muted);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-family: var(--bridge-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+.railTab:hover { color: var(--bridge-text); }
+.railTabActive {
+  color: var(--bridge-accent);
+  border-bottom-color: var(--bridge-accent);
+  background: rgba(56, 189, 248, 0.05);
+}
+.railTabCount {
+  font-size: 10px;
+  color: var(--bridge-muted);
+  background: var(--bridge-border);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.railTabActive .railTabCount {
+  color: var(--bridge-accent);
+  background: rgba(56, 189, 248, 0.15);
+}
+.railBody { flex: 1; overflow-y: auto; padding: 10px 0; }
+.railBody::-webkit-scrollbar { width: 6px; }
+.railBody::-webkit-scrollbar-thumb { background: var(--bridge-border); border-radius: 3px; }
+
+.railList { list-style: none; padding: 0; margin: 0; font-size: 13px; }
+.railItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  transition: background 0.1s ease;
+}
+.railItem:hover { background: rgba(56, 189, 248, 0.05); }
+.railLevel2 { padding-left: 12px; }
+.railLevel3 { padding-left: 28px; font-size: 12px; }
+.railItemActive {
+  background: rgba(56, 189, 248, 0.12);
+  border-left: 2px solid var(--bridge-accent);
+  padding-left: 10px;
+}
+.railLevel3.railItemActive { padding-left: 26px; }
+.railItemRead .railLink {
+  color: var(--bridge-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--bridge-accent-2);
+}
+.railReadToggle {
+  background: transparent;
+  border: 0;
+  color: var(--bridge-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+.railReadToggle:hover { color: var(--bridge-accent-2); }
+.railItemRead .railReadToggle { color: var(--bridge-accent-2); }
+.railLink {
+  color: var(--bridge-text);
+  text-decoration: none;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.railLink:hover { color: var(--bridge-accent); text-decoration: none; }
+.railEmpty { padding: 16px 14px; color: var(--bridge-muted); font-size: 12px; line-height: 1.5; }
+
+.railCmd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.railCmd:hover { background: rgba(56, 189, 248, 0.05); }
+.railCmdText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--bridge-mono);
+  background: transparent;
+  color: var(--bridge-text);
+  padding: 0;
+}
+.railCmdPrompt { color: var(--bridge-accent-2); margin-right: 4px; }
+.railCmdCopy {
+  background: transparent;
+  border: 1px solid var(--bridge-border);
+  color: var(--bridge-muted);
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--bridge-mono);
+  font-size: 11px;
+}
+.railCmdCopy:hover { color: var(--bridge-accent); border-color: var(--bridge-accent); }
+
+/* =========================================================================
+   BOTTOM CONSOLE (fixed)
+   ========================================================================= */
+.console {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: linear-gradient(0deg, var(--bridge-bg) 0%, var(--bridge-bg-2) 100%);
+  border-top: 1px solid var(--bridge-border);
+  color: var(--bridge-text);
+  font-family: var(--bridge-mono);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.28);
+  height: var(--bridge-console-h);
+}
+.consoleInner {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  height: 100%;
+}
+.consoleGroup { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.consoleKey { display: inline-flex; align-items: center; gap: 4px; }
+.consoleKeyDesc {
+  color: var(--bridge-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.consoleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--bridge-border);
+  border-radius: 4px;
+  color: var(--bridge-text);
+  font-family: var(--bridge-mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.consoleBtn:hover { border-color: var(--bridge-accent); color: var(--bridge-accent); }
+.consoleKbd {
+  font-family: var(--bridge-mono);
+  font-size: 10px;
+  background: var(--bridge-bg);
+  color: var(--bridge-accent);
+  border: 1px solid var(--bridge-border);
+  padding: 2px 6px;
+  border-radius: 3px;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+}
+.consoleRead { color: var(--bridge-muted); font-size: 11px; padding-left: 4px; }
+
+/* =========================================================================
+   HELP MODAL
+   ========================================================================= */
+.helpBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 22, 40, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.helpModal {
+  width: min(560px, 100%);
+  background: var(--bridge-bg);
+  color: var(--bridge-text);
+  border: 1px solid var(--bridge-border);
+  border-radius: 10px;
+  font-family: var(--bridge-mono);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.helpHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--bridge-border);
+}
+.helpTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--bridge-accent);
+}
+.helpClose {
+  background: transparent;
+  border: 1px solid var(--bridge-border);
+  color: var(--bridge-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--bridge-mono);
+}
+.helpClose:hover { color: var(--bridge-danger); border-color: var(--bridge-danger); }
+.helpGrid { padding: 16px 20px; display: grid; grid-template-columns: 1fr; gap: 8px; }
+.helpRow { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 12px; padding: 6px 0; font-size: 13px; }
+.helpKbd {
+  font-family: var(--bridge-mono);
+  font-size: 12px;
+  background: var(--bridge-bg-2);
+  color: var(--bridge-accent);
+  border: 1px solid var(--bridge-border);
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-align: center;
+  justify-self: start;
+  min-width: 48px;
+}
+.helpDesc { color: var(--bridge-text); }
+.helpFooter {
+  padding: 14px 20px;
+  border-top: 1px solid var(--bridge-border);
+  color: var(--bridge-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================================================
+   CLASSIC-MODE FAB (appears when user disables Bridge)
+   ========================================================================= */
+.classicWrap { position: relative; }
+.fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0a1628;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.4);
+  transition: transform 0.15s ease;
+}
+.fab:hover { transform: scale(1.08); }
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width: 1100px) {
+  .canvasWithRail {
+    grid-template-columns: var(--bridge-gutter-w) minmax(0, 1fr);
+    grid-template-areas:
+      'header header'
+      'gutter main';
+  }
+  .canvasRail { display: none; }
+}
+@media (max-width: 996px) {
+  .canvas {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'header' 'main';
+  }
+  .canvasGutter { display: none; }
+  .mainInner { padding: 0 1rem 2rem; }
+  .telemetryInner { padding: 8px 12px; gap: 8px; }
+  .telemetryLabel { display: none; }
+  .consoleInner { padding: 6px 10px; gap: 8px; }
+  .consoleKeyDesc { display: none; }
+}
+@media (max-width: 600px) {
+  .telemetryRight .telemetryBtn:nth-child(2),
+  .telemetryRight .telemetryBtn:nth-child(3) { display: none; }
+  .chapterCard { flex-wrap: wrap; padding: 6px 8px; }
+  .chapterCode { display: none; }
+}
+
+/* =========================================================================
+   COMPLETION TOAST
+   ========================================================================= */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--bridge-console-h) + 20px);
+  transform: translate(-50%, 20px);
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.32s cubic-bezier(.2, .8, .2, 1);
+}
+.toast_in { opacity: 1; transform: translate(-50%, 0); }
+.toast_hold { opacity: 1; transform: translate(-50%, 0); }
+.toast_out { opacity: 0; transform: translate(-50%, -14px); transition: opacity 0.28s ease, transform 0.28s ease; }
+
+.toastInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(56, 189, 248, 0.9));
+  color: #0a1628;
+  font-family: var(--bridge-mono);
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  position: relative;
+}
+
+.toastText { position: relative; z-index: 2; letter-spacing: 0.02em; }
+
+/* Particle burst */
+.toastBurst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: block;
+  z-index: 1;
+}
+.toastBurst span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  animation: ccBurst 700ms ease-out forwards;
+}
+.toastBurst span:nth-child(1) { --bx: -46px; --by: -8px; animation-delay: 0ms; }
+.toastBurst span:nth-child(2) { --bx: 52px;  --by: -16px; animation-delay: 40ms; }
+.toastBurst span:nth-child(3) { --bx: -8px;  --by: -34px; animation-delay: 80ms; }
+.toastBurst span:nth-child(4) { --bx: 30px;  --by: 28px;  animation-delay: 20ms; }
+.toastBurst span:nth-child(5) { --bx: -34px; --by: 26px;  animation-delay: 60ms; }
+
+@keyframes ccBurst {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  20%  { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toastBurst span { display: none; }
+  .toast_in, .toast_hold, .toast_out {
+    transition: opacity 0.1s linear;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* =========================================================================
+   SIDEBAR SPINE — progress dots on sidebar links
+   ========================================================================= */
+:global(.cc-bridge-spine-badge) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  padding-left: 8px;
+  font-family: var(--bridge-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 14px;
+}
+:global(.cc-bridge-spine-badge[data-state='partial']) {
+  color: var(--bridge-accent, #38bdf8);
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.35);
+}
+:global(.cc-bridge-spine-badge[data-state='complete']) {
+  color: var(--bridge-accent-2, #10b981);
+  text-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+/* Ensure menu item flex works */
+:global(.menu__link) { display: flex; align-items: center; }
+
+/* =========================================================================
+   RAIL TOOLBAR (download .sh, copy all)
+   ========================================================================= */
+.railToolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--bridge-border);
+  background: var(--bridge-bg-2);
+}
+.railToolBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--bridge-border);
+  color: var(--bridge-text);
+  font-family: var(--bridge-mono);
+  font-size: 11px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.railToolBtn:hover {
+  border-color: var(--bridge-accent-2);
+  color: var(--bridge-accent-2);
+  background: rgba(16, 185, 129, 0.06);
+}
+.railToolHint {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--bridge-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

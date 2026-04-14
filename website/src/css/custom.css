@@ -2107,3 +2107,44 @@ div[class*='announcementBar'] a {
   .hero-scanlines { display: none; }
   .captain-image-glow { animation: none; }
 }
+
+/* ═══ CAPTAIN'S BRIDGE v2 — global overrides for focus mode only ═══
+   The layout itself is owned by the swizzled DocItem/Layout; these rules
+   only handle the body-class-driven focus-mode dimming. */
+
+body.cc-bridge-focus article p,
+body.cc-bridge-focus article li,
+body.cc-bridge-focus article pre,
+body.cc-bridge-focus article blockquote,
+body.cc-bridge-focus article table,
+body.cc-bridge-focus article .theme-admonition {
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  opacity: 0.32;
+  filter: blur(0.3px);
+}
+body.cc-bridge-focus article p.cc-bridge-focus-active,
+body.cc-bridge-focus article li.cc-bridge-focus-active,
+body.cc-bridge-focus article pre.cc-bridge-focus-active,
+body.cc-bridge-focus article blockquote.cc-bridge-focus-active,
+body.cc-bridge-focus article table.cc-bridge-focus-active,
+body.cc-bridge-focus article .theme-admonition.cc-bridge-focus-active {
+  opacity: 1;
+  filter: none;
+}
+body.cc-bridge-focus article h1,
+body.cc-bridge-focus article h2,
+body.cc-bridge-focus article h3 {
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+}
+body.cc-bridge-focus article h2:hover,
+body.cc-bridge-focus article h3:hover { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  body.cc-bridge-focus article p,
+  body.cc-bridge-focus article li,
+  body.cc-bridge-focus article pre {
+    transition: none;
+    filter: none;
+  }
+}
