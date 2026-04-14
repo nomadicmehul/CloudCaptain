@@ -1,0 +1,173 @@
+/* =========================================================================
+   ResumeReadingWidget — homepage "Captain's Log" for in-progress docs
+   ========================================================================= */
+
+.widget {
+  padding: 2.5rem 1rem 1rem;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(30, 155, 215, 0.035) 40%,
+    transparent 100%
+  );
+}
+
+.widgetInner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: var(--ifm-background-surface-color, #fff);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(10, 22, 40, 0.06);
+}
+
+.widgetHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+.widgetKicker {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--ifm-color-primary);
+  margin-bottom: 2px;
+}
+.widgetTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.widgetAll {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.widgetAll:hover {
+  color: var(--ifm-color-primary-darker);
+  text-decoration: underline;
+}
+
+.resumeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.resumeItem {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.15s ease;
+}
+.resumeItem:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(30, 155, 215, 0.12);
+}
+
+.resumeLink {
+  display: block;
+  padding: 14px 16px;
+  color: inherit;
+  text-decoration: none;
+}
+.resumeLink:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.resumeTopRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.resumeTitle {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ifm-color-content);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70%;
+}
+.resumeMeta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ifm-color-emphasis-600);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.resumeBar {
+  height: 4px;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.resumeBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #38bdf8);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.resumeBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.resumePath {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ifm-color-emphasis-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}
+.resumeContinue {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .widgetInner {
+  background: rgba(15, 30, 51, 0.5);
+  border-color: rgba(56, 189, 248, 0.15);
+}
+[data-theme='dark'] .resumeItem {
+  background: rgba(10, 22, 40, 0.5);
+  border-color: rgba(56, 189, 248, 0.1);
+}
+[data-theme='dark'] .resumeItem:hover {
+  background: rgba(10, 22, 40, 0.7);
+}
+
+@media (max-width: 600px) {
+  .widget { padding: 1.5rem 0.75rem 0.5rem; }
+  .widgetInner { padding: 1rem; }
+  .resumeTitle { max-width: 100%; }
+}
