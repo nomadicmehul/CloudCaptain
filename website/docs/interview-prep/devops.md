@@ -502,7 +502,7 @@ Execution of automated tests every time code is merged. Enables engineers to get
 ### Week 5-6: Tools & Architecture
 - Study [DevOps Tools Overview](/docs/learning-paths/devops-tools-overview/)
 - Dive into tools relevant to target company/role
-- Review [Tool-Specific Guides](/docs/tools/)
+- Review the tool-specific guides — [Docker](/docs/tools/docker/), [Kubernetes](/docs/tools/kubernetes/), [Terraform](/docs/tools/terraform/), and more
 - Practice architecture design scenarios
 
 ### Week 7-8: Mock Interviews & Practice

@@ -11,7 +11,7 @@ const config: Config = {
   organizationName: 'nomadicmehul',
   projectName: 'CloudCaptain',
   trailingSlash: false,
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   markdown: {
     mermaid: true,
@@ -227,9 +227,8 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {label: 'Roadmap', to: '/docs/learning-paths/welcome'},
+            {label: 'Roadmap', to: '/docs/'},
             {label: '📖 Your Progress', to: '/progress'},
-            {label: 'Blog', to: '/blog'},
             {label: '☕ Buy Me a Coffee', href: 'https://buymeacoffee.com/nomadicmehul'},
             {label: '❤️ Sponsor on GitHub', href: 'https://github.com/sponsors/nomadicmehul'},
           ],

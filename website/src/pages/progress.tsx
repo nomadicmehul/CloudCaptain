@@ -119,7 +119,7 @@ function ProgressPageInner(): JSX.Element {
             <em>"Mark section complete"</em> buttons to see your progress build up here.
           </p>
           <div className={styles.emptyActions}>
-            <Link className={`button button--primary button--lg`} to="/docs/learning-paths/welcome">
+            <Link className={`button button--primary button--lg`} to="/docs/">
               📚 Browse Learning Paths
             </Link>
             <Link className={`button button--secondary button--lg`} to="/docs/tools/docker/">

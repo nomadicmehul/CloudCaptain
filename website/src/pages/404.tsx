@@ -62,7 +62,7 @@ export default function NotFound(): JSX.Element {
             <Link className="button button--primary button--lg" to="/">
               🏠 Back to Home
             </Link>
-            <Link className="button button--secondary button--lg" to="/docs/learning-paths/welcome">
+            <Link className="button button--secondary button--lg" to="/docs/">
               📚 Browse Learning Paths
             </Link>
           </div>
