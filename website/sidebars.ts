@@ -135,9 +135,6 @@ const sidebars: SidebarsConfig = {
             'tools/ansible/interview-questions',
           ],
         },
-        'tools/cloudformation/index',
-        'tools/packer/index',
-        'tools/vagrant/index',
       ],
     },
     {
@@ -302,7 +299,6 @@ const sidebars: SidebarsConfig = {
             'tools/chef/cheatsheet',
           ],
         },
-        'tools/puppet/index',
         {
           type: 'category',
           label: 'Gradle',
@@ -366,7 +362,6 @@ const sidebars: SidebarsConfig = {
             'cloud/gcp/interview-questions',
           ],
         },
-        'cloud/digitalocean/index',
       ],
     },
     {

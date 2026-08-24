@@ -192,7 +192,7 @@ function NeofetchTerminal() {
                 <div className="nf-row"><span className="nf-key">Packages</span>: 150+ (docs)</div>
                 <div className="nf-row"><span className="nf-key">Shell</span>: devops/cloud/ai</div>
                 <div className="nf-row"><span className="nf-key">License</span>: MIT (100% Free)</div>
-                <div className="nf-row"><span className="nf-key">Contributors</span>: 100+</div>
+                <div className="nf-row"><span className="nf-key">Contributors</span>: welcome!</div>
                 <div className="neofetch-colors">
                   <span className="nf-color" style={{background:'#F43F5E'}} />
                   <span className="nf-color" style={{background:'#F59E0B'}} />
@@ -412,15 +412,15 @@ function CaptainSection({ ghStats }: { ghStats: { stars: number; forks: number; 
             </div>
             <div className="captain-social-proof">
               <div className="captain-social-stat">
-                <div className="captain-social-stat__number">{ghStats.stars ? `${formatNumber(ghStats.stars)}+` : '2K+'}</div>
+                <div className="captain-social-stat__number">{ghStats.stars ? `${formatNumber(ghStats.stars)}+` : '170+'}</div>
                 <div className="captain-social-stat__label">GitHub Stars</div>
               </div>
               <div className="captain-social-stat">
-                <div className="captain-social-stat__number">{ghStats.contributors ? `${ghStats.contributors}+` : '100+'}</div>
-                <div className="captain-social-stat__label">Contributors</div>
+                <div className="captain-social-stat__number">150+</div>
+                <div className="captain-social-stat__label">Docs Pages</div>
               </div>
               <div className="captain-social-stat">
-                <div className="captain-social-stat__number">{ghStats.forks ? `${ghStats.forks}+` : '500+'}</div>
+                <div className="captain-social-stat__number">{ghStats.forks ? `${ghStats.forks}+` : '75+'}</div>
                 <div className="captain-social-stat__label">Forks</div>
               </div>
             </div>
@@ -480,15 +480,15 @@ function TestimonialsSection({ ghStats }: { ghStats: { stars: number; forks: num
         </div>
         <div className="community-banner reveal">
           <div className="community-stat">
-            <div className="community-stat__number">{ghStats.stars ? `${formatNumber(ghStats.stars)}+` : '2K+'}</div>
+            <div className="community-stat__number">{ghStats.stars ? `${formatNumber(ghStats.stars)}+` : '170+'}</div>
             <div className="community-stat__label">GitHub Stars</div>
           </div>
           <div className="community-stat">
-            <div className="community-stat__number">{ghStats.contributors ? `${ghStats.contributors}+` : '100+'}</div>
-            <div className="community-stat__label">Contributors</div>
+            <div className="community-stat__number">330K+</div>
+            <div className="community-stat__label">Words of Content</div>
           </div>
           <div className="community-stat">
-            <div className="community-stat__number">{ghStats.forks ? `${formatNumber(ghStats.forks)}+` : '500+'}</div>
+            <div className="community-stat__number">{ghStats.forks ? `${formatNumber(ghStats.forks)}+` : '75+'}</div>
             <div className="community-stat__label">Forks</div>
           </div>
         </div>
