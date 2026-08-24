@@ -1,50 +1,57 @@
 ---
 sidebar_position: 5
 title: "Containers Learning Path"
-description: "Master containers from Docker to Kubernetes and beyond"
+description: "Master containers from Docker to production Kubernetes — sequenced through CloudCaptain's full guides"
 ---
 
 # Containers & Orchestration Learning Path
 
-From your first container to production-grade Kubernetes clusters.
+From your first container to production-grade Kubernetes clusters. This path sequences **~75,000 words** of CloudCaptain's Docker and Kubernetes guides: **~10–14 weeks** at 5–7 hours/week, from `docker run hello-world` to CKA-ready.
 
-## Stage 1: Container Fundamentals
+**By the end you'll be able to:** containerize any application with a production-quality Dockerfile, operate a Kubernetes cluster (workloads, networking, storage, security), and pass the CKA/CKAD with the exam-prep guide.
 
-1. **What are containers?** — Understand namespaces, cgroups, and OCI
-2. **[Docker](/docs/tools/docker/)** — Images, containers, volumes, networks
-3. **Dockerfile** — Multi-stage builds, best practices, security
-4. **Docker Compose** — Multi-container applications
-5. **[Podman](/docs/tools/podman/)** — Rootless containers, Docker alternative
+## Stage 1: Container Fundamentals (2–3 weeks)
 
-## Stage 2: Container Orchestration
+1. **[Docker Fundamentals](/docs/tools/docker/fundamentals)** — namespaces, cgroups, OCI, images, containers, volumes
+2. **[The Dockerfile Guide](/docs/tools/docker/dockerfile-guide)** — multi-stage builds, layer caching, best practices (80+ examples)
+3. **[Compose & Swarm](/docs/tools/docker/compose-swarm)** — multi-container applications
+4. **[Networking & Storage](/docs/tools/docker/networking-storage)** — bridge/overlay networks, volumes vs bind mounts
+5. **[Security & Production](/docs/tools/docker/security-production)** — image scanning, rootless mode, hardening
+6. **[Podman](/docs/tools/podman/)** — the rootless, daemonless alternative
 
-1. **[Kubernetes Architecture](/docs/tools/kubernetes/)** — Pods, Services, Deployments
-2. **kubectl** — Master the CLI
-3. **Workloads** — Deployments, StatefulSets, DaemonSets, Jobs
-4. **Networking** — Services, Ingress, Network Policies
-5. **Storage** — PV, PVC, StorageClasses
+✅ **Checkpoint:** the [Docker cheat sheet](/docs/tools/docker/cheatsheet) should feel like review, and you should hold your own against the [Docker interview questions](/docs/tools/docker/interview-questions).
 
-## Stage 3: Advanced Kubernetes
+## Stage 2: Kubernetes Core (3–4 weeks)
 
-1. **[Helm](/docs/tools/helm/)** — Package management
-2. **RBAC** — Role-Based Access Control
-3. **Operators** — Custom controllers
-4. **Service Mesh** — Istio, Linkerd
-5. **GitOps** — ArgoCD, FluxCD
+1. **[Kubernetes Fundamentals](/docs/tools/kubernetes/fundamentals)** — architecture, pods, kubectl, the control plane
+2. **[Workloads](/docs/tools/kubernetes/workloads)** — Deployments, StatefulSets, DaemonSets, Jobs
+3. **[Networking & Services](/docs/tools/kubernetes/networking-services)** — Services, Ingress, Network Policies
+4. **[Storage](/docs/tools/kubernetes/storage)** — PVs, PVCs, StorageClasses
+5. **[Docker → Kubernetes](/docs/tools/docker/docker-kubernetes)** — how the concepts map
 
-## Stage 4: Production Operations
+✅ **Checkpoint:** drill the [Kubernetes cheat sheet](/docs/tools/kubernetes/cheatsheet) until `kubectl` is muscle memory.
 
-1. **Monitoring** — Prometheus, Grafana
-2. **Logging** — EFK/ELK stack
-3. **Autoscaling** — HPA, VPA, Cluster Autoscaler
-4. **Security** — Pod Security, OPA/Gatekeeper, Falco
-5. **Multi-cluster** — Federation, Kubefed
+## Stage 3: Advanced Kubernetes (2–3 weeks)
 
-## Hands-On Exercises
+1. **[Security](/docs/tools/kubernetes/security)** — RBAC, Pod Security, secrets management
+2. **[Helm](/docs/tools/helm/)** — package management and templating
+3. **[GitOps](/docs/tools/cicd/gitops)** — ArgoCD and FluxCD for declarative delivery
+4. **Operators & Service Mesh** — custom controllers, Istio/Linkerd concepts
 
-| Lab | Platform |
-|:----|:---------|
-| [Play with Docker](https://labs.play-with-docker.com/) | Free Docker sandbox |
-| [Play with Kubernetes](https://labs.play-with-k8s.com/) | Free K8s sandbox |
-| [Killercoda](https://killercoda.com/) | Interactive K8s scenarios |
-| [KodeKloud](https://kodekloud.com/) | Guided hands-on labs |
+## Stage 4: Production Operations (2–3 weeks)
+
+**[Production Operations](/docs/tools/kubernetes/production-operations)** covers the day-2 reality: monitoring with Prometheus/Grafana, logging, autoscaling (HPA/VPA/Cluster Autoscaler), troubleshooting, and multi-cluster patterns.
+
+## Hands-On Practice
+
+| Lab | What it's for |
+|:----|:--------------|
+| [Play with Docker](https://labs.play-with-docker.com/) | Free browser Docker sandbox |
+| [Play with Kubernetes](https://labs.play-with-k8s.com/) | Free browser K8s cluster |
+| [Killercoda](https://killercoda.com/) | Interactive CKA/CKAD-style scenarios |
+
+## Prove It
+
+1. **Certify** — the [Kubernetes exam-prep guide](/docs/tools/kubernetes/exam-prep) covers CKA, CKAD, and CKS: curriculum breakdown, time-saving tricks, and practice strategy.
+2. **Interview** — 60+ [Kubernetes interview questions](/docs/tools/kubernetes/interview-questions) and the [Docker set](/docs/tools/docker/interview-questions).
+3. **Level up** — continue with the [Platform Engineering path](/docs/learning-paths/platform-engineering) or the [SRE path](/docs/learning-paths/sre).

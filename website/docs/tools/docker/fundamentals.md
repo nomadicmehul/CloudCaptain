@@ -864,12 +864,11 @@ docker image prune
 
 You now understand Docker fundamentals. Continue your learning journey:
 
-- **[Docker Images](./images.md)** — Build custom images with Dockerfiles
-- **[Container Networking](./networking.md)** — Connect multiple containers
-- **[Docker Volumes](./volumes.md)** — Persist data across containers
-- **[Docker Compose](./docker-compose.md)** — Multi-container applications
-- **[Best Practices](./best-practices.md)** — Write efficient, secure Dockerfiles
-- **[Docker Security](./security.md)** — Secure your containers in production
+- **[The Dockerfile Guide](./dockerfile-guide.md)** — Build custom images with best practices
+- **[Networking & Storage](./networking-storage.md)** — Connect containers and persist data
+- **[Compose & Swarm](./compose-swarm.md)** — Multi-container applications
+- **[Security & Production](./security-production.md)** — Secure your containers in production
+- **[Docker → Kubernetes](./docker-kubernetes.md)** — Take the next step to orchestration
 
 ### Recommended Learning Path
 

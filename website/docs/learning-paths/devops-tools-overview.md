@@ -382,8 +382,7 @@ CloudCaptain has detailed guides for all major DevOps tools:
 - [GitHub Actions](/docs/tools/github-actions/) — Git-native CI/CD
 
 ### Monitoring
-- [Prometheus](/docs/tools/prometheus/) — Metrics collection
-- [Grafana](/docs/tools/grafana/) — Metrics visualization
+- [Observability](/docs/tools/observability/) — Prometheus, Grafana, and the monitoring stack
 
 ### Cloud Platforms
 - [AWS](/docs/cloud/aws/) — Amazon Web Services

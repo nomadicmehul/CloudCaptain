@@ -22,9 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      # onBrokenLinks is set to 'throw' in docusaurus.config.ts,
+      # so this build fails on any broken internal link.
+      - name: Build (fails on broken links)
         run: npm run build
-
-      - name: Check for broken links
-        run: |
-          echo "Build succeeded — site is deployable"
