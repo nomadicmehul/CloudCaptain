@@ -15,7 +15,8 @@
     <a href="#-whats-inside">What's Inside</a> ·
     <a href="#-contributing">Contribute</a>
   </p>
-  <img src="./website/static/img/cloudcaptain-social.jpg" width="720" alt="CloudCaptain — Learn Cloud, DevOps & AI" />
+  <img src="./website/static/img/captains-bridge-demo.gif" width="800" alt="Captain's Bridge in action — reading progress tracked per section, with a personal /progress dashboard" />
+  <p><em>Captain's Bridge: sections tick off as you read, and <a href="https://cloudcaptain.io/progress">/progress</a> remembers everything — no account needed.</em></p>
 </div>
 
 ---
@@ -63,7 +64,16 @@ CloudCaptain isn't a wall of markdown. The site ships a custom reading layout wi
 | **Bash** | 6 guides, ~14K words — with 40+ inline script examples |
 | **Git, Terraform, Networking, Azure** | 5–7 guides each with the full triad |
 
-Plus: Ansible, GCP, Jenkins, CI/CD pipelines, GitHub Actions, GitOps, Python, YAML, DevSecOps, Helm, Nginx, Chef, Gradle, Podman, and cloud concepts (Multi-Cloud, Cloud Security, FinOps).
+### Also covered
+
+| Area | Topics |
+|:-----|:-------|
+| **CI/CD & Automation** | Jenkins · CI/CD Pipelines · GitHub Actions · GitOps |
+| **IaC & Config Management** | Ansible · Chef |
+| **Languages & Scripting** | Python · YAML |
+| **Cloud & Concepts** | GCP · Multi-Cloud · Cloud Security · FinOps |
+| **Security** | DevSecOps |
+| **Platform & Web** | Helm · Nginx · Gradle · Podman |
 
 ### Learning & Career Paths
 
@@ -72,7 +82,15 @@ Plus: Ansible, GCP, Jenkins, CI/CD pipelines, GitHub Actions, GitOps, Python, YA
 
 ### Interview Preparation
 
-19 topic-specific question sets (40–60+ questions each): DevOps, Docker, Kubernetes, Terraform, AWS, Azure, GCP, Linux, Git, Python, Bash, Networking, CI/CD, Cloud Computing, Multi-Cloud, Cloud Security, FinOps, and more.
+**19 topic-specific question sets, 40–60+ questions each:**
+
+| Category | Question sets |
+|:---------|:--------------|
+| **Containers & Orchestration** | Docker · Kubernetes |
+| **Infrastructure & Delivery** | Terraform · Ansible · CI/CD · Jenkins · DevOps |
+| **Systems & Scripting** | Linux · Git · Python · Bash · Networking |
+| **Cloud Providers** | AWS · Azure · GCP |
+| **Cloud Concepts** | Cloud Computing · Multi-Cloud · Cloud Security · FinOps |
 
 ## 🚀 Getting Started
 
