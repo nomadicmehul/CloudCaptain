@@ -1,84 +1,84 @@
 <div align="center">
   <img src="./website/static/img/cloudcaptain-logo.jpg" width="200" />
   <h1>CloudCaptain</h1>
-  <p><strong>The Open-Source Learning Hub for Cloud, DevOps, AI & Operations</strong></p>
+  <p><strong>Full tutorials + cheat sheets + interview Q&A + exam prep for Cloud, DevOps & AI — with built-in reading progress. Free, forever.</strong></p>
   <p>
     <a href="https://cloudcaptain.io"><img src="https://img.shields.io/badge/Website-Live-1E9BD7?style=flat&logo=docusaurus" /></a>
     <img src="https://img.shields.io/badge/PRs-welcome-blue" />
     <img src="https://img.shields.io/github/last-commit/nomadicmehul/CloudCaptain" />
     <a href="https://twitter.com/intent/follow?screen_name=nomadicmehul"><img src="https://img.shields.io/twitter/follow/nomadicmehul?style=flat&logo=twitter" /></a>
-    <a href="https://github.com/nomadicmehul"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github" /></a>
+    <a href="https://github.com/nomadicmehul/CloudCaptain/stargazers"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github" /></a>
   </p>
+  <p>
+    <a href="https://cloudcaptain.io"><strong>Start Learning →</strong></a> ·
+    <a href="#-why-cloudcaptain">Why CloudCaptain</a> ·
+    <a href="#-whats-inside">What's Inside</a> ·
+    <a href="#-contributing">Contribute</a>
+  </p>
+  <img src="./website/static/img/cloudcaptain-social.jpg" width="720" alt="CloudCaptain — Learn Cloud, DevOps & AI" />
 </div>
 
 ---
 
-## What is CloudCaptain?
+## ⚓ What is CloudCaptain?
 
-CloudCaptain is a community-driven, open-source learning platform with **150+ comprehensive documentation pages**, **49 architecture diagrams**, **8 career paths**, and **7 structured learning roadmaps** covering Cloud, DevOps, AI, and Operations — all free, forever.
+Most learning repos give you a **list of links**. CloudCaptain gives you the **actual content**: 150+ documentation pages and **330,000+ words** of original long-form tutorials, 6,000+ runnable code blocks, 50+ architecture diagrams, 21 command cheat sheets, 19 interview question sets, and 5 certification exam-prep guides — organized into structured learning paths and readable on a site that **remembers where you left off**.
 
-Every page includes hands-on exercises, command cheat sheets, interview Q&A, and exam prep guides. Whether you're a complete beginner or a seasoned professional, CloudCaptain has something for you.
+Built and curated over 3+ years. Open source (MIT). No paywall, no email gate, no "premium tier". 
 
-**[Visit the Website →](https://cloudcaptain.io)**
+**[Visit cloudcaptain.io →](https://cloudcaptain.io)**
 
-## What's Inside
+## 🧭 Why CloudCaptain?
 
-### Tools & Technology (28 categories)
+| | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
+|:--|:--|:--|:--|:--|
+| Full written tutorials | ✅ 330K+ words, in-repo | ❌ roadmap nodes link out | ❌ Q&A only | ❌ links only |
+| Interview Q&A per topic | ✅ 19 topic sets | ❌ | ✅ | ❌ |
+| Command cheat sheets | ✅ 21 sheets | ❌ | ❌ | ❌ |
+| Certification exam prep | ✅ CKA/CKAD/CKS, AWS | ❌ | ❌ | ❌ |
+| Reading progress tracking | ✅ built-in, per page | ✅ | ❌ | ❌ |
+| Architecture diagrams | ✅ 50+ Mermaid | ✅ | ❌ | ❌ |
 
-| Category | Topics Covered |
-|:---------|:---------------|
-| **Containers** | Docker (8 guides), Podman |
-| **Orchestration** | Kubernetes (9 guides), Helm |
-| **Infrastructure as Code** | Terraform (5 guides), Ansible (4 guides + playbook examples), CloudFormation, Packer, Vagrant |
-| **CI/CD** | Jenkins (3 guides), CI/CD Pipelines (4 guides), GitHub Actions, CircleCI, GitOps |
-| **Languages & Scripting** | Linux (6 guides), Git (4 guides), Bash (5 guides + 90 script examples), Python (4 guides), YAML |
-| **Networking** | Fundamentals, Routing & Switching, Security, 100+ commands cheat sheet |
-| **Security** | DevSecOps (3 guides) |
-| **Cloud** | AWS (9 guides + CloudFormation examples), Azure (6 guides), GCP (5 guides) |
-| **Web & Build** | Nginx, Chef, Gradle |
+Every major topic follows the same triad: **Fundamentals guide → Cheat sheet → Interview questions** (plus exam prep where a certification exists). Learn it, reference it, get hired with it — in one place.
 
-### Cloud Concepts
+### 🚢 The Captain's Bridge reading experience
 
-| Topic | Coverage |
-|:------|:---------|
-| **Cloud Computing** | Fundamentals, Architecture, Migration, Interview Q&A |
-| **Multi-Cloud** | Strategy, Fundamentals, Interview Q&A |
-| **Cloud Security** | Fundamentals, Best Practices, Interview Q&A |
-| **FinOps** | Cost Optimization, Frameworks, Interview Q&A |
+CloudCaptain isn't a wall of markdown. The site ships a custom reading layout with:
 
-### Learning Paths
+- **Scroll progress + completion tracking** on every doc page
+- **[/progress](https://cloudcaptain.io/progress)** — a personal dashboard showing what you've read across every topic, with a "resume reading" widget
+- **Chapter rail navigation** and completion toasts as you finish pages
+- All client-side (localStorage) — no account, no tracking, no sign-up
 
-| Path | Description |
-|:-----|:------------|
-| DevOps | Culture, practices, tools landscape, DORA metrics |
-| Cloud | Multi-provider cloud fundamentals |
-| Containers | Docker to Kubernetes journey |
-| AI/ML Ops | Machine learning infrastructure |
-| SRE | Reliability engineering practices |
-| Platform Engineering | Internal developer platforms |
-| Linux Master | Deep systems expertise |
+## 📚 What's Inside
 
-### Career Paths (AI Era)
+### Deep-dive topics (the heavyweights)
 
-Eight high-demand roles with salary ranges, skills roadmaps, and certification recommendations: DevOps Engineer, Cloud Architect, Platform Engineer, AI/ML Infrastructure Engineer, Site Reliability Engineer, Linux Systems Master, DevSecOps Engineer, FinOps Practitioner.
+| Topic | What you get |
+|:------|:-------------|
+| **Kubernetes** | 10 guides, ~45K words — fundamentals, workloads, networking, CKA/CKAD/CKS exam prep, cheat sheet, 60+ interview questions |
+| **AWS** | 10 guides, ~40K words — core services, architecture, CloudFormation examples guide, cert prep, interview Q&A |
+| **Docker** | 12 guides, ~30K words — fundamentals, Dockerfile deep-dive, Compose, security, cheat sheet, interview Q&A |
+| **Linux** | 7 guides, ~24K words — fundamentals through advanced administration |
+| **Bash** | 6 guides, ~14K words — with 40+ inline script examples |
+| **Git, Terraform, Networking, Azure** | 5–7 guides each with the full triad |
 
-**[Explore Career Paths →](https://cloudcaptain.io/career-paths)**
+Plus: Ansible, GCP, Jenkins, CI/CD pipelines, GitHub Actions, GitOps, Python, YAML, DevSecOps, Helm, Nginx, Chef, Gradle, Podman, and cloud concepts (Multi-Cloud, Cloud Security, FinOps).
+
+### Learning & Career Paths
+
+- **7 structured learning paths** — DevOps, Cloud, Containers, AI/ML Ops, SRE, Platform Engineering, Linux Master
+- **8 career paths for the AI era** with salary ranges, skills roadmaps, and certification recommendations — **[explore →](https://cloudcaptain.io/career-paths)**
 
 ### Interview Preparation
 
-Dedicated interview prep with 40-50+ questions per topic: DevOps, Docker, Kubernetes, Terraform, AWS, Azure, GCP, Linux, Git, Python, Bash, Networking, CI/CD, Cloud Computing, Multi-Cloud, Cloud Security, FinOps, and more.
+19 topic-specific question sets (40–60+ questions each): DevOps, Docker, Kubernetes, Terraform, AWS, Azure, GCP, Linux, Git, Python, Bash, Networking, CI/CD, Cloud Computing, Multi-Cloud, Cloud Security, FinOps, and more.
 
-### Architecture Diagrams
+## 🚀 Getting Started
 
-49 Mermaid diagrams for visual learning — Docker architecture, Kubernetes cluster components, CI/CD pipeline flows, AWS VPC design, cloud service models, and more. All rendered natively in the browser.
+**Browse online:** [cloudcaptain.io](https://cloudcaptain.io) — start immediately, nothing to install.
 
-## Getting Started
-
-### Browse Online
-
-Visit **[cloudcaptain.io](https://cloudcaptain.io)** to start learning immediately.
-
-### Run Locally
+**Run locally:**
 
 ```bash
 git clone https://github.com/nomadicmehul/CloudCaptain.git
@@ -87,46 +87,13 @@ npm install
 npm start         # Dev server at localhost:3000
 ```
 
-### Build for Production
+## 🤝 Contributing
 
-```bash
-npm run build     # Production build
-npm run serve     # Preview production build
-```
+We welcome contributions of every size — see [CONTRIBUTING.md](./CONTRIBUTING.md) for full guidelines.
 
-## Tech Stack
+### Contribute in 5 minutes (no code required)
 
-| Component | Technology |
-|:----------|:-----------|
-| Framework | Docusaurus 3 (TypeScript) |
-| Hosting | GitHub Pages + Custom Domain |
-| CI/CD | GitHub Actions (auto-deploy on push to main) |
-| Diagrams | Mermaid (rendered natively in browser) |
-| Search | Local search plugin |
-| Content | Markdown / MDX |
-| Data | JSON files (edit content without touching code) |
-
-## Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for full guidelines.
-
-1. Fork the repository
-2. Create a branch: `git checkout -b add/my-resource`
-3. Make your changes
-4. Run `npm run build` locally to verify
-5. Submit a Pull Request
-
-### Content Guidelines
-
-- All documentation goes in `website/docs/` under the appropriate subdirectory
-- Use Markdown with front matter (`title`, `description`, `sidebar_position`)
-- Keep descriptions concise and include practical examples
-- Add exercises, cheat sheets, or interview questions where relevant
-- Use Mermaid diagrams for architecture visuals
-
-### Updating Homepage Content (JSON Data)
-
-Homepage sections are powered by JSON files in `website/src/data/`. You can update content by editing these files directly on GitHub — no React code changes needed:
+Homepage sections are powered by JSON files in `website/src/data/` — you can improve content by editing them directly on GitHub:
 
 | File | What it controls |
 |:-----|:-----------------|
@@ -134,42 +101,43 @@ Homepage sections are powered by JSON files in `website/src/data/`. You can upda
 | `learningPaths.json` | Learning path cards on homepage |
 | `careerPaths.json` | Career paths page (8 roles) |
 | `howItWorks.json` | "How It Works" 4-step process |
-| `sponsors.json` | Sponsor cards (Buy Me a Coffee, GitHub Sponsors) |
-| `contributeActions.json` | Contribution type tags |
 | `techBadges.json` | Tech badge pills in the hero section |
-| `testimonials.json` | Community testimonials (currently hidden) |
 
-## Project Structure
+### Contribute content
+
+1. Fork the repository and create a branch: `git checkout -b add/my-resource`
+2. Add or improve docs in `website/docs/` (Markdown with `title`, `description`, `sidebar_position` front matter)
+3. Run `npm run build` locally to verify — every PR also gets an automatic preview deployment
+4. Submit a Pull Request
+
+Looking for a place to start? Several topics (Puppet, Vagrant, Packer, CloudFormation, DigitalOcean) are stubs waiting for an author — check the [open issues](https://github.com/nomadicmehul/CloudCaptain/issues).
+
+## 🛠 Tech Stack
+
+Docusaurus 3 (TypeScript) · GitHub Pages + custom domain · GitHub Actions CI/CD with per-PR preview deploys · Mermaid diagrams · local search · JSON-driven homepage content.
 
 ```
 CloudCaptain/
-  website/                    # Docusaurus site
+  website/
     docs/
       learning-paths/         # Structured learning roadmaps
       interview-prep/         # Interview preparation guides
       tools/                  # Tool-specific documentation (25+ categories)
-        docker/               # 8 Docker guides
-        kubernetes/           # 9 Kubernetes guides
-        terraform/            # 5 Terraform guides
-        bash/                 # 5 Bash guides + 90 script examples
-        ansible/              # 4 Ansible guides + playbook examples
-        ...
-      cloud/                  # Cloud provider guides
-        aws/                  # 9 AWS guides + CloudFormation examples
-        azure/                # 6 Azure guides
-        gcp/                  # 5 GCP guides
-        ...                   # Cloud Computing, Multi-Cloud, Security, FinOps
+      cloud/                  # AWS, Azure, GCP + cloud concepts
     src/
       data/                   # JSON data files (edit to update homepage content)
-      pages/                  # Custom pages (homepage, career paths, contribute)
-      css/                    # Brand-specific styling
+      pages/                  # Custom pages (homepage, career paths, /progress)
     static/img/               # Logo, favicon, social card
-  .github/workflows/          # GitHub Actions deployment
+  .github/workflows/          # Deploy, PR checks, PR preview deploys
 ```
 
-## License
+## ⭐ Support the Project
 
-This project is licensed under the MIT License — see [LICENSE](./LICENSE) for details.
+If CloudCaptain helped you learn something, prepare for an interview, or pass a certification — **[star the repo](https://github.com/nomadicmehul/CloudCaptain)**. It takes 2 seconds and genuinely helps other engineers discover a free alternative to paid courses.
+
+## 📄 License
+
+MIT — see [LICENSE](./LICENSE). Use it, fork it, learn from it.
 
 ---
 
