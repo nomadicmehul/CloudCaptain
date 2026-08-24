@@ -272,7 +272,17 @@ const sidebars: SidebarsConfig = {
             'tools/devsecops/interview-questions',
           ],
         },
-        'tools/observability/index',
+        {
+          type: 'category',
+          label: 'Observability',
+          collapsed: true,
+          link: { type: 'doc', id: 'tools/observability/index' },
+          items: [
+            'tools/observability/fundamentals',
+            'tools/observability/cheatsheet',
+            'tools/observability/interview-questions',
+          ],
+        },
       ],
     },
     {
