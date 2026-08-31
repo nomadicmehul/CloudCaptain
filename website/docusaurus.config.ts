@@ -22,6 +22,15 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Visitor analytics via GoatCounter (free, privacy-friendly, no cookie banner needed).
+  scripts: [
+    {
+      src: 'https://gc.zgo.at/count.js',
+      async: true,
+      'data-goatcounter': 'https://cloudcaptain.goatcounter.com/count',
+    },
+  ],
+
   headTags: [
     // Preconnect to Google Fonts for faster font loading
     {

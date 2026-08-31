@@ -1,0 +1,42 @@
+name: Update Visitor Stats
+
+on:
+  schedule:
+    - cron: '15 0 * * *' # daily at 00:15 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: visitor-stats
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    if: github.repository == 'nomadicmehul/CloudCaptain'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch stats and regenerate chart + badges
+        env:
+          GOATCOUNTER_SITE_CODE: ${{ secrets.GOATCOUNTER_SITE_CODE }}
+          GOATCOUNTER_API_TOKEN: ${{ secrets.GOATCOUNTER_API_TOKEN }}
+        run: node scripts/update-visitor-stats.mjs
+
+      - name: Commit updated stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/stats
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update: visitor stats [skip ci]"
+            git push
+          fi
