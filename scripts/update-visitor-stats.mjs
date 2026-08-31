@@ -39,6 +39,13 @@ async function fetchTotal(start, end) {
     },
   });
 
+  if (res.status === 404) {
+    // GoatCounter returns 404 instead of an empty 200 for a site with zero
+    // recorded pageviews (e.g. before the tracking script has gone live).
+    console.warn(`No stats yet for this window (${url}) — treating as zero.`);
+    return {total: 0, total_events: 0, total_utc: 0, stats: []};
+  }
+
   if (!res.ok) {
     throw new Error(
       `GoatCounter API error ${res.status} on ${url}: ${await res.text()}`,
