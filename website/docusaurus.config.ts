@@ -23,14 +23,13 @@ const config: Config = {
   },
 
   // Visitor analytics via GoatCounter (free, privacy-friendly, no cookie banner needed).
-  // Sign up at https://www.goatcounter.com, then uncomment and set your site code below.
-  // scripts: [
-  //   {
-  //     src: 'https://gc.zgo.at/count.js',
-  //     async: true,
-  //     'data-goatcounter': 'https://YOUR-SITE-CODE.goatcounter.com/count',
-  //   },
-  // ],
+  scripts: [
+    {
+      src: 'https://gc.zgo.at/count.js',
+      async: true,
+      'data-goatcounter': 'https://cloudcaptain.goatcounter.com/count',
+    },
+  ],
 
   headTags: [
     // Preconnect to Google Fonts for faster font loading
