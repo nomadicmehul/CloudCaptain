@@ -149,6 +149,20 @@ CloudCaptain/
   .github/workflows/          # Deploy, PR checks, PR preview deploys
 ```
 
+## 📊 Site Traffic
+
+<div align="center">
+  <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/.github/stats/visitors-total.json" alt="Total visits" />
+  <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/.github/stats/visitors-week.json" alt="Visits this week" />
+  <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/.github/stats/visitors-today.json" alt="Visits today" />
+
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/stats/chart-dark.svg">
+    <img src="./.github/stats/chart-light.svg" width="800" alt="Visitor traffic over the last 90 days" />
+  </picture>
+  <p><em>Updated daily via <a href="https://www.goatcounter.com">GoatCounter</a> — privacy-friendly, no cookies, no tracking of individuals.</em></p>
+</div>
+
 ## ⭐ Support the Project
 
 If CloudCaptain helped you learn something, prepare for an interview, or pass a certification — **[star the repo](https://github.com/nomadicmehul/CloudCaptain)**. It takes 2 seconds and genuinely helps other engineers discover a free alternative to paid courses.
