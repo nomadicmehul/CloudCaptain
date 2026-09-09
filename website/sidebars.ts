@@ -154,7 +154,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'CI/CD',
+          label: 'CI/CD Pipelines',
           collapsed: true,
           link: { type: 'doc', id: 'tools/cicd/index' },
           items: [
