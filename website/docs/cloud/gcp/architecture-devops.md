@@ -46,6 +46,10 @@ Cloud Build is a fully managed CI/CD platform that:
 - Deploys to GCP services
 - Integrates with GitHub, Bitbucket, and Cloud Source Repositories
 
+:::warning Service Deprecation Notice: Cloud Source Repositories
+Google Cloud deprecated **Cloud Source Repositories** in 2024 for new customers. For source code management with Cloud Build, Google recommends using external Git providers such as **GitHub**, **GitLab**, or **Bitbucket** connected via Developer Connect or Cloud Build repository connections.
+:::
+
 ### Build Pipeline Stages
 
 ```
