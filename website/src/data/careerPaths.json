@@ -42,7 +42,7 @@
     "salary": "$120K–$200K",
     "steps": ["DevSecOps Practices", "IAM & RBAC", "OWASP Top 10", "Supply Chain Security", "Vault & Secrets", "Compliance Frameworks"],
     "certs": ["AWS Security Specialty", "CompTIA Security+", "CCSP"],
-    "link": "/docs/tools/devsecops/"
+    "link": "/docs/tools/devsecops"
   },
   {
     "level": "advanced", "color": "#F43F5E", "levelLabel": "Advanced",
@@ -69,6 +69,6 @@
     "salary": "$100K–$170K",
     "steps": ["Cloud Billing Tools", "Terraform (cost-aware)", "K8s Resource Mgmt", "FinOps Framework", "Data Analysis", "Forecasting"],
     "certs": ["FinOps Certified Practitioner", "AWS Cloud Financial Mgmt", "Azure Cost Mgmt"],
-    "link": "/docs/cloud/finops/"
+    "link": "/docs/cloud/finops"
   }
 ]

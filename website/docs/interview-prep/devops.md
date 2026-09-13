@@ -10,7 +10,7 @@ sidebar_position: 6
 Comprehensive preparation for DevOps engineering interviews with real-world scenarios and technical depth.
 
 :::info Learning Resources
-Before interviews, study the foundational concepts in [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals/), [DevOps Practices](/docs/learning-paths/devops-practices/), and the [Tools Landscape](/docs/learning-paths/devops-tools-overview/).
+Before interviews, study the foundational concepts in [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals), [DevOps Practices](/docs/learning-paths/devops-practices), and the [Tools Landscape](/docs/learning-paths/devops-tools-overview).
 :::
 
 ## Core Concepts
@@ -36,14 +36,14 @@ Prepare deep technical knowledge in these areas:
 
 | Topic | Key Concepts | CloudCaptain Resources |
 |:------|:-------------|:--------|
-| **DevOps Culture & Practices** | CALMS, Three Ways, blameless postmortems, DORA metrics | [Fundamentals](/docs/learning-paths/devops-fundamentals/) |
-| **CI/CD Pipelines** | Pipeline stages, testing strategies, artifact management, deployment frequency | [Practices](/docs/learning-paths/devops-practices/) |
-| **Deployment Strategies** | Blue-green, canary, rolling, feature flags, shadow deployments | [Practices](/docs/learning-paths/devops-practices/) |
-| **Infrastructure as Code** | Terraform, CloudFormation, Ansible, idempotence, state management | [Tools Overview](/docs/learning-paths/devops-tools-overview/) |
-| **Containers & Orchestration** | Docker, Kubernetes, microservices, networking, storage | [Docker](/docs/tools/docker/), [Kubernetes](/docs/tools/kubernetes/) |
-| **Monitoring & Observability** | Metrics, logs, traces, alerting, observability pillars | [Practices](/docs/learning-paths/devops-practices/) |
-| **Incident Management** | Severity levels, response procedures, postmortems, on-call | [Practices](/docs/learning-paths/devops-practices/) |
-| **Security & Compliance** | Shift-left, secrets management, container scanning, GitOps | [Tools Overview](/docs/learning-paths/devops-tools-overview/) |
+| **DevOps Culture & Practices** | CALMS, Three Ways, blameless postmortems, DORA metrics | [Fundamentals](/docs/learning-paths/devops-fundamentals) |
+| **CI/CD Pipelines** | Pipeline stages, testing strategies, artifact management, deployment frequency | [Practices](/docs/learning-paths/devops-practices) |
+| **Deployment Strategies** | Blue-green, canary, rolling, feature flags, shadow deployments | [Practices](/docs/learning-paths/devops-practices) |
+| **Infrastructure as Code** | Terraform, CloudFormation, Ansible, idempotence, state management | [Tools Overview](/docs/learning-paths/devops-tools-overview) |
+| **Containers & Orchestration** | Docker, Kubernetes, microservices, networking, storage | [Docker](/docs/tools/docker), [Kubernetes](/docs/tools/kubernetes) |
+| **Monitoring & Observability** | Metrics, logs, traces, alerting, observability pillars | [Practices](/docs/learning-paths/devops-practices) |
+| **Incident Management** | Severity levels, response procedures, postmortems, on-call | [Practices](/docs/learning-paths/devops-practices) |
+| **Security & Compliance** | Shift-left, secrets management, container scanning, GitOps | [Tools Overview](/docs/learning-paths/devops-tools-overview) |
 
 ### Common Interview Questions with Answers
 
@@ -453,7 +453,7 @@ Execution of automated tests every time code is merged. Enables engineers to get
 - **DORA Metrics**: Deployment frequency, lead time, MTTR, change failure rate
 - **Blameless Postmortems**: Learning from failures without blame
 
-→ **Study**: [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals/)
+→ **Study**: [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals)
 
 ### CI/CD & Deployment
 
@@ -463,7 +463,7 @@ Execution of automated tests every time code is merged. Enables engineers to get
 - **Release Management**: Rollback strategies, deployment verification
 - **Secrets Management**: Vault, cloud provider secrets managers
 
-→ **Study**: [DevOps Practices](/docs/learning-paths/devops-practices/)
+→ **Study**: [DevOps Practices](/docs/learning-paths/devops-practices)
 
 ### Observability at Scale
 
@@ -473,7 +473,7 @@ Execution of automated tests every time code is merged. Enables engineers to get
 - **Cost Optimization**: FinOps, resource right-sizing
 - **SLOs & Error Budgets**: Setting reliability targets
 
-→ **Study**: [DevOps Practices](/docs/learning-paths/devops-practices/)
+→ **Study**: [DevOps Practices](/docs/learning-paths/devops-practices)
 
 ### Tool Landscape & Selection
 
@@ -484,25 +484,25 @@ Execution of automated tests every time code is merged. Enables engineers to get
 - **Monitoring Platforms**: Prometheus, Grafana, Datadog, Splunk
 - **Tool Selection Framework**: How to choose tools for your environment
 
-→ **Study**: [DevOps Tools Overview](/docs/learning-paths/devops-tools-overview/)
+→ **Study**: [DevOps Tools Overview](/docs/learning-paths/devops-tools-overview)
 
 ## Recommended Interview Preparation Plan
 
 ### Week 1-2: Foundations
-- Read [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals/)
+- Read [DevOps Fundamentals](/docs/learning-paths/devops-fundamentals)
 - Understand CALMS, Three Ways, DORA metrics
 - Study team topologies and organizational aspects
 
 ### Week 3-4: Practices
-- Deep dive [DevOps Practices](/docs/learning-paths/devops-practices/)
+- Deep dive [DevOps Practices](/docs/learning-paths/devops-practices)
 - Practice designing CI/CD pipelines
 - Understand deployment strategies in detail
 - Study incident management and observability
 
 ### Week 5-6: Tools & Architecture
-- Study [DevOps Tools Overview](/docs/learning-paths/devops-tools-overview/)
+- Study [DevOps Tools Overview](/docs/learning-paths/devops-tools-overview)
 - Dive into tools relevant to target company/role
-- Review the tool-specific guides — [Docker](/docs/tools/docker/), [Kubernetes](/docs/tools/kubernetes/), [Terraform](/docs/tools/terraform/), and more
+- Review the tool-specific guides — [Docker](/docs/tools/docker), [Kubernetes](/docs/tools/kubernetes), [Terraform](/docs/tools/terraform), and more
 - Practice architecture design scenarios
 
 ### Week 7-8: Mock Interviews & Practice
