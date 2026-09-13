@@ -439,6 +439,7 @@ div[class*='announcementBar'] a {
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
   transition: transform 0.3s;
 }
+img.category-card__icon { width: 2.2rem; height: 2.2rem; object-fit: contain; }
 .category-card:hover .category-card__icon { transform: scale(1.15); }
 .category-card__count {
   padding: 0.22rem 0.65rem; background: rgba(56,189,248,0.08);
