@@ -313,7 +313,11 @@ function CategoriesSection() {
           {categories.map((cat, i) => (
             <Link key={i} className="category-card reveal" to={cat.link} style={{ '--card-accent': cat.accent } as React.CSSProperties}>
               <div className="category-card__header">
-                <span className="category-card__icon">{cat.icon}</span>
+                {cat.logo ? (
+                  <img className="category-card__icon" src={cat.logo} alt="" aria-hidden="true" />
+                ) : (
+                  <span className="category-card__icon">{cat.icon}</span>
+                )}
                 <span className="category-card__count">{cat.count}</span>
               </div>
               <div className="category-card__title">{cat.title}</div>
