@@ -144,7 +144,7 @@ Team C Repo (GitHub)  ┘                      ↓
 ```
 
 Key components:
-- **Source Control**: GitHub/Cloud Source Repositories
+- **Source Control**: GitHub / Cloud Source Repositories *(deprecated in 2024; external Git providers recommended)*
 - **Cloud Build**: Unified build platform with team-specific triggers
 - **Artifact Registry**: Central image/artifact repository
 - **GKE**: Multi-environment deployments
