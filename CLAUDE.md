@@ -32,6 +32,12 @@ npm run curriculum:unit                          # generator unit tests
 
 Features built with Claude Code assistance:
 
+### feature/lessons-progress-cleanup (2026-10-31)
+- Six new lessons (`setup/lab-doctor`, `linux/pid1-supervisor`, `containers/image-layers`, `containers/registry-pull`, `iac/state-reconciler`, `aiops/mcp-kubectl-server`) with tests, quizzes, artifacts and one `code/smoke.sh` each, run on Ubuntu + Docker + OpenTofu + kind by `lesson-smoke.yml`; new AIOps learning path
+- Lesson-aware Captain's Bridge (telemetry cell, Lesson rail tab, completion toast), `/progress` Curriculum section, "Build this from scratch" cards on reference docs, progress export v2, Commands-tab extractor fix
+- 15 stub/pointer pages deleted with redirects (`website/redirects.json`), Interview Prep sidebar refs, honest category counts, hero CTA → /learn, homepage "Learn from scratch" section
+- Freshness system: `curriculum/versions.json` (+ `versions-weekly.yml`), `curriculum/deprecations.json`, `<ToolVersion/>`, `--deprecations` scan, 18 Reference-doc status notes; issue templates, nightly validation + link check
+
 ### feature/curriculum-scaffold (2026-10-31)
 - `curriculum/` with manifest (phases 00–16), JSON Schemas, `LESSON_TEMPLATE.md`, `AGENTS.md`, `ROADMAP.md`, `CHANGELOG.md`
 - `scripts/build-curriculum.mjs` validator/generator (+ `--scaffold`, `--roadmap`, `--json`), `run-lesson-tests.mjs`, node:test suite

@@ -121,7 +121,7 @@ Plan → Code → Build → Test → Release → Deploy → Operate → Monitor 
 | Tool | Scale | Learning Curve | Adoption |
 |:-----|:------|:---|:---|
 | **[Kubernetes](/docs/tools/kubernetes/)** | Enterprise | Steep | Industry standard (learn this) |
-| **Docker Swarm** | Small-medium | Easy | Declining |
+| **Docker Swarm** | Small-medium | Easy | Maintenance mode; declining |
 | **Amazon ECS** | Any (AWS) | Moderate | Good for AWS teams |
 | **Nomad** | Large | Moderate | Multi-workload (containers, VMs, bare metal) |
 

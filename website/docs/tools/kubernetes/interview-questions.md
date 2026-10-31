@@ -106,6 +106,8 @@ kube-proxy is a network proxy that maintains network rules on nodes to enable se
 
 ### 14. What is the difference between Docker Swarm and Kubernetes?
 
+> Swarm has been in maintenance mode since 2025 (supported, no new features). Answer this as history and trade-offs, not as a choice you would make for a new platform.
+
 **Docker Swarm** is simpler, requires less resource overhead, and is easier to set up but offers basic orchestration capabilities. **Kubernetes** is more complex, feature-rich, and industry-standard with advanced scheduling, networking, security, and multi-tenancy features. Kubernetes dominates for enterprise and production environments due to its superior capabilities and ecosystem.
 
 ### 15. What is a ConfigMap?

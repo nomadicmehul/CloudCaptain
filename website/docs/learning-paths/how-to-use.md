@@ -17,7 +17,7 @@ Structured roadmaps that take you from beginner to advanced. Each path includes 
 Deep dives into specific technologies. Each section includes concepts, commands, cheatsheets, interview prep, and curated external resources. Use this when you want to learn a specific tool.
 
 ### Cloud Providers
-Provider-specific guides for AWS, Azure, GCP, and DigitalOcean. Includes architecture guides, exam prep, and best practices.
+Provider-specific guides for AWS, Azure, GCP, and. Includes architecture guides, exam prep, and best practices.
 
 ## Recommended Approach
 

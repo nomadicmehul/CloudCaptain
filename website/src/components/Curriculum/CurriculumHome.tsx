@@ -7,7 +7,9 @@ import styles from './styles.module.css';
 const curriculum = curriculumJson as unknown as CurriculumModel;
 
 export default function CurriculumHome(): React.JSX.Element {
-  const {stats, phases, paths, certifications} = curriculum;
+  const {stats, phases, paths, certifications, versions, deprecations} = curriculum;
+  const tracked = versions ? Object.entries(versions.versions).map(([key, v]) => ({key, label: versions.track[key]?.label || key, ...v})) : [];
+  const watch = (deprecations || []).slice().sort((a, b) => (a.date < b.date ? 1 : -1));
   const live = phases.filter((p) => p.live);
   const planned = phases.filter((p) => !p.live);
 
@@ -77,6 +79,53 @@ export default function CurriculumHome(): React.JSX.Element {
               </li>
             ))}
           </ul>
+        </>
+      )}
+
+      {tracked.length > 0 && (
+        <>
+          <h2>Current tool versions</h2>
+          <p className={styles.muted}>
+            Refreshed weekly from GitHub releases (last check {versions!.updatedAt.slice(0, 10)}). Lessons reference these instead of pinning
+            numbers that go stale.
+          </p>
+          <div className={styles.chips}>
+            {tracked.map((t) => (
+              <a key={t.key} className={styles.chip} href={`https://github.com/${versions!.track[t.key]?.repo}/releases`} title={t.publishedAt ? `released ${t.publishedAt}` : ''}>
+                {t.label} <strong>{t.version}</strong>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
+
+      {watch.length > 0 && (
+        <>
+          <h2>Deprecation watch</h2>
+          <p className={styles.muted}>
+            Retired, removed or relicensed tech that tutorials across the web still teach as current. Every lesson and reference page is
+            scanned for these.
+          </p>
+          <table className={styles.watchTable}>
+            <thead>
+              <tr>
+                <th>What</th>
+                <th>Status</th>
+                <th>Use instead</th>
+              </tr>
+            </thead>
+            <tbody>
+              {watch.map((d) => (
+                <tr key={d.id}>
+                  <td>{d.link ? <a href={d.link}>{d.term}</a> : d.term}</td>
+                  <td>
+                    <span className={styles.badge}>{d.status}</span> <span className={styles.muted}>{d.date}</span>
+                  </td>
+                  <td>{d.replacement}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </>
       )}
 

@@ -180,7 +180,7 @@ Multi-host networking for distributed systems (Swarm, Kubernetes).
 - **Automatic Discovery**: Service discovery built-in
 - **Performance**: Slight overhead due to encapsulation
 - **Encryption**: Optional network-level encryption
-- **Requirements**: Docker Swarm or Kubernetes
+- **Requirements**: Docker Swarm (maintenance mode) or Kubernetes
 
 **When to use**: Swarm services, multi-host deployments, microservices architecture.
 

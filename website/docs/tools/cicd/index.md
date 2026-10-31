@@ -47,3 +47,30 @@ Automate your software delivery pipeline — build, test, and deploy with confid
 ## Contributing
 
 Know great CI/CD resources? Submit a PR to help the community learn!
+
+## CircleCI in brief
+
+CircleCI is a hosted CI/CD service (GitHub, GitLab and Bitbucket sources) with the same building blocks as the pipelines above: jobs that run in containers or VMs, workflows that order them, caching and parallelism to cut build time, and **orbs** as reusable packages of configuration. A minimal `.circleci/config.yml`:
+
+```yaml
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: cimg/node:22.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [deps-{{ checksum "package-lock.json" }}]
+      - run: npm ci
+      - save_cache:
+          key: deps-{{ checksum "package-lock.json" }}
+          paths: [~/.npm]
+      - run: npm test
+workflows:
+  build:
+    jobs: [test]
+```
+
+The concepts map one-to-one onto GitHub Actions and GitLab CI; see the [CI/CD Cheatsheet](/docs/tools/cicd/cheatsheet) for the side-by-side syntax.
+

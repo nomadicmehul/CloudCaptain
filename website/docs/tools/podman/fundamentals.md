@@ -66,7 +66,7 @@ Podman (Pod Manager) is a container runtime developed by Red Hat that implements
 | **Security** | All operations require root | Per-user containers |
 | **Container children** | Child processes of daemon | Durable, independent |
 | **Container format** | Docker format | OCI standard (compatible with Docker) |
-| **Orchestration** | Docker Swarm (monolithic) | Kubernetes-native |
+| **Orchestration** | Docker Swarm (maintenance mode) | Kubernetes-native |
 | **API** | REST API over socket | REST API optional; native libpod |
 | **Pod support** | Limited (via docker-compose) | First-class pods |
 | **Systemd integration** | None | Native systemd integration |
