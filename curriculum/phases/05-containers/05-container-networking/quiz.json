@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/container-networking",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A server runs `docker run -p 8080:80 nginx`. A laptop on the office network opens `http://server:8080` and gets the nginx page. Where did the packet's destination change from port 8080 on the server to port 80 in the container?",
+      "choices": [
+        "Inside the container: nginx was started listening on 8080",
+        "In the Docker daemon, which accepts the connection and copies bytes into the container",
+        "In a netfilter NAT rule on the host: before routing, the destination `server:8080` was rewritten to the container's address and port 80",
+        "Nowhere: the container shares the host's network stack, so port 8080 is port 80"
+      ],
+      "answer": 2,
+      "explanation": "A published port is a DNAT rule in the nat table (Docker keeps it in a chain called DOCKER, reached from PREROUTING). The kernel rewrites the destination on the first packet, conntrack remembers the mapping and reverses it on the replies. Nothing in the container knows about port 8080."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Right after `ip netns add web`, before any other command, what does the new namespace contain?",
+      "choices": [
+        "Only `lo`, and it is down: no other interfaces, no routes, no NAT rules, no way to reach anything",
+        "A copy of the host's interfaces and routes, isolated from later changes",
+        "An `eth0` with an address from DHCP",
+        "Nothing at all, not even a loopback interface"
+      ],
+      "answer": 0,
+      "explanation": "A network namespace is an empty network stack. The kernel creates a loopback device in it but leaves it down; everything else (the veth end, its address, the default route, the resolv.conf) is yours to add, which is exactly what `main.sh up` does step by step."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`curl localhost:18080` on the host must reach the container at 10.90.0.2:80 and get the reply back. Which pieces are needed?",
+      "choices": [
+        "The DNAT rule alone; the reply finds its way back through the bridge",
+        "Only `net.ipv4.ip_forward=1`, since the packet crosses from `lo` to `cc0`",
+        "Only the MASQUERADE rule for 10.90.0.0/24, because it rewrites both directions",
+        "DNAT reached from the nat output hook, `route_localnet` on `cc0`, and a MASQUERADE for host-local sources going onto the bridge, so the container answers 10.90.0.1 instead of 127.0.0.1"
+      ],
+      "answer": 3,
+      "explanation": "Host-originated traffic never passes prerouting, so the DNAT must also be reached from the output hook. After DNAT the packet still has source 127.0.0.1; the kernel refuses to route a loopback source out of a real interface unless route_localnet is set, and the container would answer its own loopback unless the source is masqueraded to the bridge address. Docker does the same when its userland proxy is disabled."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "On a host where Docker is installed, containers on your `cc0` bridge can reach each other and the host but not the internet, even though `ip_forward` is 1 and the MASQUERADE rule is present. Why?",
+      "choices": [
+        "Docker reserves outbound NAT for its own bridges in the kernel",
+        "Docker sets the filter FORWARD policy to DROP and accepts only its own bridges; a routed packet must pass every forward hook, so your bridge needs an accept in DOCKER-USER",
+        "Docker uses nftables and your rules were added with iptables, so they were overwritten",
+        "Containers cannot reach the internet without `--network host`"
+      ],
+      "answer": 1,
+      "explanation": "NAT rewrites addresses; it does not grant passage. The filter table's forward hook decides whether a routed packet may continue, and dockerd sets its policy to DROP. Every base chain at a hook sees the packet, so an accept in your own table cannot undo a drop in Docker's; the DOCKER-USER chain exists so you can add accepts that dockerd will not touch."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In a Kubernetes pod with two containers, one process binds 127.0.0.1:6379 and the other connects to `localhost:6379` successfully. What does this tell you about the pod's networking?",
+      "choices": [
+        "Kubernetes created a veth pair between the two containers",
+        "Both containers run with the host's network namespace",
+        "All containers in a pod share one network namespace, one `eth0`, one address and one `lo`, set up once by the CNI plugin; localhost is common to them",
+        "The Redis container published port 6379 to the pod"
+      ],
+      "answer": 2,
+      "explanation": "The pod is the unit that owns the namespace: the sandbox (pause) container holds it, the CNI plugin plumbs one veth into it, and every application container joins it. Processes in the pod see each other on localhost and share the same ports, which is why two containers in one pod cannot both bind :8080."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "During a firewall change someone ran `nft flush ruleset`. Every published port stops answering, `docker ps` shows every container running, and `nsenter -t PID -n ip addr` inside a container still shows its address and default route. Which layer failed and what is the honest fix?",
+      "choices": [
+        "NAT: the DNAT and MASQUERADE rules are gone while namespaces, veths and bridges are intact; restart dockerd so it recreates its rules (or re-add them), and do not reach for `--network host`",
+        "The veth pairs were deleted by the flush and every container needs recreating",
+        "The bridge lost its address and needs `ip addr add` again",
+        "DNS: the embedded resolver at 127.0.0.11 was flushed"
+      ],
+      "answer": 0,
+      "explanation": "Interfaces, addresses and routes live in the network stack; NAT rules live in netfilter. A ruleset flush removes only the latter, so the containers are healthy and unreachable at the same time. `main.py explain` shows exactly this picture: every interface check passes and the DNAT and masquerade checks fail."
+    }
+  ]
+}

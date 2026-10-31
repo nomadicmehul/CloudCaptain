@@ -1,0 +1,49 @@
+{
+  "defaultAction": "SCMP_ACT_ERRNO",
+  "defaultErrnoRet": 1,
+  "syscalls": [
+    {
+      "names": [
+        "access",
+        "arch_prctl",
+        "brk",
+        "close",
+        "execve",
+        "exit",
+        "exit_group",
+        "fstat",
+        "futex",
+        "getpid",
+        "getrandom",
+        "ioctl",
+        "lseek",
+        "mmap",
+        "mprotect",
+        "munmap",
+        "open",
+        "openat",
+        "pread64",
+        "prlimit64",
+        "read",
+        "readlink",
+        "rt_sigaction",
+        "rt_sigprocmask",
+        "rt_sigreturn",
+        "set_robust_list",
+        "set_tid_address",
+        "write"
+      ],
+      "action": "SCMP_ACT_ALLOW"
+    },
+    {
+      "names": [
+        "mkdir",
+        "mkdirat",
+        "unlink",
+        "rmdir"
+      ],
+      "action": "SCMP_ACT_ERRNO",
+      "errnoRet": 13
+    }
+  ]
+}

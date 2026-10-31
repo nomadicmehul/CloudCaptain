@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/compose",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A compose file lists `api` with `depends_on: [db]`. `docker compose up` starts api and it crashes with `connection refused` talking to db. Why?",
+      "choices": [
+        "depends_on is ignored unless you run Docker Swarm",
+        "Services start in alphabetical order, so api came before db",
+        "The default condition is service_started: the db container's process has started, which says nothing about Postgres accepting connections; use condition: service_healthy with a healthcheck",
+        "The project network had not been created yet"
+      ],
+      "answer": 2,
+      "explanation": "depends_on is an edge with a condition. service_started is satisfied as soon as the container is running. A database takes seconds to be ready after that, so the edge needs service_healthy and the dependency needs a healthcheck that proves readiness."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does your parser read `8080:8000` as a string but `db:` as a mapping key?",
+      "choices": [
+        "A colon separates a key only when a space or the end of the line follows it; inside 8080:8000 the colon is followed by a digit, so the line is a scalar",
+        "Numbers can never be keys in YAML",
+        "Ports are special-cased by a regular expression",
+        "Compose quotes ports before the parser sees them"
+      ],
+      "answer": 0,
+      "explanation": "split_key() looks for ': ' or a trailing ':' outside quotes. That single rule is why 8080:8000 stays a string, http://db:5432/x stays a string, and db: opens a nested mapping. Some YAML parsers would still read 22:22 as base-60, which is why compose files quote ports."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "What does start_order() do when the file contains a cycle a -> b -> c -> a?",
+      "choices": [
+        "Starts them alphabetically and logs a warning",
+        "Starts them in the order they appear in the file",
+        "Starts a first and ignores the edge back to it",
+        "Kahn's algorithm finds no node without unmet dependencies while nodes remain, so it raises an error naming the cycle; there is no valid start order"
+      ],
+      "answer": 3,
+      "explanation": "A topological order exists only for acyclic graphs. When the ready set is empty and services remain, the remaining edges form a cycle. describe_cycle() follows them to print a -> b -> c -> a so the author can see which edge to remove."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`docker compose ps` lists the containers of a project. How does it know which containers belong to it?",
+      "choices": [
+        "By the container name prefix",
+        "By the label com.docker.compose.project set when the container was created; names can be overridden with container_name, labels cannot",
+        "By the network the containers are attached to",
+        "From a state file in the project directory"
+      ],
+      "answer": 1,
+      "explanation": "Both minicompose and Compose stamp com.docker.compose.project and com.docker.compose.service on every container and filter on them for ps, down and orphan detection. That is why a renamed service leaves an orphan that --remove-orphans can still find."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A reviewer sees `deploy: {replicas: 3, placement: {constraints: [node.role == worker]}}` in a compose file that is only ever run with `docker compose up`. What should the review say?",
+      "choices": [
+        "It will run three replicas on worker nodes",
+        "deploy is invalid and the file will not parse",
+        "deploy comes from Docker Swarm, which is in maintenance mode; docker compose honours some keys such as replicas and silently ignores others such as placement, so check docker compose config to see what survived",
+        "Only Kubernetes understands deploy"
+      ],
+      "answer": 2,
+      "explanation": "Compose reads deploy.replicas and deploy.resources and drops the scheduling keys without an error. The reviewer should ask for the Swarm-only keys to be removed and for the placement intent to be expressed where the stack actually runs."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A healthcheck has interval 10s, retries 3 and no start_period. The database needs about 25 seconds to start. What happens to a dependent with condition: service_healthy?",
+      "choices": [
+        "The three probes during start-up fail, the dependency is marked unhealthy after about 30 seconds and up fails; add start_period so early failures do not count, or raise retries",
+        "up waits forever",
+        "The dependent starts after the first probe at 10 seconds",
+        "Compose restarts the database and tries again"
+      ],
+      "answer": 0,
+      "explanation": "Health status becomes unhealthy after retries consecutive failures, and wait_for() fails fast on unhealthy rather than waiting for the timeout. start_period is the grace window the daemon gives a slow starter; failures inside it do not count toward retries."
+    }
+  ]
+}

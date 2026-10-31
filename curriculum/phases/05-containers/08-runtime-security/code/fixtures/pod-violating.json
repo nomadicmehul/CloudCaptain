@@ -1,0 +1,36 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "cc-smoke-violating",
+    "labels": {"app": "node-debug"}
+  },
+  "spec": {
+    "restartPolicy": "Never",
+    "terminationGracePeriodSeconds": 1,
+    "hostPID": true,
+    "hostNetwork": true,
+    "containers": [
+      {
+        "name": "debug",
+        "image": "alpine:3.22",
+        "command": ["sleep", "300"],
+        "securityContext": {"privileged": true},
+        "ports": [{"containerPort": 9100, "hostPort": 9100}],
+        "volumeMounts": [
+          {"name": "host-root", "mountPath": "/host"},
+          {"name": "docker-sock", "mountPath": "/var/run/docker.sock"}
+        ]
+      },
+      {
+        "name": "sidecar",
+        "image": "alpine:3.22",
+        "command": ["sleep", "300"]
+      }
+    ],
+    "volumes": [
+      {"name": "host-root", "hostPath": {"path": "/"}},
+      {"name": "docker-sock", "hostPath": {"path": "/var/run/docker.sock"}}
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/container-networking",
+  "title": "A Container's Network Is a veth Pair, a Bridge and Three NAT Rules",
+  "short": "Container Networking",
+  "motto": "A container's eth0 is one end of a virtual cable; the other end is plugged into a bridge on the host, and NAT rules do the rest.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "bash",
+    "python"
+  ],
+  "prereqs": [
+    "containers/process-isolation"
+  ],
+  "tools": [
+    "docker",
+    "ip",
+    "nft",
+    "iptables",
+    "nsenter",
+    "bridge",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/docker/networking-storage",
+    "/docs/tools/linux/networking",
+    "/docs/tools/kubernetes/networking-services"
+  ],
+  "outputs": [
+    "skill-container-network-triage.md",
+    "prompt-explain-ip-addr.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

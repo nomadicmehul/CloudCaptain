@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/image-build",
+  "title": "Build an Image Without a Dockerfile: Layers, Config and Manifest by Hand",
+  "short": "Image Build",
+  "motto": "A Dockerfile is a convenience; an image is three tar-and-JSON objects you can write yourself, and the daemon will load them.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "containers/image-layers"
+  ],
+  "tools": [
+    "docker",
+    "skopeo",
+    "crane",
+    "buildah"
+  ],
+  "reference": [
+    "/docs/tools/docker/dockerfile-guide",
+    "/docs/tools/docker/fundamentals",
+    "/docs/tools/docker/cheatsheet",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-reproducible-image.md",
+    "prompt-review-image-config.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

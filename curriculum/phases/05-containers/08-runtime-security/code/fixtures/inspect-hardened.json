@@ -1,0 +1,56 @@
+[
+  {
+    "Id": "a1c2e3f4b5d6a7c8e9f0b1d2a3c4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2",
+    "Created": "2026-10-30T09:20:41.501233811Z",
+    "Path": "python3",
+    "Args": ["-m", "http.server", "8080"],
+    "State": {"Status": "running", "Running": true, "Pid": 48990, "ExitCode": 0},
+    "Image": "sha256:5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+    "Name": "/web-hardened",
+    "Driver": "overlay2",
+    "Platform": "linux",
+    "MountLabel": "",
+    "ProcessLabel": "",
+    "AppArmorProfile": "docker-default",
+    "HostConfig": {
+      "Binds": ["web-data:/srv:ro"],
+      "NetworkMode": "bridge",
+      "PortBindings": {"8080/tcp": [{"HostIp": "127.0.0.1", "HostPort": "8080"}]},
+      "RestartPolicy": {"Name": "unless-stopped", "MaximumRetryCount": 0},
+      "CapAdd": null,
+      "CapDrop": ["ALL"],
+      "CgroupnsMode": "private",
+      "IpcMode": "private",
+      "PidMode": "",
+      "Privileged": false,
+      "ReadonlyRootfs": true,
+      "SecurityOpt": ["no-new-privileges"],
+      "Tmpfs": {"/tmp": "rw,noexec,nosuid,size=64m"},
+      "UTSMode": "",
+      "UsernsMode": "",
+      "Runtime": "runc",
+      "Memory": 268435456,
+      "MemorySwap": 268435456,
+      "NanoCpus": 500000000,
+      "Devices": [],
+      "PidsLimit": 100,
+      "Ulimits": null,
+      "MaskedPaths": ["/proc/asound", "/proc/acpi", "/proc/kcore", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/timer_stats", "/proc/sched_debug", "/proc/scsi", "/sys/firmware", "/sys/devices/virtual/powercap"],
+      "ReadonlyPaths": ["/proc/bus", "/proc/fs", "/proc/irq", "/proc/sys", "/proc/sysrq-trigger"]
+    },
+    "Mounts": [
+      {"Type": "volume", "Name": "web-data", "Source": "/var/lib/docker/volumes/web-data/_data", "Destination": "/srv", "Driver": "local", "Mode": "ro", "RW": false, "Propagation": ""}
+    ],
+    "Config": {
+      "Hostname": "a1c2e3f4b5d6",
+      "User": "1000:1000",
+      "ExposedPorts": {"8080/tcp": {}},
+      "Env": ["PATH=/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin", "PYTHON_VERSION=3.12.11"],
+      "Cmd": ["python3", "-m", "http.server", "8080"],
+      "Image": "python:3.12-alpine",
+      "WorkingDir": "/srv",
+      "Labels": {}
+    },
+    "NetworkSettings": {"Ports": {"8080/tcp": [{"HostIp": "127.0.0.1", "HostPort": "8080"}]}}
+  }
+]

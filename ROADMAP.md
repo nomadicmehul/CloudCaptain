@@ -14,7 +14,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 | 02 | Networking | 0 | planned |
 | 03 | Git & Collaboration | 0 | planned |
 | 04 | Scripting & Automation | 0 | planned |
-| 05 | Containers | 3 | in progress |
+| 05 | Containers | 8 | in progress |
 | 06 | Orchestration | 0 | planned |
 | 07 | Infrastructure as Code | 1 | in progress |
 | 08 | CI/CD & GitOps | 0 | planned |

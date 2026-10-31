@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/compose",
+  "title": "Compose Is a Dependency Graph Over docker run",
+  "short": "Compose",
+  "motto": "A compose file is a graph of services; up is a topological walk that runs docker run per node and waits for health before each edge.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "containers/image-build"
+  ],
+  "tools": [
+    "docker",
+    "docker compose"
+  ],
+  "reference": [
+    "/docs/tools/docker/compose-swarm",
+    "/docs/tools/docker/fundamentals",
+    "/docs/tools/docker/networking-storage",
+    "/docs/tools/yaml/fundamentals",
+    "/docs/tools/kubernetes/workloads"
+  ],
+  "outputs": [
+    "skill-compose-file-review.md",
+    "prompt-compose-to-kubernetes-plan.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

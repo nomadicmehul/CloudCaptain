@@ -146,6 +146,11 @@
         "containers/process-isolation",
         "containers/image-layers",
         "containers/registry-pull",
+        "containers/image-build",
+        "containers/container-networking",
+        "containers/compose",
+        "containers/rootless-podman",
+        "containers/runtime-security",
         "iac/state-reconciler",
         "aiops/mcp-kubectl-server"
       ]
