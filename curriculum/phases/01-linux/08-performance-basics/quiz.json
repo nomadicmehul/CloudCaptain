@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/performance-basics",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A node's dashboard shows CPU at 95% and the on-call adds two replicas. Latency does not move. Which number would have said beforehand whether the CPU was the bottleneck?",
+      "choices": [
+        "The run queue against the CPU count, or PSI cpu `some`: how long tasks waited for a CPU, which is saturation rather than utilization",
+        "CPU utilization averaged over five minutes instead of one",
+        "The number of containers scheduled on the node",
+        "MemFree from /proc/meminfo"
+      ],
+      "answer": 0,
+      "explanation": "Utilization says how busy the resource was. Saturation says whether work queued for it. A CPU at 95% with a run queue below the CPU count is fully used and nobody is waiting; a run queue of 12 on 4 CPUs or PSI cpu some at 38% means tasks are stalled, and that is the number replicas on the same node cannot change."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does usetop read /proc/stat twice and subtract instead of reading it once?",
+      "choices": [
+        "/proc/stat is only refreshed by the kernel once per second",
+        "The cpu fields are cumulative tick counters since boot; only the difference between two reads describes a window of time",
+        "The first read is always stale",
+        "So that steal time averages out"
+      ],
+      "answer": 1,
+      "explanation": "Every cpu line in /proc/stat counts USER_HZ ticks spent in each state since boot. One read tells you nothing about now. top, vmstat and mpstat all do the same subtraction, which is why their first row is often a since-boot average."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`free -m` shows 400 MB free on a 16 GB host and a ticket is opened. What does MemAvailable add that MemFree does not?",
+      "choices": [
+        "Nothing; it is MemFree under another name",
+        "The amount of swap left",
+        "An estimate of memory that can be used without swapping, counting reclaimable page cache and slab; low MemFree with high MemAvailable is a healthy cache, not a shortage",
+        "The memory limit of the largest container"
+      ],
+      "answer": 2,
+      "explanation": "The kernel uses free memory for the page cache on purpose and gives it back under pressure. MemAvailable, present in /proc/meminfo on current kernels, estimates what a new workload could take before swapping. usetop and `free` both report it; MemFree alone causes false alarms."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "/proc/pressure/cpu reads `some avg10=38.21` on a 4-cpu host. What does that mean?",
+      "choices": [
+        "CPU utilization was 38% over the last 10 seconds",
+        "38 processes are runnable right now",
+        "The CPUs were idle 38% of the time",
+        "In 38% of the last 10 seconds at least one task was runnable but waiting for a CPU: saturation measured as a share of wall time, not as a count"
+      ],
+      "answer": 3,
+      "explanation": "Pressure stall information counts time, not tasks. `some` is the share of wall time in which at least one task was stalled on the resource; `full` is the share in which all non-idle tasks were stalled. The `total` field is cumulative microseconds, so the delta between two reads gives the exact share for your own window."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "`iostat -xz 1` shows nvme0n1 at %util 99 with aqu-sz 9 and r_await 4 ms, and two processes sit in D state. Someone proposes adding CPUs. What does the USE table say?",
+      "choices": [
+        "CPU is the bottleneck because D-state processes consume CPU",
+        "Disk is saturated: 99% busy with a queue of 9 and blocked processes means requests wait for the device; more CPU changes nothing",
+        "Memory is saturated because the page cache is full",
+        "Nothing is wrong; D state is the normal state of a sleeping process"
+      ],
+      "answer": 1,
+      "explanation": "Utilization 99% says the device was busy all the time; a weighted queue of 9 and processes in uninterruptible sleep say work was waiting for it. That is disk saturation. The fix is fewer or larger I/Os, a faster device or caching, and the CPU column does not enter into it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`top` in a cloud VM shows 25% st in the %Cpu(s) line and the application team wants to profile their code. What should happen first?",
+      "choices": [
+        "Resize or move the VM, or raise it with the provider: steal is time the hypervisor did not schedule a runnable vCPU, and nothing inside the guest removes it",
+        "Profile the code; steal is cosmetic and can be ignored",
+        "Raise the CPU limit on the container",
+        "Lower the load average by killing idle processes"
+      ],
+      "answer": 0,
+      "explanation": "Steal is accounted when the guest had a runnable task and the host gave the physical CPU to someone else. A profile taken under 25% steal would blame random functions. Noisy neighbours, an oversubscribed host or a burstable instance that ran out of credits are the causes, and they are fixed outside the VM."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/file-descriptors",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A service dies with `OSError: [Errno 24] Too many open files`. Someone raises `ulimit -n` from 1024 to 65536 and restarts it. What have they changed?",
+      "choices": [
+        "They fixed the bug",
+        "Only when it happens next: the table is still filling at the same rate, so the failure moves from hours to days",
+        "Nothing, ulimit has no effect on a running service",
+        "The machine-wide fs.file-max"
+      ],
+      "answer": 1,
+      "explanation": "The limit decides when a leaking process falls over, not whether. A table that gains sixty descriptors a minute reaches 65536 in about eighteen hours instead of seventeen minutes; the open() calls without a matching close() are the bug."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "What does each entry under /proc/PID/fd point to?",
+      "choices": [
+        "The file's content",
+        "A symlink whose target names the open object: a path, `socket:[inode]`, `pipe:[inode]` or `anon_inode:[eventpoll]`",
+        "The process's memory map",
+        "Only an inode number"
+      ],
+      "answer": 1,
+      "explanation": "The fd directory renders the descriptor table as symlinks: the name is the descriptor number and the target identifies what it refers to. readlink gives the classification, stat through the link gives size and type, fdinfo gives offset and flags."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Which limit does open() check, and who can change it?",
+      "choices": [
+        "The hard limit; only root",
+        "The soft limit; the process may raise it up to the hard limit itself, root may raise the hard limit, and prlimit changes both on a running process",
+        "fs.file-max; the kernel",
+        "fs.nr_open; systemd"
+      ],
+      "answer": 1,
+      "explanation": "RLIMIT_NOFILE is a soft and hard pair per process. EMFILE fires at the soft value. Go and the JVM raise soft to hard at start, which is why the same leak shows up at different numbers in different runtimes."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`df` says / is 100% full; `du -sh /` finds 40 GB less. What does `fdwatch --deleted` look for, and why does it explain the gap?",
+      "choices": [
+        "Hidden dotfiles",
+        "Files whose name was unlinked while a process still holds a descriptor: the inode's blocks stay allocated until the last descriptor closes, so df counts them and du cannot see them",
+        "Filesystem corruption",
+        "Blocks reserved for root"
+      ],
+      "answer": 1,
+      "explanation": "unlink() removes a name, not the data. While any descriptor refers to the inode the blocks stay allocated. The symlink target in /proc/PID/fd ends in \"(deleted)\", and truncating through that link frees the space without a restart."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A web server is restarted and fails with `bind: address already in use`, yet `ss -ltnp` shows the port held by a log-shipping helper the old server had spawned. Which flag was missing?",
+      "choices": [
+        "O_NONBLOCK",
+        "O_CLOEXEC on the listening socket: without it every child the server execs inherits the descriptor and keeps the port open",
+        "SO_REUSEADDR",
+        "O_APPEND"
+      ],
+      "answer": 1,
+      "explanation": "exec() keeps every descriptor not marked close-on-exec. The helper inherited the listening socket and is still holding it, so the new server cannot bind. fdwatch's without-O_CLOEXEC list shows exactly which descriptors would leak this way."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "fdwatch reports 950 of 1024 descriptors, growing 60 per minute, and `ss` shows 900 sockets in CLOSE_WAIT. Where is the fix?",
+      "choices": [
+        "Raise the soft limit to 65536",
+        "In the application: it is not calling close() on connections the peer already closed; the limit only decides when it falls over",
+        "On the load balancer",
+        "In the kernel's TCP settings"
+      ],
+      "answer": 1,
+      "explanation": "CLOSE_WAIT means the remote side finished and the local program never closed its end. Each one is a descriptor. Raising the limit or restarting is a stop-gap measured in minutes at that rate; the missing close() is the bug."
+    }
+  ]
+}

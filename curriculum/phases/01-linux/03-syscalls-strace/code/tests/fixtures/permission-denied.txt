@@ -1,0 +1,10 @@
+execve("/usr/local/bin/app", ["app", "--log", "/var/log/app/app.log"], 0x7ffe4a1b2c30 /* 18 vars */) = 0
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/etc/app/app.yml", O_RDONLY) = 3
+statx(AT_FDCWD, "/var/log/app", AT_STATX_SYNC_AS_STAT, STATX_ALL, {stx_mask=STATX_BASIC_STATS|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFDIR|0755, stx_size=4096, ...}) = 0
+openat(AT_FDCWD, "/var/log/app/app.log", O_WRONLY|O_CREAT|O_APPEND, 0644) = -1 EACCES (Permission denied)
+write(2, "app: cannot open /var/log/app/app.log: Permission denied\n", 57) = 57
+exit_group(3)                           = ?
++++ exited with 3 +++

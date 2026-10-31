@@ -1,0 +1,37 @@
+12345 10:42:01.100001 execve("/usr/bin/python3", ["python3", "app.py"], 0x7ffd3e2a1a40 /* 22 vars */) = 0 <0.000412>
+12345 10:42:01.100713 brk(NULL)         = 0x5581c3a2d000 <0.000008>
+12345 10:42:01.100790 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory) <0.000011>
+12345 10:42:01.100861 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache> <0.000014>
+12345 10:42:01.100930 fstat(3</etc/ld.so.cache>, {st_mode=S_IFREG|0644, st_size=28213, ...}) = 0 <0.000006>
+12345 10:42:01.100980 mmap(NULL, 28213, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x7f0c2a3d5000 <0.000009>
+12345 10:42:01.101002 close(3</etc/ld.so.cache>) = 0 <0.000005>
+12345 10:42:01.101060 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpython3.12.so.1.0", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0> <0.000016>
+12345 10:42:01.101130 read(3</usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0>, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 832) = 832 <0.000007>
+12345 10:42:01.101210 close(3</usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0>) = 0 <0.000005>
+12345 10:42:01.101300 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libc.so.6> <0.000012>
+12345 10:42:01.101400 read(3</usr/lib/x86_64-linux-gnu/libc.so.6>, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220\243\2\0\0\0\0\0"..., 832) = 832 <0.000006>
+12345 10:42:01.101500 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0 <0.000004>
+12345 10:42:01.104001 readlink("/usr/bin/python3", "python3.12", 4096) = 10 <0.000009>
+12345 10:42:01.104100 readlink("/usr/bin/python3.12", 0x7ffd3e29f2d0, 4096) = -1 EINVAL (Invalid argument) <0.000007>
+12345 10:42:01.104200 getrandom("\x9b\x04\x2f\x51\xee\x11\x7a\x33", 8, GRND_NONBLOCK) = 8 <0.000005>
+12345 10:42:01.105001 stat("/usr/lib/python3.12/encodings/__init__.cpython-312-x86_64-linux-gnu.so", 0x7ffd3e29e9b0) = -1 ENOENT (No such file or directory) <0.000008>
+12345 10:42:01.105080 stat("/usr/lib/python3.12/encodings/__init__.abi3.so", 0x7ffd3e29e9b0) = -1 ENOENT (No such file or directory) <0.000006>
+12345 10:42:01.105150 stat("/usr/lib/python3.12/encodings/__init__.so", 0x7ffd3e29e9b0) = -1 ENOENT (No such file or directory) <0.000006>
+12345 10:42:01.105220 stat("/usr/lib/python3.12/encodings/__init__.py", {st_mode=S_IFREG|0644, st_size=5729, ...}) = 0 <0.000007>
+12345 10:42:01.105300 openat(AT_FDCWD, "/usr/lib/python3.12/encodings/__init__.py", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/encodings/__init__.py> <0.000012>
+12345 10:42:01.105350 read(3</usr/lib/python3.12/encodings/__init__.py>, "\"\"\" Standard \"encodings\" Package\n\n    Standard Python encoding modules are stored in this package\n"..., 5730) = 5729 <0.000008>
+12345 10:42:01.105400 close(3</usr/lib/python3.12/encodings/__init__.py>) = 0 <0.000005>
+12345 10:42:01.108000 openat(AT_FDCWD, "/usr/lib/python3.12/os.py", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/os.py> <0.000011>
+12345 10:42:01.108200 close(3</usr/lib/python3.12/os.py>) = 0 <0.000004>
+12345 10:42:01.112000 openat(AT_FDCWD, "/app/app.py", O_RDONLY|O_CLOEXEC) = 3</app/app.py> <0.000013>
+12345 10:42:01.112100 read(3</app/app.py>, "import os\nimport sys\n\nCANDIDATES = [\n    \"/etc/app/app.yml\",\n"..., 4096) = 412 <0.000006>
+12345 10:42:01.112200 close(3</app/app.py>) = 0 <0.000005>
+12345 10:42:01.120001 openat(AT_FDCWD, "/etc/app/app.yml", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory) <0.000011>
+12345 10:42:01.120110 openat(AT_FDCWD, "/home/deploy/.config/app/app.yml", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory) <0.000009>
+12345 10:42:01.120201 openat(AT_FDCWD, "/app/app.yml", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory) <0.000008>
+12345 10:42:01.121000 write(2</dev/pts/0>, "Traceback (most recent call last):\n", 35) = 35 <0.000021>
+12345 10:42:01.121100 write(2</dev/pts/0>, "  File \"/app/app.py\", line 9, in <module>\n", 43) = 43 <0.000012>
+12345 10:42:01.121150 write(2</dev/pts/0>, "    config = load_config(CANDIDATES)\n", 38) = 38 <0.000010>
+12345 10:42:01.121200 write(2</dev/pts/0>, "FileNotFoundError: [Errno 2] No such file or directory: '/app/app.yml'\n", 72) = 72 <0.000014>
+12345 10:42:01.121500 exit_group(1)     = ?
+12345 10:42:01.121700 +++ exited with 1 +++

@@ -1,0 +1,14 @@
+nr_free_pages 49691
+nr_zone_inactive_anon 30864
+nr_zone_active_anon 586419
+nr_zone_inactive_file 438271
+nr_zone_active_file 444444
+nr_dirty 86419
+nr_writeback 0
+pgpgin 2345678901
+pgpgout 3456789012
+pswpin 123456
+pswpout 234567
+pgfault 4567890123
+pgmajfault 345678
+oom_kill 2

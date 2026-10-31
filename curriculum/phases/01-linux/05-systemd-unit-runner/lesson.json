@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/systemd-unit-runner",
+  "title": "A Service Is a Process With a Contract: systemd Units From Scratch",
+  "short": "systemd Units",
+  "motto": "A unit file is the contract between a process and its supervisor: what runs first, how it starts, when it restarts, how it stops.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/pid1-supervisor"
+  ],
+  "tools": [
+    "systemctl",
+    "journalctl",
+    "systemd-analyze",
+    "systemd-run"
+  ],
+  "reference": [
+    "/docs/tools/linux/administration",
+    "/docs/tools/linux/fundamentals",
+    "/docs/tools/podman/cheatsheet",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "skill-unit-file-review.md",
+    "prompt-write-unit-file.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

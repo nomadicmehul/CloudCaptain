@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/filesystem-mounts",
+  "title": "A Path Is a Lookup Through a Mount Table",
+  "short": "Mounts & Overlay",
+  "motto": "Every path you open is resolved through a per-namespace mount table; ro, noexec, overlay layers and a full disk are all rows in it.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "linux/file-descriptors"
+  ],
+  "tools": [
+    "findmnt",
+    "mount",
+    "unshare",
+    "docker",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/linux/administration",
+    "/docs/tools/docker/networking-storage",
+    "/docs/tools/kubernetes/storage"
+  ],
+  "outputs": [
+    "skill-disk-and-mount-triage.md",
+    "prompt-explain-mountinfo.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

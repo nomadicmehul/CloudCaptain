@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/performance-basics",
+  "title": "USE Before You Guess: CPU, Memory, Disk and PSI From /proc",
+  "short": "Performance Basics",
+  "motto": "Busy is not saturated: the run queue, the stall time and the memory you can still use are already in /proc; read them before you scale.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "linux/file-descriptors"
+  ],
+  "tools": [
+    "vmstat",
+    "mpstat",
+    "iostat",
+    "pidstat",
+    "top",
+    "docker",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/linux/fundamentals",
+    "/docs/tools/linux/administration",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "skill-60-second-perf-triage.md",
+    "prompt-explain-top-output.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

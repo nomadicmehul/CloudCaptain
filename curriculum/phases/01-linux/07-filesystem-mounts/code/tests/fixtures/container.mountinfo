@@ -1,0 +1,22 @@
+1497 1361 0:62 / / ro,relatime master:64 - overlay overlay rw,lowerdir=/var/lib/docker/overlay2/l/QW3RTY7UIOP2ASDFGHJKL5ZXC:/var/lib/docker/overlay2/l/MNB4VCXZ1LKJHGFDSA8POIUYT:/var/lib/docker/overlay2/l/ZXC6VBNMASDFGHJKLQWERTYUI,upperdir=/var/lib/docker/overlay2/9f4c1e7a2b3d4c5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6/diff,workdir=/var/lib/docker/overlay2/9f4c1e7a2b3d4c5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6/work
+1498 1497 0:66 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw
+1499 1497 0:67 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755,inode64
+1500 1499 0:68 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666
+1501 1497 0:69 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro
+1502 1501 0:26 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw,nsdelegate,memory_recursiveprot
+1503 1499 0:65 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw
+1504 1499 0:70 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k,inode64
+1505 1497 0:71 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,inode64
+1506 1497 8:16 /exports /data ro,noatime - xfs /dev/sdb rw,attr2,inode64,logbufs=8,logbsize=32k,noquota
+1507 1497 259:2 /var/lib/docker/containers/3d2f8a1b9c7e6d5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f/resolv.conf /etc/resolv.conf rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro
+1508 1497 259:2 /var/lib/docker/containers/3d2f8a1b9c7e6d5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f/hostname /etc/hostname rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro
+1509 1497 259:2 /var/lib/docker/containers/3d2f8a1b9c7e6d5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f/hosts /etc/hosts rw,relatime - ext4 /dev/nvme0n1p2 rw,errors=remount-ro
+1510 1498 0:66 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw
+1511 1498 0:66 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw
+1512 1498 0:66 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw
+1513 1498 0:66 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw
+1514 1498 0:66 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw
+1515 1498 0:67 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755,inode64
+1516 1498 0:67 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755,inode64
+1517 1498 0:67 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755,inode64
+1518 1501 0:72 / /sys/firmware ro,relatime - tmpfs tmpfs ro,inode64

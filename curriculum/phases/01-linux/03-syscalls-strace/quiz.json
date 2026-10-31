@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/syscalls-strace",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A pod crash-loops with the one-line log `config: not found`. You `kubectl exec` into a shell in the same image and `ls /etc/app/app.yml` shows the file. What does strace add that the shell cannot?",
+      "choices": [
+        "It shows the file's contents",
+        "Nothing; strace only works for C programs",
+        "The path the process actually passed to openat(), resolved from its own cwd and environment, and the errno the kernel returned; your shell has a different cwd and environment, so you looked at a different file",
+        "It fixes the permissions on the file"
+      ],
+      "answer": 2,
+      "explanation": "The error message is the program's opinion. strace shows the request the kernel saw: `openat(AT_FDCWD, \"app.yml\", ...) = -1 ENOENT` means the process asked for app.yml relative to its working directory, which is not where you ran ls."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A line reads `openat(AT_FDCWD, \"app.yml\", O_RDONLY) = -1 ENOENT (No such file or directory) <0.000011>`. What does AT_FDCWD tell you about the missing file?",
+      "choices": [
+        "The path is resolved relative to the process's current working directory, so the missing file is `$(readlink /proc/PID/cwd)/app.yml`, not necessarily the directory you ran ls in",
+        "The file descriptor is already closed",
+        "The call was made from a thread rather than the main process",
+        "The target is a directory, not a file"
+      ],
+      "answer": 0,
+      "explanation": "openat takes a directory descriptor as its first argument; AT_FDCWD is the special value meaning \"the current working directory\". A relative path in the second argument is resolved from there, which is why tracelens reports the path exactly as traced and the hint points at /proc/PID/cwd."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Why does tracelens join `wait4(-1,  <unfinished ...>` with a later `<... wait4 resumed>` line, and why does the second half sometimes carry no `[pid N]` prefix?",
+      "choices": [
+        "strace lost part of the line because the buffer was full",
+        "wait4 was called twice and the second call succeeded",
+        "The kernel splits long system calls into two parts",
+        "A blocking call in one process is interleaved with other processes' lines: strace prints the entry when it starts and the return when it finishes, and it drops the pid prefix again once only one tracee is left"
+      ],
+      "answer": 3,
+      "explanation": "With -f, strace prints a call that has not returned yet as `<unfinished ...>` so lines from other processes can appear, then prints the return as `<... name resumed>`. Only the halves together carry the arguments, the result and the -T duration, so the parser keeps a pending table per pid and syscall name."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`strace -c` of a worker shows 40,000 `stat` calls of which 39,800 are errors (ENOENT), yet the program works correctly. What is the most likely explanation?",
+      "choices": [
+        "The disk is failing and stat is timing out",
+        "A runtime or library probing a search path (sys.path, PATH, locale or plugin directories) on every request: normal in kind, abnormal in volume, and a performance fix rather than a correctness bug",
+        "The filesystem has run out of inodes",
+        "strace counts every error twice"
+      ],
+      "answer": 1,
+      "explanation": "ENOENT in series on the same basename is a search path being walked: an import probed in six directories, a binary looked up along PATH, a config tried in three places. Programs recover from these, so they are not the cause of a failure, but 40,000 of them per minute is why the service is slow."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "`docker exec app strace -p 1` prints `strace: attach: ptrace(PTRACE_SEIZE, 1): Operation not permitted`, yet `strace ls` inside the same container works. Why?",
+      "choices": [
+        "ls is statically linked and the application is not",
+        "Docker's seccomp profile blocks ptrace entirely, and ls happens not to use it",
+        "Tracing a child you fork is allowed by default; attaching to an existing process is restricted by Yama's ptrace_scope=1 to descendants unless the caller has CAP_SYS_PTRACE, so start the container with --cap-add SYS_PTRACE or use a debug sidecar that has it",
+        "PID 1 can never be traced"
+      ],
+      "answer": 2,
+      "explanation": "PTRACE_TRACEME on your own child needs no privilege. PTRACE_ATTACH or PTRACE_SEIZE on another process must pass the uid checks and Yama, which on most distributions only allows descendants unless the tracer has CAP_SYS_PTRACE. The default container capability set does not include it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Inside a container the verdict reads `connect() to 127.0.0.1:5432 returned ECONNREFUSED`, while `psql -h localhost` on the host connects fine. What is wrong?",
+      "choices": [
+        "127.0.0.1 inside the container is the container's own loopback interface in its own network namespace, where nothing listens on 5432; point the app at the database's service name or host address instead",
+        "Postgres has crashed",
+        "The seccomp profile denies connect()",
+        "The container was started with --network none"
+      ],
+      "answer": 0,
+      "explanation": "ECONNREFUSED means the SYN reached an address with no listener and was answered with RST. Every network namespace has its own 127.0.0.1; the database listens on the host's. With --network none the error would be ENETUNREACH and a seccomp denial would be EPERM, not a refused connection."
+    }
+  ]
+}

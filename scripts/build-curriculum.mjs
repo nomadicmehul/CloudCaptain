@@ -221,7 +221,7 @@ TODO
   const q = (stage, n) => ({id: `${stage}-${n}`, stage, prompt: 'TODO: question text?', choices: ['TODO A', 'TODO B', 'TODO C'], answer: 0, explanation: 'TODO: why the answer is right.'});
   fs.writeFileSync(
     path.join(dir, 'quiz.json'),
-    JSON.stringify({$schema: '../../schema/quiz.schema.json', lesson: id, questions: [q('pre', 1), q('check', 1), q('check', 2), q('check', 3), q('post', 1), q('post', 2)]}, null, 2) + '\n',
+    JSON.stringify({$schema: '../../../schema/quiz.schema.json', lesson: id, questions: [q('pre', 1), q('check', 1), q('check', 2), q('check', 3), q('post', 1), q('post', 2)]}, null, 2) + '\n',
   );
   fs.writeFileSync(
     path.join(dir, 'outputs', `prompt-${lessonSlug}.md`),

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/cgroups-by-hand",
+  "title": "Limits Are Files: cgroup v2 by Hand",
+  "short": "cgroups v2",
+  "motto": "A CPU limit is two numbers in cpu.max and an OOM kill is a counter in memory.events; read the files before you guess.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "linux/pid1-supervisor"
+  ],
+  "tools": [
+    "docker",
+    "systemd-run",
+    "systemd-cgtop",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/linux/fundamentals",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/workloads"
+  ],
+  "outputs": [
+    "skill-cgroup-pressure-triage.md",
+    "prompt-explain-cgroup-stats.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}
