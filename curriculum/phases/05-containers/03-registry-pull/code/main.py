@@ -181,12 +181,22 @@ def _safe_join(root: str, name: str) -> str:
     return target
 
 
-def apply_layer(data: bytes, rootfs: str) -> Tuple[int, int]:
+def apply_dir_modes(dir_modes: Dict[str, int]) -> None:
+    for path in sorted(dir_modes, key=lambda p: p.count(os.sep), reverse=True):
+        try:
+            os.chmod(path, dir_modes[path])
+        except OSError:
+            pass
+
+
+def apply_layer(data: bytes, rootfs: str, dir_modes: Optional[Dict[str, int]] = None) -> Tuple[int, int]:
     import gzip
     if data[:2] == b"\x1f\x8b":
         data = gzip.decompress(data)
     added = removed = 0
     rootfs = os.path.abspath(rootfs)
+    own_modes = dir_modes is None
+    dir_modes = {} if dir_modes is None else dir_modes
     with tarfile.open(fileobj=io.BytesIO(data), mode="r:") as tar:
         for member in tar.getmembers():
             name = member.name
@@ -218,20 +228,28 @@ def apply_layer(data: bytes, rootfs: str) -> Tuple[int, int]:
                 continue
             if member.isdev():
                 continue
-            _safe_join(rootfs, name)
+            target = _safe_join(rootfs, name)
             tar.extract(member, rootfs, set_attrs=False)
             added += 1
+            if member.isfile():
+                os.chmod(target, member.mode & 0o7777)
+            elif member.isdir():
+                dir_modes[target] = member.mode & 0o7777
+    if own_modes:
+        apply_dir_modes(dir_modes)
     return added, removed
 
 
 def extract_rootfs(layer_paths: Sequence[str], rootfs: str) -> Tuple[int, int]:
     total_added = total_removed = 0
+    dir_modes: Dict[str, int] = {}
     os.makedirs(rootfs, exist_ok=True)
     for path in layer_paths:
         with open(path, "rb") as handle:
-            added, removed = apply_layer(handle.read(), rootfs)
+            added, removed = apply_layer(handle.read(), rootfs, dir_modes)
         total_added += added
         total_removed += removed
+    apply_dir_modes(dir_modes)
     return total_added, total_removed
 
 

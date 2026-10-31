@@ -1,6 +1,7 @@
 import io
 import json
 import os
+import stat
 import sys
 import tarfile
 import tempfile
@@ -15,13 +16,19 @@ def tar_bytes(files):
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w") as tar:
         for name, content in files.items():
+            mode = None
+            if isinstance(content, tuple):
+                content, mode = content
             if name.endswith("/"):
                 info = tarfile.TarInfo(name.rstrip("/"))
                 info.type = tarfile.DIRTYPE
+                info.mode = 0o755 if mode is None else mode
                 tar.addfile(info)
                 continue
             info = tarfile.TarInfo(name)
             info.size = len(content)
+            if mode is not None:
+                info.mode = mode
             tar.addfile(info, io.BytesIO(content))
     return buffer.getvalue()
 
@@ -31,7 +38,7 @@ class FakeRegistry:
 
     def __init__(self):
         self.layer1 = tar_bytes({"etc/": b"", "etc/os-release": b"ID=demo\n", "app/secret": b"s3cret"})
-        self.layer2 = tar_bytes({"app/.wh.secret": b"", "app/main.py": b"print('hi')\n"})
+        self.layer2 = tar_bytes({"app/.wh.secret": b"", "app/main.py": b"print('hi')\n", "app/run.sh": (b"#!/bin/sh\necho hi\n", 0o755), "tmp/": (b"", 0o1777)})
         self.config = json.dumps({"architecture": "amd64", "os": "linux", "rootfs": {"type": "layers"}}).encode()
         self.blobs = {main.sha256_digest(b): b for b in (self.layer1, self.layer2, self.config)}
         manifest = {
@@ -154,6 +161,9 @@ class ClientTests(unittest.TestCase):
             self.assertTrue(os.path.isfile(os.path.join(rootfs, "etc", "os-release")))
             self.assertTrue(os.path.isfile(os.path.join(rootfs, "app", "main.py")))
             self.assertFalse(os.path.exists(os.path.join(rootfs, "app", "secret")), "whiteout must delete the lower file")
+            self.assertEqual(stat.S_IMODE(os.stat(os.path.join(rootfs, "app", "run.sh")).st_mode), 0o755, "file modes must survive extraction")
+            self.assertEqual(stat.S_IMODE(os.stat(os.path.join(rootfs, "app", "main.py")).st_mode), 0o644)
+            self.assertEqual(stat.S_IMODE(os.stat(os.path.join(rootfs, "tmp")).st_mode), 0o1777, "directory modes are applied after every layer")
             self.assertEqual(removed, 1)
             self.assertGreaterEqual(added, 3)
 

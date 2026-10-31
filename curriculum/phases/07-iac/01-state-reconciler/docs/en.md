@@ -153,13 +153,15 @@ terraform init          # or: tofu init
 terraform plan
 terraform apply -auto-approve
 terraform plan          # No changes.
-sed -i.bak 's/hello/hello v2/' main.tf && terraform plan     # ~ update in-place
+sed -i.bak 's/hello/hello v2/' main.tf && terraform plan     # -/+ replace (see below)
 rm site/index.html && terraform plan                        # + create (refresh noticed the drift)
 sed -i.bak 's#site/index.html#site/home.html#' main.tf && terraform plan   # -/+ destroy and then create replacement
 terraform state list
 terraform show -json | python3 -m json.tool | head -40
 cat terraform.tfstate | python3 -c 'import json,sys; s=json.load(sys.stdin); print(s["serial"], [r["type"]+"."+r["name"] for r in s["resources"]])'
 ```
+
+One line differs from `minitf`: the content change plans as `-/+` (destroy, then create), not `~`. The `hashicorp/local` provider declares every attribute of `local_file` as forcing replacement, because from its point of view a file is written once and never edited. Whether a change is an update or a replacement is the provider's decision, written into its schema; the engine only reads it. That is why the `# forces replacement` annotations in a plan deserve a look before you approve it.
 
 Line them up:
 

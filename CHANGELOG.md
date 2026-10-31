@@ -27,6 +27,7 @@ All notable changes to CloudCaptain. The format follows [Keep a Changelog](https
 - Reference docs: 18 remaining mentions of CodeCommit, Docker Swarm, PodSecurityPolicy and ingress-nginx now carry a status note where they appear.
 
 ### Fixed
+- Findings from the first Linux smoke run (PR #69): the Process Isolation memory cgroup also sets `memory.swap.max=0` (a host with swap paged the group out instead of OOM-killing it); the Registry Pull rootfs keeps file and directory modes (`/bin/busybox` was extracted without its executable bit); the state-reconciler Use It and smoke now expect `local_file` content changes to plan as a replacement, which is what the local provider does; the lab-doctor smoke restores the previous kubectl context after deleting its cluster.
 - Captain's Bridge **Commands** tab and `.sh` download: multi-line code blocks were read as one over-long line (Prism emits no newlines), so most pages showed "Commands 0". Lines are now taken from the rendered `token-line` spans.
 
 ### Removed

@@ -22,11 +22,12 @@ OUT2="$(sudo bash code/main.sh smokesh -- /bin/sh -c 'hostname')"
 echo "▸ cgroup v2 memory.max via python (expect OOM kill, exit 137)"
 if [[ -f /sys/fs/cgroup/cgroup.controllers ]]; then
   set +e
-  sudo python3 code/main.py --name smoke-mem --memory 50M -- /bin/sh -c 'head -c 200m /dev/zero | tail' >/dev/null 2>&1
+  sudo python3 code/main.py --name smoke-mem --memory 50M -- /bin/sh -c 'head -c 200m /dev/zero | tail' >/dev/null 2>/tmp/oom.err
   CODE=$?
   set -e
-  [[ "$CODE" == "137" ]] || fail "expected exit 137 from the OOM killer, got $CODE"
+  echo "  exit $CODE; memory.events: $(sudo cat /sys/fs/cgroup/smoke-mem/memory.events 2>/dev/null | tr '\n' ' ')"
   sudo rmdir /sys/fs/cgroup/smoke-mem 2>/dev/null || true
+  [[ "$CODE" == "137" ]] || { cat /tmp/oom.err >&2; fail "expected exit 137 from the OOM killer, got $CODE"; }
 else
   echo "  (cgroup v2 not mounted; skipped)"
 fi

@@ -121,6 +121,8 @@ def _safe_join(root, name):
     return target
 ```
 
+Permission bits have to make the trip too. Python's `tarfile` creates files as `0644` and directories as `0700` unless it is asked to apply attributes, which would leave `/bin/busybox` without its executable bit and `/tmp` without its sticky bit; the rootfs would unpack and then refuse to run. `apply_layer()` sets each regular file's mode as it goes and records directory modes to apply once every layer is in place, because a read-only directory from one layer would otherwise block the files a later layer puts inside it.
+
 ### Step 6: run it
 
 ```bash

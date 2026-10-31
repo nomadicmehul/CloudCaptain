@@ -39,8 +39,25 @@ class CgroupTests(unittest.TestCase):
         spec = main.ContainerSpec(command=["/bin/sh"], name="demo", memory="100M", cgroup_base="/tmp/cg")
         self.assertEqual(
             main.cgroup_files(spec, 4242),
-            {"/tmp/cg/demo/memory.max": str(100 * 1024 ** 2), "/tmp/cg/demo/cgroup.procs": "4242"},
+            {"/tmp/cg/demo/memory.max": str(100 * 1024 ** 2), "/tmp/cg/demo/memory.swap.max": "0", "/tmp/cg/demo/cgroup.procs": "4242"},
         )
+
+    def test_write_cgroup_skips_optional_files_that_the_kernel_does_not_expose(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as base:
+            group = os.path.join(base, "demo")
+            os.makedirs(group)
+            with open(os.path.join(group, "memory.max"), "w") as handle:
+                handle.write("max")
+            with open(os.path.join(group, "cgroup.procs"), "w") as handle:
+                handle.write("")
+            spec = main.ContainerSpec(command=["/bin/sh"], name="demo", memory="50M", cgroup_base=base)
+            main.write_cgroup(main.cgroup_files(spec, 7))
+            with open(os.path.join(group, "memory.max")) as handle:
+                self.assertEqual(handle.read(), str(50 * 1024 ** 2))
+            with open(os.path.join(group, "cgroup.procs")) as handle:
+                self.assertEqual(handle.read(), "7")
+            self.assertFalse(os.path.exists(os.path.join(group, "memory.swap.max")), "optional file is not created when absent")
 
     def test_cgroup_files_empty_without_memory_limit(self):
         spec = main.ContainerSpec(command=["/bin/sh"])

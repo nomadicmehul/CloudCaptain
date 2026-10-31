@@ -28,9 +28,11 @@ grep -q "## Install plan" /tmp/LAB.md || fail "LAB.md plan section"
 
 if command -v kind >/dev/null; then
   echo "▸ main.sh creates a throwaway cluster"
+  PREV_CTX="$(kubectl config current-context 2>/dev/null || true)"
   bash code/main.sh cc-lab-smoke | tee /tmp/lab-kind.txt
   grep -q "pod ok on" /tmp/lab-kind.txt || fail "pod did not run on kind"
   kind delete cluster --name cc-lab-smoke
+  [[ -z "$PREV_CTX" ]] || kubectl config use-context "$PREV_CTX" >/dev/null 2>&1 || true
 else
   echo "  (kind not installed on this runner; cluster step skipped)"
 fi

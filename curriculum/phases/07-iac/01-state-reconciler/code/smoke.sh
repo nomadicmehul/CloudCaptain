@@ -55,7 +55,7 @@ $TF apply -input=false -auto-approve -no-color >/dev/null
 [[ "$(cat site/index.html)" == "hello" ]] || fail "$TF apply wrote the file"
 $TF plan -input=false -no-color | grep -q "No changes" || fail "$TF second plan is a no-op"
 sed -i.bak 's/"hello"/"hello v2"/' main.tf
-$TF plan -input=false -no-color | grep -q "1 to change" || fail "$TF content change is an in-place update"
+$TF plan -input=false -no-color | grep -q "1 to add, 0 to change, 1 to destroy" || fail "$TF content change should plan as a replacement (every local_file attribute forces replacement)"
 rm site/index.html
 $TF plan -input=false -no-color | grep -q "1 to add" || fail "$TF detects drift after manual deletion"
 $TF state list | grep -q "local_file.index" || fail "$TF state list"

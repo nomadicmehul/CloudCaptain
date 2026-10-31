@@ -126,16 +126,19 @@ The process sees Alpine's `/`, its own hostname and only itself in `ps`. It is n
 
 ### Step 4: a memory budget with cgroup v2
 
-Namespaces never limit anything. For that, the parent creates a cgroup, writes the limit and puts the child's PID in it. `cgroup_files()` computes exactly which two files to write:
+Namespaces never limit anything. For that, the parent creates a cgroup, writes the limit and puts the child's PID in it. `cgroup_files()` computes exactly which three files to write:
 
 ```python
 def cgroup_files(spec, pid):
     group = os.path.join(spec.cgroup_base, spec.name)
     return {
         os.path.join(group, "memory.max"): str(parse_memory(spec.memory)),
+        os.path.join(group, "memory.swap.max"): "0",
         os.path.join(group, "cgroup.procs"): str(pid),
     }
 ```
+
+`memory.swap.max` is the line most tutorials forget. On a host with swap, a group that reaches `memory.max` is paged out instead of killed, and the limit turns into a suggestion; with swap set to zero the kernel has nowhere to put the pages and the OOM killer acts. Docker's `--memory` without `--memory-swap` allows swap equal to the memory limit; Kubernetes runs pods with swap disabled unless the node opts in.
 
 Prove the limit is real by allocating more than it allows:
 
