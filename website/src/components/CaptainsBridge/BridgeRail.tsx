@@ -3,6 +3,11 @@ import React, {useState} from 'react';
 import styles from './styles.module.css';
 import type {Section} from './useScrollProgress';
 import type {Command} from './useExtractors';
+import Link from '@docusaurus/Link';
+import cstyles from '../Curriculum/styles.module.css';
+import type {LessonMetaData} from '../Curriculum/types';
+import type {QuizRecord} from '../Curriculum/storage';
+import {githubUrl} from '../Curriculum/useLesson';
 
 function downloadShellScript(commands: Command[]): void {
   const pageTitle = (document.title || 'cloudcaptain').replace(/\s*\|.*$/, '').trim();
@@ -38,9 +43,11 @@ function copyAll(commands: Command[], copy: (t: string) => void): void {
   copy(commands.map((c) => c.text).join('\n'));
 }
 
-type Tab = 'contents' | 'commands';
+type Tab = 'contents' | 'commands' | 'lesson';
 
 type Props = {
+  lesson?: LessonMetaData;
+  quiz?: QuizRecord | null;
   sections: Section[];
   commands: Command[];
   activeTab: Tab;
@@ -58,6 +65,8 @@ export default function BridgeRail({
   currentSection,
   isRead,
   onToggleRead,
+  lesson,
+  quiz,
 }: Props): JSX.Element {
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -90,9 +99,85 @@ export default function BridgeRail({
           Commands
           <span className={styles.railTabCount}>{commands.length}</span>
         </button>
+        {lesson && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'lesson'}
+            className={`${styles.railTab} ${activeTab === 'lesson' ? styles.railTabActive : ''}`}
+            onClick={() => onTabChange('lesson')}>
+            Lesson
+            <span className={styles.railTabCount}>{lesson.outputs.length}</span>
+          </button>
+        )}
       </div>
 
       <div className={styles.railBody}>
+        {activeTab === 'lesson' && lesson && (
+          <div style={{padding: '0 14px 14px', fontSize: 13, lineHeight: 1.5}}>
+            <div style={{marginBottom: 10}}>
+              <span className={cstyles.badge} data-type={lesson.type}>{lesson.type}</span>{' '}
+              <span className={cstyles.muted}>{lesson.minutes} min · Phase {lesson.phaseNumber} {lesson.phaseTitle}</span>
+            </div>
+            <div style={{fontWeight: 700, marginTop: 10}}>Quiz</div>
+            <div className={cstyles.muted}>
+              {(['pre', 'check', 'post'] as const).map((stage) => {
+                const s = quiz?.scores?.[stage];
+                return (
+                  <div key={stage}>
+                    {stage}: {s ? `${s[0]} / ${s[1]}` : 'not taken'}
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{fontWeight: 700, marginTop: 10}}>Prerequisites</div>
+            <div className={cstyles.muted}>
+              {lesson.prereqs.length === 0 && 'None'}
+              {lesson.prereqs.map((id) => (
+                <div key={id}>
+                  <Link to={`/learn/${id}`}>{id}</Link>
+                </div>
+              ))}
+            </div>
+            {lesson.tools && lesson.tools.length > 0 && (
+              <>
+                <div style={{fontWeight: 700, marginTop: 10}}>Tools</div>
+                <div className={cstyles.muted}>{lesson.tools.join(', ')}</div>
+              </>
+            )}
+            <div style={{fontWeight: 700, marginTop: 10}}>Tests</div>
+            <div className={cstyles.muted}>
+              {Object.entries(lesson.tests || {}).map(([lang, cmd]) => (
+                <code key={lang} style={{display: 'block', fontSize: 11, whiteSpace: 'normal', wordBreak: 'break-all'}}>{cmd}</code>
+              ))}
+              <a href={githubUrl(lesson, 'code', true)} target="_blank" rel="noopener noreferrer">
+                code on GitHub ↗
+              </a>
+            </div>
+            <div style={{fontWeight: 700, marginTop: 10}}>Artifacts</div>
+            <div className={cstyles.muted}>
+              {lesson.outputs.map((name) => (
+                <div key={name}>
+                  <a href={githubUrl(lesson, `outputs/${name}`, name.endsWith('/'))} target="_blank" rel="noopener noreferrer">
+                    {name}
+                  </a>
+                </div>
+              ))}
+            </div>
+            {lesson.reference && lesson.reference.length > 0 && (
+              <>
+                <div style={{fontWeight: 700, marginTop: 10}}>Reference</div>
+                <div className={cstyles.muted}>
+                  {lesson.reference.map((r) => (
+                    <div key={r}>
+                      <Link to={r}>{r.replace('/docs/', '')}</Link>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
         {activeTab === 'contents' && (
           <ol className={styles.railList}>
             {sections.length === 0 && (

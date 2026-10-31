@@ -11,6 +11,7 @@
  *                   lastUpdated?: number }
  */
 const STORAGE_PREFIX = 'cloudcaptain.bridge.read.';
+const QUIZ_PREFIX = 'cloudcaptain.quiz.';
 
 export type ReadEntry = {
   pathname: string;
@@ -58,7 +59,7 @@ export function clearAllReadEntries(): number {
   const toRemove: string[] = [];
   for (let i = 0; i < localStorage.length; i += 1) {
     const k = localStorage.key(i);
-    if (k && k.startsWith(STORAGE_PREFIX)) toRemove.push(k);
+    if (k && (k.startsWith(STORAGE_PREFIX) || k.startsWith(QUIZ_PREFIX))) toRemove.push(k);
   }
   toRemove.forEach((k) => localStorage.removeItem(k));
   window.dispatchEvent(new CustomEvent('cc-bridge-read-change'));
@@ -66,7 +67,7 @@ export function clearAllReadEntries(): number {
 }
 
 export type ExportPayload = {
-  version: 1;
+  version: 1 | 2;
   exportedAt: string;
   appliedFrom: string;
   entries: Record<string, {
@@ -74,15 +75,33 @@ export type ExportPayload = {
     totalSections?: number;
     lastUpdated?: number;
   }>;
+  /** version 2: quiz records keyed by pathname (cloudcaptain.quiz.*) */
+  quizzes?: Record<string, unknown>;
 };
+
+function readQuizzes(): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  if (typeof localStorage === 'undefined') return out;
+  for (let i = 0; i < localStorage.length; i += 1) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith(QUIZ_PREFIX)) continue;
+    const raw = localStorage.getItem(k);
+    if (!raw) continue;
+    try {
+      out[k.slice(QUIZ_PREFIX.length)] = JSON.parse(raw);
+    } catch {}
+  }
+  return out;
+}
 
 export function exportReadEntries(): ExportPayload {
   const entries = getAllReadEntries();
   const payload: ExportPayload = {
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     appliedFrom: typeof window !== 'undefined' ? window.location.origin : 'unknown',
     entries: {},
+    quizzes: readQuizzes(),
   };
   for (const e of entries) {
     payload.entries[e.pathname] = {
@@ -103,11 +122,11 @@ export function importReadEntries(
     return {imported: 0, skipped: 0, errors: ['Invalid payload: not an object.']};
   }
   const p = payload as ExportPayload;
-  if (p.version !== 1 || !p.entries || typeof p.entries !== 'object') {
+  if ((p.version !== 1 && p.version !== 2) || !p.entries || typeof p.entries !== 'object') {
     return {
       imported: 0,
       skipped: 0,
-      errors: ['Invalid payload: missing version:1 or entries map.'],
+      errors: ['Invalid payload: missing version (1 or 2) or entries map.'],
     };
   }
   if (mode === 'replace') clearAllReadEntries();
@@ -129,6 +148,14 @@ export function importReadEntries(
     } catch (e) {
       errors.push(`Failed to import ${pathname}: ${(e as Error).message}`);
       skipped += 1;
+    }
+  }
+  if (p.quizzes && typeof p.quizzes === 'object') {
+    for (const [pathname, record] of Object.entries(p.quizzes)) {
+      if (!pathname.startsWith('/')) continue;
+      try {
+        localStorage.setItem(QUIZ_PREFIX + pathname, JSON.stringify(record));
+      } catch {}
     }
   }
   window.dispatchEvent(new CustomEvent('cc-bridge-read-change'));

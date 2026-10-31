@@ -39,6 +39,8 @@ import SidebarSpine from './SidebarSpine';
 import {useScrollProgress} from './useScrollProgress';
 import {useExtractors} from './useExtractors';
 import {useReadProgress} from './useReadProgress';
+import type {LessonMetaData} from '../Curriculum/types';
+import {readQuizRecord, CHANGE_EVENT, type QuizRecord} from '../Curriculum/storage';
 
 import styles from './styles.module.css';
 
@@ -47,12 +49,13 @@ const STORAGE_FOCUS = 'cloudcaptain.bridge.focus';
 const STORAGE_RAIL = 'cloudcaptain.bridge.rail';
 const STORAGE_TAB = 'cloudcaptain.bridge.railTab';
 
-type Tab = 'contents' | 'commands';
+type Tab = 'contents' | 'commands' | 'lesson';
 
 export default function BridgeLayout({children}: Props): JSX.Element {
   const location = useLocation();
   const {frontMatter} = useDoc();
   const hideToc = frontMatter.hide_table_of_contents === true;
+  const lesson = (frontMatter as {cc_lesson?: LessonMetaData}).cc_lesson;
 
   const articleRef = useRef<HTMLElement | null>(null);
   const [article, setArticle] = useState<HTMLElement | null>(null);
@@ -77,7 +80,7 @@ export default function BridgeLayout({children}: Props): JSX.Element {
       const r = localStorage.getItem(STORAGE_RAIL);
       if (r !== null) setRailOpen(r === 'true');
       const t = localStorage.getItem(STORAGE_TAB);
-      if (t === 'contents' || t === 'commands') setRailTab(t);
+      if (t === 'contents' || t === 'commands' || t === 'lesson') setRailTab(t);
       // Migrate: any previously-persisted 'concepts' value silently resets to 'contents'
     } catch {}
   }, []);
@@ -120,6 +123,23 @@ export default function BridgeLayout({children}: Props): JSX.Element {
     location.pathname
   );
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  // Quiz record for this lesson (written by <Quiz />); drives the Lesson tab and completion toast
+  const [quiz, setQuiz] = useState<QuizRecord | null>(null);
+  useEffect(() => {
+    if (!lesson) return undefined;
+    const refresh = () => setQuiz(readQuizRecord(location.pathname));
+    refresh();
+    window.addEventListener(CHANGE_EVENT, refresh);
+    return () => window.removeEventListener(CHANGE_EVENT, refresh);
+  }, [lesson, location.pathname]);
+  const postPassed = Boolean(quiz?.scores?.post && quiz.scores.post[1] > 0 && quiz.scores.post[0] === quiz.scores.post[1]);
+  const prevLessonDoneRef = useRef(false);
+  useEffect(() => {
+    const done = Boolean(lesson) && postPassed && totalSections > 0 && readSections.length >= totalSections;
+    if (done && !prevLessonDoneRef.current) setToastMsg(`🎓 Lesson complete — ${lesson!.title}`);
+    prevLessonDoneRef.current = done;
+  }, [lesson, postPassed, totalSections, readSections.length]);
 
   // Persist total section count so SidebarSpine can classify completion
   useEffect(() => {
@@ -314,6 +334,7 @@ export default function BridgeLayout({children}: Props): JSX.Element {
           onToggleRail={() => setRailOpen((v) => !v)}
           onDisable={() => setEnabled(false)}
           onHelp={() => setHelpOpen(true)}
+          lesson={lesson}
         />
       </header>
 
@@ -356,8 +377,10 @@ export default function BridgeLayout({children}: Props): JSX.Element {
           <BridgeRail
             sections={sections}
             commands={commands}
-            activeTab={railTab}
+            activeTab={railTab === 'lesson' && !lesson ? 'contents' : railTab}
             onTabChange={setRailTab}
+            lesson={lesson}
+            quiz={quiz}
             currentSection={currentSection}
             isRead={isRead}
             onToggleRead={toggleRead}

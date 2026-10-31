@@ -60,8 +60,11 @@ function extractCommands(article: HTMLElement): Command[] {
   blocks.forEach((block, blockIndex) => {
     const lang = classify(block) || classify(block.parentElement ?? block);
     if (lang && !CLI_LANGS.has(lang)) return;
+    // Prism renders one <span class="token-line"> per line with no newline characters in
+    // textContent, so split on those first; fall back to '\n' for plain <pre> blocks.
+    const lineEls = Array.from(block.querySelectorAll<HTMLElement>('.token-line'));
     const text = block.textContent ?? '';
-    const lines = text.split('\n').slice(0, 12);
+    const lines = (lineEls.length ? lineEls.map((el) => el.textContent ?? '') : text.split('\n')).slice(0, 40);
     for (const rawLine of lines) {
       const line = rawLine.trim();
       if (!line) continue;
