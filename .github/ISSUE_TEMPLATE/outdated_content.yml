@@ -1,0 +1,44 @@
+name: 🕰️ Outdated Content
+description: A command no longer works, a tool was renamed or retired, a version or price is stale.
+title: "[Outdated]: "
+labels: ["outdated", "content"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page URL
+      placeholder: https://cloudcaptain.io/docs/tools/kubernetes/networking-services
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is outdated?
+      options:
+        - A command or snippet fails on current versions
+        - The tool/service was retired, renamed or relicensed
+        - A version, price or exam code is stale
+        - A link is dead
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: What is wrong, and what is current?
+      description: Quote the outdated text. If you know the fix, include the current command/version and a source link.
+      placeholder: |
+        Outdated: `helm install nginx-ingress stable/nginx-ingress`
+        Current: ingress-nginx retired March 2026; use Gateway API + Envoy Gateway (https://gateway-api.sigs.k8s.io/)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Fix it yourself?
+      options:
+        - label: I can open a PR with the fix (15-minute fixes are very welcome).
+          required: false

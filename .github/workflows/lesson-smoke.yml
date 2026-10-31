@@ -1,0 +1,53 @@
+name: Lesson Smoke (real tools on Linux)
+
+# Runs each lesson's code/smoke.sh: the Build It steps that need Linux root
+# (namespaces, cgroups) and the Use It commands with the real tools (Docker,
+# OpenTofu). This is what makes a lesson's commands "verified".
+
+on:
+  pull_request:
+    paths:
+      - 'curriculum/**'
+      - 'scripts/**'
+      - '.github/workflows/lesson-smoke.yml'
+  schedule:
+    - cron: '41 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      # A throwaway cluster so the kubectl/MCP lessons' Use It steps run for real
+      - uses: helm/kind-action@v1
+        with:
+          cluster_name: cc-smoke
+          wait: 120s
+
+      - name: Tool versions
+        run: |
+          docker --version
+          tofu -version | head -1
+          python3 --version
+          uname -r
+
+      - name: Run every lesson's smoke script
+        run: node scripts/run-lesson-tests.mjs --all --smoke

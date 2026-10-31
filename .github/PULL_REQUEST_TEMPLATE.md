@@ -12,6 +12,7 @@ Please fill out the sections below. Delete anything that doesn't apply.
 - [ ] 🐛 Bug fix
 - [ ] ✨ New feature / enhancement
 - [ ] 📚 Content (new tool, cheatsheet, learning path, cloud provider)
+- [ ] 🎓 Lesson (curriculum/)
 - [ ] 🎨 Style / UI
 - [ ] 🧹 Refactor / cleanup
 - [ ] 📝 Documentation
@@ -28,6 +29,7 @@ Please fill out the sections below. Delete anything that doesn't apply.
 ## Checklist
 
 - [ ] I ran `npm run build` in `website/` and it succeeded
+- [ ] If I touched `curriculum/`: `npm run curriculum:validate` and `npm run curriculum:test -- <phase>/<lesson>` pass
 - [ ] Links in new content resolve and are not broken
 - [ ] Markdown front matter has `title`, `description`, and (if applicable) `sidebar_position`
 - [ ] No `Co-Authored-By` lines in commit messages (per project policy)
