@@ -12,11 +12,11 @@ slug: /
 ## What You'll Find Here
 
 - **Structured Learning Paths** — Go from beginner to expert with our curated roadmaps
-- **40+ Technology Topics** — Docker, Kubernetes, Terraform, AWS, Azure, GCP, and much more
+- **30+ Technology Topics** — Docker, Kubernetes, Terraform, AWS, Azure, GCP, and much more
 - **Interview Prep** — Ace your DevOps and Cloud engineering interviews
 - **Hands-on Exercises** — Learn by doing with practical labs and projects
-- **Cheatsheets** — Quick reference guides for every tool
-- **Community-Curated Resources** — The best articles, videos, and tutorials, voted by the community
+- **Cheatsheets** — Quick reference guides for the 21 most-used tools
+- **Community-Curated Resources** — The best articles, videos, and tutorials, curated by the community
 
 ## Who Is This For?
 

@@ -17,20 +17,21 @@ The package manager for Kubernetes — simplify deployments with reusable charts
 ## Essential Commands
 
 ```bash
-# Add a repository
-helm repo add bitnami https://charts.bitnami.com/bitnami
+# Add a repository (classic index) and search it
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm search repo prometheus-community
 
-# Search for charts
-helm search repo nginx
+# Search Artifact Hub from the CLI
+helm search hub podinfo
 
-# Install a chart
-helm install my-release bitnami/nginx
+# Install a chart straight from an OCI registry (Helm 3.8+ / Helm 4)
+helm install my-release oci://ghcr.io/stefanprodan/charts/podinfo
 
 # List releases
 helm list
 
 # Upgrade a release
-helm upgrade my-release bitnami/nginx --set replicaCount=3
+helm upgrade my-release oci://ghcr.io/stefanprodan/charts/podinfo --set replicaCount=3
 
 # Rollback
 helm rollback my-release 1
@@ -71,20 +72,19 @@ my-chart/
 | Resource | Description |
 |:---------|:------------|
 | [Helm Documentation](https://helm.sh/docs/) | Official Helm documentation |
-| [Create Your First Helm Chart](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/) | Bitnami guide on authoring charts |
-| [Authoring Awesome Charts](https://github.com/helm/helm-classic/blob/master/docs/awesome.md) | Official Helm guide on chart authoring |
+| [Chart Template Guide](https://helm.sh/docs/chart_template_guide/getting_started/) | Official walkthrough for authoring your first chart |
+| [Chart Best Practices](https://helm.sh/docs/chart_best_practices/) | Official conventions for values, templates and dependencies |
 | [Kompose Guide](https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/) | Translate docker-compose to Helm |
 
 ### Chart Repositories
 
 | Repository | Description |
 |:-----------|:------------|
-| [Helm Hub](https://hub.helm.sh) | Official Helm Hub |
-| [Bitnami Charts](https://charts.bitnami.com/bitnami) | Popular application charts |
-| [Kubeapps](https://hub.kubeapps.com/) | Helm chart discovery hub |
-| [ChartCenter](https://chartcenter.io) | Central Helm chart repository by JFrog |
+| [Artifact Hub](https://artifacthub.io/) | CNCF-hosted search across public Helm repositories and OCI registries |
+| [prometheus-community](https://github.com/prometheus-community/helm-charts) | Prometheus, Alertmanager, kube-prometheus-stack |
+| [Grafana Charts](https://github.com/grafana/helm-charts) | Grafana, Loki, Tempo, Mimir |
 | [Cloudsmith](https://cloudsmith.io/l/helm-repository/) | Managed package repository with free tier |
-| [Fairwinds Charts](https://hub.helm.sh/charts/fairwinds-stable) | Fairwinds chart hub |
+| [Fairwinds Charts](https://artifacthub.io/packages/search?org=fairwinds) | Polaris, Goldilocks, RBAC Manager |
 
 ### Helm Plugins
 
@@ -94,18 +94,15 @@ my-chart/
 | [Helm Secrets](https://github.com/jkroepke/helm-secrets) | Manage secrets safely |
 | [Helm S3](https://github.com/hypnoglow/helm-s3) | Fetch charts from S3 |
 | [Helm GCS](https://github.com/hayorov/helm-gcs) | Manage charts on Google Cloud Storage |
-| [Helm Datree](https://github.com/datreeio/helm-datree) | Enforce best practices and policies |
 | [Helm Schema Gen](https://github.com/karuppiah7890/helm-schema-gen) | Generate values.schema.json |
-| [Helm Teller](https://github.com/SpectralOps/helm-teller) | Manage deployment configuration securely |
 
 ### Helm Tools
 
 | Tool | Description |
 |:-----|:------------|
-| [Helmfile](https://github.com/roboll/helmfile) | Declarative spec for deploying Helm charts |
+| [Helmfile](https://github.com/helmfile/helmfile) | Declarative spec for deploying Helm charts |
 | [Helmsman](https://github.com/Praqma/helmsman) | Terraform-like desired state for Helm |
 | [Reckoner](https://github.com/FairwindsOps/reckoner) | Simplify multiple Helm releases |
-| [Monocular](https://github.com/helm/monocular) | Web UI for searching charts |
 | [ChartMuseum](https://chartmuseum.com/) | Self-hosted Helm chart repository |
 | [Helmify](https://github.com/arttor/helmify) | Generate Helm charts from K8s YAML |
 | [Helm Docs](https://github.com/norwoodj/helm-docs) | Auto-generate chart documentation |

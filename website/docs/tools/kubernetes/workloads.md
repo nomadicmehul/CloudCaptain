@@ -234,8 +234,8 @@ Trigger a rolling update by changing the image:
 
 ```bash
 # Method 1: Set image directly
-kubectl set image deployment/nginx-app nginx=nginx:1.22 \
-  --record=true
+kubectl set image deployment/nginx-app nginx=nginx:1.22
+kubectl annotate deployment/nginx-app kubernetes.io/change-cause="update to nginx:1.22"
 
 # Method 2: Edit the Deployment
 kubectl edit deployment nginx-app
@@ -1816,8 +1816,8 @@ kubectl get deployment echo-app
 
 ```bash
 kubectl set image deployment/echo-app \
-  echo=hashicorp/http-echo:0.2.3 \
-  --record=true
+  echo=hashicorp/http-echo:0.2.3
+kubectl annotate deployment/echo-app kubernetes.io/change-cause="update to http-echo:0.2.3"
 
 # Wait for new version arg
 kubectl patch deployment echo-app -p '{"spec":{"template":{"spec":{"containers":[{"name":"echo","args":["-text=Version 2.0"]}]}}}}'

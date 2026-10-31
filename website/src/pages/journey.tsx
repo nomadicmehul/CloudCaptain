@@ -50,7 +50,7 @@ function useCountUp(target: number, suffix = '', duration = 1500) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(eased * target));
+      setCount(Number.isInteger(target) ? Math.round(eased * target) : Number((eased * target).toFixed(1)));
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -264,7 +264,7 @@ export default function JourneyPage(): React.ReactElement {
             <JourneyStat number={25} suffix="+" label="Countries" icon="&#x1F30D;" />
             <JourneyStat number={50} suffix="K+" label="Developers Reached" icon="&#x1F465;" />
             <JourneyStat number={305} suffix="+" label="Mentees" icon="&#x1F393;" />
-            <JourneyStat number={49} suffix="/5" label="Avg. Rating" icon="&#x2B50;" />
+            <JourneyStat number={4.9} suffix="/5" label="Avg. Rating" icon="&#x2B50;" />
           </div>
         </div>
       </div>

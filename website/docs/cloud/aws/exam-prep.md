@@ -16,7 +16,7 @@ Comprehensive preparation guide for AWS certifications, covering foundational to
 | Cloud Practitioner (CLF-C02) | Foundational | 90 min | 65 | $100 | Multiple Choice |
 | Solutions Architect Associate (SAA-C03) | Associate | 130 min | 65 | $150 | Multiple Choice |
 | Developer Associate (DVA-C02) | Associate | 130 min | 65 | $150 | Multiple Choice |
-| SysOps Administrator Associate (SOA-C02) | Associate | 130 min | 65 | $150 | Multiple Choice |
+| CloudOps Engineer Associate (SOA-C03, replaced SysOps SOA-C02 on 2025-09-30) | Associate | 130 min | 65 | $150 | Multiple Choice |
 | Solutions Architect Professional (SAP-C02) | Professional | 180 min | 75 | $300 | Multiple Choice |
 | DevOps Engineer Professional (DOP-C02) | Professional | 180 min | 75 | $300 | Multiple Choice |
 
@@ -447,7 +447,7 @@ The Solutions Architect Associate exam validates the ability to design AWS solut
 
 ---
 
-## SysOps Administrator Associate (SOA-C02)
+## CloudOps Engineer Associate (SOA-C03, formerly SysOps Administrator)
 
 The SysOps exam focuses on deployment, management, and operations of AWS systems.
 

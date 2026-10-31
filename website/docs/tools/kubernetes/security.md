@@ -940,8 +940,11 @@ External secret management with encryption and rotation.
 
 ```bash
 # Install Vault
-curl https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+  https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+  sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt-get update && sudo apt-get install vault
 
 # Start Vault
@@ -1203,8 +1206,10 @@ Falco is the de facto Kubernetes threat detection engine.
 
 ```bash
 # Install Falco on all nodes
-curl https://falco.org/repo/falcoproj-3672BA8F.asc | apt-key add -
-echo "deb https://download.falco.org/packages/deb stable main" | sudo tee /etc/apt/sources.list.d/falcosecurity.list
+curl -fsSL https://falco.org/repo/falcoproj-bootstrap.gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/falco-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/falco-archive-keyring.gpg] https://download.falco.org/packages/deb stable main" | \
+  sudo tee /etc/apt/sources.list.d/falcosecurity.list
 sudo apt-get update
 sudo apt-get install -y falco
 

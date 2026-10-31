@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 /**
  * /progress — cross-page reading-progress dashboard.
  *

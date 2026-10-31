@@ -106,7 +106,7 @@ Complete reference for Docker CLI commands. Organized by category for easy looku
 | `docker build --build-arg KEY=value -t IMAGE:TAG .` | Pass build arguments |
 | `docker build --no-cache -t IMAGE:TAG .` | Build without layer cache |
 | `docker pull IMAGE:TAG` | Download image from registry |
-| `docker pull gcr.io/project/IMAGE:TAG` | Pull from specific registry |
+| `docker pull us-docker.pkg.dev/PROJECT/REPO/IMAGE:TAG` | Pull from specific registry |
 | `docker push IMAGE:TAG` | Upload image to registry |
 | `docker images` | List local images |
 | `docker images -q` | List image IDs only |
@@ -265,7 +265,7 @@ Complete reference for Docker CLI commands. Organized by category for easy looku
 
 ```dockerfile
 # Use specific version for reproducibility
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Set metadata
 LABEL maintainer="team@example.com"
@@ -304,7 +304,7 @@ CMD ["node", "server.js"]
 
 ```dockerfile
 # Stage 1: Build
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -312,7 +312,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Runtime
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production

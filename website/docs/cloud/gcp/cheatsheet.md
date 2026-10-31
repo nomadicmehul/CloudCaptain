@@ -305,7 +305,7 @@ gcloud services enable run.googleapis.com
 
 # Deploy to Cloud Run
 gcloud run deploy myservice \
-  --image gcr.io/PROJECT-ID/myservice \
+  --image us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myservice \
   --platform managed \
   --region us-central1 \
   --memory 512Mi \
@@ -393,7 +393,7 @@ gcloud services enable cloudbuild.googleapis.com
 
 # Submit a build
 gcloud builds submit \
-  --tag gcr.io/PROJECT-ID/myapp
+  --tag us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myapp
 
 # Submit build with specific config
 gcloud builds submit \

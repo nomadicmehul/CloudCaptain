@@ -26,9 +26,10 @@ docker logs jenkins | grep -A 5 "initialAdminPassword"
 
 ```bash
 # Ubuntu/Debian
-wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | \
-  sudo apt-key add -
-echo "deb https://pkg.jenkins.io/debian-stable binary/" | \
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | \
   sudo tee /etc/apt/sources.list.d/jenkins.list
 sudo apt-get update
 sudo apt-get install jenkins

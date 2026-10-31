@@ -493,6 +493,10 @@ services:
 
 ## Docker Swarm
 
+:::note Swarm in 2026
+Swarm mode is in maintenance: Docker Engine still ships it and Mirantis has committed to support it through at least 2030, but new orchestration features land in Kubernetes. It remains a reasonable choice for small single-team clusters; for anything you expect to grow, start with k3s or a managed Kubernetes service.
+:::
+
 ### What is Docker Swarm?
 
 Docker Swarm is Docker's native clustering and orchestration solution. It allows you to manage a cluster of Docker machines as a single virtual system, enabling high availability and scaling.

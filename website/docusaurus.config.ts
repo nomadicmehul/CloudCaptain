@@ -86,7 +86,7 @@ const config: Config = {
         '@type': 'WebSite',
         name: 'CloudCaptain',
         url: 'https://cloudcaptain.io',
-        description: 'Free open-source learning hub for Cloud, DevOps, AI & Operations with curated paths, hands-on labs, and interview prep.',
+        description: 'Free open-source learning hub for Cloud, DevOps, AI & Operations with curated paths, hands-on exercises, and interview prep.',
         publisher: {
           '@type': 'Organization',
           name: 'CloudCaptain',
@@ -138,8 +138,8 @@ const config: Config = {
   themeConfig: {
     image: 'img/cloudcaptain-social.jpg',
     metadata: [
-      {name: 'keywords', content: 'cloud computing, devops, kubernetes, docker, aws, azure, gcp, terraform, ansible, linux, learning platform, open-source, interview prep, career paths, hands-on labs'},
-      {name: 'description', content: 'CloudCaptain is a free, open-source learning platform for Cloud, DevOps, AI & Operations. Curated paths, hands-on labs, interview prep — 100% free, forever.'},
+      {name: 'keywords', content: 'cloud computing, devops, kubernetes, docker, aws, azure, gcp, terraform, ansible, linux, learning platform, open-source, interview prep, career paths, hands-on exercises'},
+      {name: 'description', content: 'CloudCaptain is a free, open-source learning platform for Cloud, DevOps, AI & Operations. Curated paths, hands-on exercises, interview prep — 100% free, forever.'},
       {name: 'twitter:card', content: 'summary_large_image'},
       {name: 'twitter:site', content: '@nomadicmehul'},
       {name: 'twitter:creator', content: '@nomadicmehul'},

@@ -26,11 +26,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v7
         with:
-          node-version: '18'
+          node-version: '22'
       - name: Install dependencies
         run: npm install
       - name: Run tests
@@ -46,11 +46,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16, 18, 20]
+        node-version: [20, 22, 24]
         os: [ubuntu-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm test
@@ -67,7 +67,7 @@ steps:
 ### Docker in GitHub Actions
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v7
   - name: Build Docker image
     run: docker build -t myapp:${{ github.sha }} .
   - name: Push to registry
@@ -79,12 +79,12 @@ steps:
 ### Artifacts & Caching
 ```yaml
 steps:
-  - uses: actions/cache@v3
+  - uses: actions/cache@v6
     with:
       path: ~/.npm
       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
   - name: Upload test results
-    uses: actions/upload-artifact@v3
+    uses: actions/upload-artifact@v7
     with:
       name: test-results
       path: ./coverage/
@@ -153,7 +153,7 @@ stage('Test') {
 pipeline {
     agent {
         docker {
-            image 'node:18'
+            image 'node:22'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -340,7 +340,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:18.0
+      - image: cimg/node:22.0
     steps:
       - checkout
       - run: npm install
@@ -360,7 +360,7 @@ version: 2.1
 jobs:
   checkout_code:
     docker:
-      - image: cimg/base:2023.01
+      - image: cimg/base:current
     steps:
       - checkout
       - save_cache:
@@ -370,7 +370,7 @@ jobs:
 
   build:
     docker:
-      - image: cimg/node:18.0
+      - image: cimg/node:22.0
     steps:
       - restore_cache:
           key: source-{{ .Environment.CIRCLE_SHA1 }}
@@ -379,7 +379,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/node:18.0
+      - image: cimg/node:22.0
     steps:
       - restore_cache:
           key: source-{{ .Environment.CIRCLE_SHA1 }}
@@ -387,7 +387,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/base:2023.01
+      - image: cimg/base:current
     steps:
       - run: echo "Deploying to production"
 
@@ -415,7 +415,7 @@ workflows:
 jobs:
   build_and_push:
     docker:
-      - image: cimg/base:2023.01
+      - image: cimg/base:current
     steps:
       - setup_remote_docker
       - checkout

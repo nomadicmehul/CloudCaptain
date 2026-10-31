@@ -943,8 +943,10 @@ else
 	echo "  Skipping addition to /etc/apt/sources.list.d/sources.list."
 fi
 
-# Verify downloaded packages
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886
+# Import the repository signing key into a dedicated keyring (apt-key is deprecated)
+sudo mkdir -p /etc/apt/keyrings
+sudo gpg --no-default-keyring --keyring /etc/apt/keyrings/custom-repo.gpg \
+  --keyserver hkps://keyserver.ubuntu.com --recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886
 
 # Run apt-get update
 sudo apt-get update

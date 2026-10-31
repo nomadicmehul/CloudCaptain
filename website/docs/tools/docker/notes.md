@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Docker Notes"
 description: "Docker concepts and notes — now expanded into dedicated guides"
 sidebar_class_name: hidden

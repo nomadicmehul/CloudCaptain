@@ -714,7 +714,7 @@ jobs:
 
     steps:
       # Checkout code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # For git SHA
 

@@ -439,7 +439,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 1. Secret Scanning
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Secret Scanning
         run: |
           pip install detect-secrets

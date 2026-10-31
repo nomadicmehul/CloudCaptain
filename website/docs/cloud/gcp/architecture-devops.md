@@ -72,28 +72,28 @@ Deploy Phase (To Cloud Run, GKE, App Engine, or Compute Engine)
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/myapp:$SHORT_SHA', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/myapp:$SHORT_SHA', '.']
 
   # Run tests in the container
-  - name: 'gcr.io/$PROJECT_ID/myapp:$SHORT_SHA'
+  - name: 'us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/myapp:$SHORT_SHA'
     entrypoint: 'bash'
     args: ['-c', 'npm test']
 
-  # Push to Container Registry
+  # Push to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/myapp:$SHORT_SHA']
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/myapp:$SHORT_SHA']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gke-deploy'
     args:
       - run
       - --filename=k8s/
-      - --image=gcr.io/$PROJECT_ID/myapp:$SHORT_SHA
+      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/myapp:$SHORT_SHA
       - --location=us-central1
       - --cluster=my-cluster
 
 images:
-  - 'gcr.io/$PROJECT_ID/myapp:$SHORT_SHA'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/myapp:$SHORT_SHA'
 ```
 
 ### Key Gcloud Commands
@@ -103,7 +103,7 @@ images:
 gcloud services enable cloudbuild.googleapis.com
 
 # Submit a build
-gcloud builds submit --tag gcr.io/PROJECT-ID/myapp
+gcloud builds submit --tag us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myapp
 
 # View build logs
 gcloud builds log BUILD_ID
@@ -162,11 +162,11 @@ Cloud Run is ideal for microservices because it:
 
 ```bash
 # Build and push image
-gcloud builds submit --tag gcr.io/PROJECT-ID/myservice
+gcloud builds submit --tag us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myservice
 
 # Deploy to Cloud Run
 gcloud run deploy myservice \
-  --image gcr.io/PROJECT-ID/myservice \
+  --image us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myservice \
   --platform managed \
   --region us-central1 \
   --memory 512Mi \
@@ -214,7 +214,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: gcr.io/PROJECT-ID/myapp:latest
+        image: us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myapp:latest
         resources:
           requests:
             cpu: "100m"
@@ -391,13 +391,13 @@ gcloud builds submit --config cloudbuild.yaml
 ```bash
 # Deploy version 1
 gcloud run deploy myapp \
-  --image gcr.io/PROJECT-ID/myapp:v1 \
+  --image us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myapp:v1 \
   --platform managed \
   --region us-central1
 
 # Deploy version 2 (creates new revision)
 gcloud run deploy myapp \
-  --image gcr.io/PROJECT-ID/myapp:v2 \
+  --image us-central1-docker.pkg.dev/PROJECT-ID/my-repo/myapp:v2 \
   --platform managed \
   --region us-central1
 

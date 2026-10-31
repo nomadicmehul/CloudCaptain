@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 /**
  * ChapterEnhancements — enriches every H2 in the article with:
  *   1. A "chapter card" BEFORE the heading:

@@ -8,7 +8,7 @@ description: "High-demand career paths in Cloud, DevOps, AI Infrastructure & Pla
 
 The rise of AI is not replacing infrastructure engineers — it's making them **more critical than ever**. Every AI model needs compute, every LLM needs GPUs, every ML pipeline needs orchestration, and every AI product needs reliable, scalable infrastructure.
 
-Here are the highest-demand career paths for 2024-2026 and beyond.
+Here are the highest-demand career paths for 2026 and beyond.
 
 :::tip The AI Infrastructure Boom
 Companies like OpenAI, Anthropic, Google, Meta, and thousands of startups are investing billions in AI infrastructure. They need people who understand systems, networking, GPUs, Kubernetes, and cloud — not just ML engineers.
@@ -84,7 +84,7 @@ Follow our [Cloud Engineering Path](/docs/learning-paths/cloud) for a structured
 
 **Demand: Exploding** | **Salary Range: $130K-$220K**
 
-The hottest role in 2024-2026. Platform engineers build Internal Developer Platforms (IDPs) that let developers self-serve infrastructure.
+One of the hottest roles right now. Platform engineers build Internal Developer Platforms (IDPs) that let developers self-serve infrastructure.
 
 ### What You'll Do
 - Build golden paths for developers (templates, scaffolding)

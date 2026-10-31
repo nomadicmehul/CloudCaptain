@@ -20,7 +20,7 @@ jobs:
   job-name:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: echo "Hello World"
 ```
 
@@ -69,9 +69,9 @@ jobs:
 ## Runners
 
 ```yaml
-ubuntu:   runs-on: ubuntu-latest      # or ubuntu-20.04, ubuntu-22.04
-windows:  runs-on: windows-latest     # or windows-2019, windows-2022
-macos:    runs-on: macos-latest       # or macos-11, macos-12
+ubuntu:   runs-on: ubuntu-latest      # or ubuntu-24.04, ubuntu-22.04
+windows:  runs-on: windows-latest     # or windows-2025, windows-2022
+macos:    runs-on: macos-latest       # or macos-15, macos-14
 ```
 
 ## Steps
@@ -79,7 +79,7 @@ macos:    runs-on: macos-latest       # or macos-11, macos-12
 ```yaml
 steps:
   # Use action
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v7
     with:
       ref: develop
 
@@ -107,20 +107,20 @@ steps:
 ## Setup Actions
 
 ```yaml
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v7
   with:
-    node-version: 16
+    node-version: 22
     cache: npm
 
-- uses: actions/setup-python@v4
+- uses: actions/setup-python@v7
   with:
     python-version: 3.9
 
-- uses: actions/setup-go@v4
+- uses: actions/setup-go@v7
   with:
     go-version: 1.19
 
-- uses: actions/setup-java@v3
+- uses: actions/setup-java@v6
   with:
     java-version: 11
 ```
@@ -128,7 +128,7 @@ steps:
 ## Cache
 
 ```yaml
-- uses: actions/cache@v3
+- uses: actions/cache@v6
   with:
     path: ~/.npm
     key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
@@ -136,7 +136,7 @@ steps:
       ${{ runner.os }}-npm-
 
 # Auto cache with setup
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v7
   with:
     cache: npm
 ```
@@ -145,13 +145,13 @@ steps:
 
 ```yaml
 # Upload
-- uses: actions/upload-artifact@v3
+- uses: actions/upload-artifact@v7
   with:
     name: build-output
     path: dist/
 
 # Download
-- uses: actions/download-artifact@v3
+- uses: actions/download-artifact@v8
   with:
     name: build-output
 ```
@@ -235,11 +235,11 @@ ${{ job.status }}                    # success, failure
 ```yaml
 strategy:
   matrix:
-    node-version: [14, 16, 18]
+    node-version: [20, 22, 24]
     os: [ubuntu-latest, windows-latest]
 
 steps:
-  - uses: actions/setup-node@v3
+  - uses: actions/setup-node@v7
     with:
       node-version: ${{ matrix.node-version }}
 
@@ -274,21 +274,21 @@ steps:
 
 ```yaml
 # Checkout
-- uses: actions/checkout@v3
+- uses: actions/checkout@v7
 
 # Setup Node
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v7
   with:
-    node-version: 16
+    node-version: 22
 
 # Upload artifact
-- uses: actions/upload-artifact@v3
+- uses: actions/upload-artifact@v7
   with:
     name: artifacts
     path: dist/
 
 # Download artifact
-- uses: actions/download-artifact@v3
+- uses: actions/download-artifact@v8
   with:
     name: artifacts
 
@@ -347,7 +347,7 @@ strategy:
   matrix:
     python-version: [3.8, 3.9, '3.10']
 steps:
-  - uses: actions/setup-python@v4
+  - uses: actions/setup-python@v7
     with:
       python-version: ${{ matrix.python-version }}
 ```
@@ -356,7 +356,7 @@ steps:
 
 ```yaml
 - name: Upload artifacts
-  uses: actions/upload-artifact@v3
+  uses: actions/upload-artifact@v7
   with:
     name: all-artifacts
     path: |

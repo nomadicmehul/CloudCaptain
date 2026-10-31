@@ -74,7 +74,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Run tests
         run: npm test
       - name: Deploy
@@ -187,7 +187,7 @@ graph TD
 ```yaml
 jobs:
   linux:
-    runs-on: ubuntu-latest      # or ubuntu-20.04
+    runs-on: ubuntu-latest      # or ubuntu-24.04
   windows:
     runs-on: windows-latest
   macos:
@@ -216,7 +216,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Use an action
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           ref: develop
 
@@ -248,20 +248,20 @@ Actions are reusable units of code.
 
 ```yaml
 # Checkout repository
-- uses: actions/checkout@v3
+- uses: actions/checkout@v7
 
 # Setup Node.js
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v7
   with:
-    node-version: '16'
+    node-version: '22'
 
 # Setup Python
-- uses: actions/setup-python@v4
+- uses: actions/setup-python@v7
   with:
     python-version: '3.9'
 
 # Upload artifacts
-- uses: actions/upload-artifact@v3
+- uses: actions/upload-artifact@v7
   with:
     name: build-output
     path: dist/
@@ -327,11 +327,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14, 16, 18]
+        node-version: [20, 22, 24]
         os: [ubuntu-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm test
@@ -358,15 +358,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
-          node-version: 16
+          node-version: 22
           cache: 'npm'  # Automatically cache node_modules
 
       # Or manual cache
-      - uses: actions/cache@v3
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
@@ -463,11 +463,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
-          node-version: 16
+          node-version: 22
           cache: 'npm'
 
       - run: npm ci
@@ -489,7 +489,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - uses: docker/setup-buildx-action@v2
 
@@ -519,11 +519,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
-          node-version: 16
+          node-version: 22
 
       - run: npm ci
       - run: npm run build

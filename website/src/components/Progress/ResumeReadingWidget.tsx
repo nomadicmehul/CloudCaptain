@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 /**
  * ResumeReadingWidget — homepage banner that surfaces the user's top 3
  * in-progress docs. Renders nothing when there's no read-progress data,

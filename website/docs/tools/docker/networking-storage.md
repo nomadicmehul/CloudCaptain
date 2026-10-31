@@ -640,7 +640,7 @@ project/
 docker run -d \
   -v $(pwd):/app \
   -w /app \
-  node:18 \
+  node:22 \
   npm start
 
 # Changes to local files are immediately reflected in container!
@@ -667,7 +667,7 @@ On Docker Desktop (Mac/Windows), bind mounts use file sharing services (Osxfs, W
 docker run -d \
   -v $(pwd):/app \
   -e CHOKIDAR_USEPOLLING=true \
-  node:18 \
+  node:22 \
   npm start
 ```
 
@@ -706,7 +706,7 @@ docker run -d \
   --name webserver \
   --tmpfs /app/sessions:size=100m \
   -v app_code:/app \
-  node:18
+  node:22
 
 # Session files are created in RAM
 # Never written to persistent storage
@@ -846,7 +846,7 @@ docker run -d \
   --name api \
   --network backend-net \
   -e PORT=5000 \
-  node:18 \
+  node:22 \
   bash -c "npm install express && node -e \"const e=require('express')(); e.get('/api/data', (r,s)=>s.json({msg:'Hello from API'})); e.listen(5000);\""
 
 # Step 3: Run frontend
@@ -989,7 +989,7 @@ docker run -d \
   -v $(pwd):/app \
   -w /app \
   -p 3000:3000 \
-  node:18 \
+  node:22 \
   bash -c "npm install && npm run dev"
 
 # Step 2: Check logs
@@ -1032,7 +1032,7 @@ docker run -d \
   -v app-node-modules:/app/node_modules \
   -w /app \
   -p 3000:3000 \
-  node:18 \
+  node:22 \
   bash -c "npm install && npm run dev"
 
 # Benefits:

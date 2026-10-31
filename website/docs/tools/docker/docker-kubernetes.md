@@ -470,7 +470,7 @@ jobs:
 
     steps:
     # Step 1: Checkout code
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
 
     # Step 2: Build Docker image
     - name: Build Docker image
@@ -649,7 +649,7 @@ kubectl cluster-info
 **Dockerfile**:
 
 ```dockerfile
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY package.json .
 RUN npm install

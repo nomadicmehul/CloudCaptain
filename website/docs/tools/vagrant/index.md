@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Vagrant"
 description: "Development environments made easy"
 ---

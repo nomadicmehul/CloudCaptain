@@ -1413,4 +1413,3 @@ aws logs tail /aws/lambda/my-api --follow
 
 ---
 
-**Last Updated:** March 2026

@@ -1214,7 +1214,7 @@ spec:
           serviceAccountName: snapshot-creator
           containers:
           - name: snapshotter
-            image: bitnami/kubectl:latest
+            image: registry.k8s.io/kubectl:v1.37.2
             command:
             - /bin/sh
             - -c

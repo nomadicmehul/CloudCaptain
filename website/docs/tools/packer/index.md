@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Packer"
 description: "Build automated machine images"
 ---

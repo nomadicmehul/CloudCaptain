@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Docker Commands"
 description: "Docker command reference — redirects to comprehensive cheat sheet"
 sidebar_class_name: hidden

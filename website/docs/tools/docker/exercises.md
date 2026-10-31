@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Docker Exercises"
 description: "Hands-on Docker exercises — now integrated into each guide"
 sidebar_class_name: hidden

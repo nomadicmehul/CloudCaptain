@@ -8,7 +8,7 @@ sidebar_position: 1
 
 ## What is Terraform?
 
-Terraform is an open-source Infrastructure as Code (IaC) tool developed by HashiCorp. It allows you to define, provision, and manage cloud infrastructure using declarative configuration files written in HCL (HashiCorp Configuration Language).
+Terraform is a source-available Infrastructure as Code (IaC) tool developed by HashiCorp (BUSL 1.1 since v1.6; the MPL-licensed community fork **OpenTofu** is the open-source drop-in alternative). It allows you to define, provision, and manage cloud infrastructure using declarative configuration files written in HCL (HashiCorp Configuration Language).
 
 **Key Features:**
 - **Declarative syntax**: Describe desired state, not implementation steps
@@ -427,7 +427,7 @@ terraform destroy -target="aws_instance.web"
 | **Learning curve** | Moderate | Steeper |
 
 **When to choose:**
-- **Terraform**: Multi-cloud, better UX, open-source
+- **Terraform / OpenTofu**: Multi-cloud, better UX, largest provider ecosystem (OpenTofu if you need an OSI-approved licence)
 - **CloudFormation**: AWS-native only, full AWS API coverage
 
 ### Terraform vs Pulumi
