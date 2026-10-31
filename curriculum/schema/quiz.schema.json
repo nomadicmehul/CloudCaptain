@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudcaptain.io/schema/quiz.schema.json",
+  "title": "CloudCaptain lesson quiz (quiz.json)",
+  "type": "object",
+  "required": ["lesson", "questions"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "lesson": { "type": "string", "pattern": "^[a-z0-9-]+/[a-z0-9-]+$" },
+    "questions": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "description": "Exactly six: one pre (asked before the lesson), three check (after Use It), two post (after Exercises).",
+      "items": {
+        "type": "object",
+        "required": ["id", "stage", "prompt", "choices", "answer", "explanation"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^(pre|check|post)-[0-9]+$" },
+          "stage": { "enum": ["pre", "check", "post"] },
+          "prompt": { "type": "string", "minLength": 10 },
+          "choices": { "type": "array", "minItems": 3, "maxItems": 5, "items": { "type": "string" } },
+          "answer": { "type": "integer", "minimum": 0, "description": "Index into choices." },
+          "explanation": { "type": "string", "minLength": 10 }
+        }
+      }
+    }
+  }
+}

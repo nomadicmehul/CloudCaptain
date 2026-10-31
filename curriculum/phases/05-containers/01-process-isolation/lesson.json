@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/process-isolation",
+  "title": "Process Isolation: A Container Is Just a Process",
+  "short": "Process Isolation",
+  "motto": "A container is an ordinary Linux process that has been told a careful set of lies.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": ["python", "bash"],
+  "prereqs": [],
+  "tools": ["docker", "unshare", "lsns", "nsenter"],
+  "reference": ["/docs/tools/docker/fundamentals", "/docs/tools/linux/fundamentals"],
+  "outputs": ["prompt-explain-container-isolation.md", "skill-container-isolation-triage.md"],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "last_verified": "2026-10-31"
+}

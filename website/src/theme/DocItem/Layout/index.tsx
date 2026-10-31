@@ -17,10 +17,18 @@
 import React, {type ReactNode} from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import type {Props} from '@theme/DocItem/Layout';
+import {useDoc} from '@docusaurus/plugin-content-docs/client';
 import BridgeLayout from '@site/src/components/CaptainsBridge/BridgeLayout';
 import ClassicLayout from '@site/src/components/CaptainsBridge/ClassicLayout';
 
 export default function DocItemLayout({children}: Props): ReactNode {
+  // Curriculum landing and learning-path pages are overview pages, not reading
+  // material: render them in the classic layout without the Bridge chrome.
+  const {frontMatter} = useDoc();
+  const kind = (frontMatter as {cc_kind?: string}).cc_kind;
+  if (kind === 'landing' || kind === 'path') {
+    return <ClassicLayout>{children}</ClassicLayout>;
+  }
   // SSR renders classic layout so there's no hydration flash and search
   // engines see stable markup. BrowserOnly swaps to BridgeLayout client-side.
   return (

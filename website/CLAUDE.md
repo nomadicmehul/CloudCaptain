@@ -12,6 +12,11 @@ CloudCaptain is an open-source, community-driven learning platform for Cloud, De
 - **Hosting**: GitHub Pages
 - **CI/CD**: GitHub Actions (auto-deploy on push to main)
 - **Content**: Markdown/MDX docs organized by category
+- **Two content layers**: Reference docs in `website/docs` (served at `/docs`, hand-written sidebars in `sidebars.ts`) and the from-scratch **curriculum** in `../curriculum` (served at `/learn` by a second `@docusaurus/plugin-content-docs` instance with `id: 'curriculum'`; sidebar generated into `sidebars.curriculum.ts` from `src/data/generated/curriculum.json`)
+- **Curriculum build step**: `scripts/build-curriculum.mjs` runs on `prestart`/`prebuild`/`pretypecheck`; it validates lessons against `LESSON_TEMPLATE.md` and writes `src/data/generated/curriculum.json` (gitignored). `npx docusaurus build` without the npm script will fail until it has run once.
+- **Front matter for lessons is injected**, not written: `plugins/curriculum-frontmatter.ts` (wired via `markdown.parseFrontMatter`) reads `lesson.json`/`quiz.json` and sets `slug`, `title`, `draft`/`unlisted` plus custom keys `cc_kind` (landing|phase|lesson|path), `cc_lesson`, `cc_quiz`, `cc_phase`, `cc_path`. Components read them with `useDoc().frontMatter`.
+- **Global MDX components** (`src/theme/MDXComponents.tsx`): `Quiz`, `LessonMeta`, `ShipIt`, `RunTests`, `CurriculumHome`, `LearningPath` from `src/components/Curriculum/`. Quiz results are stored at `cloudcaptain.quiz.{pathname}` and fire `cc-bridge-read-change` like Captain's Bridge.
+- **Links in curriculum markdown** to `https://cloudcaptain.io/...` are rewritten to internal links by `plugins/remark-site-links.ts` so `onBrokenLinks: 'throw'` checks them.
 
 ## Directory Structure
 
@@ -64,6 +69,8 @@ npm install         # Install dependencies
 npm start           # Dev server at localhost:3000
 npm run build       # Production build
 npm run serve       # Serve production build locally
+npm run curriculum:validate   # Validate lessons (no build)
+npm run curriculum:test -- <phase>/<lesson>   # Run a lesson's tests
 ```
 
 ## Contributing
@@ -78,6 +85,10 @@ npm run serve       # Serve production build locally
 
 - `docusaurus.config.ts` — Main site configuration
 - `sidebars.ts` — Navigation sidebar definitions
+- `sidebars.curriculum.ts` — Generated sidebar for `/learn` (do not edit; add lesson folders instead)
+- `plugins/curriculum-frontmatter.ts`, `plugins/remark-site-links.ts` — Curriculum integration
+- `src/components/Curriculum/` — Quiz and lesson components
+- `../scripts/build-curriculum.mjs` — Curriculum validator/generator (`npm run curriculum:validate`)
 - `src/pages/index.tsx` — Custom homepage
 - `src/css/custom.css` — Brand-specific styling
 - `.github/workflows/deploy.yml` — Deployment pipeline

@@ -14,11 +14,32 @@ npm run serve       # Serve production build locally
 
 > For full project intelligence (architecture, brand colors, content guidelines), see [`website/CLAUDE.md`](website/CLAUDE.md).
 
+### Curriculum (from-scratch lessons at /learn)
+
+Lessons live in `curriculum/phases/NN-phase/NN-lesson/` (docs, runnable code with tests, quiz, artifacts) and are served by a second Docusaurus docs instance at `/learn`. `scripts/build-curriculum.mjs` validates every lesson against [`LESSON_TEMPLATE.md`](LESSON_TEMPLATE.md) and generates the sidebar and stats before each start/build. See [`AGENTS.md`](AGENTS.md) for the repo map and commands.
+
+```bash
+cd website
+npm run curriculum:validate                      # validate all lessons (fast)
+npm run curriculum:scaffold -- 05-containers image-layers --type Learn --langs python --title "..."
+npm run curriculum:test -- containers/process-isolation
+npm run curriculum:unit                          # generator unit tests
+```
+
 ---
 
 ## AI Contribution Log
 
 Features built with Claude Code assistance:
+
+### feature/curriculum-scaffold (2026-10-31)
+- `curriculum/` with manifest (phases 00–16), JSON Schemas, `LESSON_TEMPLATE.md`, `AGENTS.md`, `ROADMAP.md`, `CHANGELOG.md`
+- `scripts/build-curriculum.mjs` validator/generator (+ `--scaffold`, `--roadmap`, `--json`), `run-lesson-tests.mjs`, node:test suite
+- Second docs instance at `/learn`, front-matter injection from `lesson.json`, `<Quiz/>`, `<ShipIt/>`, `<RunTests/>`, `<CurriculumHome/>`, `<LearningPath/>` components
+- First lesson: Containers → Process Isolation (Python + Bash, 11 tests, quiz, prompt + skill artifacts)
+
+### fix/broken-commands-and-claims (2026-10-31)
+- Fixed commands that no longer worked (Actions pins, apt-key, dead Helm repo, kubectl --record, old registries), flagged retired tech (ingress-nginx, PSP, CodeCommit, Swarm, Terraform BUSL), corrected README/homepage numbers, unlisted stub pages
 
 ### design/homepage-v2-upgrade
 - Animated typing terminal with character-by-character command rendering
