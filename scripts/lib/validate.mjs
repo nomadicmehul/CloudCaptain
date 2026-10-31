@@ -56,6 +56,10 @@ export function validateLesson(lesson, ctx) {
     if (typeof json.motto === 'string' && json.motto.length > 140) err('lesson.json: motto longer than 140 characters');
     if (json.last_verified && !/^\d{4}-\d{2}-\d{2}$/.test(json.last_verified)) err('lesson.json: last_verified must be YYYY-MM-DD');
     if (!json.last_verified) warn('lesson.json: no last_verified date; set it when you have run the commands');
+    else {
+      const ageDays = Math.floor((Date.now() - new Date(json.last_verified).getTime()) / 86400000);
+      if (ageDays > 180) warn(`lesson.json: last_verified is ${ageDays} days old; re-run code/smoke.sh against current tool versions`);
+    }
     for (const ref of json.reference || []) {
       if (!resolveReferenceDoc(ref, ctx.websiteDocsRoot)) err(`lesson.json: reference "${ref}" does not exist under website/docs`);
     }
@@ -177,6 +181,56 @@ function validateDoc(lesson, json, ctx, err, warn) {
   if (!parsed.components.includes('ShipIt')) warn('Ship It: add <ShipIt /> so the site links the artifacts');
   if (!parsed.components.includes('RunTests')) warn('Build It: add <RunTests /> so the site shows the test command');
   if (/\bTODO\b/.test(lesson.md)) warn('docs/en.md still contains TODO');
+
+  for (const hit of findUnannotatedDeprecations(lesson.md, ctx.deprecations || [])) {
+    warn(`docs/en.md line ${hit.line}: mentions ${hit.term} (${hit.status}) without saying so nearby; replacement: ${hit.replacement}`);
+  }
+}
+
+const STATUS_WORDS = /retired|removed|deprecated|deprecation|end of life|end-of-life|eol\b|shut down|shutdown|frozen|maintenance|declining|closed to new|relicensed|busl|legacy|no longer|moved to/i;
+
+export function findUnannotatedDeprecations(text, deprecations) {
+  const hits = [];
+  const lines = text.split(/\r?\n/);
+  for (const dep of deprecations) {
+    if (!dep.pattern) continue;
+    const re = new RegExp(dep.pattern, 'i');
+    let first = -1;
+    let annotated = false;
+    for (let i = 0; i < lines.length; i++) {
+      if (!re.test(lines[i])) continue;
+      if (first === -1) first = i;
+      const window = lines.slice(Math.max(0, i - 6), i + 7).join('\n');
+      if (STATUS_WORDS.test(window)) {
+        annotated = true;
+        break;
+      }
+    }
+    if (first !== -1 && !annotated) {
+      hits.push({line: first + 1, term: dep.term, status: dep.status, replacement: dep.replacement, id: dep.id});
+    }
+  }
+  return hits;
+}
+
+export function scanDeprecations(roots, deprecations, repoRoot) {
+  const out = [];
+  const walkMd = (dir) => {
+    for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === 'node_modules' || entry.name === 'code' || entry.name === 'outputs') continue;
+        walkMd(full);
+      } else if (/\.mdx?$/.test(entry.name)) {
+        const text = fs.readFileSync(full, 'utf8');
+        for (const hit of findUnannotatedDeprecations(text, deprecations)) {
+          out.push({file: path.relative(repoRoot, full), ...hit});
+        }
+      }
+    }
+  };
+  for (const root of roots) if (exists(root)) walkMd(root);
+  return out;
 }
 
 export function validateGlobal(phases, manifest, ctx) {

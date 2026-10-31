@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "setup/lab-doctor",
+  "title": "The Lab: One Command That Proves Your Machine Is Ready",
+  "short": "Lab Doctor",
+  "motto": "Every later lesson assumes four tools and a Linux kernel; this one makes the assumption true and writes down what it found.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 60,
+  "langs": ["python", "bash"],
+  "prereqs": [],
+  "tools": ["docker", "kind", "kubectl", "tofu"],
+  "reference": ["/docs/tools/docker/fundamentals", "/docs/tools/kubernetes/fundamentals", "/docs/tools/python/fundamentals"],
+  "outputs": ["skill-lab-doctor.md"],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

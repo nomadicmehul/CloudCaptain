@@ -7,14 +7,28 @@
   "type": "Build",
   "status": "published",
   "minutes": 90,
-  "langs": ["python", "bash"],
+  "langs": [
+    "python",
+    "bash"
+  ],
   "prereqs": [],
-  "tools": ["docker", "unshare", "lsns", "nsenter"],
-  "reference": ["/docs/tools/docker/fundamentals", "/docs/tools/linux/fundamentals"],
-  "outputs": ["prompt-explain-container-isolation.md", "skill-container-isolation-triage.md"],
+  "tools": [
+    "docker",
+    "unshare",
+    "lsns",
+    "nsenter"
+  ],
+  "reference": [
+    "/docs/tools/docker/fundamentals",
+    "/docs/tools/linux/fundamentals"
+  ],
+  "outputs": [
+    "prompt-explain-container-isolation.md",
+    "skill-container-isolation-triage.md"
+  ],
   "tests": {
     "python": "python3 -m unittest discover -s code/tests -v",
     "bash": "bash -n code/main.sh"
   },
-  "last_verified": "2026-10-31"
+  "smoke": "bash code/smoke.sh"
 }

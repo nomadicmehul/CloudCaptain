@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "aiops/mcp-kubectl-server",
+  "title": "An MCP Server for kubectl: Tools Are Functions With a Schema",
+  "short": "MCP for kubectl",
+  "motto": "An agent can only touch your cluster through the tools you expose; write the server yourself and decide what those tools can never do.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "setup/lab-doctor"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "claude-code",
+    "mcp-inspector"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "mcp-kubectl-readonly/",
+    "skill-mcp-tool-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

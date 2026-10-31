@@ -24,6 +24,7 @@
       "description": "One command per language, run from the lesson folder by scripts/run-lesson-tests.mjs.",
       "additionalProperties": { "type": "string" }
     },
+    "smoke": { "type": "string", "description": "End-to-end check of Build It + Use It with the real tools, run on Linux CI by scripts/run-lesson-tests.mjs --smoke (lesson-smoke.yml). Sets last_verified when it passes." },
     "last_verified": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "description": "Date the commands were last run against current tool versions." }
   }
 }

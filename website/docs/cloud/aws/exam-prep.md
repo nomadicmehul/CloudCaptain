@@ -56,7 +56,7 @@ The Cloud Practitioner exam is the foundational certification, ideal for those n
 - Database: RDS, DynamoDB, ElastiCache
 - Networking: VPC, CloudFront, Route 53
 - Application services: SNS, SQS, SES
-- Developer tools: CodeCommit, CodeBuild, CodeDeploy
+- Developer tools: CodeCommit (closed to new customers since 2024), CodeBuild, CodeDeploy, CodePipeline
 
 **Domain 4: Billing, Pricing, and Support (12%)**
 - AWS Pricing models (on-demand, reserved, spot)

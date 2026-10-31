@@ -1,7 +1,7 @@
 ---
 title: "Docker Compose & Swarm"
 sidebar_label: "Compose & Swarm"
-description: "Multi-container applications with Docker Compose and container orchestration with Docker Swarm"
+description: "Multi-container applications with Docker Compose, and Docker Swarm (maintenance mode) for simple clustering"
 sidebar_position: 4
 ---
 

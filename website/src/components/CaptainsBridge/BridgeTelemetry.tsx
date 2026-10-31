@@ -13,6 +13,7 @@ type Props = {
   onToggleRail: () => void;
   onDisable: () => void;
   onHelp: () => void;
+  lesson?: {type: string; minutes: number; phaseNumber: string; phaseTitle: string};
 };
 
 export default function BridgeTelemetry({
@@ -26,6 +27,7 @@ export default function BridgeTelemetry({
   onToggleRail,
   onDisable,
   onHelp,
+  lesson,
 }: Props): JSX.Element {
   const pct = Math.round(progress * 100);
   const sectionLabel =
@@ -42,6 +44,17 @@ export default function BridgeTelemetry({
           <span className={styles.telemetryBadge} title="Captain's Bridge reading mode">
             ⚓ BRIDGE
           </span>
+          {lesson && (
+            <>
+              <span className={styles.telemetryDivider} />
+              <span className={styles.telemetryCell} title={`Phase ${lesson.phaseNumber} · ${lesson.phaseTitle}`}>
+                <span className={styles.telemetryLabel}>lesson</span>
+                <span className={styles.telemetryValue}>
+                  {lesson.type} · {lesson.minutes} min · phase {lesson.phaseNumber}
+                </span>
+              </span>
+            </>
+          )}
           <span className={styles.telemetryDivider} />
           <span className={styles.telemetryCell}>
             <span className={styles.telemetryLabel}>progress</span>

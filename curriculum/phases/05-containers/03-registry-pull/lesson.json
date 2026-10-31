@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/registry-pull",
+  "title": "Pull an Image With Plain HTTP: Registries Are Content-Addressed",
+  "short": "Registry Pull",
+  "motto": "A registry is a web server that answers by hash; pull an image with nothing but HTTP and every layer becomes a request you can see.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": ["python"],
+  "prereqs": ["containers/image-layers"],
+  "tools": ["docker", "crane", "skopeo", "curl"],
+  "reference": ["/docs/tools/docker/fundamentals", "/docs/tools/docker/cheatsheet", "/docs/tools/docker/security-production"],
+  "outputs": ["skill-registry-triage.md"],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

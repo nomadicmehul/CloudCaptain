@@ -822,7 +822,7 @@ rbac:
   create: true
 
 podSecurityPolicy:
-  create: true
+  create: false   # PodSecurityPolicy was removed in Kubernetes v1.25; use Pod Security Admission namespace labels
 
 config:
   service: |

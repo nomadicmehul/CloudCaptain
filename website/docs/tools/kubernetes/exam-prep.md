@@ -1479,6 +1479,7 @@ Create a Pod Security Policy that prevents privileged containers and enforces re
 <summary>Solution</summary>
 
 ```yaml
+# Legacy: PodSecurityPolicy was removed in Kubernetes v1.25 (see the note above); shown for recognition only
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -2243,7 +2244,7 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Allow ingress only from ingress-nginx controller
+# Allow ingress only from the ingress controller's namespace (ingress-nginx shown; it was retired in March 2026, the same selector pattern applies to a Gateway API implementation)
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

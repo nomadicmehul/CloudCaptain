@@ -1,0 +1,101 @@
+[
+  {
+    "id": "ingress-nginx",
+    "term": "ingress-nginx controller",
+    "pattern": "ingress-nginx|nginx ingress controller",
+    "status": "retired",
+    "date": "2026-03-26",
+    "replacement": "Gateway API with a maintained implementation (Envoy Gateway, Cilium, Istio, kgateway); migrate with ingress2gateway",
+    "link": "https://github.com/kubernetes/ingress-nginx"
+  },
+  {
+    "id": "podsecuritypolicy",
+    "term": "PodSecurityPolicy",
+    "pattern": "PodSecurityPolicy|\\bPSPs?\\b",
+    "status": "removed",
+    "date": "2022-08-23",
+    "replacement": "Pod Security Admission (Pod Security Standards) and policy engines such as Kyverno or OPA Gatekeeper",
+    "link": "https://kubernetes.io/docs/concepts/security/pod-security-admission/"
+  },
+  {
+    "id": "aws-codecommit",
+    "term": "AWS CodeCommit",
+    "pattern": "CodeCommit",
+    "status": "closed to new customers",
+    "date": "2024-07-25",
+    "replacement": "GitHub, GitLab or Bitbucket through AWS CodeConnections",
+    "link": "https://aws.amazon.com/codecommit/"
+  },
+  {
+    "id": "docker-swarm",
+    "term": "Docker Swarm",
+    "pattern": "Docker Swarm|Swarm mode",
+    "status": "maintenance",
+    "date": "2025-07-01",
+    "replacement": "Kubernetes (k3s or a managed service); Swarm remains supported by Mirantis through at least 2030",
+    "link": "https://docs.docker.com/engine/swarm/"
+  },
+  {
+    "id": "bitnami-catalog",
+    "term": "Bitnami free images and charts",
+    "pattern": "bitnami/|charts\\.bitnami\\.com",
+    "status": "moved",
+    "date": "2025-08-28",
+    "replacement": "official upstream images; bitnamilegacy for frozen copies",
+    "link": "https://github.com/bitnami/containers/issues/83267"
+  },
+  {
+    "id": "gcr",
+    "term": "Google Container Registry (gcr.io)",
+    "pattern": "gcr\\.io/(?!cloud-builders|distroless|cadvisor|etcd-development)",
+    "status": "shut down",
+    "date": "2025-03-18",
+    "replacement": "Artifact Registry (REGION-docker.pkg.dev)",
+    "link": "https://cloud.google.com/artifact-registry/docs/transition/transition-from-gcr"
+  },
+  {
+    "id": "k8s-gcr-io",
+    "term": "k8s.gcr.io",
+    "pattern": "k8s\\.gcr\\.io",
+    "status": "frozen",
+    "date": "2023-04-03",
+    "replacement": "registry.k8s.io",
+    "link": "https://kubernetes.io/blog/2023/03/10/image-registry-redirect/"
+  },
+  {
+    "id": "terraform-licence",
+    "term": "Terraform described as open source",
+    "pattern": "Terraform is an open-source|Terraform is open source",
+    "status": "relicensed",
+    "date": "2023-08-10",
+    "replacement": "BUSL 1.1 (source-available); OpenTofu is the MPL-licensed fork",
+    "link": "https://opentofu.org/"
+  },
+  {
+    "id": "kubectl-record",
+    "term": "kubectl --record",
+    "pattern": "kubectl [^\\n]*--record\\b",
+    "status": "removed",
+    "date": "2023-04-11",
+    "replacement": "the kubernetes.io/change-cause annotation",
+    "link": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_annotate/"
+  },
+  {
+    "id": "apt-key",
+    "term": "apt-key",
+    "pattern": "apt-key (add|adv)",
+    "status": "deprecated",
+    "date": "2022-01-01",
+    "replacement": "a keyring under /etc/apt/keyrings referenced with signed-by",
+    "link": "https://wiki.debian.org/DebianRepository/UseThirdParty"
+  },
+  {
+    "id": "actions-artifact-v3",
+    "term": "actions/upload-artifact@v3 and download-artifact@v3",
+    "pattern": "actions/(upload|download)-artifact@v[123]\\b",
+    "status": "removed",
+    "date": "2025-01-30",
+    "replacement": "actions/upload-artifact@v4 or newer",
+    "link": "https://github.blog/changelog/2024-04-16-deprecation-notice-v3-of-the-artifact-actions/"
+  }
+]

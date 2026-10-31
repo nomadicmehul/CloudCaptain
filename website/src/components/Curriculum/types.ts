@@ -109,4 +109,20 @@ export type CurriculumModel = {
   certifications: {id: string; title: string; vendor?: string; referenceDoc: string; phases?: string[]}[];
   backlinks: Record<string, string[]>;
   lessonsById: Record<string, CurriculumLesson>;
+  versions?: {
+    updatedAt: string;
+    track: Record<string, {repo: string; label: string}>;
+    versions: Record<string, {version: string; publishedAt: string}>;
+  } | null;
+  deprecations?: Deprecation[];
+};
+
+export type Deprecation = {
+  id: string;
+  term: string;
+  pattern?: string;
+  status: string;
+  date: string;
+  replacement: string;
+  link?: string;
 };

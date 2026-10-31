@@ -23,7 +23,7 @@ DevOps is a cultural and technical movement that combines software development a
 
 | Service | Purpose |
 |---------|---------|
-| **CodeCommit** | Git repository hosting and source control |
+| **CodeCommit** | Git repository hosting (closed to new customers since July 2024; see the status note below) |
 | **CodeBuild** | Managed build and test service |
 | **CodeDeploy** | Automated deployment to EC2, on-premises, or Lambda |
 | **CodePipeline** | Orchestrates CI/CD workflows across services |

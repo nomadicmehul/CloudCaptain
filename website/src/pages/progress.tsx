@@ -25,6 +25,8 @@ import {
   type ReadEntry,
 } from '@site/src/components/Progress/readProgress';
 import styles from '@site/src/components/Progress/styles.module.css';
+import CurriculumProgress from '@site/src/components/Curriculum/CurriculumProgress';
+import {curriculumTitle} from '@site/src/components/Curriculum/curriculumTitles';
 
 function flattenDocs(allDocsData: ReturnType<typeof useAllDocsData>): DocSummary[] {
   const out: DocSummary[] = [];
@@ -39,6 +41,7 @@ function flattenDocs(allDocsData: ReturnType<typeof useAllDocsData>): DocSummary
         out.push({
           pathname: doc.path,
           title:
+            curriculumTitle(doc.path) ||
             // @ts-expect-error - Docusaurus exposes sidebar label via id heuristics;
             // prefer the prettier segment if provided, else derive from path.
             doc.label || humanizePath(doc.id || doc.path),
@@ -120,8 +123,8 @@ function ProgressPageInner(): JSX.Element {
             <em>"Mark section complete"</em> buttons to see your progress build up here.
           </p>
           <div className={styles.emptyActions}>
-            <Link className={`button button--primary button--lg`} to="/docs/">
-              📚 Browse Learning Paths
+            <Link className={`button button--primary button--lg`} to="/learn">
+              🎓 Start the curriculum
             </Link>
             <Link className={`button button--secondary button--lg`} to="/docs/tools/docker/">
               🐳 Start with Docker
@@ -133,6 +136,8 @@ function ProgressPageInner(): JSX.Element {
           </p>
         </section>
       )}
+
+      <CurriculumProgress entries={entries} />
 
       <ProgressByTool allDocs={allDocs} entries={entries} />
 

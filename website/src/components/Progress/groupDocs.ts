@@ -6,6 +6,8 @@
  * only defines the grouping rules (pathname regex → category label + icon).
  */
 
+import curriculumJson from '@site/src/data/generated/curriculum.json';
+
 export type Category = {
   id: string;
   label: string;
@@ -15,7 +17,29 @@ export type Category = {
   match: RegExp;
 };
 
+type CurriculumShape = {
+  site: {routeBasePath: string};
+  phases: {slug: string; title: string; number: string; icon: string; live: boolean}[];
+};
+const curriculum = curriculumJson as unknown as CurriculumShape;
+const learnBase = curriculum.site.routeBasePath.replace(/\/$/, '');
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const CURRICULUM_CATEGORIES: Category[] = [
+  ...curriculum.phases
+    .filter((p) => p.live)
+    .map((p, i) => ({
+      id: `phase-${p.slug}`,
+      label: `${p.number} · ${p.title}`,
+      icon: p.icon || '🎓',
+      order: 1 + i,
+      match: new RegExp(`^${escapeRe(learnBase)}/${escapeRe(p.slug)}(/|$)`),
+    })),
+  {id: 'learn-other', label: 'Curriculum', icon: '🎓', order: 9, match: new RegExp(`^${escapeRe(learnBase)}(/|$)`)},
+];
+
 export const CATEGORIES: Category[] = [
+  ...CURRICULUM_CATEGORIES,
   // Learning paths
   {
     id: 'path-devops',

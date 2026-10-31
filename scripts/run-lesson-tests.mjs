@@ -4,8 +4,9 @@
  *
  *   node scripts/run-lesson-tests.mjs containers/process-isolation
  *   node scripts/run-lesson-tests.mjs --all
+ *   node scripts/run-lesson-tests.mjs --all --smoke     # lesson.json "smoke": real tools, Linux CI
  *
- * Commands come from lesson.json "tests" and run from the lesson folder.
+ * Commands come from lesson.json "tests" (or "smoke") and run from the lesson folder.
  */
 import path from 'node:path';
 import url from 'node:url';
@@ -18,6 +19,7 @@ const curriculumRoot = path.join(repoRoot, 'curriculum');
 
 const args = process.argv.slice(2);
 const all = args.includes('--all');
+const smoke = args.includes('--smoke');
 const ids = args.filter((a) => !a.startsWith('--'));
 if (!all && ids.length === 0) {
   console.error('usage: run-lesson-tests.mjs <phase-slug>/<lesson-slug> [...] | --all');
@@ -37,9 +39,9 @@ if (missing.length) {
 let failures = 0;
 let ran = 0;
 for (const lesson of lessons) {
-  const tests = lesson.json.tests || {};
+  const tests = smoke ? (lesson.json.smoke ? {smoke: lesson.json.smoke} : {}) : lesson.json.tests || {};
   if (Object.keys(tests).length === 0) {
-    console.log(`▸ ${lesson.json.id}: no test commands`);
+    console.log(`▸ ${lesson.json.id}: no ${smoke ? 'smoke' : 'test'} commands`);
     continue;
   }
   for (const [lang, cmd] of Object.entries(tests)) {

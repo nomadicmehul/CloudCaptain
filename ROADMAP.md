@@ -9,21 +9,21 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 <!-- curriculum:start -->
 | # | Phase | Lessons live | Status |
 |---|---|---|---|
-| 00 | Setup & Lab | 0 | planned |
-| 01 | Linux & Systems | 0 | planned |
+| 00 | Setup & Lab | 1 | in progress |
+| 01 | Linux & Systems | 1 | in progress |
 | 02 | Networking | 0 | planned |
 | 03 | Git & Collaboration | 0 | planned |
 | 04 | Scripting & Automation | 0 | planned |
-| 05 | Containers | 1 | in progress |
+| 05 | Containers | 3 | in progress |
 | 06 | Orchestration | 0 | planned |
-| 07 | Infrastructure as Code | 0 | planned |
+| 07 | Infrastructure as Code | 1 | in progress |
 | 08 | CI/CD & GitOps | 0 | planned |
 | 09 | Cloud Providers | 0 | planned |
 | 10 | Observability & SRE | 0 | planned |
 | 11 | Security & DevSecOps | 0 | planned |
 | 12 | Platform Engineering | 0 | planned |
 | 13 | AI Infrastructure | 0 | planned |
-| 14 | AIOps & Agentic Ops | 0 | planned |
+| 14 | AIOps & Agentic Ops | 1 | in progress |
 | 15 | MLOps & LLMOps | 0 | planned |
 | 16 | Capstone Projects | 0 | planned |
 <!-- curriculum:end -->

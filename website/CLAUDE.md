@@ -16,6 +16,7 @@ CloudCaptain is an open-source, community-driven learning platform for Cloud, De
 - **Curriculum build step**: `scripts/build-curriculum.mjs` runs on `prestart`/`prebuild`/`pretypecheck`; it validates lessons against `LESSON_TEMPLATE.md` and writes `src/data/generated/curriculum.json` (gitignored). `npx docusaurus build` without the npm script will fail until it has run once.
 - **Front matter for lessons is injected**, not written: `plugins/curriculum-frontmatter.ts` (wired via `markdown.parseFrontMatter`) reads `lesson.json`/`quiz.json` and sets `slug`, `title`, `draft`/`unlisted` plus custom keys `cc_kind` (landing|phase|lesson|path), `cc_lesson`, `cc_quiz`, `cc_phase`, `cc_path`. Components read them with `useDoc().frontMatter`.
 - **Global MDX components** (`src/theme/MDXComponents.tsx`): `Quiz`, `LessonMeta`, `ShipIt`, `RunTests`, `CurriculumHome`, `LearningPath` from `src/components/Curriculum/`. Quiz results are stored at `cloudcaptain.quiz.{pathname}` and fire `cc-bridge-read-change` like Captain's Bridge.
+- **Freshness data**: `curriculum/versions.json` and `curriculum/deprecations.json` are copied into `curriculum.json` by the generator; `<ToolVersion name="kubernetes" />` renders the tracked version, `/learn` shows both lists, and `build-curriculum.mjs --deprecations` scans `website/docs` for retired tech without a status note.
 - **Links in curriculum markdown** to `https://cloudcaptain.io/...` are rewritten to internal links by `plugins/remark-site-links.ts` so `onBrokenLinks: 'throw'` checks them.
 
 ## Directory Structure

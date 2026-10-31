@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/image-layers",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "You COPY a secret into an image in one Dockerfile line and `rm` it in the next line. Is the secret still in the image?",
+      "choices": ["No, rm removes it from the image", "Yes, it is still in the earlier layer; the later layer only hides it", "Only if the image is pushed to a registry", "Only on Windows"],
+      "answer": 1,
+      "explanation": "Each instruction adds a layer. A later layer records a whiteout that hides the file in the merged view, but the bytes stay in the earlier layer and ship with the image."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "What identifies a layer inside an image?",
+      "choices": ["Its position in the Dockerfile", "The SHA-256 digest of its content", "A random UUID assigned by the daemon", "The image tag"],
+      "answer": 1,
+      "explanation": "Layers are content-addressed. Two images built from the same base share the same layer digests, which is why pulls and pushes skip layers that already exist."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "You change one line in your application code. Why does `RUN pip install -r requirements.txt` rerun if COPY . . comes before it?",
+      "choices": [
+        "pip always reruns",
+        "The cache is invalidated top-down: once a layer's input changes, every later instruction is rebuilt",
+        "Docker compares timestamps, not content",
+        "Because requirements.txt changed"
+      ],
+      "answer": 1,
+      "explanation": "Build cache is a prefix match on the layer chain. Copy dependency manifests first, install, then copy the rest of the source so code edits do not bust the install layer."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "In the audit tool, what does a `.wh.` entry inside a layer tarball mean?",
+      "choices": ["A hard link", "A file that must be made writable", "A whiteout: the path with that name from lower layers is hidden", "A compressed file"],
+      "answer": 2,
+      "explanation": "OverlayFS-style whiteouts are how a read-only layer stack expresses deletion. `.wh..wh..opq` hides an entire directory from lower layers."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Which change removes a secret from an image for good?",
+      "choices": [
+        "Adding RUN rm after the COPY",
+        "Rebuilding so the secret is never written to a layer (build secrets or a multi-stage build), then re-pushing under a new digest",
+        "Running docker image prune",
+        "Changing the tag"
+      ],
+      "answer": 1,
+      "explanation": "Only layers that never contained the secret are safe. Rotate the secret too: anyone who pulled the old digest has it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A container writes 2 GB of logs to /var/log inside itself. Where do those bytes live?",
+      "choices": ["In the image's top layer", "In the container's thin writable layer, which is discarded when the container is removed", "In the registry", "In the Dockerfile"],
+      "answer": 1,
+      "explanation": "Images are read-only. Each container gets a writable layer on top; `docker commit` would freeze it into a new image layer, which is how accidental multi-GB images are born."
+    }
+  ]
+}
