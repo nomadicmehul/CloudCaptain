@@ -16,7 +16,7 @@ Comprehensive guide with 40+ questions across beginner, intermediate, and advanc
 
 **Answer:**
 
-Terraform is an open-source Infrastructure as Code (IaC) tool by HashiCorp that allows you to define, provision, and manage cloud infrastructure using declarative configuration files written in HCL.
+Terraform is an Infrastructure as Code (IaC) tool by HashiCorp (source-available under BUSL 1.1 since 2023; OpenTofu is the open-source fork) that allows you to define, provision, and manage cloud infrastructure using declarative configuration files written in HCL.
 
 **Problem it solves:**
 - Manual infrastructure management is error-prone and inconsistent
@@ -1226,7 +1226,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -1257,7 +1257,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Upload Plan
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: tfplan
           path: infrastructure/prod/tfplan
@@ -1282,13 +1282,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Download Plan
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v8
         with:
           name: tfplan
 

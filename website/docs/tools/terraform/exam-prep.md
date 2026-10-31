@@ -6,11 +6,11 @@ sidebar_position: 4
 
 # Terraform Certification Prep
 
-Comprehensive guide for the HashiCorp Certified: Terraform Associate (003) exam.
+Comprehensive guide for the HashiCorp Certified: Terraform Associate (004) exam.
 
 ## Exam Overview
 
-- **Exam ID**: HashiCorp Certified: Terraform Associate (003)
+- **Exam ID**: HashiCorp Certified: Terraform Associate (004)
 - **Duration**: 60 minutes
 - **Questions**: 57 multiple choice and multiple select
 - **Passing Score**: 70%

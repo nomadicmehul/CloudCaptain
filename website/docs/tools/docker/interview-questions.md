@@ -600,7 +600,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Build Docker image
         run: docker build -t myapp:${{ github.sha }} .
       - name: Run tests in container
@@ -809,7 +809,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 7. **Use specific base image tags**:
 ```dockerfile
-FROM node:18-alpine  # Specific, minimal
+FROM node:22-alpine  # Specific, minimal
 FROM node            # Latest, larger
 ```
 

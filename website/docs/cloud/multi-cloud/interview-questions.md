@@ -1488,10 +1488,10 @@ MULTI-CLOUD STRATEGY v1.0
    └─ Service Mesh: Istio (unified policies)
 
 5. IMPLEMENTATION TIMELINE
-   Q1 2024: Pilot project (1 team, 1 workload)
-   Q2 2024: Expand to 3 teams, train DevOps
-   Q3 2024: Migrate core infrastructure
-   Q4 2024: Full production deployment
+   Quarter 1: Pilot project (1 team, 1 workload)
+   Quarter 2: Expand to 3 teams, train DevOps
+   Quarter 3: Migrate core infrastructure
+   Quarter 4: Full production deployment
 
 6. SUCCESS METRICS
    - 0 vendor lock-in on new projects

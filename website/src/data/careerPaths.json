@@ -32,7 +32,7 @@
     "desc": "Keep the internet running — define SLOs, build observability, lead incident response.",
     "salary": "$120K–$210K",
     "steps": ["Linux (deep)", "Python or Go", "Kubernetes", "Prometheus / Grafana", "Incident Management", "Chaos Engineering"],
-    "certs": ["CKA", "AWS DevOps Engineer", "Google SRE Certificate"],
+    "certs": ["CKA", "AWS DevOps Engineer Pro", "Prometheus Certified Associate"],
     "link": "/docs/learning-paths/sre"
   },
   {
@@ -50,7 +50,7 @@
     "desc": "Build Internal Developer Platforms — golden paths, self-service infra, and developer experience.",
     "salary": "$130K–$220K",
     "steps": ["Kubernetes (deep)", "Terraform Modules", "Backstage / Port", "ArgoCD / FluxCD", "OPA / Kyverno", "DORA Metrics"],
-    "certs": ["CKA + CKAD", "Terraform Associate", "GitOps Certified"],
+    "certs": ["CKA + CKAD", "Terraform Associate", "Certified Argo Project Associate"],
     "link": "/docs/learning-paths/platform-engineering"
   },
   {
@@ -59,7 +59,7 @@
     "desc": "Build and operate GPU clusters, ML training pipelines, and LLM serving infrastructure.",
     "salary": "$140K–$250K+",
     "steps": ["Linux (deep)", "Kubernetes + Ray", "GPU Orchestration", "Kubeflow / MLflow", "vLLM / TensorRT", "Distributed Training"],
-    "certs": ["CKA", "AWS ML Specialty", "NVIDIA DLI Certification"],
+    "certs": ["CKA", "AWS ML Engineer Associate", "NVIDIA NCA-AIIO"],
     "link": "/docs/learning-paths/ai-ml"
   },
   {
@@ -68,7 +68,7 @@
     "desc": "Optimize cloud spend for AI/ML workloads — reserved instances, right-sizing, and cost governance.",
     "salary": "$100K–$170K",
     "steps": ["Cloud Billing Tools", "Terraform (cost-aware)", "K8s Resource Mgmt", "FinOps Framework", "Data Analysis", "Forecasting"],
-    "certs": ["FinOps Certified Practitioner", "AWS Cloud Financial Mgmt", "Azure Cost Mgmt"],
+    "certs": ["FinOps Certified Practitioner", "FinOps Certified Engineer", "AWS Solutions Architect Associate"],
     "link": "/docs/cloud/finops"
   }
 ]

@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 /**
  * BridgeLayout — Captain's Bridge v2 doc layout.
  *

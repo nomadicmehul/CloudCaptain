@@ -527,10 +527,10 @@ aws ec2 delete-nat-gateway --nat-gateway-id natgw-12345
 
 ```bash
 # Create function from ZIP file
-aws lambda create-function --function-name my-function --runtime python3.9 --role arn:aws:iam::123456789012:role/lambda-role --handler lambda_function.lambda_handler --zip-file fileb://function.zip
+aws lambda create-function --function-name my-function --runtime python3.13 --role arn:aws:iam::123456789012:role/lambda-role --handler lambda_function.lambda_handler --zip-file fileb://function.zip
 
 # Create function from S3
-aws lambda create-function --function-name my-function --runtime python3.9 --role arn:aws:iam::123456789012:role/lambda-role --handler lambda_function.lambda_handler --code S3Bucket=my-bucket,S3Key=function.zip
+aws lambda create-function --function-name my-function --runtime python3.13 --role arn:aws:iam::123456789012:role/lambda-role --handler lambda_function.lambda_handler --code S3Bucket=my-bucket,S3Key=function.zip
 
 # List functions
 aws lambda list-functions
@@ -584,7 +584,7 @@ aws lambda get-policy --function-name my-function
 
 ```bash
 # Publish layer version
-aws lambda publish-layer-version --layer-name my-layer --description "My dependencies" --zip-file fileb://layer.zip --compatible-runtimes python3.9
+aws lambda publish-layer-version --layer-name my-layer --description "My dependencies" --zip-file fileb://layer.zip --compatible-runtimes python3.13
 
 # List layer versions
 aws lambda list-layer-versions --layer-name my-layer

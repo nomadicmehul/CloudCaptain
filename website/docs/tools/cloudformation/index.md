@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "CloudFormation"
 description: "AWS CloudFormation for infrastructure as code"
 ---

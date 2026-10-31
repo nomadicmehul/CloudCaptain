@@ -966,12 +966,21 @@ spec:
 
 An Ingress Controller actually implements the routing (nginx, traefik, HAProxy, etc.).
 
-```bash
-# Check available ingress classes
-kubectl get ingressclass
+:::warning ingress-nginx is retired
+The community **ingress-nginx** controller reached end of life in March 2026 and no longer receives security fixes. The Ingress API still works with maintained controllers (Traefik, HAProxy, Cilium, F5 NGINX), but new clusters should use the **Gateway API**. Migrate existing Ingress objects with [ingress2gateway](https://github.com/kubernetes-sigs/ingress2gateway).
+:::
 
-# Deploy nginx ingress controller (if not already installed)
-helm install nginx-ingress stable/nginx-ingress --namespace ingress-nginx --create-namespace
+```bash
+# Check available ingress classes and gateway classes
+kubectl get ingressclass
+kubectl get gatewayclass
+
+# Install the Gateway API CRDs (standard channel)
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.7.0/standard-install.yaml
+
+# Install a Gateway API implementation, e.g. Envoy Gateway
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.9.3 \
+  --namespace envoy-gateway-system --create-namespace
 ```
 
 ---
@@ -1375,7 +1384,8 @@ kubectl scale deployment my-app --replicas=2
 kubectl get pods
 
 # 7. Update image (rolling update)
-kubectl set image deployment/my-app app=nginx:1.26 --record
+kubectl set image deployment/my-app app=nginx:1.26
+kubectl annotate deployment/my-app kubernetes.io/change-cause="update to nginx:1.26"
 
 # 8. Watch the rolling update
 kubectl rollout status deployment/my-app

@@ -247,7 +247,7 @@ function HeroSection() {
           </h1>
           <p className="hero__subtitle">
             The open-source, community-driven learning platform for Cloud, DevOps, AI & Operations.
-            Curated paths, hands-on labs, interview prep — <strong style={{color:'#10B981'}}>100% free, forever.</strong>
+            Curated paths, hands-on exercises, interview prep — <strong style={{color:'#10B981'}}>100% free, forever.</strong>
           </p>
           <div className="hero-buttons">
             <Link className="btn-primary" to="/docs/learning-paths/devops">
@@ -290,7 +290,7 @@ function StatsSection() {
       <div className="container">
         <div className="stats-section reveal">
           <StatCard number={150} suffix="+" label="/usr/share/docs" icon="📖" />
-          <StatCard number={49} suffix="" label="/etc/diagrams" icon="📐" />
+          <StatCard number={52} suffix="" label="/etc/diagrams" icon="📐" />
           <StatCard number={8} suffix="" label="/opt/career-paths" icon="🗺️" />
           <StatCard number={100} suffix="%" label="FOSS Licensed" icon="🐧" />
         </div>
@@ -488,8 +488,8 @@ function TestimonialsSection({ ghStats }: { ghStats: { stars: number; forks: num
             <div className="community-stat__label">GitHub Stars</div>
           </div>
           <div className="community-stat">
-            <div className="community-stat__number">330K+</div>
-            <div className="community-stat__label">Words of Content</div>
+            <div className="community-stat__number">185K+</div>
+            <div className="community-stat__label">Words of Prose</div>
           </div>
           <div className="community-stat">
             <div className="community-stat__number">{ghStats.forks ? `${formatNumber(ghStats.forks)}+` : '75+'}</div>

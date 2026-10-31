@@ -83,12 +83,12 @@ npm run test
 **2. Container Image Stage**
 ```dockerfile
 # Dockerfile
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY . .
@@ -388,33 +388,33 @@ Helm is the package manager for Kubernetes. A Helm chart is a collection of YAML
 
 ```bash
 # Add Helm repository
-helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
 # List available charts
-helm search repo bitnami
+helm search repo prometheus-community
 
 # Install a release
-helm install my-postgres bitnami/postgresql \
+helm install monitoring prometheus-community/kube-prometheus-stack \
   --values values.yaml \
-  --namespace database \
+  --namespace monitoring \
   --create-namespace
 
 # List releases
-helm list -n database
+helm list -n monitoring
 
 # Upgrade a release
-helm upgrade my-postgres bitnami/postgresql \
+helm upgrade monitoring prometheus-community/kube-prometheus-stack \
   --values values.yaml
 
 # Rollback to previous release
-helm rollback my-postgres 1
+helm rollback monitoring 1
 
 # Get release values
-helm get values my-postgres
+helm get values monitoring
 
 # Uninstall a release
-helm uninstall my-postgres
+helm uninstall monitoring
 ```
 
 ### Creating a Helm Chart
@@ -448,9 +448,12 @@ maintainers:
   - name: DevOps Team
     email: devops@example.com
 dependencies:
-  - name: postgresql
-    version: "12.0.0"
-    repository: "https://charts.bitnami.com/bitnami"
+  # CloudNativePG "cluster" chart (needs the CNPG operator installed once per cluster).
+  # Bitnami's free chart images moved to the frozen bitnamilegacy catalogue in Aug 2025.
+  - name: cluster
+    alias: postgresql
+    version: ">=0.3.0"
+    repository: "https://cloudnative-pg.github.io/charts"
 ```
 
 **values.yaml (defaults):**
@@ -1006,7 +1009,7 @@ spec:
           serviceAccountName: etcd-backup
           containers:
           - name: etcd-backup
-            image: bitnami/etcd:latest
+            image: registry.k8s.io/etcd:3.6.4-0
             command:
             - /bin/sh
             - -c
@@ -1868,7 +1871,7 @@ spec:
           serviceAccountName: etcd-backup
           containers:
           - name: backup
-            image: bitnami/etcd:latest
+            image: registry.k8s.io/etcd:3.6.4-0
             command:
             - /bin/sh
             - -c

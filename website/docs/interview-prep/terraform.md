@@ -1,6 +1,6 @@
 ---
 title: "Terraform Interview Prep"
-description: "Terraform interview preparation — 40+ questions with detailed answers"
+description: "Terraform interview preparation — 30+ questions with detailed answers"
 ---
 
 # Terraform Interview Preparation

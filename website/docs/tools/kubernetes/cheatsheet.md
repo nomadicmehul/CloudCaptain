@@ -799,4 +799,3 @@ kubectl autoscale deployment myapp --min=2 --max=10 --cpu-percent=80
 
 ---
 
-**Last Updated:** March 21, 2026 | **kubectl Version:** 1.28+ | Maintained for CloudCaptain Learning Platform

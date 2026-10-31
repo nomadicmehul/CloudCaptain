@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Terraform Commands"
 description: "Terraform command reference — redirects to comprehensive cheat sheet"
 sidebar_class_name: hidden

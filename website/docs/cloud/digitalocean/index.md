@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "DigitalOcean"
 description: "Cloud platform for developers"
 ---

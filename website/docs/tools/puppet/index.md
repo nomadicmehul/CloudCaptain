@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: "Puppet"
 description: "Infrastructure automation"
 ---

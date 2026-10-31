@@ -15,10 +15,10 @@ Master Kubernetes certifications with this comprehensive study guide covering **
 
 | Certification | Prerequisites | Duration | Passing Score | Cost | Difficulty | Focus Area |
 |--------------|---------------|----------|---------------|------|-----------|-----------|
-| **KCNA** | None | 90 min | 66% | $395 | Beginner | Kubernetes fundamentals |
-| **CKA** | Docker/container basics | 120 min | 66% | $395 | Intermediate | Cluster administration |
-| **CKAD** | Basic Kubernetes knowledge | 120 min | 66% | $395 | Intermediate | Application development |
-| **CKS** | CKA or 1+ years K8s experience | 120 min | 66% | $395 | Advanced | Security & hardening |
+| **KCNA** | None | 90 min | 75% | $250 | Beginner | Kubernetes fundamentals |
+| **CKA** | Docker/container basics | 120 min | 66% | $445 | Intermediate | Cluster administration |
+| **CKAD** | Basic Kubernetes knowledge | 120 min | 66% | $445 | Intermediate | Application development |
+| **CKS** | CKA or 1+ years K8s experience | 120 min | 66% | $445 | Advanced | Security & hardening |
 
 :::note
 All exams are hands-on, performance-based. You have access to Kubernetes documentation (kubernetes.io) but **not external sites**.
@@ -342,7 +342,8 @@ Example fix for bad image:
 
 ```bash
 kubectl set image deployment/my-app \
-  my-app=nginx:1.14 --record
+  my-app=nginx:1.14
+kubectl annotate deployment/my-app kubernetes.io/change-cause="rollback bad image to nginx:1.14"
 ```
 
 </details>
@@ -351,7 +352,7 @@ kubectl set image deployment/my-app \
 
 **Question 7: Upgrade Kubernetes cluster**
 
-Upgrade a kubeadm cluster from 1.24 to 1.25.
+Upgrade a kubeadm cluster from 1.36 to 1.37 (always one minor version at a time).
 
 <details>
 <summary>Solution</summary>
@@ -362,17 +363,25 @@ On control plane node:
 # Check current version
 kubectl version
 
-# Upgrade kubeadm
-apt update && apt-get install -y kubeadm=1.25.x-00
+# pkgs.k8s.io publishes one apt repo per minor version: point it at the target first
+sudo sed -i 's#/v1.36/#/v1.37/#' /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+
+# Upgrade kubeadm (packages are held, so unhold/hold around the install)
+sudo apt-mark unhold kubeadm
+sudo apt-get install -y kubeadm='1.37.x-1.1'
+sudo apt-mark hold kubeadm
 
 # Plan the upgrade
-kubeadm upgrade plan
+sudo kubeadm upgrade plan
 
 # Apply the upgrade
-sudo kubeadm upgrade apply v1.25.x
+sudo kubeadm upgrade apply v1.37.x
 
 # Upgrade kubelet and kubectl
-apt-get install -y kubelet=1.25.x-00 kubectl=1.25.x-00
+sudo apt-mark unhold kubelet kubectl
+sudo apt-get install -y kubelet='1.37.x-1.1' kubectl='1.37.x-1.1'
+sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 ```
@@ -383,11 +392,15 @@ On worker nodes (repeat for each):
 # Drain the node
 kubectl drain <node-name> --ignore-daemonsets
 
-# SSH to worker node and upgrade
-apt-get install -y kubeadm=1.25.x-00
+# SSH to worker node and upgrade (repo already pointed at v1.37 as above)
+sudo apt-mark unhold kubeadm
+sudo apt-get install -y kubeadm='1.37.x-1.1'
+sudo apt-mark hold kubeadm
 sudo kubeadm upgrade node
 
-apt-get install -y kubelet=1.25.x-00 kubectl=1.25.x-00
+sudo apt-mark unhold kubelet kubectl
+sudo apt-get install -y kubelet='1.37.x-1.1' kubectl='1.37.x-1.1'
+sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 
@@ -603,7 +616,7 @@ The CKAD exam focuses on application deployment and development:
 | Application Design and Build | 20% | Dockerfile, container images, deployments, jobs |
 | Application Deployment | 20% | Rolling updates, canary, blue-green, health checks |
 | Application Observability and Maintenance | 15% | Logging, monitoring, debugging, troubleshooting |
-| Application Environment, Configuration and Security | 25% | Secrets, ConfigMaps, RBAC, security policies, PodSecurityPolicy |
+| Application Environment, Configuration and Security | 25% | Secrets, ConfigMaps, RBAC, security policies, Pod Security Standards |
 | Services and Networking | 20% | Services, Ingress, network policies, DNS |
 
 ### CKAD: Detailed Topics & Key Concepts
@@ -639,7 +652,7 @@ The CKAD exam focuses on application deployment and development:
 - **ConfigMaps**: Key-value configuration, file-based config, env vars
 - **Security Context**: RunAsUser, fsGroup, capabilities, SELinux
 - **RBAC**: Roles, RoleBindings, service accounts
-- **PodSecurityPolicy**: Pod security standards, policy enforcement
+- **Pod Security Admission (PSA)**: Pod Security Standards, policy enforcement (PodSecurityPolicy was removed in v1.25)
 - **Network Policies**: Ingress/egress rules, default deny policies
 
 #### Services and Networking (20%)
@@ -822,7 +835,8 @@ spec:
 Trigger update and monitor:
 ```bash
 # Update image
-kubectl set image deployment/rolling-update-app app=myapp:2.0 --record
+kubectl set image deployment/rolling-update-app app=myapp:2.0
+kubectl annotate deployment/rolling-update-app kubernetes.io/change-cause="update to myapp:2.0"
 
 # Watch rollout progress
 kubectl rollout status deployment/rolling-update-app
@@ -1345,7 +1359,7 @@ The CKS exam is the most advanced, focusing entirely on security:
 #### Cluster Hardening (15%)
 
 - **RBAC**: Principle of least privilege, role segregation, service account binding
-- **Admission Controllers**: PodSecurityPolicy, NetworkPolicy validation, image validation
+- **Admission Controllers**: Pod Security Admission, ValidatingAdmissionPolicy, NetworkPolicy validation, image validation
 - **API Server Flags**: `--authorization-mode`, `--admission-control`, `--enable-audit-log`
 - **Certificate Management**: Certificate rotation, certificate pinning, CA security
 
@@ -1421,7 +1435,7 @@ metadata:
 spec:
   containers:
   - name: kube-apiserver
-    image: k8s.gcr.io/kube-apiserver:v1.24.0
+    image: registry.k8s.io/kube-apiserver:v1.37.2
     command:
     - kube-apiserver
     - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
@@ -1453,7 +1467,11 @@ tail -f /var/log/kubernetes/audit.log
 
 ---
 
-**Question 2: Implement Pod Security Policy**
+:::caution PodSecurityPolicy was removed in Kubernetes v1.25
+The current CKS exam tests **Pod Security Admission** (namespace labels `pod-security.kubernetes.io/enforce: restricted`) and policy engines such as Kyverno or OPA Gatekeeper. The PSP manifest below is kept only so you recognise it in legacy clusters; see the PSA section in [Kubernetes Security](/docs/tools/kubernetes/security).
+:::
+
+**Question 2: Implement Pod Security Policy (legacy, pre-1.25 clusters)**
 
 Create a Pod Security Policy that prevents privileged containers and enforces read-only filesystems.
 
@@ -1520,7 +1538,7 @@ subjects:
 
 Enable PSP admission controller in API server flags:
 ```bash
---enable-admission-plugins=PodSecurityPolicy,RBAC
+--enable-admission-plugins=NodeRestriction,PodSecurity
 ```
 
 </details>
@@ -1766,7 +1784,7 @@ sudo journalctl -u kubelet -f
 1. **Understand Each Security Domain**: Security is broad; know implications of each setting.
 2. **RBAC Mastery**: Test RBAC rules with `kubectl auth can-i` frequently.
 3. **Network Policies First**: Always implement deny-all first, then allow explicit rules.
-4. **PSP vs PodSecurityPolicy**: Know both old PSP and new Pod Security Standards (PSS).
+4. **Pod Security Standards**: Know the three PSA levels (privileged, baseline, restricted), how namespace labels enforce/audit/warn them, and that PodSecurityPolicy was removed in v1.25.
 5. **Audit Logging**: Memorize audit policy syntax and API server flags.
 6. **Image Security**: Practice Trivy, image signing, private registry setup.
 7. **Falco Rules**: Understand runtime monitoring and Falco rule syntax basics.
@@ -1806,7 +1824,8 @@ kubectl logs <pod-name> -c <container-name>
 kubectl exec -it <pod-name> -- /bin/bash
 
 # Update/Delete
-kubectl set image deployment/app app=app:2.0 --record
+kubectl set image deployment/app app=app:2.0
+kubectl annotate deployment/app kubernetes.io/change-cause="update to app:2.0"
 kubectl set resources deployment/app --limits=cpu=500m,memory=256Mi
 kubectl delete deployment app
 

@@ -450,7 +450,7 @@ ip nat inside source list 1 interface Serial0/0 overload
 | **IPsec** | Optional | Mandatory |
 | **Fragmentation** | Host & router | Host only |
 | **Loopback** | 127.0.0.1 | ::1 |
-| **Adoption** | Near universal (98%+) | Growing (~35% 2024) |
+| **Adoption** | Near universal (98%+) | Growing (~45–50% of Google traffic, 2026) |
 
 **IPv6 Special Addresses:**
 

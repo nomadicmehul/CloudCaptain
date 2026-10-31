@@ -51,6 +51,10 @@ DevOps is a cultural and technical movement that combines software development a
 
 AWS CodeCommit is a fully managed Git service that hosts secure, highly scalable private Git repositories.
 
+:::info CodeCommit status
+In July 2024 AWS stopped onboarding new CodeCommit customers; existing repositories keep working, but check the current availability in your account before building anything new on it. The recommended source for new pipelines is GitHub, GitLab or Bitbucket connected through **AWS CodeConnections**. The commands below still apply to existing CodeCommit repositories.
+:::
+
 **Key Features:**
 - Fully managed, no infrastructure to maintain
 - IAM-based access control
@@ -1238,7 +1242,7 @@ aws ec2 run-instances \
 yum update -y
 yum install -y java-11-openjdk java-11-openjdk-devel
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 yum install -y jenkins
 systemctl start jenkins
 systemctl enable jenkins

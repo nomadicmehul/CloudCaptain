@@ -23,7 +23,7 @@
 
 ## ⚓ What is CloudCaptain?
 
-Most learning repos give you a **list of links**. CloudCaptain gives you the **actual content**: 150+ documentation pages and **330,000+ words** of original long-form tutorials, 6,000+ runnable code blocks, 50+ architecture diagrams, 21 command cheat sheets, 19 interview question sets, and 5 certification exam-prep guides — organized into structured learning paths and readable on a site that **remembers where you left off**.
+Most learning repos give you a **list of links**. CloudCaptain gives you the **actual content**: 150+ documentation pages and **185,000+ words** of original long-form prose, 3,300+ runnable code blocks, 50+ architecture diagrams, 21 command cheat sheets, 19 interview question sets, and 5 certification exam-prep guides — organized into structured learning paths and readable on a site that **remembers where you left off**.
 
 Built and curated over 3+ years. Open source (MIT). No paywall, no email gate, no "premium tier". 
 
@@ -33,10 +33,10 @@ Built and curated over 3+ years. Open source (MIT). No paywall, no email gate, n
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| Full written tutorials | ✅ 330K+ words, in-repo | ❌ roadmap nodes link out | ❌ Q&A only | ❌ links only |
+| Full written tutorials | ✅ 185K+ words of prose, in-repo | ❌ roadmap nodes link out | ❌ Q&A only | ❌ links only |
 | Interview Q&A per topic | ✅ 19 topic sets | ❌ | ✅ | ❌ |
 | Command cheat sheets | ✅ 21 sheets | ❌ | ❌ | ❌ |
-| Certification exam prep | ✅ CKA/CKAD/CKS, AWS | ❌ | ❌ | ❌ |
+| Certification exam prep | ✅ CKA/CKAD/CKS, Terraform, AWS, Azure, GCP | ❌ | ❌ | ❌ |
 | Reading progress tracking | ✅ built-in, per page | ✅ | ❌ | ❌ |
 | Architecture diagrams | ✅ 50+ Mermaid | ✅ | ❌ | ❌ |
 
@@ -82,7 +82,7 @@ CloudCaptain isn't a wall of markdown. The site ships a custom reading layout wi
 
 ### Interview Preparation
 
-**19 topic-specific question sets, 40–60+ questions each:**
+**19 topic-specific question sets, 20–60+ questions each:**
 
 | Category | Question sets |
 |:---------|:--------------|

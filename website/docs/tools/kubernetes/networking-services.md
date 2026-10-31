@@ -458,7 +458,11 @@ graph LR
 | **Google Cloud LB** | GCP | Managed service, auto-scaling |
 | **HAProxy** | High-performance | Reverse proxy, load balancing, custom rules |
 
-### Installing NGINX Ingress Controller
+:::warning ingress-nginx is retired (March 2026)
+The community ingress-nginx controller reached end of life on 2026-03-26 and no longer receives security fixes. The steps below are kept for clusters that still run it. For new work use the **Gateway API** with a maintained implementation (Envoy Gateway, Cilium, Istio, Traefik, kgateway) and migrate existing rules with [ingress2gateway](https://github.com/kubernetes-sigs/ingress2gateway). An install snippet is in [Kubernetes Fundamentals](/docs/tools/kubernetes/fundamentals).
+:::
+
+### Installing NGINX Ingress Controller (legacy)
 
 ```bash
 # Using Helm

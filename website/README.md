@@ -1,41 +1,15 @@
-# Website
+# CloudCaptain website
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
-
-## Installation
+Docusaurus 3 site for [cloudcaptain.io](https://cloudcaptain.io). The repo uses **npm** (see `package-lock.json`).
 
 ```bash
-yarn
+npm ci            # install dependencies
+npm start         # dev server at http://localhost:3000
+npm run build     # production build into build/
+npm run serve     # serve the production build locally
+npm run typecheck # tsc
 ```
 
-## Local Development
+Deployment is automatic: `.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main`; pull requests get a preview deployment.
 
-```bash
-yarn start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
-
-```bash
-yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Project conventions live in [`CLAUDE.md`](./CLAUDE.md) and the root [`CONTRIBUTING.md`](../CONTRIBUTING.md).
