@@ -42,8 +42,9 @@ Desktop.ini
 .settings/
 .classpath
 
-# Claude Code
-.claude/
+# Claude Code (local settings stay private; the tutor skills are committed)
+.claude/*
+!.claude/skills/
 
 # Testing
 coverage/
