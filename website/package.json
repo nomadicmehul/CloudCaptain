@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
+    "prestart": "node ../scripts/build-curriculum.mjs",
     "start": "docusaurus start",
+    "prebuild": "node ../scripts/build-curriculum.mjs",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -12,7 +14,12 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "pretypecheck": "node ../scripts/build-curriculum.mjs",
+    "typecheck": "tsc",
+    "curriculum:validate": "node ../scripts/build-curriculum.mjs --check",
+    "curriculum:scaffold": "node ../scripts/build-curriculum.mjs --scaffold",
+    "curriculum:test": "node ../scripts/run-lesson-tests.mjs",
+    "curriculum:unit": "node --test ../scripts/__tests__/"
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",

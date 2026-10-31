@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/process-isolation",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Which Linux kernel feature decides what a process can see, such as hostnames, process IDs and mount points?",
+      "choices": ["Namespaces", "Control groups (cgroups)", "seccomp", "Capabilities"],
+      "answer": 0,
+      "explanation": "Namespaces partition what a process can observe. cgroups limit how much it can use, seccomp filters system calls, and capabilities split root's privileges."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "After unshare(CLONE_NEWPID) in the parent, why does the command we exec see itself as PID 1?",
+      "choices": [
+        "Because unshare renumbers the calling process immediately",
+        "Because a new PID namespace applies to the next child, and the first process in a namespace is its PID 1",
+        "Because /proc was remounted",
+        "Because the shell always reports PID 1"
+      ],
+      "answer": 1,
+      "explanation": "The calling process keeps its PID; the new namespace takes effect for children. That is why main.py forks after unshare and execs the command in the child."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "What actually enforces the 100M limit when you pass --memory 100M to the mini container?",
+      "choices": ["The PID namespace", "ulimit -v", "cgroup v2 memory.max for the group the process is placed in", "The chroot"],
+      "answer": 2,
+      "explanation": "Namespaces never limit resources. The parent writes the byte count to <cgroup>/memory.max and the child's PID to cgroup.procs; the kernel's memory controller does the rest."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why does the child remount / as MS_PRIVATE (recursively) before mounting /proc inside the new mount namespace?",
+      "choices": [
+        "To make the filesystem read-only",
+        "To stop the new /proc mount from propagating back to the host's mount table",
+        "To speed up mounting",
+        "It is required by chroot"
+      ],
+      "answer": 1,
+      "explanation": "On systemd hosts the root mount is shared, so mounts made in a new mount namespace would propagate to the host. Marking the tree private keeps the container's mounts inside."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In the vocabulary of this lesson, what does docker run --pid=host do?",
+      "choices": [
+        "Gives the container more CPU",
+        "Removes one lie: the container shares the host's PID namespace and can see every host process",
+        "Mounts the host filesystem",
+        "Disables the cgroup"
+      ],
+      "answer": 1,
+      "explanation": "Every Docker isolation flag maps to a namespace or cgroup. --pid=host skips CLONE_NEWPID, which is handy for debugging tools and dangerous for anything else."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A container process reads files from the host's real / directory. Which layer was most likely misconfigured?",
+      "choices": [
+        "The UTS namespace",
+        "The memory cgroup",
+        "The root filesystem: a chroot without pivot_root, or a bind mount of the host's /",
+        "The hostname"
+      ],
+      "answer": 2,
+      "explanation": "Hostnames and memory limits cannot expose files. Filesystem visibility is decided by the mount namespace and how / was switched; chroot alone is escapable, which is why real runtimes use pivot_root."
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import {curriculumFrontMatter, isCurriculumFile} from './plugins/curriculum-frontmatter';
+import remarkSiteLinks from './plugins/remark-site-links';
 
 const config: Config = {
   title: 'CloudCaptain',
@@ -15,6 +17,12 @@ const config: Config = {
   onBrokenMarkdownLinks: 'warn',
   markdown: {
     mermaid: true,
+    // Curriculum lessons keep their markdown clean; slug/title/cc_* come from lesson.json.
+    parseFrontMatter: async (params) => {
+      const result = await params.defaultParseFrontMatter(params);
+      if (!isCurriculumFile(params.filePath)) return result;
+      return {...result, frontMatter: {...curriculumFrontMatter(params.filePath), ...result.frontMatter}};
+    },
   },
 
   i18n: {
@@ -167,21 +175,22 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'learnSidebar',
+          sidebarId: 'curriculumSidebar',
+          docsPluginId: 'curriculum',
           position: 'left',
-          label: 'Learning Paths',
+          label: 'Learn',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'toolsSidebar',
+          type: 'dropdown',
+          label: 'Reference',
           position: 'left',
-          label: 'Tools & Tech',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'cloudSidebar',
-          position: 'left',
-          label: 'Cloud Providers',
+          items: [
+            {type: 'docSidebar', sidebarId: 'learnSidebar', label: 'Learning Paths'},
+            {type: 'docSidebar', sidebarId: 'toolsSidebar', label: 'Tools & Tech'},
+            {type: 'docSidebar', sidebarId: 'cloudSidebar', label: 'Cloud Providers'},
+            {to: '/career-paths', label: 'Career Paths'},
+            {to: '/docs/interview-prep/devops', label: 'Interview Prep'},
+          ],
         },
         {to: '/journey', label: "Captain's Journey", position: 'left'},
         {to: '/contribute', label: 'Contribute', position: 'left'},
@@ -209,6 +218,7 @@ const config: Config = {
         {
           title: 'Learn',
           items: [
+            {label: 'Curriculum: from scratch', to: '/learn'},
             {label: 'Career Paths', to: '/career-paths'},
             {label: 'DevOps Path', to: '/docs/learning-paths/devops'},
             {label: 'Linux Master', to: '/docs/learning-paths/linux-master'},
@@ -262,6 +272,24 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   plugins: [
+    // Curriculum (/learn): lessons live in ../curriculum and are validated + indexed by
+    // scripts/build-curriculum.mjs (prestart/prebuild). Sidebar is generated, never hand-edited.
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'curriculum',
+        path: '../curriculum',
+        routeBasePath: 'learn',
+        sidebarPath: './sidebars.curriculum.ts',
+        include: ['README.md', 'phases/*/README.md', 'phases/*/*/docs/en.md', 'paths/*.md', 'certifications/*/README.md', 'projects/*/README.md'],
+        exclude: ['**/code/**', '**/outputs/**', '**/node_modules/**'],
+        numberPrefixParser: false,
+        editUrl: 'https://github.com/nomadicmehul/CloudCaptain/tree/main/curriculum/',
+        showLastUpdateTime: true,
+        breadcrumbs: true,
+        beforeDefaultRemarkPlugins: [remarkSiteLinks],
+      },
+    ],
     // Zoom on images in docs/blog for cheatsheets and diagrams
     [
       'plugin-image-zoom',
@@ -286,7 +314,8 @@ const config: Config = {
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: true,
-        docsRouteBasePath: '/docs',
+        docsRouteBasePath: ['/docs', '/learn'],
+        docsDir: ['docs', '../curriculum'],
       },
     ],
   ],
