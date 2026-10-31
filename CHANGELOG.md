@@ -10,6 +10,9 @@ All notable changes to CloudCaptain. The format follows [Keep a Changelog](https
 - `scripts/run-lesson-tests.mjs`: runs a lesson's tests by id or `--all`.
 - Website: second docs instance at `/learn`, front-matter injection from `lesson.json`, `<Quiz />`, `<ShipIt />`, `<RunTests />`, `<CurriculumHome />`, `<LearningPath />` MDX components, "Learn" navbar entry.
 
+### Changed
+- Navbar: the three Reference sidebars (Learning Paths, Tools & Tech, Cloud Providers) plus Career Paths and Interview Prep now live under one **Reference** dropdown next to **Learn**, so the row fits at 1280px and above.
+
 ## [2026-10-31]
 
 ### Fixed
