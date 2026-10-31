@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/image-layers",
+  "title": "Images Are Just Layers",
+  "short": "Image Layers",
+  "motto": "An image is a stack of tarballs and a JSON file; every byte you ship was put there by one line of a Dockerfile.",
+  "type": "Learn",
+  "status": "published",
+  "minutes": 45,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "containers/process-isolation"
+  ],
+  "tools": [
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/docker/fundamentals",
+    "/docs/tools/docker/dockerfile-guide",
+    "/docs/tools/docker/cheatsheet"
+  ],
+  "outputs": [
+    "prompt-image-layer-audit.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

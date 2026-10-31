@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/pid1-supervisor",
+  "title": "PID 1: Why Your Container Ignores Ctrl-C",
+  "short": "PID 1 & Signals",
+  "motto": "A process that forgets to reap its children and forward its signals is a bug; inside a container it is PID 1, and the bug is the whole box.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": ["python", "bash"],
+  "prereqs": ["setup/lab-doctor"],
+  "tools": ["docker", "ps", "tini"],
+  "reference": ["/docs/tools/linux/fundamentals", "/docs/tools/linux/administration", "/docs/tools/docker/security-production"],
+  "outputs": ["skill-pid1-triage.md", "prompt-explain-process-tree.md"],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

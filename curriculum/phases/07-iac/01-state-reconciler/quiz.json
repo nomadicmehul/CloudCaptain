@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/state-reconciler",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A script that creates a storage bucket is run twice. What property would stop it creating a second bucket?",
+      "choices": ["Running it as root", "Idempotency: it compares what exists with what is wanted and only acts on the difference", "Adding sleep between runs", "Logging"],
+      "answer": 1,
+      "explanation": "Infrastructure as code is a reconciler. The engine reads current state, diffs it against the desired configuration, and applies only the delta, so repeating a run with no changes does nothing."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does the engine keep a state file at all, when it could just look at the disk?",
+      "choices": [
+        "To make plans faster",
+        "To know which real resources it owns and what their last-applied attributes were, so it can tell its own resources from everything else and detect drift",
+        "Because JSON is required",
+        "To store secrets"
+      ],
+      "answer": 1,
+      "explanation": "The provider can read a file, but it cannot know whether that file was created by this configuration. State is the mapping from resource address to real-world id, plus the last attributes applied."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "You change a `local_file`'s `path`. Why does the plan show `-/+` (replace) instead of `~` (update)?",
+      "choices": ["The engine cannot update files", "path is an immutable attribute: the provider cannot move the resource in place, so it must destroy and create", "Because content also changed", "Replace is always safer"],
+      "answer": 1,
+      "explanation": "Each provider declares which attributes force replacement. In Terraform you see this as `# forces replacement` next to the attribute; it is the most common source of accidental data loss."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Someone deletes a managed file by hand. What does the next plan show after refresh?",
+      "choices": ["Nothing; the file is gone", "A create, because the resource is in state but missing in reality (drift)", "An error", "A delete"],
+      "answer": 1,
+      "explanation": "Refresh reads reality into the plan. The desired configuration still wants the file, state says it existed, reality says it does not, so the plan recreates it."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In a real Terraform or OpenTofu plan, which line deserves a second look before approving in CI?",
+      "choices": ["Any `+` on a new resource", "Any `-` or `-/+` on a database, bucket or volume, because destroy means data loss", "Any `~` on a tag", "The summary line"],
+      "answer": 1,
+      "explanation": "Creates and in-place updates are usually safe. Destroys and replacements of stateful resources are where outages come from; `prevent_destroy` and plan review gates exist for exactly this."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Two engineers run apply at the same time against the same state file. What is the failure mode and the fix?",
+      "choices": [
+        "Nothing happens; the second run waits",
+        "Both read the old state, both act, the second write overwrites the first: lost updates and duplicated resources. Fix: a state lock and remote state",
+        "The provider rejects one",
+        "JSON merges automatically"
+      ],
+      "answer": 1,
+      "explanation": "State is a shared record. Terraform backends lock it (DynamoDB, S3 lockfile, Postgres advisory locks) so only one plan/apply can run; the Hard exercise adds the same to minitf."
+    }
+  ]
+}

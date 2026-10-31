@@ -7,23 +7,125 @@
     "branch": "main"
   },
   "phases": [
-    { "dir": "00-setup", "slug": "setup", "title": "Setup & Lab", "icon": "🧰", "tagline": "A laptop lab (kind, Docker, free cloud tiers) and your coding agent, ready for every later phase." },
-    { "dir": "01-linux", "slug": "linux", "title": "Linux & Systems", "icon": "🐧", "tagline": "Processes, files, cgroups, systemd and the kernel interfaces every ops tool is built on." },
-    { "dir": "02-networking", "slug": "networking", "title": "Networking", "icon": "🌐", "tagline": "Build a resolver, a TCP proxy and a TLS handshake before you configure nginx or Envoy." },
-    { "dir": "03-git", "slug": "git", "title": "Git & Collaboration", "icon": "🌳", "tagline": "A tiny object store and commit graph, then the real Git workflows teams run on." },
-    { "dir": "04-scripting", "slug": "scripting", "title": "Scripting & Automation", "icon": "⌨️", "tagline": "Bash and Python for operations: idempotent scripts, CLIs, APIs and safe automation." },
-    { "dir": "05-containers", "slug": "containers", "title": "Containers", "icon": "📦", "tagline": "Write a container runtime in a few hundred lines, then master Docker, Podman, OCI images and Compose." },
-    { "dir": "06-orchestration", "slug": "orchestration", "title": "Orchestration", "icon": "☸️", "tagline": "A scheduler and a reconciler from scratch, then Kubernetes, Helm, operators and the Gateway API." },
-    { "dir": "07-iac", "slug": "iac", "title": "Infrastructure as Code", "icon": "🏗️", "tagline": "A state file and a plan/apply engine, then Terraform, OpenTofu, Pulumi, Crossplane and Ansible." },
-    { "dir": "08-cicd", "slug": "cicd", "title": "CI/CD & GitOps", "icon": "🚀", "tagline": "A pipeline runner and a GitOps reconciler, then GitHub Actions, GitLab CI, Argo CD, Flux and supply-chain security." },
-    { "dir": "09-cloud", "slug": "cloud", "title": "Cloud Providers", "icon": "☁️", "tagline": "IAM, networking and compute mental models built by hand, then AWS, Azure and GCP services and certifications." },
-    { "dir": "10-observability", "slug": "observability", "title": "Observability & SRE", "icon": "📈", "tagline": "A metrics store, a log pipeline and a tracer, then Prometheus, Grafana, OpenTelemetry, SLOs and incident response." },
-    { "dir": "11-security", "slug": "security", "title": "Security & DevSecOps", "icon": "🔐", "tagline": "A policy engine and a secrets workflow, then OPA, Kyverno, Falco, Vault and cloud security posture." },
-    { "dir": "12-platform", "slug": "platform", "title": "Platform Engineering", "icon": "🛠️", "tagline": "A golden-path generator, then Backstage, internal developer platforms, DORA metrics and FinOps." },
-    { "dir": "13-ai-infra", "slug": "ai-infra", "title": "AI Infrastructure", "icon": "🧠", "tagline": "GPU scheduling, model serving with vLLM, KServe and llm-d, AI gateways and the cost of running models." },
-    { "dir": "14-aiops", "slug": "aiops", "title": "AIOps & Agentic Ops", "icon": "🤖", "tagline": "MCP servers for your cluster, incident-triage agents, LLM observability, guardrails and evaluations for ops agents." },
-    { "dir": "15-mlops", "slug": "mlops", "title": "MLOps & LLMOps", "icon": "🔁", "tagline": "Pipelines, registries, evaluation and rollout for models, for engineers who run the platform." },
-    { "dir": "16-capstones", "slug": "capstones", "title": "Capstone Projects", "icon": "🏁", "tagline": "Graded projects: build your own PaaS, an AIOps copilot, a multi-cloud landing zone." }
+    {
+      "dir": "00-setup",
+      "slug": "setup",
+      "title": "Setup & Lab",
+      "icon": "🧰",
+      "tagline": "A laptop lab (kind, Docker, free cloud tiers) and your coding agent, ready for every later phase."
+    },
+    {
+      "dir": "01-linux",
+      "slug": "linux",
+      "title": "Linux & Systems",
+      "icon": "🐧",
+      "tagline": "Processes, files, cgroups, systemd and the kernel interfaces every ops tool is built on."
+    },
+    {
+      "dir": "02-networking",
+      "slug": "networking",
+      "title": "Networking",
+      "icon": "🌐",
+      "tagline": "Build a resolver, a TCP proxy and a TLS handshake before you configure nginx or Envoy."
+    },
+    {
+      "dir": "03-git",
+      "slug": "git",
+      "title": "Git & Collaboration",
+      "icon": "🌳",
+      "tagline": "A tiny object store and commit graph, then the real Git workflows teams run on."
+    },
+    {
+      "dir": "04-scripting",
+      "slug": "scripting",
+      "title": "Scripting & Automation",
+      "icon": "⌨️",
+      "tagline": "Bash and Python for operations: idempotent scripts, CLIs, APIs and safe automation."
+    },
+    {
+      "dir": "05-containers",
+      "slug": "containers",
+      "title": "Containers",
+      "icon": "📦",
+      "tagline": "Write a container runtime in a few hundred lines, then master Docker, Podman, OCI images and Compose."
+    },
+    {
+      "dir": "06-orchestration",
+      "slug": "orchestration",
+      "title": "Orchestration",
+      "icon": "☸️",
+      "tagline": "A scheduler and a reconciler from scratch, then Kubernetes, Helm, operators and the Gateway API."
+    },
+    {
+      "dir": "07-iac",
+      "slug": "iac",
+      "title": "Infrastructure as Code",
+      "icon": "🏗️",
+      "tagline": "A state file and a plan/apply engine, then Terraform, OpenTofu, Pulumi, Crossplane and Ansible."
+    },
+    {
+      "dir": "08-cicd",
+      "slug": "cicd",
+      "title": "CI/CD & GitOps",
+      "icon": "🚀",
+      "tagline": "A pipeline runner and a GitOps reconciler, then GitHub Actions, GitLab CI, Argo CD, Flux and supply-chain security."
+    },
+    {
+      "dir": "09-cloud",
+      "slug": "cloud",
+      "title": "Cloud Providers",
+      "icon": "☁️",
+      "tagline": "IAM, networking and compute mental models built by hand, then AWS, Azure and GCP services and certifications."
+    },
+    {
+      "dir": "10-observability",
+      "slug": "observability",
+      "title": "Observability & SRE",
+      "icon": "📈",
+      "tagline": "A metrics store, a log pipeline and a tracer, then Prometheus, Grafana, OpenTelemetry, SLOs and incident response."
+    },
+    {
+      "dir": "11-security",
+      "slug": "security",
+      "title": "Security & DevSecOps",
+      "icon": "🔐",
+      "tagline": "A policy engine and a secrets workflow, then OPA, Kyverno, Falco, Vault and cloud security posture."
+    },
+    {
+      "dir": "12-platform",
+      "slug": "platform",
+      "title": "Platform Engineering",
+      "icon": "🛠️",
+      "tagline": "A golden-path generator, then Backstage, internal developer platforms, DORA metrics and FinOps."
+    },
+    {
+      "dir": "13-ai-infra",
+      "slug": "ai-infra",
+      "title": "AI Infrastructure",
+      "icon": "🧠",
+      "tagline": "GPU scheduling, model serving with vLLM, KServe and llm-d, AI gateways and the cost of running models."
+    },
+    {
+      "dir": "14-aiops",
+      "slug": "aiops",
+      "title": "AIOps & Agentic Ops",
+      "icon": "🤖",
+      "tagline": "MCP servers for your cluster, incident-triage agents, LLM observability, guardrails and evaluations for ops agents."
+    },
+    {
+      "dir": "15-mlops",
+      "slug": "mlops",
+      "title": "MLOps & LLMOps",
+      "icon": "🔁",
+      "tagline": "Pipelines, registries, evaluation and rollout for models, for engineers who run the platform."
+    },
+    {
+      "dir": "16-capstones",
+      "slug": "capstones",
+      "title": "Capstone Projects",
+      "icon": "🏁",
+      "tagline": "Graded projects: build your own PaaS, an AIOps copilot, a multi-cloud landing zone."
+    }
   ],
   "paths": [
     {
@@ -32,19 +134,111 @@
       "description": "From a single Linux process to a GitOps-driven platform. The default path if you are not sure where to start.",
       "careerPath": "/career-paths",
       "lessons": [
-        "containers/process-isolation"
+        "setup/lab-doctor",
+        "linux/pid1-supervisor",
+        "containers/process-isolation",
+        "containers/image-layers",
+        "containers/registry-pull",
+        "iac/state-reconciler",
+        "aiops/mcp-kubectl-server"
+      ]
+    },
+    {
+      "id": "aiops",
+      "title": "AIOps Engineer",
+      "description": "For engineers who already run Kubernetes and want to put agents to work on it safely: tool servers, guardrails, triage agents, evaluations.",
+      "careerPath": "/career-paths",
+      "lessons": [
+        "setup/lab-doctor",
+        "containers/process-isolation",
+        "aiops/mcp-kubectl-server"
       ]
     }
   ],
   "certifications": [
-    { "id": "cka", "title": "CKA", "vendor": "CNCF / Linux Foundation", "referenceDoc": "/docs/tools/kubernetes/exam-prep", "phases": ["orchestration"] },
-    { "id": "ckad", "title": "CKAD", "vendor": "CNCF / Linux Foundation", "referenceDoc": "/docs/tools/kubernetes/exam-prep", "phases": ["orchestration"] },
-    { "id": "cks", "title": "CKS", "vendor": "CNCF / Linux Foundation", "referenceDoc": "/docs/tools/kubernetes/exam-prep", "phases": ["orchestration", "security"] },
-    { "id": "kcna", "title": "KCNA", "vendor": "CNCF / Linux Foundation", "referenceDoc": "/docs/tools/kubernetes/exam-prep", "phases": ["containers", "orchestration"] },
-    { "id": "terraform-associate", "title": "Terraform Associate (004)", "vendor": "HashiCorp", "referenceDoc": "/docs/tools/terraform/exam-prep", "phases": ["iac"] },
-    { "id": "aws-saa", "title": "AWS Solutions Architect Associate", "vendor": "AWS", "referenceDoc": "/docs/cloud/aws/exam-prep", "phases": ["cloud"] },
-    { "id": "aws-devops-pro", "title": "AWS DevOps Engineer Professional", "vendor": "AWS", "referenceDoc": "/docs/cloud/aws/exam-prep", "phases": ["cloud", "cicd"] },
-    { "id": "az-104", "title": "Azure Administrator (AZ-104)", "vendor": "Microsoft", "referenceDoc": "/docs/cloud/azure/exam-prep", "phases": ["cloud"] },
-    { "id": "gcp-ace", "title": "Google Associate Cloud Engineer", "vendor": "Google Cloud", "referenceDoc": "/docs/cloud/gcp/exam-prep", "phases": ["cloud"] }
+    {
+      "id": "cka",
+      "title": "CKA",
+      "vendor": "CNCF / Linux Foundation",
+      "referenceDoc": "/docs/tools/kubernetes/exam-prep",
+      "phases": [
+        "orchestration"
+      ]
+    },
+    {
+      "id": "ckad",
+      "title": "CKAD",
+      "vendor": "CNCF / Linux Foundation",
+      "referenceDoc": "/docs/tools/kubernetes/exam-prep",
+      "phases": [
+        "orchestration"
+      ]
+    },
+    {
+      "id": "cks",
+      "title": "CKS",
+      "vendor": "CNCF / Linux Foundation",
+      "referenceDoc": "/docs/tools/kubernetes/exam-prep",
+      "phases": [
+        "orchestration",
+        "security"
+      ]
+    },
+    {
+      "id": "kcna",
+      "title": "KCNA",
+      "vendor": "CNCF / Linux Foundation",
+      "referenceDoc": "/docs/tools/kubernetes/exam-prep",
+      "phases": [
+        "containers",
+        "orchestration"
+      ]
+    },
+    {
+      "id": "terraform-associate",
+      "title": "Terraform Associate (004)",
+      "vendor": "HashiCorp",
+      "referenceDoc": "/docs/tools/terraform/exam-prep",
+      "phases": [
+        "iac"
+      ]
+    },
+    {
+      "id": "aws-saa",
+      "title": "AWS Solutions Architect Associate",
+      "vendor": "AWS",
+      "referenceDoc": "/docs/cloud/aws/exam-prep",
+      "phases": [
+        "cloud"
+      ]
+    },
+    {
+      "id": "aws-devops-pro",
+      "title": "AWS DevOps Engineer Professional",
+      "vendor": "AWS",
+      "referenceDoc": "/docs/cloud/aws/exam-prep",
+      "phases": [
+        "cloud",
+        "cicd"
+      ]
+    },
+    {
+      "id": "az-104",
+      "title": "Azure Administrator (AZ-104)",
+      "vendor": "Microsoft",
+      "referenceDoc": "/docs/cloud/azure/exam-prep",
+      "phases": [
+        "cloud"
+      ]
+    },
+    {
+      "id": "gcp-ace",
+      "title": "Google Associate Cloud Engineer",
+      "vendor": "Google Cloud",
+      "referenceDoc": "/docs/cloud/gcp/exam-prep",
+      "phases": [
+        "cloud"
+      ]
+    }
   ]
 }

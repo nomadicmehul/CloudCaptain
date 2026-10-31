@@ -21,7 +21,7 @@ function tmpCurriculum() {
   fs.cpSync(path.join(realCurriculum, 'manifest.json'), path.join(dir, 'manifest.json'));
   fs.cpSync(path.join(realCurriculum, 'README.md'), path.join(dir, 'README.md'));
   fs.cpSync(path.join(realCurriculum, 'paths'), path.join(dir, 'paths'), {recursive: true});
-  fs.cpSync(path.join(realCurriculum, 'phases', SAMPLE_PHASE), path.join(dir, 'phases', SAMPLE_PHASE), {recursive: true});
+  fs.cpSync(path.join(realCurriculum, 'phases'), path.join(dir, 'phases'), {recursive: true});
   return dir;
 }
 
@@ -105,24 +105,28 @@ test('prerequisite cycles are detected', () => {
 
 test('draft lessons are excluded from the model and sidebar', () => {
   const dir = tmpCurriculum();
-  const lesson = firstLessonDir(dir);
-  const jsonFile = path.join(lesson, 'lesson.json');
-  const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
-  json.status = 'draft';
-  fs.writeFileSync(jsonFile, JSON.stringify(json));
+  const phaseDir = path.join(dir, 'phases', SAMPLE_PHASE);
+  const lessonDirs = fs.readdirSync(phaseDir).filter((n) => /^\d{2}-/.test(n));
+  for (const name of lessonDirs) {
+    const jsonFile = path.join(phaseDir, name, 'lesson.json');
+    const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+    json.status = 'draft';
+    fs.writeFileSync(jsonFile, JSON.stringify(json));
+  }
+  const before = run({check: true, quiet: true}).model.stats.lessons;
   const {phases, manifest} = validateAll(dir);
   const model = buildModel(phases, manifest);
-  assert.equal(model.stats.lessons, 0);
+  assert.equal(model.stats.lessons, before - lessonDirs.length);
   assert.ok(!model.sidebar.some((item) => item.type === 'category' && item.label.includes('Containers')));
 });
 
 test('scaffold creates a lesson folder that the validator can read', () => {
   const dir = tmpCurriculum();
-  const created = scaffold({phaseDir: SAMPLE_PHASE, lessonSlug: 'image-layers', type: 'Learn', langs: ['python'], title: 'Images Are Just Layers', curriculum: dir});
+  const created = scaffold({phaseDir: SAMPLE_PHASE, lessonSlug: 'registries', type: 'Learn', langs: ['python'], title: 'Registries and Content Addressing', curriculum: dir});
   assert.ok(fs.existsSync(path.join(created, 'docs', 'en.md')));
   assert.ok(fs.existsSync(path.join(created, 'code', 'tests', 'test_main.py')));
   const json = JSON.parse(fs.readFileSync(path.join(created, 'lesson.json'), 'utf8'));
-  assert.equal(json.id, 'containers/image-layers');
+  assert.equal(json.id, 'containers/registries');
   assert.equal(json.status, 'draft');
   const {errors} = validateAll(dir);
   assert.ok(!errors.some((e) => e.includes('H2 sections must be exactly')), 'scaffold section order is valid');

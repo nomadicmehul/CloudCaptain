@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/pid1-supervisor",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`docker stop` takes exactly ten seconds on a container whose only process is `sleep 600`. Why?",
+      "choices": ["sleep is slow to exit", "As PID 1, sleep has no default SIGTERM handler, so the signal is ignored and Docker falls back to SIGKILL after the grace period", "Docker always waits ten seconds", "The image is missing bash"],
+      "answer": 1,
+      "explanation": "The kernel does not apply default signal actions to PID 1. A process that would die from SIGTERM anywhere else ignores it as PID 1 unless it installs a handler, which is why init systems and tini exist."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "What is a zombie process and why does PID 1 have to care?",
+      "choices": [
+        "A process using too much memory",
+        "A process that has exited but whose exit status has not been collected with wait(); orphans are re-parented to PID 1, so if PID 1 never waits, zombies accumulate",
+        "A process stuck in D state",
+        "A process started with nohup"
+      ],
+      "answer": 1,
+      "explanation": "Every exited child stays in the process table until its parent calls wait(). Orphaned processes are adopted by PID 1, so a PID 1 that never reaps leaks process-table entries forever."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Why does the supervisor use `waitpid(-1, WNOHANG)` in a loop instead of one blocking `wait()` per SIGCHLD?",
+      "choices": [
+        "Blocking wait is deprecated",
+        "Signals coalesce: several children can exit while one SIGCHLD is pending, so you must reap until nothing is left",
+        "WNOHANG is faster",
+        "To avoid using signals at all"
+      ],
+      "answer": 1,
+      "explanation": "SIGCHLD is not queued per child. One delivery may stand for many exits; a single wait would leave the others as zombies."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "An ENTRYPOINT script ends with `node server.js`. Pressing Ctrl-C does nothing and `docker stop` waits ten seconds. What is the one-word fix?",
+      "choices": ["sudo", "exec", "nohup", "setsid"],
+      "answer": 1,
+      "explanation": "Without exec, the shell is PID 1 and node is its child; the shell ignores SIGTERM and does not forward it. `exec node server.js` replaces the shell so node becomes PID 1 with its own handler."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In the supervisor, why does begin_shutdown() clear the pending restarts before forwarding the signal?",
+      "choices": [
+        "To save memory",
+        "Otherwise a service killed by the forwarded SIGTERM would be restarted by the on-failure policy during shutdown, fighting the shutdown",
+        "Because pending restarts are invalid after a signal",
+        "It does not; restarts continue"
+      ],
+      "answer": 1,
+      "explanation": "A SIGTERM-terminated child looks like a failure to the restart policy. Shutdown must win; systemd and Kubernetes encode the same rule as a stopping state during which restart policies are suspended."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Kubernetes sends SIGTERM, waits terminationGracePeriodSeconds, then SIGKILLs. Which lesson concept is that?",
+      "choices": ["Backoff", "The same forward-then-escalate shutdown you implemented, with the grace period as a pod field", "Zombie reaping", "exec form"],
+      "answer": 1,
+      "explanation": "Graceful shutdown is forward SIGTERM, wait a bounded time, escalate to SIGKILL. The pod field, docker stop -t and the supervisor's --grace are the same knob at three layers."
+    }
+  ]
+}

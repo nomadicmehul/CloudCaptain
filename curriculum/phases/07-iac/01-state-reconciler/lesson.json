@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/state-reconciler",
+  "title": "Plan and Apply: A State File Is Just a Diff",
+  "short": "Plan and Apply",
+  "motto": "Infrastructure as code is three functions: read what exists, diff it against what you want, apply the difference, then write it down.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [],
+  "tools": [
+    "terraform",
+    "tofu"
+  ],
+  "reference": [
+    "/docs/tools/terraform/fundamentals",
+    "/docs/tools/terraform/cheatsheet",
+    "/docs/tools/terraform/advanced"
+  ],
+  "outputs": [
+    "prompt-review-terraform-plan.md",
+    "skill-plan-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

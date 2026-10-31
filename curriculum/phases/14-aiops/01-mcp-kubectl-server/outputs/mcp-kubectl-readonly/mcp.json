@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "kubectl-ro": {
+      "command": "python3",
+      "args": ["/absolute/path/to/server.py", "--allow-namespaces", "default,dev", "--context", "kind-cc-lab"]
+    }
+  }
+}

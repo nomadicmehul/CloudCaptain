@@ -1,0 +1,59 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/registry-pull",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "What does `docker pull alpine:3.22` actually transfer over the network?",
+      "choices": ["One big disk image file", "A manifest naming the config and layer blobs by SHA-256 digest, then each blob the daemon does not already have", "A Dockerfile that gets rebuilt locally", "A VM snapshot"],
+      "answer": 1,
+      "explanation": "A registry is an HTTP server for content-addressed blobs. The tag resolves to a manifest; the manifest lists digests; only missing digests are downloaded, which is why pulls of related images are fast."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The first request to the registry returns 401 with a `WWW-Authenticate: Bearer realm=…` header. What happens next in your client?",
+      "choices": ["It gives up", "It parses realm, service and scope from the header, fetches a token from the realm, and retries with Authorization: Bearer", "It uses basic auth with a password", "It switches to HTTP"],
+      "answer": 1,
+      "explanation": "That is the token flow every registry client implements, including for anonymous pulls. The token encodes the scope (repository:library/alpine:pull), which is why a token for one image does not work for another."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "For `alpine:3.22` the manifest endpoint returns an *index* with several entries. Why?",
+      "choices": ["The tag is broken", "The image is multi-platform: the index lists one manifest per OS/architecture, and the client picks the one matching its platform", "It contains the image history", "Docker Hub pagination"],
+      "answer": 1,
+      "explanation": "An OCI image index (Docker calls it a manifest list) maps platforms to manifests. Pulling on an Apple Silicon Mac picks linux/arm64; on CI it picks linux/amd64. `exec format error` is what you get when the pick is wrong."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why does the client verify the SHA-256 of every blob, even over HTTPS?",
+      "choices": [
+        "HTTPS is not encryption",
+        "Digests make the content self-verifying end to end: a mirror, a cache, a compromised registry or a bit flip cannot change a layer without changing its name",
+        "To detect slow networks",
+        "Because Docker Hub requires it"
+      ],
+      "answer": 1,
+      "explanation": "Content addressing is the trust model. TLS protects the channel; the digest protects the content, which is why pinning images by digest (image@sha256:…) in Kubernetes is the reproducibility and supply-chain baseline."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A pod shows ImagePullBackOff and the event says `manifest unknown` for `myapp:v3` which you pushed from your laptop. Most likely cause?",
+      "choices": ["The registry is down", "You pushed only your laptop's platform (e.g. arm64) and the node is amd64, or the tag was pushed to a different repository", "The node has no disk", "Kubernetes caches manifests"],
+      "answer": 1,
+      "explanation": "`manifest unknown` means the tag or the platform entry does not exist in that repository. Check with `crane manifest` or `skopeo inspect --raw` and build multi-platform (`docker buildx build --platform linux/amd64,linux/arm64`)."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A layer entry in a tar is named `../../etc/passwd`. What must a correct extractor do?",
+      "choices": ["Extract it; the registry is trusted", "Refuse the entry (and ideally the whole layer): paths must be normalised and confined to the rootfs, or an image can overwrite files on the host", "Rename it", "Ignore the problem; tar handles it"],
+      "answer": 1,
+      "explanation": "Path traversal in archives is a classic container-runtime CVE class. Normalise names, reject anything that resolves outside the target directory, and never extract device nodes."
+    }
+  ]
+}
