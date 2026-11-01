@@ -22,7 +22,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 | 10 | Observability & SRE | 0 | planned |
 | 11 | Security & DevSecOps | 0 | planned |
 | 12 | Platform Engineering | 0 | planned |
-| 13 | AI Infrastructure | 0 | planned |
+| 13 | AI Infrastructure | 8 | in progress |
 | 14 | AIOps & Agentic Ops | 7 | in progress |
 | 15 | MLOps & LLMOps | 0 | planned |
 | 16 | Capstone Projects | 0 | planned |

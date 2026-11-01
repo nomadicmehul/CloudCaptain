@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/llm-serving",
+  "title": "Serving a Model Is a Batch Scheduler With a KV Cache",
+  "short": "LLM Serving",
+  "motto": "Each decode step reads every weight once, so batching is nearly free until the KV cache fills; TTFT and TPOT show who pays.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/gpu-scheduling"
+  ],
+  "tools": [
+    "docker",
+    "llama.cpp",
+    "vllm",
+    "curl"
+  ],
+  "reference": [
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/docker/fundamentals",
+    "/docs/tools/observability"
+  ],
+  "outputs": [
+    "skill-llm-serving-tuning.md",
+    "prompt-explain-serving-metrics.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

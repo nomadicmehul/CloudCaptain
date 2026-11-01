@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cc-load
+spec:
+  restartPolicy: Never
+  containers:
+    - name: load
+      image: python:3.12-alpine
+      command:
+        - python3
+        - /app/main.py
+        - load
+        - --url
+        - http://cc-sim:8000
+        - --concurrency
+        - "12"
+        - --duration
+        - "60"
+        - --max-tokens
+        - "16"
+        - --json
+      resources:
+        requests:
+          cpu: 50m
+          memory: 32Mi
+      volumeMounts:
+        - name: code
+          mountPath: /app
+  volumes:
+    - name: code
+      configMap:
+        name: infscale

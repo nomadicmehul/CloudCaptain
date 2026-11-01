@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/inference-autoscaling",
+  "title": "Scale Inference on Queue Depth, Not CPU",
+  "short": "Inference Autoscaling",
+  "motto": "A model server is full when requests wait, not when its CPU is busy: scale on running plus waiting, and budget for the cold start.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/llm-serving"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "docker",
+    "llm-d-inference-sim",
+    "vllm",
+    "llama.cpp",
+    "keda",
+    "kserve"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/observability",
+    "/docs/learning-paths/ai-ml"
+  ],
+  "outputs": [
+    "skill-inference-autoscaling-review.md",
+    "prompt-choose-scaling-metric.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

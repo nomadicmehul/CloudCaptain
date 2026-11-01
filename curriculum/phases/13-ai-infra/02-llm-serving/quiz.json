@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/llm-serving",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Llama 3.1 8B on one H100 decodes a single request at about 7 ms per token. You send 16 requests at once. Roughly how long does one decode step take now?",
+      "choices": [
+        "Still close to 7 ms: the step is dominated by reading the 16 GB of weights once, and all 16 sequences share that read",
+        "It depends only on the prompt lengths, not on the number of requests",
+        "About 56 ms: batching halves the cost per sequence",
+        "About 112 ms: each of the 16 sequences needs its own forward pass"
+      ],
+      "answer": 0,
+      "explanation": "Decode is memory-bound. Every step reads all the weights to do two floating point operations per weight per sequence, and on an H100 the arithmetic for 16 sequences takes a small fraction of the weight read. The step grows slowly until the batch approaches FLOPs divided by bandwidth (a couple of hundred tokens per step), which is why batching multiplies throughput."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Llama 3.1 8B has 32 layers, 8 KV heads of dimension 128, and its KV cache is stored in BF16. How many tokens fit in 4 GiB of KV cache?",
+      "choices": [
+        "8,192: each token needs 512 KiB because there are 32 query heads",
+        "131,072: each token needs 32 KiB",
+        "32,768: each token needs 2 x 32 x 8 x 128 x 2 bytes = 128 KiB",
+        "About 250: each token stores a copy of the 16 GB of weights' activations"
+      ],
+      "answer": 2,
+      "explanation": "Per token the cache keeps one key and one value vector per layer per KV head: 2 x 32 x 8 x 128 elements of 2 bytes, 131,072 bytes. 4 GiB / 128 KiB = 32,768 tokens. Grouped-query attention is why the 8 KV heads, not the 32 query heads, count; with full multi-head attention the cache would be four times larger."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "llama-server runs with `--parallel 4 --ctx-size 4096`. A request with a 900-token prompt and `max_tokens: 300` fails with `the request exceeds the available context size`, although the other three slots are idle. Why?",
+      "choices": [
+        "SmolLM2 cannot handle prompts longer than 512 tokens",
+        "The server is still loading the model and reports a misleading error",
+        "Continuous batching (`-cb`) limits every request to a quarter of the context",
+        "With an explicit slot count the 4,096-token cache is split into four fixed 1,024-token contexts, and 1,200 tokens do not fit in one; raise `--ctx-size`, lower `--parallel` or use the unified cache (`--kv-unified`)"
+      ],
+      "answer": 3,
+      "explanation": "llama.cpp gives each slot ctx-size / parallel tokens when the slot count is set explicitly and the cache is not unified, a static reservation; idle slots cannot lend their space. vLLM's paged cache would admit the request as long as 1,200 tokens of blocks are free anywhere."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Against that 4-slot server, loadgen at concurrency 4 gives about twice the throughput of concurrency 1, 40% worse TPOT and a server mean batch per decode of 3.9. At concurrency 8 throughput is unchanged, TTFT is much higher and `max waiting` is 4. What does that tell you?",
+      "choices": [
+        "The CPU is overheating at concurrency 8",
+        "The four slots are the binding budget: beyond four in flight, extra clients only queue, so TTFT grows by the wait for a slot while throughput and TPOT stay put",
+        "Concurrency 8 overloads the network; use HTTP/2",
+        "TPOT got worse, so batching is not working on CPUs"
+      ],
+      "answer": 1,
+      "explanation": "`llamacpp:requests_deferred` reaching 4 means four requests were waiting for a slot. With the batch capped at four, the server does the same work per step whatever the offered load; the difference appears only as queue time in TTFT. The TPOT increase from 1 to 4 is the normal batching trade-off on hardware whose compute knee is below a batch of 4."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A vLLM server on one L4 shows `vllm:kv_cache_usage_perc` at 1.0, `vllm:num_preemptions_total` rising, about 18 running and 40 waiting requests, with `--max-num-seqs 256`. Every request starts with the same 1,000-token system prompt. What should you change first?",
+      "choices": [
+        "Raise `--max-num-seqs` to 512 so more requests can run",
+        "Make sure prefix caching is on (and check the hit rate) so the shared prompt's blocks are stored once; then consider more cache memory (a KV cache in FP8, a smaller `--max-model-len`, a higher `--gpu-memory-utilization`)",
+        "Lower `--max-num-batched-tokens` so each step is cheaper",
+        "Add a second replica behind the same autoscaler because GPU utilisation is 100%"
+      ],
+      "answer": 1,
+      "explanation": "Memory caps the batch at 18, not the sequence limit, so raising it does nothing; preemptions say the cache is the binding budget. Forty copies of the same 1,000 tokens are the largest avoidable use of that cache. Utilisation at 100% only says kernels are running. A second replica may be needed later, but the arithmetic says the first one is wasting most of its cache."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A chat service has a TPOT p95 SLO of 60 ms. When users paste 8,000-token documents, everyone's inter-token latency p95 spikes for a few seconds. Which knob addresses the spike, and what does it cost?",
+      "choices": [
+        "Disable chunked prefill so prompts are processed in one step",
+        "Lower `--max-num-batched-tokens` so long prompts are prefilled in smaller chunks that share fewer steps' time with decodes; the long prompts' own TTFT gets longer",
+        "Raise `--gpu-memory-utilization` to 0.99",
+        "Lower `--max-num-seqs` to 8; nothing else changes"
+      ],
+      "answer": 1,
+      "explanation": "With chunked prefill a step carries every decoding sequence plus a prefill chunk up to the token budget, and the step time (the ITL of every decoding request) grows with that chunk. A smaller budget means more, smaller chunks: steadier ITL, slower TTFT for the long prompt. Disabling chunking makes the spike worse; separating prefill and decode onto different workers is the larger-scale answer."
+    }
+  ]
+}

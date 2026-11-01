@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/model-artifacts",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A capacity plan says an 8B model quantized to 4 bits needs about 4.5 GB, so it fits a 24 GB GPU five times over. What does that estimate leave out?",
+      "choices": [
+        "Nothing; 4-bit weights are the whole memory footprint",
+        "The tokenizer, which is usually larger than the weights",
+        "The KV cache, which grows with context length times concurrent sequences and can be many times the weights",
+        "The safetensors header, which is loaded into GPU memory"
+      ],
+      "answer": 2,
+      "explanation": "Serving memory is weights plus KV cache plus runtime buffers. For Llama 3.1 8B the cache is 128 KiB per token in f16, so 32,768 tokens x 16 sequences asks for 64 GiB, more than ten times the 4-bit weights."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "How can you learn the parameter count and dtypes of a 269 MB model.safetensors on the Hub without downloading it?",
+      "choices": [
+        "Divide the file size by 2, because safetensors always stores 16-bit weights",
+        "Read the model card, which is generated from the weights",
+        "Load it with the safetensors library and count the values in each tensor",
+        "Fetch the first 8 bytes and then the JSON header with HTTP Range requests; dtypes and shapes are all in the header"
+      ],
+      "answer": 3,
+      "explanation": "safetensors puts a little-endian u64 header length first, then a JSON table of dtype, shape and offsets. modelinspect reads it in one 64 KiB Range request. Dividing by two assumes a dtype, and loading reads far more than needed."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A Q8_0 block stores 32 weights. Why is Q8_0 8.5 bits per weight rather than 8?",
+      "choices": [
+        "GGUF pads every tensor to 32-byte alignment",
+        "Each block of 32 signed bytes also carries one 16-bit scale: 34 bytes for 32 weights",
+        "The extra half bit is a sign bit",
+        "Q8_0 keeps one F32 copy of every 16th weight for accuracy"
+      ],
+      "answer": 1,
+      "explanation": "Block quantization shares a scale across a group. Q8_0 is fp16 scale + 32 int8 values = 34 bytes, so 34 x 8 / 32 = 8.5 bits. Q4_0 is 18 bytes per 32 (4.5 bits) and Q4_K is 144 bytes per 256 (4.5 bits)."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The Hub reports `x-linked-etag: \"5a1395...\"` for a GGUF file. You push that file unchanged as a raw layer to an OCI registry. What is the layer's digest?",
+      "choices": [
+        "sha256:5a1395..., because both the LFS pointer and the registry name the file by the SHA-256 of its bytes",
+        "A new random id chosen by the registry",
+        "The SHA-256 of a gzip of the file, because registries compress layers",
+        "The git commit id of the Hugging Face revision"
+      ],
+      "answer": 0,
+      "explanation": "Content addressing is the same on both sides. An uncompressed layer's digest is sha256 of the file, which is what Git LFS stores. That is why a pinned Hub sha256 can be checked against the registry without downloading again."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After `oras push`, a `modelinspect push` of the same files to the same repository uploads 0 blobs, yet the two manifest digests differ. Why?",
+      "choices": [
+        "The manifests are different JSON documents (ORAS stamps a created timestamp and annotates layers differently) that reference the same config and layer blobs",
+        "modelinspect skipped the upload, so its manifest points at nothing",
+        "The registry re-encoded one of the uploads",
+        "One of the pushes used compression"
+      ],
+      "answer": 0,
+      "explanation": "A manifest digest is the hash of the manifest bytes. Any difference in annotations or field order gives a new digest even when every referenced blob is identical. Pin the manifest digest you deploy, and compare layer digests to prove the weights are the same."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A Q4_K_M GGUF of a model with hidden size 576 averages 6.2 bits per weight, and most tensors are Q5_0. What happened?",
+      "choices": [
+        "The file is corrupt; Q4_K_M always averages 4.5 bits",
+        "The tokenizer is stored as Q5_0",
+        "imatrix calibration raised the precision of every tensor",
+        "K-quants need rows that are a multiple of 256; 576 is not, so llama.cpp fell back to 32-wide formats such as Q5_0 and Q8_0 for those tensors"
+      ],
+      "answer": 3,
+      "explanation": "Q4_K_M is a recipe that picks a type per tensor. When a tensor's row length is not divisible by the 256-weight super-block, llama-quantize substitutes a compatible type. Inspect the per-dtype table before trusting the name."
+    }
+  ]
+}

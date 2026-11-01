@@ -1,0 +1,11 @@
+{
+  "name": "support-chat",
+  "hourly_requests_per_second": [0.4, 0.3, 0.3, 0.3, 0.4, 0.6, 1.0, 1.8, 2.8, 3.6, 4.0, 4.2, 4.0, 4.2, 4.4, 4.2, 3.8, 3.2, 2.6, 2.0, 1.6, 1.2, 0.8, 0.6],
+  "request": {"input_tokens": 600, "output_tokens": 200},
+  "slo": {"min_stream_tokens_per_second": 15},
+  "autoscaling": {"target_utilization": 0.7, "min_replicas": 1, "max_replicas": 8},
+  "days_per_month": 30,
+  "overhead_monthly": 0,
+  "cached_input_fraction": 0,
+  "compare_with": ["api-small", "api-large"]
+}

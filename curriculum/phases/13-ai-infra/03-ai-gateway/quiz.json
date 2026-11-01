@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/ai-gateway",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Three teams share one provider key with a 200,000 tokens-per-minute limit. Someone puts nginx in front with `limit_req` at 60 requests per minute per team. Why does that not protect the shared limit?",
+      "choices": [
+        "nginx cannot proxy HTTPS to a provider",
+        "nginx counts requests, but the provider limits and bills tokens; one request can be 20 tokens or 20,000, and the real count is only known from the response's `usage`",
+        "`limit_req` resets every minute, so bursts get through at the boundary",
+        "The provider ignores requests that come through a proxy"
+      ],
+      "answer": 1,
+      "explanation": "The constrained resource is tokens. A gateway has to estimate tokens before the call (prompt length plus max_tokens), hold that against a per-key token budget, and settle to the usage the response reports. Request counting is still useful as a second bucket, but it cannot enforce TPM."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A key has 300 tokens per minute, refilled continuously. Its bucket holds 66 tokens and the next request is held at 148 tokens (prompt estimate plus max_tokens). What does tokengate answer?",
+      "choices": [
+        "200, because the actual usage will probably be lower than the estimate",
+        "429 with `retry-after: 60`, the length of the window",
+        "400 request_too_large, because 148 is more than 66",
+        "429 with `retry-after: 17`, because (148 - 66) / (300 / 60) = 16.4 seconds, rounded up"
+      ],
+      "answer": 3,
+      "explanation": "A token bucket has no window. The wait is the shortfall over the refill rate (300/60 = 5 tokens per second). 400 request_too_large is only for a hold larger than the whole bucket (more than 300 here), which no amount of waiting can satisfy. Admitting on the hope that usage is lower defeats the hold."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The primary deployment of `chat` answers `429` with `retry-after: 30`. tokengate has `retries: 1` and `max_wait_seconds: 1`. What happens to this request and the next one?",
+      "choices": [
+        "It falls back at once because 30 seconds exceeds what it will wait, and marks the primary as cooling down for 30 seconds, so the next request goes straight to the fallback",
+        "It returns the 429 to the client, because a 429 is the client's problem",
+        "It retries the primary immediately, ignoring retry-after",
+        "It sleeps 30 seconds and retries the primary, then falls back"
+      ],
+      "answer": 0,
+      "explanation": "retry-after is the provider telling you when it will accept traffic again. Waiting longer than your own latency budget turns a rate limit into a slow request; hammering it immediately makes it worse. Falling back and cooling the deployment down for the advertised time keeps traffic flowing and the provider quiet. LiteLLM with num_retries above zero waits the retry-after instead."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A client streams a chat completion without `stream_options`. How can the gateway still bill the exact token count from the server?",
+      "choices": [
+        "It counts the `data:` events, one per token",
+        "It sends a second, non-streamed request with the same prompt to read `usage`",
+        "It adds `stream_options.include_usage: true` upstream, reads the final event with `usage` and empty `choices`, and drops that event before it reaches the client that did not ask for it",
+        "It cannot; streams are always estimated"
+      ],
+      "answer": 2,
+      "explanation": "OpenAI-compatible servers, llama.cpp included, add a usage-only final event when include_usage is set. Events do not map one to one onto tokens (a delta can hold several), so counting events or characters is only the fallback for servers that report nothing. A second request would double the cost."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Halfway through a streamed answer the backend's connection resets. Why does the gateway not fall back to the second deployment as it would for a 503?",
+      "choices": [
+        "Fallbacks only apply to 429",
+        "Bytes have already reached the client; a retry would send a second, different answer after part of the first, so failover is only possible before the first byte",
+        "The second deployment uses a different price",
+        "Connection resets are always client errors"
+      ],
+      "answer": 1,
+      "explanation": "Retries and fallbacks are invisible only while nothing has been sent. Once a stream has started, the gateway can end it, log the partial usage and let the client decide. This is why retry rules are checked against the status line and headers, before relaying any body."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The finance team wants the exact-match cache to be global across all tenants to maximise hits, for every temperature. What is wrong with that?",
+      "choices": [
+        "Nothing; a cache hit is free",
+        "A cache shared across tenants returns one tenant's answer to another and its latency reveals that someone asked the same thing, and caching sampled answers (temperature above 0) turns intended randomness into a constant",
+        "Global caches cannot be keyed on the request body",
+        "Cached responses cannot carry usage"
+      ],
+      "answer": 1,
+      "explanation": "Scope the key by tenant (tokengate's default `scope: key`) and cache deterministic requests (`mode: deterministic`). A hit refunds the hold and costs nothing, which is why the saving is real, but correctness and isolation come first."
+    }
+  ]
+}

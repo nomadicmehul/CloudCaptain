@@ -1,0 +1,55 @@
+{
+  "name": "gpu-l4-1x llama-8b Q8_0",
+  "instance": "gpu-l4-1x",
+  "model": "llama-8b",
+  "quantization": "Q8_0",
+  "method": "estimated",
+  "source": "tokencost estimate: 8B params, 8.5 bits/weight, 131072 B KV/token, 4096 context, 0.6 of peak bandwidth and FLOPs on L4",
+  "max_batch": 24,
+  "memory_gb": {
+    "weights": 8.5,
+    "kv_per_sequence": 0.5369
+  },
+  "points": [
+    {
+      "concurrency": 1,
+      "requests_per_second": 0.1033,
+      "input_tokens": 600.0,
+      "output_tokens": 200.0,
+      "stream_tokens_per_second": 20.66,
+      "prefill_tokens_per_second": 4537.5
+    },
+    {
+      "concurrency": 4,
+      "requests_per_second": 0.3853,
+      "input_tokens": 600.0,
+      "output_tokens": 200.0,
+      "stream_tokens_per_second": 20.03,
+      "prefill_tokens_per_second": 4537.5
+    },
+    {
+      "concurrency": 8,
+      "requests_per_second": 0.7068,
+      "input_tokens": 600.0,
+      "output_tokens": 200.0,
+      "stream_tokens_per_second": 19.25,
+      "prefill_tokens_per_second": 4537.5
+    },
+    {
+      "concurrency": 16,
+      "requests_per_second": 1.2129,
+      "input_tokens": 600.0,
+      "output_tokens": 200.0,
+      "stream_tokens_per_second": 17.84,
+      "prefill_tokens_per_second": 4537.5
+    },
+    {
+      "concurrency": 24,
+      "requests_per_second": 1.5931,
+      "input_tokens": 600.0,
+      "output_tokens": 200.0,
+      "stream_tokens_per_second": 16.63,
+      "prefill_tokens_per_second": 4537.5
+    }
+  ]
+}

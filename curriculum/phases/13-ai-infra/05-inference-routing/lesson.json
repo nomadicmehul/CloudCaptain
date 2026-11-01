@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/inference-routing",
+  "title": "Route by Prefix Cache, Not Round Robin",
+  "short": "Inference Routing",
+  "motto": "A prefix cache only helps on the replica that holds it: hash the prompt into blocks, find that replica, and weigh it against its queue.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/inference-autoscaling"
+  ],
+  "tools": [
+    "docker",
+    "llm-d-inference-sim",
+    "vllm",
+    "kubectl",
+    "kind",
+    "gateway-api-inference-extension",
+    "llm-d-router"
+  ],
+  "reference": [
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/docker/fundamentals",
+    "/docs/tools/observability"
+  ],
+  "outputs": [
+    "skill-inference-routing-review.md",
+    "prompt-explain-prefix-caching.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

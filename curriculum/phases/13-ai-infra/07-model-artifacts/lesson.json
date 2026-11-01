@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/model-artifacts",
+  "title": "A Model Is an Artifact: Weights, Formats and Quantization",
+  "short": "Model Artifacts",
+  "motto": "A model is tensors behind a header you can read in 64 KB: count its bytes before you size a GPU, and pin it by digest like an image.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/llm-serving",
+    "containers/registry-pull"
+  ],
+  "tools": [
+    "hf",
+    "oras",
+    "registry",
+    "llama.cpp",
+    "gguf-py"
+  ],
+  "reference": [
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-model-supply-chain.md",
+    "prompt-estimate-model-memory.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

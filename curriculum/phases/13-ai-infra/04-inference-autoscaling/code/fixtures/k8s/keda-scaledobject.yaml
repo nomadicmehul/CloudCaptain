@@ -1,0 +1,21 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: cc-sim
+spec:
+  scaleTargetRef:
+    name: cc-sim
+  pollingInterval: 15
+  minReplicaCount: 1
+  maxReplicaCount: 3
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 300
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-operated.monitoring.svc:9090
+        query: sum(vllm:num_requests_running{namespace="cc-inference-autoscaling"}) + sum(vllm:num_requests_waiting{namespace="cc-inference-autoscaling"})
+        threshold: "4"

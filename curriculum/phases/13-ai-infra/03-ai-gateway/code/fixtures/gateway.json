@@ -1,0 +1,20 @@
+{
+  "backends": {
+    "llama": {"url": "http://127.0.0.1:8081", "timeout_seconds": 120},
+    "fake": {"url": "http://127.0.0.1:8082", "api_key_env": "FAKE_API_KEY", "timeout_seconds": 30}
+  },
+  "models": {
+    "local": [{"backend": "llama", "model": "smollm2"}],
+    "fake": [{"backend": "fake", "model": "fake-small"}],
+    "chat": [{"backend": "fake", "model": "fake-small"}, {"backend": "llama", "model": "smollm2"}]
+  },
+  "keys": [
+    {"name": "team-a", "key": "sk-cc-team-a", "rpm": 120, "tpm": 20000},
+    {"name": "tight", "key": "sk-cc-tight", "rpm": 60, "tpm": 300, "models": ["fake", "chat"]}
+  ],
+  "prices": "prices.json",
+  "retry": {"retries": 1, "backoff_seconds": 0.2, "max_wait_seconds": 1.0, "cooldown_seconds": 30},
+  "limits": {"default_max_tokens": 256},
+  "cache": {"mode": "deterministic", "ttl_seconds": 300, "max_entries": 1000, "scope": "key"},
+  "log": {"prompts": "redacted"}
+}

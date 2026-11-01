@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/ai-gateway",
+  "title": "An AI Gateway Is a Reverse Proxy That Counts Tokens",
+  "short": "AI Gateway",
+  "motto": "Route by model, hold an estimate before the call and settle the real usage after, fall back before the first byte, and price every request.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/llm-serving",
+    "orchestration/gateway-api"
+  ],
+  "tools": [
+    "docker",
+    "llama.cpp",
+    "litellm",
+    "curl",
+    "envoy-ai-gateway"
+  ],
+  "reference": [
+    "/docs/tools/nginx/fundamentals",
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/observability",
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-ai-gateway-policy.md",
+    "prompt-design-rate-limits.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

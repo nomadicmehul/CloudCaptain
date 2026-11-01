@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/inference-autoscaling",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A vLLM Deployment has an HPA on CPU at 70%. During a traffic spike, time to first token rises from 0.3 s to 40 s while `kubectl get hpa` shows `cpu: 31%/70%`. Why does it not scale?",
+      "choices": [
+        "The HPA's 15-second sync period is too long to see the spike",
+        "metrics-server cannot read the CPU of pods that use a GPU",
+        "The HPA ignores pods that request an extended resource such as nvidia.com/gpu",
+        "The pod's CPU is mostly one engine loop that is busy as soon as anything runs; waiting requests add almost no CPU, so utilisation plateaus below the target while the queue grows"
+      ],
+      "answer": 3,
+      "explanation": "Decode is bound by GPU memory bandwidth and concurrency by KV capacity; neither shows up in pod CPU. The queue is visible only in the server's own metrics: vllm:num_requests_waiting, llamacpp:requests_deferred or sglang:num_queue_reqs."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Three ready vLLM replicas report running + waiting of 10, 14 and 12. The HPA has an AverageValue target of 4 per replica and the default behavior. What does it set this period?",
+      "choices": [
+        "9, because ceil(36 / 4) = 9",
+        "3, because each replica is still within its batch limit",
+        "7: the raw recommendation is 9, but the default scale-up policy allows at most doubling or four more pods per 15 s, whichever is more, so 9 comes a period later if the load holds",
+        "12, one replica per three requests"
+      ],
+      "answer": 2,
+      "explanation": "desired = ceil(total / target) = 9, the ratio 36 / (3 x 4) = 3 is far outside the 0.1 tolerance, and the scale-up limit from 3 is max(6, 7) = 7. infscale prints the same three steps."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Load stops at 10:00. With the default HPA behavior, the last recommendation above 1 was 6, at 09:58. When can the Deployment go back to 1 replica?",
+      "choices": [
+        "Around 10:03: scale-down goes only to the highest recommendation in the last 300 s, and the 6 from 09:58 stays in that window until then",
+        "At the next 15-second sync after the queue empties",
+        "After KEDA's cooldownPeriod, which applies to every scale-down",
+        "Never: the HPA does not scale below the peak it reached"
+      ],
+      "answer": 0,
+      "explanation": "The scale-down stabilisation window keeps the maximum of the stored recommendations. KEDA's cooldownPeriod applies only to the last step from 1 to 0; between 1 and N the HPA that KEDA generates decides, under its own window."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A KEDA ScaledObject scales a vLLM Deployment on the Prometheus query `sum(vllm:num_requests_waiting)` with minReplicaCount 0. It scales to zero overnight and never comes back in the morning, although clients are sending requests. Why?",
+      "choices": [
+        "cooldownPeriod is shorter than pollingInterval",
+        "At zero there is no vLLM pod, so Prometheus scrapes nothing, the query returns no value and the trigger never becomes active; the waking demand has to be counted in front of the pods, by the KEDA HTTP add-on's interceptor, a gateway or Knative's activator",
+        "activationThreshold has to be negative for the trigger to fire",
+        "The HPA that KEDA created still has minReplicas 1 and blocks the change"
+      ],
+      "answer": 1,
+      "explanation": "A metric exported by the pods disappears with them. Scale to zero needs a component that outlives the pods, holds the request and reports it as demand, which is the held argument in infscale's decision."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A replica needs 90 s from scale-up to Ready. Traffic ramps from 10 to 30 requests per second within a minute, and one replica serves about 13. Which change does most for time-to-first-token misses during the ramp?",
+      "choices": [
+        "A longer scale-down stabilisation window",
+        "Scaling earlier, with a target below the replica's knee or a lookahead over the cold start, and shortening the cold start itself with pre-pulled images and locally cached weights",
+        "Switching the metric to KV cache usage",
+        "A higher maxReplicas"
+      ],
+      "answer": 1,
+      "explanation": "During the cold start the queue grows by arrivals minus capacity times 90 s, all of it on the replicas you already have. Only headroom bought before the ramp, or a shorter cold start, prevents that; the window and maxReplicas change nothing during the ramp."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Why does infscale refuse `--metric cpu --min 0` with exit code 2?",
+      "choices": [
+        "KEDA's cooldownPeriod does not apply to CPU triggers",
+        "CPU utilisation never drops to zero, so the idle cooldown would never start",
+        "With no pod there is no CPU sample, so a utilisation metric can never produce the first replica; only demand counted outside the pods, such as held requests, can wake a service from zero",
+        "A CPU target must be at least 50% for scale to zero to be stable"
+      ],
+      "answer": 2,
+      "explanation": "A utilisation metric is an average over the pods that report it. At zero pods that average does not exist, which is also why the HPA allows minReplicas 0 only behind a feature gate and only for Object or External metrics."
+    }
+  ]
+}

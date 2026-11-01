@@ -1,0 +1,8 @@
+[
+  {"name": "notebook", "count": 6, "gpus": 1, "memory_gib": 16},
+  {"name": "train-8", "gpus": 8, "memory_gib": 70, "model": "A100-SXM4-80GB", "nvlink": true, "gradient_gb": 14},
+  {"name": "finetune-2", "gpus": 2, "memory_gib": 60, "nvlink": true, "gradient_gb": 14},
+  {"name": "embed", "gpus": 1, "memory_gib": 40},
+  {"name": "chat", "count": 3, "gpus": 1, "memory_gib": 10, "shared": true},
+  {"name": "rerank", "mig": "3g.40gb"}
+]

@@ -1,0 +1,9 @@
+{
+  "currency": "USD",
+  "date": "2026-11-01",
+  "source": "Example rates for this lesson, not a vendor price list: llama/smollm2 is an internal chargeback rate for a CPU-hosted model, fake/fake-small stands in for a hosted API. Replace both with your provider's price page and your own cost model, and update the date.",
+  "per_million_tokens": {
+    "llama/smollm2": {"input": 0.05, "output": 0.10},
+    "fake/fake-small": {"input": 0.15, "output": 0.60}
+  }
+}

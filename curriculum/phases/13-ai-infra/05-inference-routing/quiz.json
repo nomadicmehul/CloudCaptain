@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/inference-routing",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Eight vLLM replicas with prefix caching enabled sit behind a plain Kubernetes Service. Forty tenants each send a 3,000-token system prompt followed by a short question. The servers report a 14% prefix cache hit rate. What is the main reason?",
+      "choices": [
+        "Prefix caching only works for identical prompts, and every question is different",
+        "The Service's kube-proxy rules strip the system prompt from the request body",
+        "Each replica caches only what it has seen, the Service spreads every tenant over all eight, so each replica must hold all forty prefixes and evicts them before reuse",
+        "The KV cache is flushed after every request unless sessions are sticky"
+      ],
+      "answer": 2,
+      "explanation": "The cache lives in each replica's GPU memory. A load balancer that ignores the prompt makes every replica prefill every tenant's prefix and keep all of them to hit; with finite cache per replica they are evicted before they come back. Routing each prefix to a replica that holds it turns eight copies of one cache into eight caches."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "With 16-token blocks, a request shares its first 40 tokens with a request the same replica served a moment ago. How much of its prompt can vLLM's prefix cache reuse?",
+      "choices": [
+        "All 40 shared tokens",
+        "Nothing: prefix caching needs the whole prompt to match",
+        "Three blocks: the partial third block is cached as well",
+        "Two blocks, 32 tokens: only full blocks are cached, and a block hits only if its chained hash, which covers every earlier token, matches"
+      ],
+      "answer": 3,
+      "explanation": "vLLM caches full blocks only, and each block's hash includes its parent's hash, so a hit means the whole prefix up to that block matches. Tokens 33 to 40 sit in a block that also holds different tokens, so its hash differs and it is prefilled again."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Weights are prefix 3, queue 2, KV 2. Endpoint A matches the whole prompt but has the longest queue (queue score 0) and KV usage 0.9. Endpoint B matches nothing, has the shortest queue (score 1) and KV usage 0. Which endpoint does a max-score picker choose?",
+      "choices": [
+        "A, because a full prefix match always wins",
+        "B, with 4.0 against A's 3.2",
+        "Either, because the scores tie and the picker chooses at random",
+        "A, with 3.2 against B's 2.0"
+      ],
+      "answer": 1,
+      "explanation": "A scores 3 × 1 + 2 × 0 + 2 × (1 − 0.9) = 3.2; B scores 3 × 0 + 2 × 1 + 2 × 1 = 4.0. The weights decide how deep a queue has to get before load overrules locality, which is what stops one hot tenant from piling onto one replica."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "You apply an InferencePool (inference.networking.k8s.io/v1) whose targetPorts list `{number: 8000}` twice. What happens?",
+      "choices": [
+        "The API server rejects it with `port number must be unique`, a validation rule in the CRD",
+        "It is accepted and every Pod becomes two endpoints on port 8000",
+        "It is accepted, and the endpoint picker silently ignores the duplicate",
+        "It is accepted but the HTTPRoute that references it shows ResolvedRefs False"
+      ],
+      "answer": 0,
+      "explanation": "The v1 CRD carries a CEL rule on targetPorts that every number appears once, so the object never reaches a controller. The same CRD requires a non-empty selector.matchLabels, one to eight ports, and a port on an endpointPickerRef of kind Service."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Llama 3.1 8B in 16-bit stores 128 KiB of KV per token. A prefill pod computes 12,000 tokens per second and the link to the decode pods is 10 Gb/s. What does that mean for disaggregating prefill and decode?",
+      "choices": [
+        "Nothing: KV transfer is negligible next to prefill compute",
+        "The prefill GPU produces KV at about 12.6 Gb/s, faster than the link moves it, so moving a prompt's KV takes longer than computing it and remote prefill raises TTFT",
+        "The link should be at least 128 Gb/s, one gigabit per KiB",
+        "It is always a win, because decode no longer shares the GPU with prefill"
+      ],
+      "answer": 1,
+      "explanation": "131,072 bytes × 8 bits × 12,000 tokens/s ≈ 12.6 Gb/s. Below that rate the transfer cannot keep pace with prefill, so each remote prefill adds more than its own compute time to TTFT. Disaggregation pays when the link keeps up and the decode stalls it removes are worth the transfer; chunked prefill is the cheaper first step."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A burst of new tenants made replica B evict tenant 7's prefix blocks. The next request from tenant 7 is still routed to B, prefills everything and is slow. Why, and what fixes it?",
+      "choices": [
+        "B's queue scorer was misconfigured; raising the queue weight fixes it",
+        "Block hashes expire after a minute; shortening the scrape interval fixes it",
+        "The router's approximate index records only its own decisions and never learns about evictions; an index fed by the servers' BlockRemoved KV events (precise prefix caching) fixes it",
+        "Tenant 7's cache_salt changed; disabling salting fixes it"
+      ],
+      "answer": 2,
+      "explanation": "The approximate producer believes a block is on an endpoint because it sent it there, until its own LRU drops it. Only the server knows when it evicted. vLLM and the simulator publish BlockStored and BlockRemoved events over ZMQ, and a precise index built from them routes tenant 7 as cold instead of trusting a stale belief."
+    }
+  ]
+}

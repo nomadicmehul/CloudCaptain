@@ -1,0 +1,31 @@
+{
+  "name": "cpu-4vcpu SmolLM2-135M-Instruct Q8_0",
+  "instance": "cpu-4vcpu",
+  "model": "SmolLM2-135M-Instruct",
+  "quantization": "Q8_0",
+  "method": "measured",
+  "source": "tokencost measure against llama.cpp server b11641 (CPU only, -t 4, --parallel 4) on an Apple M-series laptop, 2026-11-01, 8 requests per point, max_tokens 96, prompt cache off; priced as cpu-4vcpu for the walk-through",
+  "points": [
+    {
+      "concurrency": 1,
+      "requests_per_second": 3.9622,
+      "input_tokens": 57,
+      "output_tokens": 96,
+      "stream_tokens_per_second": 383.44,
+      "prefill_tokens_per_second": 2812.0
+    },
+    {
+      "concurrency": 4,
+      "requests_per_second": 7.6292,
+      "input_tokens": 57.8,
+      "output_tokens": 96,
+      "stream_tokens_per_second": 183.5,
+      "prefill_tokens_per_second": 2812.0
+    }
+  ],
+  "server_metrics": {
+    "metric": "llamacpp:tokens_predicted_total",
+    "delta": 1632.0,
+    "client_completion_tokens": 1632
+  }
+}

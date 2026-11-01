@@ -1,0 +1,63 @@
+{
+  "currency": "USD",
+  "instances": [
+    {
+      "name": "cpu-4vcpu",
+      "hourly_price": 0.17,
+      "accelerators": 0,
+      "as_of": "2026-10-28",
+      "source": "example figure for the lesson, not a quote: a 4 vCPU / 16 GiB general-purpose VM; read yours from the provider's price list"
+    },
+    {
+      "name": "gpu-l4-1x",
+      "hourly_price": 0.8,
+      "accelerators": 1,
+      "accelerator": "L4",
+      "memory_gb": 24,
+      "bandwidth_gbps": 300,
+      "tflops": 121,
+      "as_of": "2026-10-28",
+      "source": "example price, not a quote (a 1x NVIDIA L4 instance such as AWS g6.xlarge or GCP g2-standard-4); specs from the NVIDIA L4 datasheet (FP16 dense)"
+    },
+    {
+      "name": "gpu-l4-4x",
+      "hourly_price": 4.6,
+      "accelerators": 4,
+      "accelerator": "L4",
+      "memory_gb": 24,
+      "bandwidth_gbps": 300,
+      "tflops": 121,
+      "as_of": "2026-10-28",
+      "source": "example price, not a quote (a 4x NVIDIA L4 instance such as AWS g6.12xlarge); specs from the NVIDIA L4 datasheet (FP16 dense)"
+    },
+    {
+      "name": "gpu-h100-1x",
+      "hourly_price": 4.0,
+      "accelerators": 1,
+      "accelerator": "H100",
+      "memory_gb": 80,
+      "bandwidth_gbps": 3350,
+      "tflops": 989,
+      "as_of": "2026-10-28",
+      "source": "example price, not a quote (one GPU's share of an 8x H100 SXM instance); specs from the NVIDIA H100 datasheet (SXM, BF16 dense)"
+    }
+  ],
+  "apis": [
+    {
+      "name": "api-small",
+      "input_per_mtok": 0.15,
+      "output_per_mtok": 0.6,
+      "cached_input_per_mtok": 0.075,
+      "as_of": "2026-10-28",
+      "source": "example price for a small hosted model, not a quote; read the provider's pricing page"
+    },
+    {
+      "name": "api-large",
+      "input_per_mtok": 3.0,
+      "output_per_mtok": 15.0,
+      "cached_input_per_mtok": 0.3,
+      "as_of": "2026-10-28",
+      "source": "example price for a frontier hosted model, not a quote; read the provider's pricing page"
+    }
+  ]
+}

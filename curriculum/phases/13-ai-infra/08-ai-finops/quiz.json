@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/ai-finops",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A vendor benchmark shows one GPU serving 2,000 output tokens/s at batch 64, and the GPU costs 4 USD an hour. What else do you need before you can say what an output token costs you?",
+      "choices": [
+        "The batch your latency target allows, and how much of each hour your replicas are actually busy over your traffic curve",
+        "The model's parameter count",
+        "Nothing: 4 / (2,000 × 3,600) is the cost per token",
+        "The API's price for the same model"
+      ],
+      "answer": 0,
+      "explanation": "The division assumes batch 64 is allowed and the GPU is busy every second it is billed. The latency target caps the batch (per-request speed falls as the batch grows), and utilisation over a real day, with whole replicas, a night floor and autoscaler headroom, is often under half. Cost per token is price / (throughput at your batch × 3,600 × utilisation)."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "On a 24 GB, 300 GB/s L4, an 8B model streams about 11 tokens/s per request in F16 and about 38 in Q4_K at batch 1. Why?",
+      "choices": [
+        "Q4_K skips half the layers",
+        "Q4_K runs on the tensor cores and F16 does not",
+        "F16 spends most of its time on prefill",
+        "Each decode step reads every weight once, so reading 16 GB versus 4.5 GB per step over the same bus sets the speed"
+      ],
+      "answer": 3,
+      "explanation": "At small batch, decode is bound by memory bandwidth: step time is roughly bytes read divided by bandwidth. Q4_K is about 4.5 bits per weight against 16 for F16, so each step reads about a quarter of the bytes. The freed memory also fits more KV cache, so the larger batch raises throughput further."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Your measurement shows prefill at 2,800 tokens/s at concurrency 1 and 630 tokens/s at concurrency 4. Which rate should split the replica's time between input and output tokens?",
+      "choices": [
+        "630, because it was measured under realistic load",
+        "2,800: under load a prompt is processed in the same batches as other requests' decode steps, so its per-request speed measures contention, not what the replica can prefill",
+        "Neither; prefill is free once batching is on",
+        "The mean of the two"
+      ],
+      "answer": 1,
+      "explanation": "Per-request prompt speed under concurrency includes time the replica spent decoding other requests in the same steps. Using it would charge that decode time to input tokens twice. tokencost uses the rate measured alone (isolated_prefill) for every point and turns prompt caching off while measuring, because cached tokens are not prefilled at all."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The support-chat plan sizes replicas for 70% utilisation, yet the chosen L4 option averages 46% over the day. Where did the rest go?",
+      "choices": [
+        "The autoscaler is misconfigured",
+        "The latency target forces the server to idle between requests",
+        "Replicas are whole numbers and quiet hours still need one: at 03:00 a replica that can serve 2.5 requests/s receives 0.3, and those hours pull the daily average down",
+        "The API served part of the traffic"
+      ],
+      "answer": 2,
+      "explanation": "The target applies to the busy hours; rounding up to whole replicas and keeping at least one replica up during quiet hours leaves capacity unused. Scaling to zero does not help while any traffic arrives. Moving the quiet hours elsewhere (an API, or batch work on the same GPUs) does."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "The H100 option has the lowest cost per token at eight times today's traffic, but the highest monthly bill today. What does its break-even line tell finance?",
+      "choices": [
+        "Buy the H100 now; cost per token is all that matters",
+        "Never self-host",
+        "Self-hosting on the H100 beats api-small once traffic is about 2.4 times today's; until then its one replica runs at 11% utilisation and a quantized model on a smaller GPU, or the API, is cheaper",
+        "The H100 price in the file is stale"
+      ],
+      "answer": 2,
+      "explanation": "Break-even is where the staircase of self-hosted replica-hours drops below the API's linear bill and stays there. Below it the replica floor dominates. The decision depends on the traffic forecast, which is why the report states break-even as a multiple of current traffic and in requests per day."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A team's namespace requested 2 of a node's 4 GPUs all month, but its pods were idle half the time. How does OpenCost-style showback charge it, and what happens to the 2 GPUs nobody requested?",
+      "choices": [
+        "It pays for the 2 GPUs it requested, the greater of request and usage; the other 2 go to __idle__, or are spread over the teams in proportion when idle sharing is on",
+        "It pays for half of 2 GPUs, matching its usage",
+        "Nothing is charged until the GPUs are used",
+        "It pays for all 4 because its pods were scheduled first"
+      ],
+      "answer": 0,
+      "explanation": "A request reserves the GPU from the scheduler whether or not it is used, so the OpenCost model charges max(request, usage). Capacity nobody requested is reported as its own __idle__ allocation (includeIdle) or shared out in proportion to each allocation's cost (shareIdle), so the split always adds up to the node's bill."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "network_gbps": 50,
+  "nodes": [
+    {
+      "name": "dgx-a",
+      "labels": {"topology.kubernetes.io/zone": "eu-1a"},
+      "gpu": {"model": "A100-SXM4-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1, 2, 3, 4, 5, 6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}
+    },
+    {
+      "name": "dgx-b",
+      "labels": {"topology.kubernetes.io/zone": "eu-1a"},
+      "gpu": {"model": "A100-SXM4-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1, 2, 3, 4, 5, 6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}
+    },
+    {
+      "name": "pcie-a",
+      "labels": {"topology.kubernetes.io/zone": "eu-1b"},
+      "gpu": {"model": "A100-PCIE-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1], [2, 3], [4, 5], [6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}
+    },
+    {
+      "name": "l4-a",
+      "labels": {"topology.kubernetes.io/zone": "eu-1b"},
+      "gpu": {"model": "L4", "count": 2, "memory_gib": 24, "pcie_gbps": 32, "time_slicing": 4}
+    },
+    {
+      "name": "mig-a",
+      "labels": {"topology.kubernetes.io/zone": "eu-1b"},
+      "gpu": {"model": "A100-SXM4-80GB", "count": 1, "memory_gib": 80, "mig": [["1g.10gb@0", "1g.10gb@1", "2g.20gb@2", "3g.40gb@4"]]}
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/gpu-scheduling",
+  "title": "A GPU Is a Countable Resource Until It Isn't",
+  "short": "GPU Scheduling",
+  "motto": "The scheduler counts GPUs; memory, NVLink islands, MIG slices and gangs decide whether a job runs. Model them, or describe them with DRA.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/scheduler"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "kube-scheduler",
+    "nvidia-device-plugin",
+    "gpu-operator",
+    "kueue",
+    "jobset"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/learning-paths/ai-ml"
+  ],
+  "outputs": [
+    "skill-gpu-capacity-planning.md",
+    "prompt-explain-gpu-pending.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

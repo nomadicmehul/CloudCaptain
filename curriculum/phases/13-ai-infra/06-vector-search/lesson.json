@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/vector-search",
+  "title": "A Vector Index Is a Recall Budget You Tune",
+  "short": "Vector Search",
+  "motto": "An ANN index reads less and misses neighbours; measure recall@k against exact search, then spend ef_search, probes and filters on purpose.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/llm-serving"
+  ],
+  "tools": [
+    "docker",
+    "pgvector",
+    "postgresql",
+    "psql"
+  ],
+  "reference": [
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/docker/fundamentals",
+    "/docs/cloud/aws/databases-storage"
+  ],
+  "outputs": [
+    "skill-vector-index-tuning.md",
+    "prompt-choose-vector-store.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

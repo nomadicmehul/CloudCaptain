@@ -1,0 +1,23 @@
+model_list:
+  - model_name: local
+    litellm_params:
+      model: openai/smollm2
+      api_base: os.environ/LLAMA_API_BASE
+      api_key: none
+  - model_name: fake
+    litellm_params:
+      model: openai/fake-small
+      api_base: os.environ/FAKE_API_BASE
+      api_key: os.environ/FAKE_API_KEY
+  - model_name: chat
+    litellm_params:
+      model: openai/fake-small
+      api_base: os.environ/FAKE_API_BASE
+      api_key: os.environ/FAKE_API_KEY
+router_settings:
+  num_retries: 0
+  allowed_fails: 1
+  cooldown_time: 30
+  fallbacks: [{"chat": ["local"]}]
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
