@@ -1,0 +1,14 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "metadata": {"name": "gpu-node-a", "labels": {"node.kubernetes.io/instance-type": "gpu-l4-4x"}},
+      "status": {"capacity": {"cpu": "48", "memory": "196Gi", "nvidia.com/gpu": "4"}, "allocatable": {"cpu": "47", "memory": "190Gi", "nvidia.com/gpu": "4"}}
+    },
+    {
+      "metadata": {"name": "cpu-node-b", "labels": {"node.kubernetes.io/instance-type": "cpu-4vcpu"}},
+      "status": {"capacity": {"cpu": "4", "memory": "16Gi"}, "allocatable": {"cpu": "3920m", "memory": "15Gi"}}
+    }
+  ]
+}

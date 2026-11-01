@@ -1,0 +1,11 @@
+{
+  "name": "internal-docs-bot",
+  "hourly_requests_per_second": [0.05, 0.05, 0.05, 0.05, 0.05, 0.1, 0.2, 0.4, 0.8, 1.2, 1.4, 1.5, 1.2, 1.4, 1.5, 1.4, 1.2, 0.9, 0.6, 0.4, 0.3, 0.2, 0.1, 0.05],
+  "request": {"input_tokens": 58, "output_tokens": 96},
+  "slo": {"min_stream_tokens_per_second": 10},
+  "autoscaling": {"target_utilization": 0.7, "min_replicas": 1, "max_replicas": 16},
+  "days_per_month": 30,
+  "overhead_monthly": 0,
+  "cached_input_fraction": 0,
+  "compare_with": ["api-small"]
+}

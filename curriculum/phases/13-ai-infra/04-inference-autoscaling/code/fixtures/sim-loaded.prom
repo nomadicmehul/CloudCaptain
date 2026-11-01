@@ -1,0 +1,22 @@
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 1.27
+# HELP vllm:generation_tokens_total Total number of generated tokens.
+# TYPE vllm:generation_tokens_total counter
+vllm:generation_tokens_total{model_name="cc-tiny"} 1384
+# HELP vllm:kv_cache_usage_perc Prometheus metric for the fraction of KV-cache blocks currently in use (from 0 to 1).
+# TYPE vllm:kv_cache_usage_perc gauge
+vllm:kv_cache_usage_perc{model_name="cc-tiny"} 0
+# HELP vllm:num_requests_running Number of requests currently running on GPU.
+# TYPE vllm:num_requests_running gauge
+vllm:num_requests_running{model_name="cc-tiny"} 2
+# HELP vllm:num_requests_waiting Prometheus metric for the number of queued requests.
+# TYPE vllm:num_requests_waiting gauge
+vllm:num_requests_waiting{model_name="cc-tiny"} 10
+# HELP vllm:prompt_tokens_total Total number of prompt tokens processed.
+# TYPE vllm:prompt_tokens_total counter
+vllm:prompt_tokens_total{model_name="cc-tiny"} 912
+# HELP vllm:request_success_total Count of successfully processed requests.
+# TYPE vllm:request_success_total counter
+vllm:request_success_total{finish_reason="length",model_name="cc-tiny"} 61
+vllm:request_success_total{finish_reason="stop",model_name="cc-tiny"} 26

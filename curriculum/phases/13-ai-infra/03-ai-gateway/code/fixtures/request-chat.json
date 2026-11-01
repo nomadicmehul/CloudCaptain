@@ -1,0 +1,9 @@
+{
+  "model": "chat",
+  "messages": [
+    {"role": "system", "content": "You are the on-call assistant. Answer in one sentence."},
+    {"role": "user", "content": "Summarise the incident reported by maria@example.com from 10.20.30.40; her token sk-live-4f9a8b7c6d5e is in the ticket."}
+  ],
+  "max_tokens": 64,
+  "temperature": 0
+}

@@ -1,0 +1,41 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "resource.k8s.io/v1",
+      "kind": "ResourceClaim",
+      "metadata": {"name": "big-sxm", "namespace": "ml"},
+      "spec": {"devices": {"requests": [{"name": "gpu", "exactly": {"deviceClassName": "gpu.example.com", "count": 1, "selectors": [
+        {"cel": {"expression": "device.attributes[\"gpu.example.com\"].model == \"A100-SXM4-80GB\" && device.capacity[\"gpu.example.com\"].memory.compareTo(quantity(\"80Gi\")) >= 0"}}
+      ]}}]}}
+    },
+    {
+      "apiVersion": "resource.k8s.io/v1",
+      "kind": "ResourceClaim",
+      "metadata": {"name": "nvlink-pair", "namespace": "ml"},
+      "spec": {"devices": {
+        "requests": [{"name": "gpus", "exactly": {"deviceClassName": "gpu.example.com", "count": 2, "selectors": [
+          {"cel": {"expression": "device.attributes[\"gpu.example.com\"].model.startsWith(\"A100-PCIE\")"}}
+        ]}}],
+        "constraints": [{"requests": ["gpus"], "matchAttribute": "gpu.example.com/nvlinkIsland"}]
+      }}
+    },
+    {
+      "apiVersion": "resource.k8s.io/v1",
+      "kind": "ResourceClaim",
+      "metadata": {"name": "rerank-mig", "namespace": "ml"},
+      "spec": {"devices": {"requests": [{"name": "mig", "exactly": {"deviceClassName": "mig.example.com", "selectors": [
+        {"cel": {"expression": "device.attributes[\"gpu.example.com\"].profile == \"3g.40gb\""}}
+      ]}}]}}
+    },
+    {
+      "apiVersion": "resource.k8s.io/v1",
+      "kind": "ResourceClaim",
+      "metadata": {"name": "h200", "namespace": "ml"},
+      "spec": {"devices": {"requests": [{"name": "gpu", "exactly": {"deviceClassName": "gpu.example.com", "selectors": [
+        {"cel": {"expression": "device.capacity[\"gpu.example.com\"].memory.isGreaterThan(quantity(\"100Gi\"))"}}
+      ]}}]}}
+    }
+  ]
+}

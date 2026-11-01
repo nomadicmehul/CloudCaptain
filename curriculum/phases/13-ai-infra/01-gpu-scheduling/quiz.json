@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/gpu-scheduling",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A node reports `nvidia.com/gpu: 8` in allocatable and pods already request 3. What does kube-scheduler know about the other five?",
+      "choices": [
+        "Only that five units of an integer resource are unrequested; nothing about memory, model, interconnect or sharing",
+        "Which of them share an NVLink connection, from the device plugin",
+        "Their model and memory, from GPU Feature Discovery labels it reads automatically",
+        "Their current utilisation, from the DCGM exporter"
+      ],
+      "answer": 0,
+      "explanation": "An extended resource is a count that NodeResourcesFit compares like CPU. Labels only matter if the pod's node affinity asks for them, topology is invisible, and the scheduler never reads usage metrics."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Six 1-GPU notebook pods arrive on three empty 8-GPU nodes, then an 8-GPU training pod stays Pending with 18 GPUs free. With the default scheduler profile, why, and what keeps it from happening again?",
+      "choices": [
+        "The device plugin reserves two GPUs per node for system pods",
+        "The training pod needs a PriorityClass before it can use free GPUs",
+        "The default LeastAllocated score spread the notebooks over every node (and it weighs only CPU and memory); a profile with MostAllocated that weights nvidia.com/gpu packs small pods and keeps whole nodes free",
+        "Extended resources cannot be requested in amounts above 4"
+      ],
+      "answer": 2,
+      "explanation": "Two notebooks per node leave six free on each: plenty by total, zero for an 8-GPU pod. That is fragmentation. Bin-packing (gpusched --policy binpack, or NodeResourcesFit MostAllocated with a GPU weight) fills one node first."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A 2-GPU data-parallel pod on a PCIe server with NVLink bridges between GPU pairs runs five times slower than expected: its GPUs are in different pairs. With Dynamic Resource Allocation, how do you require GPUs from one NVLink pair?",
+      "choices": [
+        "Set `allocationMode: All` on the request",
+        "Add a nodeSelector for the GPU product label",
+        "Request `nvidia.com/gpu: 2` in limits and set `topologyManagerPolicy` on the pod",
+        "Have the driver publish an island attribute on each device and add a constraint with `matchAttribute` on it, so every device allocated for the request shares one value"
+      ],
+      "answer": 3,
+      "explanation": "matchAttribute makes the allocator keep only combinations whose devices agree on the attribute. allocationMode All takes every matching device, a node label cannot tell GPUs on one node apart, and pods do not set the Topology Manager policy (it is kubelet configuration, about NUMA)."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "An A100 80GB has two busy `1g.10gb` MIG instances at memory slices 0 and 4; everything else on the GPU is free or unused. Can an administrator add a `3g.40gb` instance without disturbing them?",
+      "choices": [
+        "Yes: six memory slices and five compute slices are free, more than a 3g.40gb needs",
+        "No: a 3g.40gb must start at memory slice 0 or 4 and covers four slices, and both ranges contain a busy instance",
+        "Yes, but only with the device plugin's mixed strategy",
+        "No: MIG only allows identical profiles on one GPU"
+      ],
+      "answer": 1,
+      "explanation": "MIG profiles have fixed placements (`nvidia-smi mig -lgipp`). Free capacity is necessary but not sufficient, which is fragmentation inside one GPU. Mixed and single are how the device plugin advertises instances, not how they are placed, and mixed profiles on one GPU are normal."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Two 4-pod training jobs were submitted together. Each has two pods Running and two Pending, the cluster has no free GPUs, and both jobs log that they are waiting for ranks. What fixes it?",
+      "choices": [
+        "Delete the Pending pods so the Job controller recreates them",
+        "Raise the jobs' priority",
+        "Admit each job's pods all or none, with Kueue (quota admission, plus waitForPodsReady) or a coscheduling PodGroup with minMember 4, so one job runs while the other waits holding nothing",
+        "Enable time-slicing so all eight pods fit"
+      ],
+      "answer": 2,
+      "explanation": "The default scheduler binds pods one at a time, so the jobs deadlocked on each other's GPUs, as gpusched gang --mode pod shows. Recreating pods repeats the race, equal priorities preempt nothing, and time-slicing would run eight training processes on shared GPUs."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A pod with a ResourceClaim is Pending with `cannot allocate all claims`, the claim shows no allocation, and `kubectl get resourceslices` prints nothing. Where do you look first?",
+      "choices": [
+        "The kubelet logs on the node, because preparing devices failed",
+        "The claim's `reservedFor` list, because another pod holds it",
+        "The DRA driver: no driver has published any devices, so there is nothing for the scheduler to allocate; check that its DaemonSet runs and registered on the GPU nodes",
+        "The pod's resource limits, because they must also list the GPUs"
+      ],
+      "answer": 2,
+      "explanation": "Allocation searches ResourceSlices. With none, every node fails the claim. Kubelet preparation happens only after allocation and binding, reservedFor matters for an allocated claim, and a DRA pod references the claim in resources.claims instead of a count in limits."
+    }
+  ]
+}

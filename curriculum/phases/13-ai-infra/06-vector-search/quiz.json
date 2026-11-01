@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "ai-infra/vector-search",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A retrieval query `ORDER BY embedding <=> $1 LIMIT 10` scanned every row and took 900 ms. After `CREATE INDEX ... USING hnsw` it takes 12 ms. Apart from speed, what changed?",
+      "choices": [
+        "The answers: an approximate index reads a subset of the vectors and can miss some true nearest neighbours, and only a comparison with exact search tells you how many",
+        "The rows now come back in random order because HNSW is randomised",
+        "Nothing; an index only changes how rows are found, never which rows come back",
+        "Writes became faster because the index caches every vector in memory"
+      ],
+      "answer": 0,
+      "explanation": "Exact search compares the query with every vector. HNSW walks a graph and keeps ef_search candidates, so some true neighbours can be missed. pgvector's documentation says it outright: unlike typical indexes, you will see different results after adding an approximate index. Recall@k against exact search is the only way to know how different."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A table has an HNSW index and the default `hnsw.ef_search` of 40. `WHERE tenant = 'acme' ORDER BY embedding <-> $1 LIMIT 10` often returns one row or none, although acme owns thousands of rows (2% of the table). Why, and what fixes it?",
+      "choices": [
+        "The HNSW index skips rows whose tenant column is not indexed; add tenant to the HNSW index",
+        "The filter runs on the at most 40 candidates the index scan returns, and about 2% of them match; enable iterative scans, or search acme's rows directly with a B-tree, a partial index or a partition",
+        "LIMIT 10 is applied before the WHERE clause; move the LIMIT into a subquery",
+        "acme's vectors are not normalised; switch the operator to cosine distance"
+      ],
+      "answer": 1,
+      "explanation": "With an approximate index the WHERE clause filters what the scan produced: selectivity times ef_search rows survive, 0.02 x 40 = 0.8 on average. hnsw.iterative_scan keeps reading the index until LIMIT is met (up to hnsw.max_scan_tuples). For a filter this selective, exact search over the matching rows (pre-filtering) is cheaper still."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An IVFFlat index with `lists = 100` was created when the table held 20,000 rows. The table now holds 2 million rows, recall has fallen and some lists are huge. What explains it?",
+      "choices": [
+        "IVFFlat stops indexing new rows once it is full, so they fall back to a sequential scan",
+        "`ivfflat.probes` resets to 1 when the table grows",
+        "The centroids were learned once from the 20,000 rows and never move; new rows go to the nearest old list, so the cells no longer fit the data. Rebuild the index with a list count chosen for the new size",
+        "The table needs VACUUM; dead tuples are the only thing that lowers IVF recall"
+      ],
+      "answer": 2,
+      "explanation": "IVF is k-means at CREATE INDEX time plus a list per centroid. Inserts are appended to the nearest existing list. When the data grows or drifts, the lists become unbalanced and the same probes value covers a smaller or less relevant part of the space. pgvector's advice is to create IVFFlat after the data is loaded, with lists around rows/1000 up to a million rows and sqrt(rows) beyond."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "How do you measure the recall of a production pgvector HNSW index?",
+      "choices": [
+        "Read the recall figure from `pg_stat_user_indexes`",
+        "Check that `hnsw.ef_search` is larger than the LIMIT; recall is then 1.0",
+        "Compare `EXPLAIN` costs with and without the index",
+        "Run a sample of real queries twice, normally and inside a transaction with `SET LOCAL enable_indexscan = off`, and compute the overlap of the returned ids divided by k per query"
+      ],
+      "answer": 3,
+      "explanation": "PostgreSQL has no recall statistic: recall is a property of your data and queries. Disabling index scans forces the exact sequential scan, which is the ground truth, and recall@k is the share of those ids the indexed query returned. Track the minimum as well as the mean."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A sweep reports `ef_search=40`: mean recall@10 0.97, min 0.80; `ef_search=80`: mean 1.00, min 1.00, with 60% more distance computations. The product requires every query to find at least 9 of its 10 true neighbours. Which setting meets the requirement at the lowest cost?",
+      "choices": [
+        "80, because the requirement is about the worst query, and at 40 at least one query found only 8 of 10",
+        "10, because any approximate index is good enough for retrieval",
+        "200, because recall should always be maximised",
+        "40, because a mean of 0.97 is above 0.9"
+      ],
+      "answer": 0,
+      "explanation": "A recall budget is set against the requirement, and a per-query requirement is checked against the minimum, not the mean. 80 is the smallest tested value whose min meets 0.9; 200 costs more without improving recall on this data."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A team has 50,000 documents with 768-dimension embeddings, about 20 queries per second, and the documents already live in PostgreSQL. A vendor proposes a dedicated vector database. What do you recommend?",
+      "choices": [
+        "The vector database, because PostgreSQL cannot store vectors",
+        "A GPU-backed vector service, because brute force over 50,000 vectors takes seconds",
+        "Store the vectors in a JSON column and compute distances in the application",
+        "pgvector in the existing database: brute force reads about 150 MB per query (around 15 ms at 10 GB/s), an HNSW index is one CREATE INDEX away, and vectors stay next to their metadata, transactions and backups"
+      ],
+      "answer": 3,
+      "explanation": "50,000 x 768 x 4 bytes is about 154 MB; even exact search costs milliseconds next to a model call that takes seconds. A separate system adds deployment, synchronisation and access control for no recall or latency gain at this size. It earns its place at hundreds of millions of vectors, high query rates with selective filters, or when you need managed sharding."
+    }
+  ]
+}

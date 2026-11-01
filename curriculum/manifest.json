@@ -192,6 +192,31 @@
         "aiops/write-tools-safely",
         "aiops/agent-evals"
       ]
+    },
+    {
+      "id": "ai-platform",
+      "title": "AI Platform Engineer",
+      "description": "For platform and infrastructure engineers who have to run models: GPU scheduling, model servers, gateways, autoscaling, routing, vector stores, model supply chain and cost.",
+      "careerPath": "/career-paths",
+      "lessons": [
+        "setup/lab-doctor",
+        "containers/process-isolation",
+        "containers/registry-pull",
+        "containers/image-build",
+        "orchestration/reconciler",
+        "orchestration/scheduler",
+        "orchestration/services-dns",
+        "orchestration/gateway-api",
+        "ai-infra/gpu-scheduling",
+        "ai-infra/llm-serving",
+        "ai-infra/ai-gateway",
+        "ai-infra/inference-autoscaling",
+        "ai-infra/inference-routing",
+        "ai-infra/vector-search",
+        "ai-infra/model-artifacts",
+        "ai-infra/ai-finops",
+        "aiops/llm-observability"
+      ]
     }
   ],
   "certifications": [

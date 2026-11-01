@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "ai-infra/ai-finops",
+  "title": "The Cost of a Token Is a Capacity Plan",
+  "short": "AI FinOps",
+  "motto": "A self-hosted token costs the hourly price over throughput times utilisation; measure throughput, and utilisation decides the bill.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "ai-infra/llm-serving",
+    "ai-infra/inference-autoscaling"
+  ],
+  "tools": [
+    "docker",
+    "llama.cpp",
+    "kubectl",
+    "kind",
+    "opencost",
+    "aws-cli"
+  ],
+  "reference": [
+    "/docs/cloud/finops/fundamentals",
+    "/docs/cloud/finops",
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "skill-ai-cost-review.md",
+    "prompt-self-host-vs-api.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

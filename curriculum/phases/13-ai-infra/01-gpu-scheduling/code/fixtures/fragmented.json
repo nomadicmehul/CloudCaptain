@@ -1,0 +1,8 @@
+{
+  "nodes": [
+    {"name": "dgx-a", "busy": [0, 1, 2, 3, 4, 5], "gpu": {"model": "A100-SXM4-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1, 2, 3, 4, 5, 6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}},
+    {"name": "dgx-b", "busy": [0, 1, 2, 3, 4, 5], "gpu": {"model": "A100-SXM4-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1, 2, 3, 4, 5, 6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}},
+    {"name": "pcie-a", "busy": [0, 2, 4, 6], "gpu": {"model": "A100-PCIE-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1], [2, 3], [4, 5], [6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}},
+    {"name": "mig-a", "gpu": {"model": "A100-SXM4-80GB", "count": 1, "memory_gib": 80, "mig": [[{"profile": "1g.10gb", "start": 0, "holder": "chat-0"}, "1g.10gb@1", "2g.20gb@2", {"profile": "1g.10gb", "start": 4, "holder": "chat-1"}, "1g.10gb@5", "1g.10gb@6"]]}}
+  ]
+}

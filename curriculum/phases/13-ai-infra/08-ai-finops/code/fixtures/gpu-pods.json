@@ -1,0 +1,31 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "metadata": {"name": "llm-0", "namespace": "chat", "labels": {"team": "assistant"}},
+      "spec": {"nodeName": "gpu-node-a", "containers": [{"name": "server", "resources": {"limits": {"nvidia.com/gpu": "2"}}}]},
+      "status": {"phase": "Running"}
+    },
+    {
+      "metadata": {"name": "embed-0", "namespace": "search", "labels": {"team": "search"}},
+      "spec": {"nodeName": "gpu-node-a", "containers": [{"name": "embedder", "resources": {"requests": {"nvidia.com/gpu": "1"}, "limits": {"nvidia.com/gpu": "1"}}}]},
+      "status": {"phase": "Running"}
+    },
+    {
+      "metadata": {"name": "reindex-28934", "namespace": "search", "labels": {"team": "search"}},
+      "spec": {"nodeName": "gpu-node-a", "containers": [{"name": "job", "resources": {"limits": {"nvidia.com/gpu": "1"}}}]},
+      "status": {"phase": "Succeeded"}
+    },
+    {
+      "metadata": {"name": "llm-1", "namespace": "chat", "labels": {"team": "assistant"}},
+      "spec": {"containers": [{"name": "server", "resources": {"limits": {"nvidia.com/gpu": "2"}}}]},
+      "status": {"phase": "Pending"}
+    },
+    {
+      "metadata": {"name": "frontend-7c9", "namespace": "web"},
+      "spec": {"nodeName": "cpu-node-b", "containers": [{"name": "web", "resources": {"requests": {"cpu": "500m"}}}]},
+      "status": {"phase": "Running"}
+    }
+  ]
+}

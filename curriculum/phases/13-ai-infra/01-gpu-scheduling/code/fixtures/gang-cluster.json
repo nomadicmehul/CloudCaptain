@@ -1,0 +1,7 @@
+{
+  "network_gbps": 50,
+  "nodes": [
+    {"name": "dgx-a", "gpu": {"model": "A100-SXM4-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1, 2, 3, 4, 5, 6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}},
+    {"name": "dgx-b", "gpu": {"model": "A100-SXM4-80GB", "count": 8, "memory_gib": 80, "islands": [[0, 1, 2, 3, 4, 5, 6, 7]], "nvlink_gbps": 300, "pcie_gbps": 32}}
+  ]
+}

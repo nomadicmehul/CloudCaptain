@@ -1,0 +1,314 @@
+{
+  "requests_per_month": 5648400,
+  "cheapest": {
+    "name": "gpu-l4-1x llama-8b Q4_K",
+    "kind": "self-hosted",
+    "monthly": 1080.0
+  },
+  "apis": {
+    "api-small": 1186.16,
+    "api-large": 27112.32
+  },
+  "options": {
+    "gpu-l4-1x llama-8b F16": {
+      "chosen": null,
+      "points": {
+        "1": {
+          "meets_slo": false,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.0555,
+          "replica_hours_per_day": 192,
+          "utilization": 0.9512,
+          "monthly": 4608.0,
+          "per_mtok_input": 0.0515,
+          "per_mtok_output": 20.8926,
+          "break_even": {
+            "api-small": null,
+            "api-large": null
+          }
+        },
+        "4": {
+          "meets_slo": false,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.2137,
+          "replica_hours_per_day": 158,
+          "utilization": 0.8804,
+          "monthly": 3792.0,
+          "per_mtok_input": 0.0556,
+          "per_mtok_output": 5.7391,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "8": {
+          "meets_slo": false,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.4071,
+          "replica_hours_per_day": 137,
+          "utilization": 0.824,
+          "monthly": 3288.0,
+          "per_mtok_input": 0.0594,
+          "per_mtok_output": 3.1341,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "10": {
+          "meets_slo": false,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.497,
+          "replica_hours_per_day": 126,
+          "utilization": 0.8169,
+          "monthly": 3024.0,
+          "per_mtok_input": 0.06,
+          "per_mtok_output": 2.5569,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        }
+      }
+    },
+    "gpu-l4-1x llama-8b Q8_0": {
+      "chosen": 24,
+      "points": {
+        "1": {
+          "meets_slo": true,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.1033,
+          "replica_hours_per_day": 179,
+          "utilization": 0.9152,
+          "monthly": 4296.0,
+          "per_mtok_input": 0.0535,
+          "per_mtok_output": 11.5925,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0372
+          }
+        },
+        "4": {
+          "meets_slo": true,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.3853,
+          "replica_hours_per_day": 137,
+          "utilization": 0.8419,
+          "monthly": 3288.0,
+          "per_mtok_input": 0.0582,
+          "per_mtok_output": 3.2507,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "8": {
+          "meets_slo": true,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.7068,
+          "replica_hours_per_day": 113,
+          "utilization": 0.6548,
+          "monthly": 2712.0,
+          "per_mtok_input": 0.0748,
+          "per_mtok_output": 2.1763,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "16": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 1.2129,
+          "replica_hours_per_day": 73,
+          "utilization": 0.5907,
+          "monthly": 1752.0,
+          "per_mtok_input": 0.0829,
+          "per_mtok_output": 1.3021,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "24": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 1.5931,
+          "replica_hours_per_day": 58,
+          "utilization": 0.566,
+          "monthly": 1392.0,
+          "per_mtok_input": 0.0865,
+          "per_mtok_output": 0.9726,
+          "break_even": {
+            "api-small": 5.7463,
+            "api-large": 0.0213
+          }
+        }
+      }
+    },
+    "gpu-l4-1x llama-8b Q4_K": {
+      "chosen": 31,
+      "points": {
+        "1": {
+          "meets_slo": true,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.1911,
+          "replica_hours_per_day": 159,
+          "utilization": 0.8986,
+          "monthly": 3816.0,
+          "per_mtok_input": 0.0545,
+          "per_mtok_output": 6.307,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "4": {
+          "meets_slo": true,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.6738,
+          "replica_hours_per_day": 113,
+          "utilization": 0.6869,
+          "monthly": 2712.0,
+          "per_mtok_input": 0.0713,
+          "per_mtok_output": 2.1868,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "8": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 1.1639,
+          "replica_hours_per_day": 76,
+          "utilization": 0.5913,
+          "monthly": 1824.0,
+          "per_mtok_input": 0.0828,
+          "per_mtok_output": 1.3661,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.0213
+          }
+        },
+        "16": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 1.8292,
+          "replica_hours_per_day": 55,
+          "utilization": 0.5198,
+          "monthly": 1320.0,
+          "per_mtok_input": 0.0942,
+          "per_mtok_output": 0.8858,
+          "break_even": {
+            "api-small": 1.4366,
+            "api-large": 0.0213
+          }
+        },
+        "24": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 2.2598,
+          "replica_hours_per_day": 47,
+          "utilization": 0.4924,
+          "monthly": 1128.0,
+          "per_mtok_input": 0.0995,
+          "per_mtok_output": 0.7001,
+          "break_even": {
+            "api-small": 0.9105,
+            "api-large": 0.0213
+          }
+        },
+        "31": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 2.5287,
+          "replica_hours_per_day": 45,
+          "utilization": 0.4596,
+          "monthly": 1080.0,
+          "per_mtok_input": 0.1066,
+          "per_mtok_output": 0.6364,
+          "break_even": {
+            "api-small": 0.7082,
+            "api-large": 0.0213
+          }
+        }
+      }
+    },
+    "gpu-h100-1x llama-8b F16": {
+      "chosen": 64,
+      "points": {
+        "1": {
+          "meets_slo": true,
+          "shortfall": true,
+          "requests_per_second_per_replica": 0.6183,
+          "replica_hours_per_day": 117,
+          "utilization": 0.723,
+          "monthly": 14040.0,
+          "per_mtok_input": 0.0414,
+          "per_mtok_output": 12.304,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.1461
+          }
+        },
+        "8": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 4.4581,
+          "replica_hours_per_day": 33,
+          "utilization": 0.3555,
+          "monthly": 3960.0,
+          "per_mtok_input": 0.0843,
+          "per_mtok_output": 3.2526,
+          "break_even": {
+            "api-small": null,
+            "api-large": 0.1063
+          }
+        },
+        "16": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 8.0122,
+          "replica_hours_per_day": 24,
+          "utilization": 0.272,
+          "monthly": 2880.0,
+          "per_mtok_input": 0.1102,
+          "per_mtok_output": 2.2189,
+          "break_even": {
+            "api-small": 28.7313,
+            "api-large": 0.1063
+          }
+        },
+        "32": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 13.3229,
+          "replica_hours_per_day": 24,
+          "utilization": 0.1636,
+          "monthly": 2880.0,
+          "per_mtok_input": 0.1832,
+          "per_mtok_output": 1.9999,
+          "break_even": {
+            "api-small": 3.4397,
+            "api-large": 0.1063
+          }
+        },
+        "64": {
+          "meets_slo": true,
+          "shortfall": false,
+          "requests_per_second_per_replica": 19.9271,
+          "replica_hours_per_day": 24,
+          "utilization": 0.1094,
+          "monthly": 2880.0,
+          "per_mtok_input": 0.274,
+          "per_mtok_output": 1.7275,
+          "break_even": {
+            "api-small": 2.428,
+            "api-large": 0.1063
+          }
+        }
+      }
+    }
+  }
+}

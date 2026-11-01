@@ -1,0 +1,5 @@
+[
+  {"name": "etl", "pods": 1, "gpus_per_pod": 8, "duration": 1200, "arrival": 0},
+  {"name": "llm-a", "pods": 4, "gpus_per_pod": 4, "duration": 3600, "arrival": 10},
+  {"name": "llm-b", "pods": 4, "gpus_per_pod": 4, "duration": 1800, "arrival": 10}
+]
