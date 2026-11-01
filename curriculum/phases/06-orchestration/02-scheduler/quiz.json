@@ -18,7 +18,7 @@
     {
       "id": "check-1",
       "stage": "check",
-      "prompt": "The event says `0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 Insufficient cpu.` The control-plane node is also short of CPU. Why is it not counted under Insufficient cpu?",
+      "prompt": "The event says `0/3 nodes are available: 1 node(s) had untolerated taint(s), 2 Insufficient cpu.` The control-plane node is also short of CPU. Why is it not counted under Insufficient cpu?",
       "choices": [
         "The scheduler merges duplicate reasons",
         "Control-plane nodes have no allocatable CPU",

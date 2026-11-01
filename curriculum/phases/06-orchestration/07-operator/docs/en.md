@@ -61,7 +61,7 @@ The loop is level-triggered. An event only says which key to look at; `reconcile
 
 ## Build It
 
-`code/main.py` is `minioperator`. The CRD and the Role are Python dicts printed as JSON (`kubectl apply -f` reads JSON). The controller talks to an API object with seven methods (`list`, `watch`, `get`, `create`, `update`, `update_status`, `delete`). `HttpApi` implements them with `urllib` against `kubectl proxy`; `FakeApi` implements them in memory with real semantics (resourceVersions, generations, the status subresource, finalizers, garbage collection, compaction and `410`), so the tests and the demo run on macOS without a cluster.
+`code/main.py` is `minioperator`. The CRD and the Role are Python dicts printed as JSON (`kubectl apply -f` reads JSON). The controller talks to an API object with seven methods (`list`, `watch`, `get`, `create`, `update`, `update_status`, `delete`). `HttpApi` implements them with `urllib` against `kubectl proxy`; `FakeApi` implements them in memory with real semantics (resourceVersions, generations, the status subresource, finalizers, garbage collection, compaction and `410`), so the tests and the demo run on macOS without a cluster. `HttpApi` retries `429 TooManyRequests` after the server's `Retry-After` (capped, with exponential backoff when the header is missing): right after a CRD is created the API server can answer that for a moment with `storage is (re)initializing`, and client-go waits and retries in the same way.
 
 ### Step 1: the type
 

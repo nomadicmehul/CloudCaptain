@@ -445,7 +445,7 @@ def taint_toleration(pod: Pod, info: NodeInfo, state: CycleState) -> Optional[St
     if taint is None:
         return None
     key, value = taint.get("key", ""), taint.get("value", "")
-    return Status("TaintToleration", UNRESOLVABLE, [f"node(s) had untolerated taint {{{key}: {value}}}"], f"{key}={value}:{taint.get('effect')}")
+    return Status("TaintToleration", UNRESOLVABLE, ["node(s) had untolerated taint(s)"], f"{key}={value}:{taint.get('effect')}")
 
 
 def node_affinity(pod: Pod, info: NodeInfo, state: CycleState) -> Optional[Status]:

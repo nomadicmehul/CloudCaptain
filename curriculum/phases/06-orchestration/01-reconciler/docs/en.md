@@ -378,13 +378,13 @@ kubectl -n reconcile-lab get events --field-selector reason=SuccessfulCreate
 The watch shows the victim go `Terminating` and a new pod appear `Pending`, `ContainerCreating`, `Running` under the same ReplicaSet. The real kubelet adds what `minictl` skips: a pod being deleted gets a `deletionTimestamp` and a grace period, and the ReplicaSet controller already ignores it when counting, which is why the replacement appears before the old pod is gone. The `get events` line is your `SuccessfulCreate` record. The stream behind `-w` is the watch from Step 2, and you can read it raw by asking for it from a version:
 
 ```bash
-RV=$(kubectl -n reconcile-lab get pods -o jsonpath='{.metadata.resourceVersion}')
+RV=$(kubectl get --raw /api/v1/namespaces/reconcile-lab/pods | python3 -c 'import json,sys; print(json.load(sys.stdin)["metadata"]["resourceVersion"])')
 VICTIM=$(kubectl -n reconcile-lab get pods -o jsonpath='{.items[0].metadata.name}')
 kubectl -n reconcile-lab delete pod "$VICTIM"
 kubectl get --raw "/api/v1/namespaces/reconcile-lab/pods?watch=1&resourceVersion=$RV&timeoutSeconds=5"
 ```
 
-That prints one JSON object per line, `{"type":"MODIFIED","object":{...}}` and so on, replayed from `RV` and in order: the victim gets a `deletionTimestamp`, a replacement is `ADDED`, statuses change, and finally the victim is `DELETED`. A version older than the server's watch cache returns a single `ERROR` event whose status has code 410, the real `Gone`; the cure is the relist in Step 6. Optimistic concurrency is just as visible. Save an object, let someone else change it, then write your stale copy:
+Read `RV` from the raw list, not from `kubectl get pods -o jsonpath='{.metadata.resourceVersion}'`: kubectl wraps the items it fetched in a `List` it builds itself, and that wrapper has no resourceVersion, so the watch would start from "now" and replay nothing. That prints one JSON object per line, `{"type":"MODIFIED","object":{...}}` and so on, replayed from `RV` and in order: the victim gets a `deletionTimestamp`, a replacement is `ADDED`, statuses change, and finally the victim is `DELETED`. A version older than the server's watch cache returns a single `ERROR` event whose status has code 410, the real `Gone`; the cure is the relist in Step 6. Optimistic concurrency is just as visible. Save an object, let someone else change it, then write your stale copy:
 
 ```bash
 kubectl -n reconcile-lab get deployment web -o json > saved.json

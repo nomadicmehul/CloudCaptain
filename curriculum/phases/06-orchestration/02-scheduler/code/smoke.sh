@@ -49,7 +49,7 @@ echo "  LeastAllocated -> worker-a, MostAllocated -> worker-b"
 echo "▸ FailedScheduling messages in kube-scheduler's format, first failing filter per node"
 CODE="$(mini "$WORK/big.json" --nodes "$F/nodes.json" --pods "$F/pods.json" --pod "$F/pod-big.json")"
 [[ "$CODE" == "1" ]] || fail "big should not schedule (exit $CODE)"
-WANT="0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 Insufficient cpu."
+WANT="0/3 nodes are available: 1 node(s) had untolerated taint(s), 2 Insufficient cpu."
 [[ "$(field "$WORK/big.json" filter_message)" == "$WANT" ]] || fail "big: $(field "$WORK/big.json" filter_message)"
 echo "  $(field "$WORK/big.json" message)"
 CODE="$(mini "$WORK/gpu.json" --nodes "$F/nodes.json" --pods "$F/pods.json" --pod "$F/pod-gpu.json")"
@@ -173,20 +173,21 @@ k describe pod cc-big -n "$NS" > "$WORK/describe.txt"
 grep -q "FailedScheduling" "$WORK/describe.txt" || fail "kubectl describe should list the FailedScheduling event: $(cat "$WORK/describe.txt")"
 k delete pod cc-big -n "$NS" --wait=false >/dev/null
 
-echo "▸ taint every node cc-smoke=1:NoSchedule: a plain pod stays Pending and both name the taint"
+echo "▸ taint every node cc-smoke=1:NoSchedule: a plain pod stays Pending; both report the taint, minisched's per-node detail names it"
 for n in "${NODES[@]}"; do k taint nodes "$n" cc-smoke=1:NoSchedule --overwrite >/dev/null || fail "taint $n"; done
 snapshot
 write_pod cc-plain 50m
 write_pod cc-tolerates 50m tolerate
 CODE="$(mini "$WORK/mini-plain.json" --nodes "$WORK/nodes.json" --pods "$WORK/pods.json" --pod "$WORK/cc-plain.json")"
 MINI="$(field "$WORK/mini-plain.json" message)"
-[[ "$CODE" == "1" && "$MINI" == *"$N node(s) had untolerated taint {cc-smoke: 1}"* ]] || fail "minisched should name the taint (exit $CODE): $MINI"
+[[ "$CODE" == "1" && "$MINI" == *"$N node(s) had untolerated taint(s)"* ]] || fail "minisched should report the untolerated taint (exit $CODE): $MINI"
+grep -q "cc-smoke=1:NoSchedule" "$WORK/mini-plain.json" || fail "minisched's per-node detail should name the cc-smoke taint: $(cat "$WORK/mini-plain.json")"
 echo "  minisched:      $MINI"
 k apply -f "$WORK/cc-plain.json" >/dev/null || fail "apply cc-plain"
 expect_pending cc-plain
 REAL="$(event_message cc-plain)" || fail "no FailedScheduling event for cc-plain"
 echo "  kube-scheduler: $REAL"
-[[ "$REAL" == *"untolerated taint"* && "$REAL" == *"cc-smoke"* ]] || fail "event should name the cc-smoke taint: $REAL"
+[[ "$REAL" == *"untolerated taint"* ]] || fail "event should report an untolerated taint: $REAL"
 same_first_sentence "$MINI" "$REAL"
 
 echo "▸ a pod that tolerates the taint is bound where minisched predicts"

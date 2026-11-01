@@ -124,11 +124,11 @@ class FilterTests(unittest.TestCase):
         ])
         status = self.status(pod("p", cpu="100m"), tainted)
         self.assertEqual(status.plugin, "TaintToleration")
-        self.assertEqual(status.reasons, ["node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }"])
+        self.assertEqual(status.reasons, ["node(s) had untolerated taint(s)"])
         tolerated = pod("p", cpu="100m", tolerations=[{"key": "node-role.kubernetes.io/control-plane", "operator": "Exists", "effect": "NoSchedule"}])
         self.assertIsNone(self.status(tolerated, tainted))
         evicting = node("n2", taints=[{"key": "cc-smoke", "value": "1", "effect": "NoExecute"}])
-        self.assertEqual(self.status(pod("p"), evicting).reasons, ["node(s) had untolerated taint {cc-smoke: 1}"])
+        self.assertEqual(self.status(pod("p"), evicting).reasons, ["node(s) had untolerated taint(s)"])
 
     def test_cordoned_node_is_unschedulable_unless_the_pod_tolerates_the_unschedulable_taint(self):
         cordoned = node("n1", unschedulable=True)
@@ -188,7 +188,7 @@ class FilterTests(unittest.TestCase):
         n = node("n1", cpu="1", taints=[{"key": "dedicated", "value": "db", "effect": "NoSchedule"}], labels={"zone": "a"})
         status = self.status(pod("p", cpu="8", nodeSelector={"zone": "b"}), n)
         self.assertEqual(status.plugin, "TaintToleration")
-        self.assertEqual(status.reasons, ["node(s) had untolerated taint {dedicated: db}"])
+        self.assertEqual(status.reasons, ["node(s) had untolerated taint(s)"])
 
     def test_topology_spread_skew_counts_tainted_domains_unless_taints_are_honored(self):
         nodes = [
@@ -227,10 +227,10 @@ class MessageTests(unittest.TestCase):
     def test_failed_scheduling_message_is_a_sorted_histogram_in_kube_scheduler_format(self):
         statuses = [
             main.Status("NodeResourcesFit", main.UNSCHEDULABLE, ["Insufficient cpu"]),
-            main.Status("TaintToleration", main.UNRESOLVABLE, ["node(s) had untolerated taint {k: v}"]),
+            main.Status("TaintToleration", main.UNRESOLVABLE, ["node(s) had untolerated taint(s)"]),
             main.Status("NodeResourcesFit", main.UNSCHEDULABLE, ["Insufficient cpu"]),
         ]
-        self.assertEqual(main.fit_error(3, statuses), "0/3 nodes are available: 1 node(s) had untolerated taint {k: v}, 2 Insufficient cpu.")
+        self.assertEqual(main.fit_error(3, statuses), "0/3 nodes are available: 1 node(s) had untolerated taint(s), 2 Insufficient cpu.")
         both = [main.Status("NodeResourcesFit", main.UNSCHEDULABLE, ["Insufficient cpu", "Insufficient memory"])]
         self.assertEqual(main.fit_error(1, both), "0/1 nodes are available: 1 Insufficient cpu, 1 Insufficient memory.")
         many = [main.Status("x", main.UNSCHEDULABLE, ["b"])] * 10 + [main.Status("x", main.UNSCHEDULABLE, ["a"])] * 2
@@ -243,7 +243,7 @@ class MessageTests(unittest.TestCase):
         self.assertIsNone(result.node)
         self.assertEqual(
             result.message,
-            "0/2 nodes are available: 1 Insufficient cpu, 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }. "
+            "0/2 nodes are available: 1 Insufficient cpu, 1 node(s) had untolerated taint(s). "
             "preemption: 0/2 nodes are available: 1 No preemption victims found for incoming pod, 1 Preemption is not helpful for scheduling.",
         )
         never = main.schedule(pod("big", cpu="1", priority=100, preemptionPolicy="Never"), main.Cluster(nodes, bound))
@@ -352,7 +352,7 @@ class ManifestAndCliTests(unittest.TestCase):
         code, out, _ = run(fixture("pod-big.json"))
         big = json.loads(out)
         self.assertEqual(code, 1)
-        self.assertEqual(big["filter_message"], "0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 Insufficient cpu.")
+        self.assertEqual(big["filter_message"], "0/3 nodes are available: 1 node(s) had untolerated taint(s), 2 Insufficient cpu.")
         self.assertTrue(big["message"].endswith("preemption: 0/3 nodes are available: 1 Preemption is not helpful for scheduling, 2 No preemption victims found for incoming pod."))
         _, out, _ = run(fixture("pod-urgent.json"))
         self.assertEqual(json.loads(out)["preemption"], {"message": "preemption: nominate worker-a and evict default/batch-1 (priority 0)", "node": "worker-a", "victims": ["default/batch-1"]})

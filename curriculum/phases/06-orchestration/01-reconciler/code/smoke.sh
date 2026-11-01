@@ -202,7 +202,11 @@ print("  %d SuccessfulCreate events (3 initial + the replacement)" % len(items))
 PY
 
 echo "▸ a watch from a resourceVersion replays what happened since"
-RV="$(k get pods -n "$NS" -o jsonpath='{.metadata.resourceVersion}')"
+k get --raw "/api/v1/namespaces/$NS/pods" > "$WORK/pods-list.json" || fail "raw pod list"
+RV="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["metadata"]["resourceVersion"])' "$WORK/pods-list.json")"
+[[ -n "$RV" ]] || fail "the raw list carried no resourceVersion"
+LISTRV="$(k get pods -n "$NS" -o jsonpath='{.metadata.resourceVersion}')"
+echo "  list resourceVersion $RV from the API server; kubectl's own List wrapper says '${LISTRV}'"
 k get pods -n "$NS" -l app=web -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' > "$WORK/before-watch.txt"
 VICTIM2="$(head -1 "$WORK/before-watch.txt")"
 k delete pod "$VICTIM2" -n "$NS" --wait=true >/dev/null || fail "delete pod $VICTIM2"

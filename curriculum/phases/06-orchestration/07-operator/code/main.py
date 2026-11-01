@@ -756,11 +756,21 @@ def http_error(exc: urllib.error.HTTPError) -> ApiError:
     return status_error(status)
 
 
+def retry_after(headers: Any, attempt: int) -> float:
+    value = headers.get("Retry-After") if headers is not None else None
+    try:
+        return min(float(value), 10.0)
+    except (TypeError, ValueError):
+        return min(0.5 * 2 ** attempt, 10.0)
+
+
 class HttpApi:
-    def __init__(self, server: str, opener: Callable[..., Any] = urllib.request.urlopen, timeout: float = 30.0):
+    def __init__(self, server: str, opener: Callable[..., Any] = urllib.request.urlopen, timeout: float = 30.0, sleep: Callable[[float], Any] = time.sleep, retries: int = 5):
         self.server = server.rstrip("/")
         self.opener = opener
         self.timeout = timeout
+        self.sleep = sleep
+        self.retries = retries
 
     def url(self, path: str, query: Optional[Dict[str, Optional[str]]] = None) -> str:
         pairs = {key: value for key, value in (query or {}).items() if value is not None}
@@ -768,13 +778,19 @@ class HttpApi:
 
     def send(self, method: str, path: str, body: Optional[Obj] = None, query: Optional[Dict[str, Optional[str]]] = None, timeout: Optional[float] = None) -> Any:
         data = None if body is None else json.dumps(body).encode("utf-8")
-        request = urllib.request.Request(self.url(path, query), data=data, method=method, headers={"Accept": "application/json", "Content-Type": "application/json"})
-        try:
-            return self.opener(request, timeout=timeout or self.timeout)
-        except urllib.error.HTTPError as exc:
-            raise http_error(exc) from None
-        except urllib.error.URLError as exc:
-            raise ApiError(0, "Unreachable", f"{self.server}: {exc.reason}; is kubectl proxy running?") from None
+        attempt = 0
+        while True:
+            request = urllib.request.Request(self.url(path, query), data=data, method=method, headers={"Accept": "application/json", "Content-Type": "application/json"})
+            try:
+                return self.opener(request, timeout=timeout or self.timeout)
+            except urllib.error.HTTPError as exc:
+                if exc.code == 429 and attempt < self.retries:
+                    self.sleep(retry_after(exc.headers, attempt))
+                    attempt += 1
+                    continue
+                raise http_error(exc) from None
+            except urllib.error.URLError as exc:
+                raise ApiError(0, "Unreachable", f"{self.server}: {exc.reason}; is kubectl proxy running?") from None
 
     def call(self, method: str, path: str, body: Optional[Obj] = None, query: Optional[Dict[str, Optional[str]]] = None) -> Obj:
         response = self.send(method, path, body, query)

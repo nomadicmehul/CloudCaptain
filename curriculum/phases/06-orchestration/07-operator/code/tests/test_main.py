@@ -164,6 +164,24 @@ class ApiClientTests(unittest.TestCase):
         self.assertIn("kubectl proxy", caught.exception.message)
 
 
+    def test_too_many_requests_is_retried_after_retry_after(self):
+        def busy():
+            body = b'{"kind":"Status","code":429,"reason":"TooManyRequests","message":"storage is (re)initializing"}'
+            return urllib.error.HTTPError("http://x", 429, "Too Many Requests", {"Retry-After": "1"}, io.BytesIO(body))
+        slept = []
+        api = main.HttpApi("http://127.0.0.1:8001", FakeOpener([busy(), busy(), {"items": [], "metadata": {"resourceVersion": "7"}}]), sleep=slept.append)
+        self.assertEqual(api.list(main.SITE, NS), ([], "7"))
+        self.assertEqual(slept, [1.0, 1.0])
+        api = main.HttpApi("http://127.0.0.1:8001", FakeOpener([busy(), busy(), busy()]), sleep=slept.append, retries=2)
+        with self.assertRaises(main.ApiError) as caught:
+            api.list(main.SITE, NS)
+        self.assertEqual((caught.exception.code, caught.exception.reason), (429, "TooManyRequests"))
+
+    def test_retry_after_falls_back_to_exponential_backoff_with_a_cap(self):
+        self.assertEqual([main.retry_after({}, n) for n in range(6)], [0.5, 1.0, 2.0, 4.0, 8.0, 10.0])
+        self.assertEqual(main.retry_after({"Retry-After": "30"}, 0), 10.0)
+
+
 class FakeApiTests(unittest.TestCase):
     def test_resource_versions_generation_and_optimistic_concurrency(self):
         _, api, _, _ = make_world()

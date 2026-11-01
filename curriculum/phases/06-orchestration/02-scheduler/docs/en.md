@@ -18,7 +18,7 @@
 
 Friday, 16:40. The `checkout` rollout has been stuck for twenty minutes: four new pods are Running, two are `Pending`, and `kubectl rollout status` is still waiting. `kubectl top nodes` shows every node under 35% CPU, so somebody says the cluster is "obviously not full" and deletes the two Pending pods. The ReplicaSet creates two new ones. They are Pending too. Someone else bumps the node group from twelve to fifteen nodes; three nodes join, the pods stay Pending, and the new nodes sit there almost empty and billed by the hour.
 
-The answer was on the screen the whole time, in the event nobody read closely: `0/12 nodes are available: 3 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 4 Insufficient memory, 5 node(s) didn't match pod topology spread constraints.` Every one of the twelve nodes is in that sentence exactly once. Three are control-plane nodes the pod does not tolerate. Four have less free memory than the pod *requests*, which has nothing to do with what `top` measures. Five would push one zone two pods ahead of another, and the release added `maxSkew: 1` across zones while all three new nodes landed in the same zone. Deleting pods changes none of that, and new nodes help only if they fix the specific reason.
+The answer was on the screen the whole time, in the event nobody read closely: `0/12 nodes are available: 3 node(s) had untolerated taint(s), 4 Insufficient memory, 5 node(s) didn't match pod topology spread constraints.` Every one of the twelve nodes is in that sentence exactly once. Three are control-plane nodes the pod does not tolerate. Four have less free memory than the pod *requests*, which has nothing to do with what `top` measures. Five would push one zone two pods ahead of another, and the release added `maxSkew: 1` across zones while all three new nodes landed in the same zone. Deleting pods changes none of that, and new nodes help only if they fix the specific reason.
 
 The scheduler is not a black box that "decides". It runs a fixed list of filter plugins against every node, keeps the nodes that pass all of them, scores those with another list of plugins, and writes one field: `spec.nodeName`. When no node passes, it counts the reasons and prints the histogram you just read. You are going to write `minisched`, which does the same thing from `kubectl get nodes -o json` and the pods already bound: the same filters in the same order, the same scores and weights, preemption, and the FailedScheduling message word for word. After that, every Pending pod is one line of that message and one change you can name.
 
@@ -142,7 +142,7 @@ def tolerates(toleration: Dict[str, Any], taint: Dict[str, Any]) -> bool:
     return False
 ```
 
-`taint_toleration()` looks only at `NoSchedule` and `NoExecute` taints and reports the first untolerated one as `node(s) had untolerated taint {KEY: VALUE}`; `PreferNoSchedule` only lowers the score. `node_unschedulable()` rejects a cordoned node (`spec.unschedulable: true`) unless the pod tolerates `node.kubernetes.io/unschedulable:NoSchedule`, which is how DaemonSet pods still land on cordoned nodes. `node_name()` matters for simulations only: a pod created with `spec.nodeName` already set never reaches the scheduler at all. `node_affinity()` checks `nodeSelector` (every pair must match) and the required `nodeSelectorTerms` (terms are ORed, expressions inside a term are ANDed, `NotIn` and `DoesNotExist` match nodes that lack the label, and an empty term matches nothing). `matchFields` on `metadata.name` is what the DaemonSet controller writes to pin a pod to one node.
+`taint_toleration()` looks only at `NoSchedule` and `NoExecute` taints and reports the first untolerated one. The event says only `node(s) had untolerated taint(s)`: current releases stopped printing the taint's key and value there (older ones printed `{KEY: VALUE}`), so minisched keeps the taint in its per-node detail, the column you would otherwise rebuild with `kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints`; `PreferNoSchedule` only lowers the score. `node_unschedulable()` rejects a cordoned node (`spec.unschedulable: true`) unless the pod tolerates `node.kubernetes.io/unschedulable:NoSchedule`, which is how DaemonSet pods still land on cordoned nodes. `node_name()` matters for simulations only: a pod created with `spec.nodeName` already set never reaches the scheduler at all. `node_affinity()` checks `nodeSelector` (every pair must match) and the required `nodeSelectorTerms` (terms are ORed, expressions inside a term are ANDed, `NotIn` and `DoesNotExist` match nodes that lack the label, and an empty term matches nothing). `matchFields` on `metadata.name` is what the DaemonSet controller writes to pin a pod to one node.
 
 ### Step 4: requests against allocatable, and skew against the minimum
 
@@ -241,7 +241,7 @@ kube-scheduler picks uniformly at random among nodes with the same top total; `m
 ```bash
 F=code/fixtures
 python3 code/main.py --nodes $F/nodes.json --pods $F/pods.json --pod $F/pod-web.json
-#   cp-1      TaintToleration    node(s) had untolerated taint {node-role.kubernetes.io/control-plane: } ...
+#   cp-1      TaintToleration    node(s) had untolerated taint(s) ...
 #   node            Fit  Balance    Taint   total
 #   worker-a         56       77      100     433
 #   worker-b         24       96      100     420
@@ -256,7 +256,7 @@ python3 code/main.py --nodes $F/nodes.json --pod $F/pod-web.json      # no bound
 python3 code/main.py --nodes $F/nodes.json --pods $F/pods.json --pod $F/pod-big.json; echo "exit $?"
 #   worker-a  NodeResourcesFit   Insufficient cpu (cpu: requested 2000m, free 1800m of 3800m)
 #   worker-b  NodeResourcesFit   Insufficient cpu (cpu: requested 2000m, free 1300m of 3800m)
-# FailedScheduling: 0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 Insufficient cpu. preemption: 0/3 nodes are available: 1 Preemption is not helpful for scheduling, 2 No preemption victims found for incoming pod.
+# FailedScheduling: 0/3 nodes are available: 1 node(s) had untolerated taint(s), 2 Insufficient cpu. preemption: 0/3 nodes are available: 1 Preemption is not helpful for scheduling, 2 No preemption victims found for incoming pod.
 # exit 1
 python3 code/main.py --nodes $F/nodes.json --pods $F/pods.json --pod $F/pod-urgent.json
 # preemption: nominate worker-a and evict default/batch-1 (priority 0)
@@ -292,6 +292,8 @@ kubectl get nodes -o json > nodes.json && kubectl get pods -A -o json > pods.jso
 python3 code/main.py --nodes nodes.json --pods pods.json --pod hog.json                       # minisched says the same sentence
 ```
 
+On a cluster where Dynamic Resource Allocation is on, as it is on current kind clusters, the real event also carries `no new claims to deallocate,` before the preemption part. The DRA plugin's post-filter adds it, and it means only that releasing device claims would not make the pod fit; minisched leaves it out.
+
 Requests against allocatable, and why `top` is the wrong tool for this question:
 
 ```bash
@@ -305,7 +307,7 @@ Taints, cordons and the requeue:
 
 ```bash
 kubectl taint nodes $NODE dedicated=db:NoSchedule
-kubectl -n sched run plain --image=registry.k8s.io/pause:3.10                 # Pending: 1 node(s) had untolerated taint {dedicated: db}
+kubectl -n sched run plain --image=registry.k8s.io/pause:3.10                 # Pending: 1 node(s) had untolerated taint(s)
 kubectl taint nodes $NODE dedicated=db:NoSchedule-                            # the trailing dash removes it; plain is bound within seconds, not recreated
 kubectl cordon $NODE && kubectl get node $NODE                                # STATUS Ready,SchedulingDisabled; existing pods keep running
 kubectl -n sched run late --image=registry.k8s.io/pause:3.10                  # 1 node(s) were unschedulable
