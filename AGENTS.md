@@ -23,6 +23,7 @@ npm run curriculum:validate     # validate every lesson against LESSON_TEMPLATE.
 npm run curriculum:scaffold -- <phase-dir> <lesson-slug> --type Build|Learn --langs python,bash --title "..."
 npm run curriculum:test -- <phase-slug>/<lesson-slug>   # run that lesson's tests (or --all)
 npm run curriculum:test -- --all --smoke                # real-tool end-to-end checks (Linux + Docker; what lesson-smoke.yml runs)
+npm run curriculum:test -- --all --smoke --phase=iac    # one phase only (lesson-smoke.yml runs one job per phase)
 npm run curriculum:unit         # unit tests for the generator itself
 node ../scripts/build-curriculum.mjs --deprecations   # scan lessons + Reference docs for retired tech without a note
 node ../scripts/update-versions.mjs --check           # what the weekly version refresh would change
