@@ -378,7 +378,7 @@ python3 code/main.py status --state /tmp/demo.json
 
 ## Use It
 
-Argo Rollouts is the controller minirollout imitates: a `Rollout` CRD that replaces a Deployment, `AnalysisTemplate` and `AnalysisRun` CRDs, and a kubectl plugin. Install it on kind (the smoke test pins v1.10.1 and checks both downloads against the release's `argo-rollouts-checksums.txt`):
+Argo Rollouts is the controller minirollout imitates: a `Rollout` CRD that replaces a Deployment, `AnalysisTemplate` and `AnalysisRun` CRDs, and a kubectl plugin. Install it on kind (the smoke test pins v1.10.1, checks the plugin against the release's `argo-rollouts-checksums.txt` and `install.yaml` against a pinned sha256, because the release publishes no checksum for the manifest):
 
 ```bash
 V=v1.10.1
