@@ -241,6 +241,7 @@ Now the refactor. Rename the module call and the root resource, with and without
 
 ```bash
 cp ~/CloudCaptain/curriculum/phases/07-iac/03-modules-variables/code/fixtures/renamed/main.tf.json main.tf.json
+tofu init                                  # a renamed module call is a new call: init records "site" in .terraform/modules
 tofu plan -var-file=prod.tfvars            # "# module.web["blog"].local_file.page[0] has moved to module.site["blog"]..." and 0 to add, 0 to destroy
 python3 $MINIMOD plan -var-file=prod.tfvars --state terraform.tfstate   # the same five moves, read from tofu's own state
 tofu apply -auto-approve -var-file=prod.tfvars

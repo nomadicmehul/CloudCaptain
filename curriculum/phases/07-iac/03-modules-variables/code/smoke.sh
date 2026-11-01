@@ -112,6 +112,7 @@ grep -q '"prod-site"' eval.txt || fail "minimod eval local.prefix: $(cat eval.tx
 
 echo "▸ a rename without moved destroys and creates in both"
 drop_moved
+$TF init -input=false -no-color > init-rename.txt 2>&1 || fail "$TF init for the renamed module call: $(tail -30 init-rename.txt)"
 $TF plan -input=false -no-color -var-file=prod.tfvars > rename.txt 2>&1 || fail "$TF rename plan: $(tail -30 rename.txt)"
 grep -q "Plan: 5 to add, 0 to change, 5 to destroy." rename.txt || fail "$TF rename without moved: $(grep 'Plan:' rename.txt || tail -20 rename.txt)"
 python3 "$MINIMOD" plan -var-file=prod.tfvars --state terraform.tfstate > mm-rename.txt 2>&1 || fail "minimod rename plan on $TF state: $(cat mm-rename.txt)"
