@@ -662,6 +662,10 @@ class CommandResult:
 Runner = Callable[[Sequence[str]], CommandResult]
 
 
+def is_missing(stderr: str) -> bool:
+    return "No such" in stderr or " not found" in stderr
+
+
 def subprocess_runner(args: Sequence[str]) -> CommandResult:
     try:
         completed = subprocess.run(list(args), capture_output=True, text=True, check=False)
@@ -705,7 +709,7 @@ class Engine:
     def run(self, args: Sequence[str], ignore_missing: bool = False) -> CommandResult:
         self.executed.append(list(args))
         result = self.runner(args)
-        if not result.ok and not (ignore_missing and "No such" in result.stderr):
+        if not result.ok and not (ignore_missing and is_missing(result.stderr)):
             raise ComposeError(f"command failed ({result.returncode}): {shell_line(args)}\n{result.stderr.strip()}")
         return result
 

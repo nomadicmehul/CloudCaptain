@@ -166,7 +166,7 @@ class TraceTests(unittest.TestCase):
             out = os.path.join(tmp, "profile.json")
             code, stdout, _ = run_main(["generate", TRACE, "--out", out, "--errno", "38"])
             self.assertEqual(code, 0)
-            self.assertIn("32 from the trace + 32 always needed = 64 allowed", stdout)
+            self.assertIn("32 from the trace + 43 always needed = 75 allowed", stdout)
             self.assertIn("ENOSYS", stdout)
             self.assertIn(f"seccomp={out}", stdout)
             self.assertEqual(load(out)["defaultErrnoRet"], 38)

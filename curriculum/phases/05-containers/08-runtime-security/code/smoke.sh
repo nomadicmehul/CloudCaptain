@@ -25,7 +25,7 @@ python3 code/main.py seccomp "$EXCERPT" --caps docker-default,SYS_ADMIN --check 
 echo "▸ seccomp-diff, and generate from the fixture trace"
 python3 code/main.py seccomp-diff "$EXCERPT" code/fixtures/seccomp-tiny.json --json | jsonq '"mkdir" in d["only_a"] and not d["only_b"]' | grep -qx True || fail "diff should list mkdir only in the excerpt"
 python3 code/main.py generate code/fixtures/strace-python-print.log --out "$WORK/fixture-profile.json" | tee "$WORK/gen.txt"
-grep -q "32 from the trace + 32 always needed = 64 allowed" "$WORK/gen.txt" || fail "generate summary"
+grep -q "32 from the trace + 43 always needed = 75 allowed" "$WORK/gen.txt" || fail "generate summary"
 python3 code/main.py seccomp "$WORK/fixture-profile.json" --caps none --check mkdir,execve --json | jsonq '[c["action"] for c in d["checks"]]' | grep -qx "\['SCMP_ACT_ERRNO', 'SCMP_ACT_ALLOW'\]" || fail "generated profile should deny mkdir and allow execve"
 
 echo "▸ inspect and k8s on the fixtures"

@@ -102,7 +102,7 @@ class FakeDocker:
             return main.CommandResult(0, "netid\n")
         if args[0] == "rm":
             if args[-1] not in self.networks:
-                return main.CommandResult(1, "", f"Error response from daemon: network {args[-1]} not found: No such network")
+                return main.CommandResult(1, "", f"Error response from daemon: network {args[-1]} not found")
             self.networks.discard(args[-1])
             return main.CommandResult(0, args[-1] + "\n")
         if args[0] == "connect":

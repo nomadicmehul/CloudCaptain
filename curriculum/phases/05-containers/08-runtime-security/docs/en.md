@@ -124,7 +124,7 @@ def generate_profile(traced, errno_value=1):
     return profile, added
 ```
 
-`ALWAYS_NEEDED` is the set a trace can miss and a container cannot start without: what the dynamic loader does before `main` (`brk`, `mmap`, `mprotect`, `arch_prctl`, `set_tid_address`, `prlimit64`), signals and exit (`rt_sigaction`, `rt_sigreturn`, `exit_group`), and the few calls the runtime makes between installing the filter and `execve`. The generated profile names no architectures, so libseccomp uses the native one wherever it runs. A trace taken on your laptop's glibc is not a trace of the Alpine image's musl: trace inside the image the profile is for.
+`ALWAYS_NEEDED` is the set a trace can miss and a container cannot start without: what the dynamic loader does before `main` (`brk`, `mmap`, `mprotect`, `arch_prctl`, `set_tid_address`, `prlimit64`), signals and exit (`rt_sigaction`, `rt_sigreturn`, `exit_group`), and the calls runc itself makes between installing the filter and `execve`: `capget` and `capset` to drop capabilities, `setgroups`, `setresgid` and `setresuid` to switch user, `chdir` into the working directory. Leave those out and the container dies before your program starts, with `unable to get capability version from the kernel`. The generated profile names no architectures, so libseccomp uses the native one wherever it runs. A trace taken on your laptop's glibc is not a trace of the Alpine image's musl: trace inside the image the profile is for.
 
 ### Step 5: score a running container
 
@@ -166,7 +166,7 @@ python3 code/main.py seccomp code/fixtures/seccomp-docker-default-excerpt.json -
 python3 code/main.py seccomp code/fixtures/seccomp-docker-default-excerpt.json --caps docker-default,SYS_ADMIN --check mount,unshare,bpf
 python3 code/main.py seccomp code/fixtures/seccomp-docker-default-excerpt.json --caps none --check chroot              # drop SYS_CHROOT and chroot goes with it
 python3 code/main.py seccomp-diff code/fixtures/seccomp-docker-default-excerpt.json code/fixtures/seccomp-tiny.json
-python3 code/main.py generate code/fixtures/strace-python-print.log --out profile.json                                # 32 traced + 32 always needed
+python3 code/main.py generate code/fixtures/strace-python-print.log --out profile.json                                # 32 traced + 43 always needed
 python3 code/main.py seccomp profile.json --check mkdir,execve                                                         # mkdir ERRNO, execve ALLOW
 python3 code/main.py inspect code/fixtures/inspect-default.json                                                        # score 40, eight fixes, one docker run line
 python3 code/main.py inspect code/fixtures/inspect-hardened.json --fail-under 100; echo "exit $?"
