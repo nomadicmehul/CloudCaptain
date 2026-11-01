@@ -1,0 +1,60 @@
+[
+  {
+    "Id": "3f1b7c2d9a0e4f6b8c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b",
+    "Created": "2026-10-30T09:14:02.118455321Z",
+    "Path": "/docker-entrypoint.sh",
+    "Args": ["nginx", "-g", "daemon off;"],
+    "State": {"Status": "running", "Running": true, "Pid": 48213, "ExitCode": 0},
+    "Image": "sha256:9e2b4a7c1f0d3e5b6a8c7d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0",
+    "Name": "/web",
+    "Driver": "overlay2",
+    "Platform": "linux",
+    "MountLabel": "",
+    "ProcessLabel": "",
+    "AppArmorProfile": "docker-default",
+    "HostConfig": {
+      "Binds": ["/var/run/docker.sock:/var/run/docker.sock", "web-data:/usr/share/nginx/html"],
+      "NetworkMode": "bridge",
+      "PortBindings": {"80/tcp": [{"HostIp": "", "HostPort": "8080"}]},
+      "RestartPolicy": {"Name": "unless-stopped", "MaximumRetryCount": 0},
+      "CapAdd": null,
+      "CapDrop": null,
+      "CgroupnsMode": "private",
+      "Dns": [],
+      "IpcMode": "private",
+      "PidMode": "",
+      "Privileged": false,
+      "PublishAllPorts": false,
+      "ReadonlyRootfs": false,
+      "SecurityOpt": null,
+      "UTSMode": "",
+      "UsernsMode": "",
+      "ShmSize": 67108864,
+      "Runtime": "runc",
+      "Memory": 0,
+      "NanoCpus": 0,
+      "CpuShares": 0,
+      "Devices": [],
+      "OomKillDisable": null,
+      "PidsLimit": null,
+      "Ulimits": null,
+      "MaskedPaths": ["/proc/asound", "/proc/acpi", "/proc/kcore", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/timer_stats", "/proc/sched_debug", "/proc/scsi", "/sys/firmware", "/sys/devices/virtual/powercap"],
+      "ReadonlyPaths": ["/proc/bus", "/proc/fs", "/proc/irq", "/proc/sys", "/proc/sysrq-trigger"]
+    },
+    "Mounts": [
+      {"Type": "bind", "Source": "/var/run/docker.sock", "Destination": "/var/run/docker.sock", "Mode": "", "RW": true, "Propagation": "rprivate"},
+      {"Type": "volume", "Name": "web-data", "Source": "/var/lib/docker/volumes/web-data/_data", "Destination": "/usr/share/nginx/html", "Driver": "local", "Mode": "z", "RW": true, "Propagation": ""}
+    ],
+    "Config": {
+      "Hostname": "3f1b7c2d9a0e",
+      "User": "",
+      "ExposedPorts": {"80/tcp": {}},
+      "Env": ["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", "NGINX_VERSION=1.27.4"],
+      "Cmd": ["nginx", "-g", "daemon off;"],
+      "Image": "nginx:1.27",
+      "Entrypoint": ["/docker-entrypoint.sh"],
+      "Labels": {"com.example.team": "payments"}
+    },
+    "NetworkSettings": {"Ports": {"80/tcp": [{"HostIp": "0.0.0.0", "HostPort": "8080"}, {"HostIp": "::", "HostPort": "8080"}]}}
+  }
+]

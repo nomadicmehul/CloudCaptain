@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/runtime-security",
+  "title": "Shrink What a Compromised Process Can Do: seccomp, Capabilities, Read-Only Roots",
+  "short": "Runtime Security",
+  "motto": "Assume the shell is already inside: what it can still call, hold and write is decided before the process starts, by flags you can read back.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/permissions-capabilities",
+    "linux/syscalls-strace"
+  ],
+  "tools": [
+    "docker",
+    "kubectl",
+    "strace",
+    "kind",
+    "trivy"
+  ],
+  "reference": [
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/linux/security",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-container-hardening-review.md",
+    "prompt-seccomp-profile-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

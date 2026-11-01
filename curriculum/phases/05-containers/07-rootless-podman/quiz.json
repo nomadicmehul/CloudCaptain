@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/rootless-podman",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A rootless Podman container writes into a bind-mounted directory. On the host the new subdirectories are owned by uid 100999 and `rm -r` as your user fails on them. What happened?",
+      "choices": [
+        "Podman has a bug in volume handling",
+        "The container ran as the host's root, so the files belong to root",
+        "The process inside ran as container uid 1000; the kernel stored the host uid that maps to under your /etc/subuid range (100000 + 1000 - 1 = 100999)",
+        "SELinux relabelled the files"
+      ],
+      "answer": 2,
+      "explanation": "Rootless containers run inside a user namespace whose uid_map is `0 <you> 1` followed by `1 <subuid start> 65536`. Container uid 1000 is the thousandth id of the subordinate range, host uid 100999. The files are correct; the mapping is just invisible until you read uid_map."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Which program writes `/proc/PID/uid_map` when podman starts a rootless container, and why can it map 65536 ids while your own `unshare -Ur` maps one?",
+      "choices": [
+        "`newuidmap`, a setuid helper from the shadow suite that checks /etc/subuid for your ranges; an unprivileged process may write only a single line that maps its own uid",
+        "The kernel fills it in automatically from /etc/passwd",
+        "podman briefly runs as root through sudo",
+        "conmon writes it from the container's point of view"
+      ],
+      "answer": 0,
+      "explanation": "Writing more than one line, or any id other than your own, needs CAP_SETUID in the parent namespace. newuidmap has it through its setuid bit and refuses anything /etc/subuid does not grant you. That file is the only policy input; podman just calls the helper."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Inside a rootless container `id` prints `uid=0(root)`, yet `cat /etc/shadow` on a host file bind-mounted into it fails with Permission denied. Why?",
+      "choices": [
+        "seccomp blocks open()",
+        "AppArmor denies /etc/shadow",
+        "Rootless containers have no capabilities at all",
+        "Permission checks use the host uid behind the mapping: the process is host uid 1000 and the file is root:shadow 0640; CAP_DAC_OVERRIDE inside the namespace only counts for files owned by ids mapped into it"
+      ],
+      "answer": 3,
+      "explanation": "Capabilities in a user namespace apply to objects owned by that namespace. A file owned by host root is owned by an unmapped id, so the process's capabilities do not apply and the ordinary mode bits decide, using its real host uid."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A rootless container needs to listen on port 80 on the host. Which statement is accurate?",
+      "choices": [
+        "Impossible without running podman as root",
+        "Binding below 1024 on the host is refused for an unprivileged user; lower `net.ipv4.ip_unprivileged_port_start` (for example to 80) or publish a higher port and let a proxy or redirect own 80",
+        "Add `--cap-add NET_BIND_SERVICE` to the container; the capability applies on the host",
+        "Use `--network host` and it works because the process is root inside"
+      ],
+      "answer": 1,
+      "explanation": "The host-side listener for a published port is the user-space network helper (pasta or slirp4netns) running as you, in the initial user namespace, where you have no CAP_NET_BIND_SERVICE. Capabilities granted inside the container never reach that process. The sysctl moves the privileged boundary; a proxy avoids it."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "`userns explain` on a pod's main process prints `0 0 4294967295`. What does that tell you about its isolation?",
+      "choices": [
+        "It is rootless: the whole range is mapped",
+        "The pod has `hostUsers: false`",
+        "It runs in the initial user namespace: uid 0 inside is the host's root, so its root is one kernel bug or one careless bind mount away from the host's root",
+        "The uid map is corrupted"
+      ],
+      "answer": 2,
+      "explanation": "That single line is the identity map every process on the host starts with. Nothing has been translated. Namespaces for pid, mount and network still apply, but a container root that escapes any of them is host root. A pod with its own user namespace shows a short map that starts at a subordinate range instead."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "What does rootless NOT protect against, and what does it protect against?",
+      "choices": [
+        "It does not stop kernel exploits, because the kernel is shared; it does shrink what an escape gains to your unprivileged uid and keeps container root from being host root through the engine, its socket or a bind mount",
+        "It stops all exploits because root does not exist inside",
+        "It protects nothing and is only a convenience",
+        "It prevents network attacks because pasta filters traffic"
+      ],
+      "answer": 0,
+      "explanation": "A user namespace is a translation table, not a hypervisor. An attacker who runs kernel code is past the table. Everything below that, from a leaked docker.sock to a `-v /:/host` mount to a setuid binary in the image, lands as your uid, not as root."
+    }
+  ]
+}

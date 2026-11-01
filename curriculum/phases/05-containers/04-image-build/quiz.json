@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/image-build",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "CI builds the same commit twice with the same Dockerfile and gets two different image IDs. What changed?",
+      "choices": [
+        "The base image was updated between builds",
+        "Timestamps: COPY keeps the files' modification times and the config records a creation time, so the layer bytes and the config bytes differ even though the content is the same",
+        "Docker adds a random nonce to every build",
+        "The image ID includes the build host name"
+      ],
+      "answer": 1,
+      "explanation": "An image ID is the SHA-256 of the config, which embeds the diff_ids of the layers. Any byte that differs, including the mtime stored for every tar entry and the created timestamp, changes it. Fixed timestamps (SOURCE_DATE_EPOCH, rewrite-timestamp) make the build reproducible."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A layer has a diff_id and a digest. Which is which?",
+      "choices": [
+        "diff_id is the compressed blob, digest is the uncompressed tar",
+        "diff_id is the SHA-256 of the uncompressed tar and lives in the config; digest is the SHA-256 of the compressed blob and lives in the manifest",
+        "They are the same value in two places",
+        "diff_id is per file, digest is per layer"
+      ],
+      "answer": 1,
+      "explanation": "The daemon identifies layers by their uncompressed content, registries by the compressed blob they store. Recompressing a layer changes its digest but not its diff_id, which is why the same image ID can appear under several manifest digests."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Two images put an identical app layer on top of different base images. Why does the daemon not share that layer between them?",
+      "choices": [
+        "It does; layers are always shared by diff_id",
+        "Layers in position are identified by chain ID, the hash of the previous chain ID and this diff_id, so the same diff_id on a different parent is a different chain ID",
+        "Because the tags differ",
+        "Because the config differs"
+      ],
+      "answer": 1,
+      "explanation": "A layer's content only makes sense on top of what is below it. The chain ID encodes the whole stack, so the layer store can reuse 'alpine + app' for every image that has exactly that prefix, and only those."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`docker image inspect hand:1 --format '{{.Id}}'` prints a sha256. What did it hash?",
+      "choices": [
+        "The manifest",
+        "The config JSON, which includes the diff_ids, the entrypoint, the environment and the timestamps",
+        "The concatenated layers",
+        "The tag"
+      ],
+      "answer": 1,
+      "explanation": "The image ID is the digest of the config blob; mkimage prints the same value before docker load ever runs. The manifest digest is a different value that covers the compressed layers and is what name@sha256:… pulls."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "mkimage writes an OCI layout and a legacy manifest.json into one tarball. Why both?",
+      "choices": [
+        "The OCI layout is for Docker and manifest.json is for Podman",
+        "Both describe the same blobs: index.json is what registries, skopeo, crane and recent daemons read, manifest.json is what older docker load reads, so one archive works everywhere",
+        "manifest.json holds the layers and index.json holds the config",
+        "It is required by the OCI specification"
+      ],
+      "answer": 1,
+      "explanation": "The blobs are the image; the two indexes are two tables of contents. docker save has emitted both since Docker 25 for the same compatibility reason."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A Dockerfile with COPY, RUN rm /etc/motd, ENV and ENTRYPOINT produces how many filesystem layers on top of the base, and what do ENV and ENTRYPOINT produce?",
+      "choices": [
+        "Four layers; every instruction is a layer",
+        "Two layers (COPY and the RUN whiteout); ENV and ENTRYPOINT change only the config and appear as empty_layer history rows",
+        "One layer; Docker squashes them",
+        "Three layers; ENTRYPOINT has no layer but ENV does"
+      ],
+      "answer": 1,
+      "explanation": "Only instructions that change the filesystem produce layers. Metadata instructions edit the config and leave a history row flagged empty_layer, which is why the Image Layers auditor skips them when matching history to layers."
+    }
+  ]
+}

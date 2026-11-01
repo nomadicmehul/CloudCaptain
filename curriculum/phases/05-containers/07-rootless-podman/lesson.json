@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "containers/rootless-podman",
+  "title": "Rootless Means a User Namespace, Not Less Container",
+  "short": "Rootless Podman",
+  "motto": "Root inside a rootless container is your own uid behind a table in /proc/PID/uid_map; the host never hands out uid 0.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 60,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "containers/process-isolation"
+  ],
+  "tools": [
+    "podman",
+    "unshare",
+    "newuidmap",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/podman/fundamentals",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/linux/security",
+    "/docs/tools/kubernetes/security"
+  ],
+  "outputs": [
+    "skill-rootless-migration.md",
+    "prompt-explain-uid-map.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "containers/runtime-security",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A container runs as root with Docker's defaults and mounts `/var/run/docker.sock` read-only \"for metrics\". An attacker gets a shell inside it. How far can they get?",
+      "choices": [
+        "Only the container: the socket is mounted read-only",
+        "The container and its volumes",
+        "The whole host: the socket is the Docker API with root privileges, a read-only bind mount does not stop connect(), and one API call starts a privileged container with / mounted",
+        "Nowhere: the default seccomp profile blocks access to unix sockets"
+      ],
+      "answer": 2,
+      "explanation": "A read-only mount affects open() for writing, not connecting to a socket. Anything that can talk to the Docker API can create a container with --privileged and the host root bind-mounted, which is root on the host. No flag on the compromised container matters once that mount exists; remove it or put a socket proxy with an allow-list in front."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In Docker's default seccomp profile, `mount`, `unshare`, `setns` and `bpf` sit in a rule with `includes: {caps: [CAP_SYS_ADMIN]}`. What does `--cap-add SYS_ADMIN` change?",
+      "choices": [
+        "Two things at once: the process gains the capability bit and the seccomp filter built for it now allows mount, unshare, setns, bpf and the rest of that rule",
+        "Only the capability bit; the filter is compiled once when the daemon starts",
+        "Nothing unless --privileged is also set",
+        "It disables seccomp for that container"
+      ],
+      "answer": 0,
+      "explanation": "The daemon resolves the profile per container against the container's bounding set: rules whose includes.caps are satisfied become part of the filter. Adding a capability therefore also widens the syscall filter, which is why hardencheck reports mount as \"ERRNO, allowed with CAP_SYS_ADMIN\" and why SYS_ADMIN is never just one bit."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "You generate a profile from `strace -f python3 -c print` on your Ubuntu laptop and run `python:3.12-alpine` under it. The container fails to start. Most likely cause?",
+      "choices": [
+        "Alpine images need --privileged to accept custom profiles",
+        "The profile must list architectures or the daemon rejects it",
+        "Custom profiles only work with seccompProfile type RuntimeDefault",
+        "The trace shows glibc's loader and libc; the image uses musl, which makes different syscalls, so the profile denies calls the image needs. Trace inside the image the profile is for."
+      ],
+      "answer": 3,
+      "explanation": "A profile is an allow-list of what one binary and one libc do. glibc uses newfstatat, rseq and statx where musl uses fstat, open and stat; a different Python build and version add more differences. Trace the exact image (apk add strace inside it), then run that image under the result."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A Deployment's pod template sets `runAsNonRoot: true` and `seccompProfile.type: RuntimeDefault` at pod level. One container sets `seccompProfile.type: Unconfined` and `runAsUser: 0`. What does a namespace with `enforce=restricted` do with it?",
+      "choices": [
+        "Admits it: pod-level settings take precedence",
+        "Rejects it: container-level settings override pod-level ones, Unconfined and runAsUser 0 are forbidden, and every container must also set allowPrivilegeEscalation false and drop ALL",
+        "Admits it with a warning because runAsNonRoot is set",
+        "Rejects it only if the audit label is also present"
+      ],
+      "answer": 1,
+      "explanation": "A container's securityContext overrides the pod's for the fields it sets. The restricted standard checks the effective value per container: Unconfined seccomp and runAsUser 0 are violations, and allowPrivilegeEscalation=false and capabilities.drop=[ALL] have no pod-level form, so each container must state them. Enforcement rejects at admission regardless of the warn and audit labels."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You want a seccomp allow-list for a service with a large test suite, but a missed syscall in production would be an outage. What is the safe path?",
+      "choices": [
+        "Ship with SCMP_ACT_KILL_PROCESS and watch for crashes",
+        "There is none; run seccomp=unconfined",
+        "Generate from a trace, set defaultAction to SCMP_ACT_LOG, run the test suite and staging under it, collect unlisted syscalls from the kernel log (dmesg or journalctl -k), add them, then switch the default to SCMP_ACT_ERRNO",
+        "Use RuntimeDefault; custom profiles cannot be audited"
+      ],
+      "answer": 2,
+      "explanation": "SCMP_ACT_LOG records every syscall the rules do not match without denying it, so a profile can be grown against real traffic before it is enforced. Kubernetes exposes the same idea through a Localhost profile with a logging default action. Only when the log stays quiet do you flip the default to ERRNO."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your pod is admitted under `enforce=restricted`. Which of these is still true unless you add it yourself?",
+      "choices": [
+        "The root filesystem is writable, there is no memory limit and the service account token is mounted: restricted does not require readOnlyRootFilesystem, resources.limits or automountServiceAccountToken: false",
+        "The container may still run as root",
+        "Privilege escalation through setuid binaries is still possible",
+        "The pod may still mount a hostPath volume"
+      ],
+      "answer": 0,
+      "explanation": "Restricted guarantees non-root, no privilege escalation, dropped capabilities, a seccomp profile and safe volume types. It says nothing about a writable root filesystem, resource limits or the API credential every pod gets by default, which is why hardencheck reports those three as \"extra\" and why the runbook adds them anyway."
+    }
+  ]
+}
