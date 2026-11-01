@@ -261,7 +261,7 @@ sys.path.insert(0, "code")
 import main
 limits = main.rolling_limits(main.deployment_manifest("web", "i", 3, max_surge="25%", max_unavailable="25%"))
 assert limits == (1, 0), limits
-print("  25%/25% of 3 replicas is surge %d, unavailable %d (surge rounds up, unavailable rounds down)" % limits)
+print("  25%%/25%% of 3 replicas is surge %d, unavailable %d (surge rounds up, unavailable rounds down)" % limits)
 PY
 k set image deployment/web "$CNAME=registry.k8s.io/pause:3.9" -n "$NS" >/dev/null || fail "set image"
 k rollout status deployment/web -n "$NS" --timeout=180s > "$WORK/rollout1.txt" 2>&1 || fail "rollout did not finish: $(cat "$WORK/rollout1.txt")"
