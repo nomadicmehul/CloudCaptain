@@ -274,6 +274,8 @@ tests:
         provider: anthropic:messages:claude-sonnet-5-5
 ```
 
+promptfoo 0.122 and later need Node.js 22.22 or newer (`node --version`).
+
 ```bash
 npx promptfoo@0.124.1 eval -c promptfooconfig.yaml -o out.json --no-cache     # the matrix, exit non-zero on failed assertions
 npx promptfoo@0.124.1 view                                                   # the web UI over past runs
