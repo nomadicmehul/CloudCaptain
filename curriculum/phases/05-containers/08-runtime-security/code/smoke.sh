@@ -31,9 +31,11 @@ python3 code/main.py seccomp "$WORK/fixture-profile.json" --caps none --check mk
 echo "▸ inspect and k8s on the fixtures"
 python3 code/main.py inspect code/fixtures/inspect-default.json --json | jsonq 'd[0]["score"]' | grep -qx 40 || fail "default fixture should score 40"
 python3 code/main.py inspect code/fixtures/inspect-hardened.json --fail-under 100 >/dev/null || fail "hardened fixture should score 100"
-python3 code/main.py k8s code/fixtures/pod-violating.json | tee "$WORK/k8s-violating.txt" | head -1
+python3 code/main.py k8s code/fixtures/pod-violating.json > "$WORK/k8s-violating.txt"
+head -1 "$WORK/k8s-violating.txt"
 grep -q "REJECTED by pod-security.kubernetes.io/enforce=restricted (8 violations)" "$WORK/k8s-violating.txt" || fail "violating pod verdict"
-python3 code/main.py k8s code/fixtures/pod-restricted.json --fail-under 100 | head -1 | grep -q "admitted under" || fail "restricted pod verdict"
+python3 code/main.py k8s code/fixtures/pod-restricted.json --fail-under 100 > "$WORK/k8s-restricted.txt" || fail "restricted pod should pass --fail-under 100"
+head -1 "$WORK/k8s-restricted.txt" | grep -q "admitted under" || fail "restricted pod verdict"
 
 if command -v docker >/dev/null; then
   echo "▸ Use It: trace python3 -c print inside the image it will run in, generate a profile, run under it"
@@ -55,8 +57,10 @@ if command -v docker >/dev/null; then
   echo "▸ inspect: a default container against a hardened one, live through docker inspect"
   docker run -d --name cc-smoke-default alpine:3.22 sleep 300 >/dev/null
   docker run -d --name cc-smoke-hardened --user 1000 --cap-drop ALL --security-opt no-new-privileges --read-only --tmpfs /tmp --pids-limit 100 --memory 128m alpine:3.22 sleep 300 >/dev/null
-  python3 code/main.py inspect cc-smoke-default | tee "$WORK/inspect-default.txt" | head -1
-  python3 code/main.py inspect cc-smoke-hardened | tee "$WORK/inspect-hardened.txt" | head -1
+  python3 code/main.py inspect cc-smoke-default > "$WORK/inspect-default.txt"
+  head -1 "$WORK/inspect-default.txt"
+  python3 code/main.py inspect cc-smoke-hardened > "$WORK/inspect-hardened.txt"
+  head -1 "$WORK/inspect-hardened.txt"
   DEF=$(python3 code/main.py inspect cc-smoke-default --json | jsonq 'd[0]["score"]')
   HARD=$(python3 code/main.py inspect cc-smoke-hardened --json | jsonq 'd[0]["score"]')
   [[ "$HARD" -gt "$DEF" ]] || fail "hardened container should score higher ($HARD vs $DEF)"
@@ -87,7 +91,8 @@ if command -v kubectl >/dev/null && [[ "$(kubectl config current-context 2>/dev/
     grep -q "$word" <<<"$OUT" || echo "  (admission message did not mention $word)"
   done
   kubectl wait --for=condition=Ready pod/cc-smoke-restricted -n cc-smoke-psa --timeout=120s >/dev/null
-  kubectl get pod cc-smoke-restricted -n cc-smoke-psa -o json | python3 code/main.py k8s - | tee "$WORK/k8s-live.txt" | head -1
+  kubectl get pod cc-smoke-restricted -n cc-smoke-psa -o json | python3 code/main.py k8s - > "$WORK/k8s-live.txt"
+  head -1 "$WORK/k8s-live.txt"
   grep -q "admitted under pod-security.kubernetes.io/enforce=restricted" "$WORK/k8s-live.txt" || fail "hardencheck should admit the live restricted pod"
   kubectl exec -n cc-smoke-psa cc-smoke-restricted -- grep -E 'CapEff|NoNewPrivs|Seccomp' /proc/1/status | sed 's/^/  /'
   kubectl exec -n cc-smoke-psa cc-smoke-restricted -- grep -q "Seccomp:.*2" /proc/1/status || fail "RuntimeDefault should install a seccomp filter"

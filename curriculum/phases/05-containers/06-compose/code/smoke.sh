@@ -27,7 +27,7 @@ services:
     image: python:3.12-alpine
     command: ["python3", "-m", "http.server", "8000"]
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/ >/dev/null"]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8000/ >/dev/null"]
       interval: 2s
       timeout: 2s
       retries: 10
@@ -56,7 +56,7 @@ ORDER="$(python3 code/main.py -f "$WORK/compose.yaml" order)"
 [[ "$ORDER" == $'1. db\n2. web' ]] || fail "start order should be db then web, got: $ORDER"
 python3 code/main.py -f "$WORK/compose.yaml" render > "$WORK/render.txt"
 grep -q "^docker network create .*ccsmoke_default$" "$WORK/render.txt" || fail "render should create the project network"
-grep -q -- "--network-alias db .*--health-cmd 'wget -qO- http://localhost:8000/ >/dev/null' --health-interval 2s" "$WORK/render.txt" || fail "render should carry the healthcheck flags: $(cat "$WORK/render.txt")"
+grep -q -- "--network-alias db .*--health-cmd 'wget -qO- http://127.0.0.1:8000/ >/dev/null' --health-interval 2s" "$WORK/render.txt" || fail "render should carry the healthcheck flags: $(cat "$WORK/render.txt")"
 
 echo "▸ a bad file fails with the line number and exit 2"
 printf 'services:\n  web:\n    image: x\n   ports: [1]\n' > "$WORK/bad.yaml"
@@ -69,7 +69,8 @@ grep -q "bad.yaml:4: bad indentation" <<<"$ERR" || fail "expected a line-numbere
 
 echo "▸ up: db starts first, web only after db reports healthy"
 docker pull -q python:3.12-alpine >/dev/null
-python3 code/main.py -f "$WORK/compose.yaml" --verbose up --timeout 90 2> "$WORK/up.log" | tee "$WORK/up.txt"
+python3 code/main.py -f "$WORK/compose.yaml" --verbose up --timeout 90 > "$WORK/up.txt" 2> "$WORK/up.log" || fail "up failed: $(cat "$WORK/up.log")"
+cat "$WORK/up.txt"
 [[ "$(cat "$WORK/up.txt")" == $'started ccsmoke-db-1\nstarted ccsmoke-web-1' ]] || fail "unexpected up output: $(cat "$WORK/up.txt")"
 grep -q "web: db is healthy after" "$WORK/up.log" || fail "up should log the health wait: $(cat "$WORK/up.log")"
 HEALTH="$(docker inspect -f '{{.State.Health.Status}}' "${PROJECT}-db-1")"

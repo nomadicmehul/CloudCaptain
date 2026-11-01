@@ -209,7 +209,7 @@ services:
     image: python:3.12-alpine
     command: ["python3", "-m", "http.server", "8000"]
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/ >/dev/null"]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8000/ >/dev/null"]
       interval: 2s
       retries: 10
       start_period: 1s
@@ -231,6 +231,8 @@ $MC ps                                # NAME  SERVICE  STATE  HEALTH  STATUS
 docker logs shop-web-1                # reached-db
 $MC down                              # removed shop-web-1, removed shop-db-1, network gone
 ```
+
+The healthcheck asks for `127.0.0.1`, not `localhost`. Inside the container `/etc/hosts` maps `localhost` to both `127.0.0.1` and `::1`; busybox `wget` tries only the first address it gets, and when that is `::1` while the server listens on IPv4, the check fails forever and `db` never turns healthy.
 
 And the error path, which is most of what a tool like this is for:
 

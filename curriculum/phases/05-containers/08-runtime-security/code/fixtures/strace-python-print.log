@@ -1,0 +1,67 @@
+9     execve("/usr/local/bin/python3", ["python3", "-c", "print"], 0x7ffd3e2d1d28 /* 6 vars */) = 0
+9     arch_prctl(ARCH_SET_FS, 0x7f2a1c0b5b28) = 0
+9     set_tid_address(0x7f2a1c0b5b60)      = 9
+9     brk(NULL)                            = 0x55d2a3f3e000
+9     brk(0x55d2a3f40000)                  = 0x55d2a3f40000
+9     mmap(0x55d2a3f3e000, 4096, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_FIXED, -1, 0) = 0x55d2a3f3e000
+9     open("/etc/ld-musl-x86_64.path", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+9     open("/lib/libpython3.12.so.1.0", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+9     open("/usr/local/lib/libpython3.12.so.1.0", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+9     fcntl(3, F_SETFD, FD_CLOEXEC)        = 0
+9     fstat(3, {st_mode=S_IFREG|0755, st_size=5242880, ...}) = 0
+9     read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0\0\0\0\0\0\0\0"..., 960) = 960
+9     mmap(NULL, 5300224, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f2a1bb00000
+9     mmap(0x7f2a1bb81000, 2764800, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED, 3, 0x81000) = 0x7f2a1bb81000
+9     mmap(0x7f2a1be24000, 1912832, PROT_READ, MAP_PRIVATE|MAP_FIXED, 3, 0x324000) = 0x7f2a1be24000
+9     mmap(0x7f2a1bff8000, 696320, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED, 3, 0x4f7000) = 0x7f2a1bff8000
+9     mmap(0x7f2a1c0a2000, 73728, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_FIXED, -1, 0) = 0x7f2a1c0a2000
+9     close(3)                             = 0
+9     mprotect(0x7f2a1bff8000, 651264, PROT_READ) = 0
+9     mprotect(0x7f2a1c0b2000, 8192, PROT_READ) = 0
+9     mprotect(0x55d2a3f3c000, 4096, PROT_READ) = 0
+9     prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+9     getrandom("\xd3\x1e\x9b\x44\x7a\x02\xc8\x11\x5f\x90\x3a\xee\x21\x47\xbb\x08\x6c\xd5\x13\x7e\x40\x99\xa1\x02", 24, GRND_NONBLOCK) = 24
+9     rt_sigaction(SIGPIPE, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER|SA_ONSTACK, sa_restorer=0x7f2a1c05ea70}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+9     rt_sigaction(SIGXFSZ, {sa_handler=SIG_IGN, sa_mask=[], sa_flags=SA_RESTORER|SA_ONSTACK, sa_restorer=0x7f2a1c05ea70}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+9     rt_sigaction(SIGINT, {sa_handler=0x7f2a1bcf1a30, sa_mask=[], sa_flags=SA_RESTORER|SA_ONSTACK, sa_restorer=0x7f2a1c05ea70}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+9     rt_sigprocmask(SIG_BLOCK, NULL, [], 8) = 0
+9     sigaltstack({ss_sp=0x55d2a3f4a2c0, ss_flags=0, ss_size=16384}, NULL) = 0
+9     readlink("/usr/local/bin/python3", "python3.12", 4096) = 10
+9     readlink("/usr/local/bin/python3.12", 0x7ffd3e2d0a40, 4096) = -1 EINVAL (Invalid argument)
+9     getcwd("/", 4096)                    = 2
+9     stat("/usr/local/bin/python3.12", {st_mode=S_IFREG|0755, st_size=5912, ...}) = 0
+9     stat("/usr/local/lib/python312.zip", 0x7ffd3e2cf8e0) = -1 ENOENT (No such file or directory)
+9     stat("/usr/local/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+9     stat("/usr/local/lib/python3.12/os.py", {st_mode=S_IFREG|0644, st_size=40378, ...}) = 0
+9     stat("/usr/local/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+9     ioctl(0, TIOCGWINSZ, 0x7ffd3e2d0c20)  = -1 ENOTTY (Inappropriate ioctl for device)
+9     fstat(0, {st_mode=S_IFCHR|0666, st_rdev=makedev(0x1, 0x3), ...}) = 0
+9     fstat(1, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+9     fstat(2, {st_mode=S_IFIFO|0600, st_size=0, ...}) = 0
+9     lseek(0, 0, SEEK_CUR)                = -1 ESPIPE (Illegal seek)
+9     lseek(1, 0, SEEK_CUR)                = -1 ESPIPE (Illegal seek)
+9     openat(AT_FDCWD, "/usr/local/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+9     fstat(3, {st_mode=S_IFREG|0644, st_size=4126, ...}) = 0
+9     read(3, "\313\r\r\n\0\0\0\0\340\361\10g\251\25\0\0\343\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 4127) = 4126
+9     read(3, "", 1)                       = 0
+9     close(3)                             = 0
+9     openat(AT_FDCWD, "/usr/local/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+9     fstat(3, {st_mode=S_IFREG|0644, st_size=1932, ...}) = 0
+9     read(3, "\313\r\r\n\0\0\0\0\340\361\10g\3\4\0\0\343\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 1933) = 1932
+9     close(3)                             = 0
+9     openat(AT_FDCWD, "/usr/local/lib/python3.12/site-packages", O_RDONLY|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+9     fstat(3, {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+9     getdents64(3, 0x55d2a3f6b2b0 /* 4 entries */, 32768) = 112
+9     getdents64(3, 0x55d2a3f6b2b0 /* 0 entries */, 32768) = 0
+9     close(3)                             = 0
+9     getuid()                             = 0
+9     geteuid()                            = 0
+9     getgid()                             = 0
+9     getegid()                            = 0
+9     getpid()                             = 9
+9     futex(0x7f2a1c0b5c20, FUTEX_WAKE_PRIVATE, 1) = 0
+9     write(1, "\n", 1)                    = 1
+9     rt_sigaction(SIGINT, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=SA_RESTORER|SA_ONSTACK, sa_restorer=0x7f2a1c05ea70}, {sa_handler=0x7f2a1bcf1a30, sa_mask=[], sa_flags=SA_RESTORER|SA_ONSTACK, sa_restorer=0x7f2a1c05ea70}, 8) = 0
+9     munmap(0x7f2a1b900000, 262144)       = 0
+9     exit_group(0)                        = ?
+9     +++ exited with 0 +++

@@ -28,7 +28,7 @@ echo "▸ build: two layers, config, manifest, index, packaged for docker load a
 build --out "$WORK/img.tar" --oci-dir "$WORK/oci" --json > "$WORK/build.json"
 python3 code/main.py verify "$WORK/img.tar"
 IMAGE_ID="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["image_id"])' "$WORK/build.json")"
-DIFF_IDS="$(python3 -c 'import json,sys; print(json.dumps([l["diff_id"] for l in json.load(open(sys.argv[1]))["layers"]]))' "$WORK/build.json")"
+DIFF_IDS="$(python3 -c 'import json,sys; print(json.dumps([l["diff_id"] for l in json.load(open(sys.argv[1]))["layers"]], separators=(",", ":")))' "$WORK/build.json")"
 
 echo "▸ docker load accepts it and the container runs"
 docker load -i "$WORK/img.tar" | tee "$WORK/load.txt"
