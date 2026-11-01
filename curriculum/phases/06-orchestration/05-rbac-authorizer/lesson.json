@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/rbac-authorizer",
+  "title": "kubectl auth can-i Is a Function You Can Write",
+  "short": "RBAC Authorizer",
+  "motto": "Authorization is a pure function of who asks, what they ask and every binding in the cluster; the answer is yes with a reason, or no.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/reconciler"
+  ],
+  "tools": [
+    "kubectl",
+    "kind"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/kubernetes/exam-prep",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-rbac-least-privilege-review.md",
+    "prompt-explain-forbidden-error.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

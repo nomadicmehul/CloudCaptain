@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/reconciler",
+  "title": "A Controller Is a Loop That Compares: Reconcilers From Scratch",
+  "short": "Reconcile Loops",
+  "motto": "Kubernetes does not run your command; it records a wish, and independent loops compare it with the world until the two match.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "containers/compose"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "kube-controller-manager"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "skill-controller-debugging.md",
+    "prompt-explain-rollout.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

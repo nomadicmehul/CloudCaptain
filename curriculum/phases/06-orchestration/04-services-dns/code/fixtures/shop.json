@@ -1,0 +1,429 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "web",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "clusterIP": "10.96.0.20",
+        "selector": {
+          "app": "web"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 80,
+            "targetPort": "http",
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "web-headless",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "clusterIP": "None",
+        "selector": {
+          "app": "web"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "targetPort": "http",
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "db",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "clusterIP": "None",
+        "selector": {
+          "app": "db"
+        },
+        "ports": [
+          {
+            "name": "pg",
+            "port": 5432,
+            "targetPort": 5432,
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "checkout",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "NodePort",
+        "clusterIP": "10.96.0.30",
+        "externalTrafficPolicy": "Local",
+        "selector": {
+          "app": "checkout"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 80,
+            "targetPort": 8080,
+            "nodePort": 30080,
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "empty",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "clusterIP": "10.96.0.40",
+        "selector": {
+          "app": "nothing"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 80,
+            "targetPort": 8080,
+            "protocol": "TCP"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "partner",
+        "namespace": "shop"
+      },
+      "spec": {
+        "type": "ExternalName",
+        "externalName": "api.partner.example.com"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "web-7c9d-a1",
+        "namespace": "shop",
+        "labels": {
+          "app": "web"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.1.5",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "web-7c9d-b2",
+        "namespace": "shop",
+        "labels": {
+          "app": "web"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.1.6",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "web-7c9d-c3",
+        "namespace": "shop",
+        "labels": {
+          "app": "web"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker2",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.2.7",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "web-7c9d-d4",
+        "namespace": "shop",
+        "labels": {
+          "app": "web"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker2",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.2.8",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "False"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "checkout-5f-a1",
+        "namespace": "shop",
+        "labels": {
+          "app": "checkout"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "containerPort": 8080
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.1.10",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "checkout-5f-b2",
+        "namespace": "shop",
+        "labels": {
+          "app": "checkout"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker2",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "containerPort": 8080
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.2.11",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "db-0",
+        "namespace": "shop",
+        "labels": {
+          "app": "db"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "name": "pg",
+                "containerPort": 5432
+              }
+            ]
+          }
+        ],
+        "hostname": "db-0",
+        "subdomain": "db"
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.1.20",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "db-1",
+        "namespace": "shop",
+        "labels": {
+          "app": "db"
+        }
+      },
+      "spec": {
+        "nodeName": "kind-worker2",
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "ports": [
+              {
+                "name": "pg",
+                "containerPort": 5432
+              }
+            ]
+          }
+        ],
+        "hostname": "db-1",
+        "subdomain": "db"
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.244.2.21",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True"
+          }
+        ]
+      }
+    }
+  ]
+}

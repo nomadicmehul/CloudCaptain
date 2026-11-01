@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/operator",
+  "title": "An Operator Is a Controller for a Type You Defined",
+  "short": "CRDs & Operators",
+  "motto": "A CRD teaches the API server a new noun; an operator is the loop that turns each one into real objects and reports back in status.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/reconciler",
+    "orchestration/rbac-authorizer"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "kubebuilder",
+    "kopf"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/interview-questions",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/cheatsheet"
+  ],
+  "outputs": [
+    "skill-operator-review.md",
+    "prompt-crd-design.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

@@ -1,0 +1,13 @@
+message: installed with -f
+logLevel: debug
+ports:
+  - name: http
+    containerPort: 8080
+  - name: metrics
+    containerPort: 9090
+podAnnotations:
+  prometheus.io/scrape: "true"
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/helm-from-scratch",
+  "title": "A Chart Is a Template Plus a Release Record",
+  "short": "Helm From Scratch",
+  "motto": "A chart is a function from values to one manifest; a release is that manifest written down per revision, and rollback is one more revision.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/reconciler"
+  ],
+  "tools": [
+    "helm",
+    "kubectl",
+    "kind"
+  ],
+  "reference": [
+    "/docs/tools/helm",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/yaml/fundamentals",
+    "/docs/tools/cicd/gitops"
+  ],
+  "outputs": [
+    "skill-helm-release-triage.md",
+    "prompt-chart-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

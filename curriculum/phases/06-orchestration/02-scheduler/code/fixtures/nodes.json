@@ -1,0 +1,61 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Node",
+      "metadata": {
+        "name": "cp-1",
+        "labels": {
+          "kubernetes.io/hostname": "cp-1",
+          "node-role.kubernetes.io/control-plane": "",
+          "topology.kubernetes.io/zone": "zone-a"
+        }
+      },
+      "spec": {
+        "taints": [
+          {"key": "node-role.kubernetes.io/control-plane", "effect": "NoSchedule"}
+        ]
+      },
+      "status": {
+        "capacity": {"cpu": "2", "memory": "8148628Ki", "pods": "110", "ephemeral-storage": "102350Mi"},
+        "allocatable": {"cpu": "2", "memory": "8148628Ki", "pods": "110", "ephemeral-storage": "102350Mi"}
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Node",
+      "metadata": {
+        "name": "worker-a",
+        "labels": {
+          "kubernetes.io/hostname": "worker-a",
+          "topology.kubernetes.io/zone": "zone-a",
+          "disktype": "ssd"
+        }
+      },
+      "spec": {},
+      "status": {
+        "capacity": {"cpu": "4", "memory": "16405884Ki", "pods": "110", "ephemeral-storage": "102350Mi"},
+        "allocatable": {"cpu": "3800m", "memory": "15357308Ki", "pods": "110", "ephemeral-storage": "94322Mi"}
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Node",
+      "metadata": {
+        "name": "worker-b",
+        "labels": {
+          "kubernetes.io/hostname": "worker-b",
+          "topology.kubernetes.io/zone": "zone-b",
+          "disktype": "hdd"
+        }
+      },
+      "spec": {},
+      "status": {
+        "capacity": {"cpu": "4", "memory": "16405884Ki", "pods": "110", "ephemeral-storage": "102350Mi"},
+        "allocatable": {"cpu": "3800m", "memory": "15357308Ki", "pods": "110", "ephemeral-storage": "94322Mi"}
+      }
+    }
+  ]
+}

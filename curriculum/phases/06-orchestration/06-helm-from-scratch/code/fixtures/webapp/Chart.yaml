@@ -1,0 +1,6 @@
+apiVersion: v2
+name: webapp
+description: A small web app chart for the minihelm lesson
+type: application
+version: 0.1.0
+appVersion: "3.10"

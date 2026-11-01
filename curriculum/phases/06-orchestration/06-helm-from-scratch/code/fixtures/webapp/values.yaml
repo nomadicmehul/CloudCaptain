@@ -1,0 +1,20 @@
+replicaCount: 1
+image:
+  repository: registry.k8s.io/pause
+  tag: ""
+  pullPolicy: IfNotPresent
+team: platform
+tier: frontend
+message: hello from minihelm
+logLevel: info
+env:
+  FEATURE_X: "on"
+  REGION: eu-central-1
+ports:
+  - name: http
+    containerPort: 8080
+resources: {}
+podAnnotations: {}
+service:
+  enabled: true
+  port: 80

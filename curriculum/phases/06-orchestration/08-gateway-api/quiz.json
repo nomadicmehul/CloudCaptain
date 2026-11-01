@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/gateway-api",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An HTTPRoute rule matches `path: {type: PathPrefix, value: /api}`. Which request does it not match?",
+      "choices": [
+        "`/apis/v1`",
+        "`/api/`",
+        "`/api`",
+        "`/api/v1/users`"
+      ],
+      "answer": 0,
+      "explanation": "PathPrefix compares whole path segments, not characters. `/api` matches `/api`, `/api/` and anything under `/api/`, but `/apis` is a different first segment. A regex or a plain string prefix would have matched it, which is exactly what breaks when an ingress-nginx `use-regex` path is translated to PathPrefix."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Route A, created first, has a rule `PathPrefix /api` with a header match `x-version: v2`. Route B, created a week later, has `Exact /api/v2/users`. Both attach to the same listener and hostname. Which rule serves `GET /api/v2/users` with `x-version: v2`?",
+      "choices": [
+        "Either one: the order between routes is implementation-specific",
+        "Route A: the oldest route wins",
+        "Route A: it has more header matches",
+        "Route B: an Exact path match ranks above every prefix, whatever the header count or the route's age"
+      ],
+      "answer": 3,
+      "explanation": "The spec orders candidates by Exact path, then the longest prefix, then method, then the number of header matches, then query matches; route age and namespace/name only break ties that are left after all of those. B wins on the first criterion and age is never consulted."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An HTTPRoute in namespace `shop` sends `/pay` to `backendRefs: [{name: api, namespace: payments, port: 8080}]`. Its status says `ResolvedRefs: False` with reason `RefNotPermitted`. What fixes it?",
+      "choices": [
+        "Add `namespace: payments` to the route's parentRefs",
+        "Create a ReferenceGrant in `payments` that allows HTTPRoutes from `shop` to reference Services",
+        "Create a ReferenceGrant in `shop` that allows Services from `payments`",
+        "Set `allowedRoutes.namespaces.from: All` on the Gateway listener"
+      ],
+      "answer": 1,
+      "explanation": "A cross-namespace reference needs the consent of the namespace being referenced, so the ReferenceGrant lives in `payments`, lists `from: HTTPRoute in shop` and `to: Service` (optionally by name). allowedRoutes is the other direction: it decides which routes may attach to a listener, not which backends a route may use."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A rule splits traffic `blue` weight 90 and `green` weight 10. Someone deletes the `green` Service. What do clients see?",
+      "choices": [
+        "All traffic moves to blue automatically",
+        "Every request on the rule gets a 503 until the route is fixed",
+        "About 10% of requests get a 500 and the rest still reach blue; the route reports `ResolvedRefs: False` with `BackendNotFound`",
+        "The route flips to `Accepted: False` and stops serving entirely"
+      ],
+      "answer": 2,
+      "explanation": "The spec keeps the weights: the share of traffic that would have gone to an invalid backend gets a 500, the valid share is unaffected, and the route stays Accepted because attachment and reference resolution are separate conditions. minigateway's `/broken` route and the half-invalid test show both."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A Gateway listener has `hostname: \"*.example.com\"`. An HTTPRoute attached to it lists `hostnames: [\"example.com\"]` and shows `Accepted: False`. Which reason, and why?",
+      "choices": [
+        "NoMatchingListenerHostname: a wildcard needs at least one label in front of the suffix, so it never matches the apex `example.com`",
+        "NoMatchingParent: the sectionName is wrong",
+        "BackendNotFound: the Service is missing",
+        "NotAllowedByListeners: the route is in another namespace"
+      ],
+      "answer": 0,
+      "explanation": "Listener and route hostnames must intersect. `*.example.com` matches `shop.example.com` and `a.b.example.com` but not `example.com`. Add a second listener for the apex, or drop the hostname from the listener and let routes declare their own."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Two teams each own an HTTPRoute with `PathPrefix /api/search` for `shop.example.com` on a shared Gateway, with no other match conditions. Team B deletes and re-applies its route during a migration, and from then on team A's route takes every request. Why?",
+      "choices": [
+        "On a full tie the oldest route by creationTimestamp wins; re-creating team B's route made it the younger one",
+        "`kubectl apply` resets backend weights to zero",
+        "A Gateway refuses routes that were deleted once",
+        "Team B's route lost its ReferenceGrant when it was deleted"
+      ],
+      "answer": 0,
+      "explanation": "Hostname, path, method, headers and query are identical, so the cross-route tie-breakers apply: oldest route first, then `namespace/name` alphabetically. Deleting and re-creating changes creationTimestamp, which silently changes who wins. The fix is to make the matches different (or keep one owner per path), not to rely on age."
+    }
+  ]
+}

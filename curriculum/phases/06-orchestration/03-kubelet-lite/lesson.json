@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/kubelet-lite",
+  "title": "A Node Agent Turns a Pod Spec Into Processes",
+  "short": "Kubelet Lite",
+  "motto": "A kubelet is a loop over pod specs: start what is missing, probe what runs, restart with back-off, stop with a grace period, report it all.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/scheduler"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "crictl",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-crashloop-triage.md",
+    "prompt-probe-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

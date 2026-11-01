@@ -1,0 +1,10 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {"name": "big", "namespace": "default", "labels": {"app": "big"}},
+  "spec": {
+    "containers": [
+      {"name": "big", "image": "shop/train:1.0", "resources": {"requests": {"cpu": "2", "memory": "1Gi"}}}
+    ]
+  }
+}

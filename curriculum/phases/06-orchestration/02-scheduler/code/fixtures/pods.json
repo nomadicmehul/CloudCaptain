@@ -1,0 +1,62 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "kind": "Pod",
+      "metadata": {"name": "coredns-7db6d8ff4d-x2v9k", "namespace": "kube-system", "labels": {"k8s-app": "kube-dns"}},
+      "spec": {
+        "nodeName": "cp-1",
+        "priority": 2000000000,
+        "priorityClassName": "system-cluster-critical",
+        "containers": [{"name": "coredns", "image": "registry.k8s.io/coredns/coredns:v1.12.0", "resources": {"requests": {"cpu": "100m", "memory": "70Mi"}, "limits": {"memory": "170Mi"}}}]
+      },
+      "status": {"phase": "Running"}
+    },
+    {
+      "kind": "Pod",
+      "metadata": {"name": "api-1", "namespace": "default", "labels": {"app": "api"}},
+      "spec": {
+        "nodeName": "worker-a",
+        "containers": [{"name": "api", "image": "shop/api:2.3", "resources": {"requests": {"cpu": "1500m", "memory": "2Gi"}}}]
+      },
+      "status": {"phase": "Running"}
+    },
+    {
+      "kind": "Pod",
+      "metadata": {"name": "batch-1", "namespace": "default", "labels": {"app": "batch"}},
+      "spec": {
+        "nodeName": "worker-a",
+        "containers": [{"name": "batch", "image": "shop/batch:2.3", "resources": {"requests": {"cpu": "500m", "memory": "512Mi"}}}]
+      },
+      "status": {"phase": "Running"}
+    },
+    {
+      "kind": "Pod",
+      "metadata": {"name": "report-28311840-q7x2m", "namespace": "default", "labels": {"app": "report"}},
+      "spec": {
+        "nodeName": "worker-a",
+        "containers": [{"name": "report", "image": "shop/report:2.3", "resources": {"requests": {"cpu": "2", "memory": "4Gi"}}}]
+      },
+      "status": {"phase": "Succeeded"}
+    },
+    {
+      "kind": "Pod",
+      "metadata": {"name": "api-2", "namespace": "default", "labels": {"app": "api"}},
+      "spec": {
+        "nodeName": "worker-b",
+        "containers": [{"name": "api", "image": "shop/api:2.3", "resources": {"requests": {"cpu": "1500m", "memory": "2Gi"}}}]
+      },
+      "status": {"phase": "Running"}
+    },
+    {
+      "kind": "Pod",
+      "metadata": {"name": "db-0", "namespace": "default", "labels": {"app": "db"}},
+      "spec": {
+        "nodeName": "worker-b",
+        "containers": [{"name": "db", "image": "postgres:17-alpine", "resources": {"requests": {"cpu": "1", "memory": "8Gi"}}}]
+      },
+      "status": {"phase": "Running"}
+    }
+  ]
+}

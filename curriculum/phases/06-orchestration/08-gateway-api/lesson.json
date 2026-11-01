@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/gateway-api",
+  "title": "Routing Is Listeners, Routes and Precedence: the Gateway API",
+  "short": "Gateway API",
+  "motto": "A Gateway listens, an HTTPRoute attaches and matches, the most specific match wins in a fixed order, and status names the step that failed.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/services-dns"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "helm",
+    "envoy-gateway",
+    "curl",
+    "ingress2gateway"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/nginx/fundamentals",
+    "/docs/tools/helm"
+  ],
+  "outputs": [
+    "skill-ingress-to-gateway-migration.md",
+    "prompt-explain-httproute-status.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

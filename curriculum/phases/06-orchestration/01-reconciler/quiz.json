@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/reconciler",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A script starts a replacement container whenever it receives a `die` event. It is restarted during a deploy and is down for ten seconds, and two containers die in that window. What happens to those two?",
+      "choices": [
+        "The script replays the missed events when it comes back",
+        "Docker queues the events and delivers them when the script reconnects",
+        "The script notices the wrong count on its next event and fixes both",
+        "Nothing ever replaces them: the script only reacts to events it hears and never compares how many containers should run with how many do"
+      ],
+      "answer": 3,
+      "explanation": "An edge-triggered handler is correct only if it hears every event once. Events missed while it was down are gone, and the shortfall stays until some other event happens to trigger a count. A level-triggered loop derives its work from a comparison of desired and actual state, so it repairs the gap whenever it next runs."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Two clients read a Deployment at resourceVersion 41. Client A scales it, which makes the version 42. Client B then writes its edited copy, which still carries version 41. What happens, and what should B do?",
+      "choices": [
+        "The API server answers 409 Conflict (\"the object has been modified\"); B should read the object again, reapply its change to the fresh copy and write again",
+        "The write succeeds and B's copy replaces A's change, because the last writer wins",
+        "The API server merges both changes field by field and returns 200",
+        "The API server answers 409 Conflict; B should delete resourceVersion from its copy and resend, so the write goes through"
+      ],
+      "answer": 0,
+      "explanation": "The version is a precondition: a write carrying a stale one is refused. The cure is read, reapply, write. Dropping the version forces the write through and silently overwrites A's change, which is the failure the version exists to prevent."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A controller resumes a watch from resourceVersion 120 after being down for an hour, and the server answers 410 Gone (\"too old resource version\"). What is the right response?",
+      "choices": [
+        "Retry the watch from 120 with a longer timeout",
+        "Treat it as a deleted object and drop it from the cache",
+        "List the collection again, queue every key (including cached ones that are now missing), and start a new watch from the version the list returned",
+        "Restart the process and wait for the next resync to find out what changed"
+      ],
+      "answer": 2,
+      "explanation": "The server compacted the history the watch needed, so the missed changes cannot be replayed. A fresh list is the current truth, the diff against the cache yields the deletes, and a watch from the list's version loses nothing after that. Level-triggered reconcile makes the repeat work harmless."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Ten update events arrive for one Deployment within a tick. The work queue holds `default/web` once and the controller reconciles it once. Why is that safe?",
+      "choices": [
+        "The queue keeps only the newest event and discards the nine older ones",
+        "reconcile(key) reads the current state of the object and its children instead of the event, so one run does the work of all ten",
+        "Kubernetes guarantees that only one of the ten events carries a real change",
+        "The informer applies the ten events to its cache, so the controller can skip the API server"
+      ],
+      "answer": 1,
+      "explanation": "A key is a pointer, not a message. Because reconcile compares current desired state with current actual state, the number and content of the events that woke it make no difference. Collapsing them saves work and cannot lose information."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A Deployment has 3 replicas, maxSurge 1 and maxUnavailable 0. You set an image whose pods never become Ready. What does the cluster look like when the progress deadline passes?",
+      "choices": [
+        "The new ReplicaSet has 3 pods, all not ready, and the old ReplicaSet has been scaled to 0",
+        "All pods are deleted and recreated until the image works",
+        "The rollout is rolled back automatically to the previous revision",
+        "The 3 old pods still serve, one new pod exists but is not ready, and the Deployment reports ProgressDeadlineExceeded; `kubectl rollout undo` repairs it"
+      ],
+      "answer": 3,
+      "explanation": "The budget for removing old pods is pods minus minimum available minus new pods that are not yet available. With an unavailable new pod it stays at zero, so nothing old is removed and the service never dips. The Deployment only marks the rollout as failed; it does not undo it, because undo is a decision for a person."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A Deployment is at revision 2 after one `set image`. You run `kubectl rollout undo` and then `kubectl rollout history`. What does history show, and why?",
+      "choices": [
+        "Revisions 1, 2 and 3, because undo creates a fresh ReplicaSet with a new hash",
+        "Only revision 1, because the undo rewound the history",
+        "Revisions 2 and 3: the controller reused the revision 1 ReplicaSet, because its template hash matches again, and renumbered it to 3",
+        "Revisions 1 and 2 unchanged, because undo only changes the replica counts"
+      ],
+      "answer": 2,
+      "explanation": "Undo copies the old template back into the Deployment. The template hash equals the old ReplicaSet's, so the Deployment controller scales that one up instead of creating a new one, and stamps it with the next revision number. History only moves forward, which is why revision 1 disappears and revision 3 appears."
+    }
+  ]
+}

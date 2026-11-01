@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webapp.fullname" . }}-config
+  labels:
+    {{- include "webapp.labels" . | nindent 4 }}
+data:
+  MESSAGE: {{ .Values.message | quote }}
+  LOG_LEVEL: {{ .Values.logLevel | upper | quote }}
+  {{- range $key, $value := .Values.env }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- if eq .Values.tier "frontend" }}
+  UPSTREAM: "api"
+  {{- else if eq .Values.tier "backend" }}
+  UPSTREAM: "database"
+  {{- else }}
+  UPSTREAM: "none"
+  {{- end }}

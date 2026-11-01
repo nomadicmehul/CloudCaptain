@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/kubelet-lite",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`kubectl get pods` shows a pod with `STATUS CrashLoopBackOff` and `RESTARTS 6`. What is its `.status.phase`?",
+      "choices": [
+        "Running: CrashLoopBackOff is the container's waiting reason while the kubelet delays the next restart, and the pod phase stays Running",
+        "Failed",
+        "CrashLoopBackOff",
+        "Pending"
+      ],
+      "answer": 0,
+      "explanation": "The phase is one of Pending, Running, Succeeded, Failed and Unknown. A container that will be restarted counts as stopped, not waiting, so with restartPolicy Always the phase is Running. The STATUS column is computed by kubectl from container states, which is where CrashLoopBackOff comes from; the cause is in lastState.terminated and kubectl logs --previous."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A readiness probe on a running container fails `failureThreshold` times in a row. What does the kubelet do?",
+      "choices": [
+        "It deletes the pod so the ReplicaSet can create a new one",
+        "It kills the container and restarts it with back-off",
+        "It sets the container's ready flag to false, so the pod's Ready condition becomes False and the pod leaves its Services' endpoints; the container keeps running and restartCount does not change",
+        "It runs the liveness probe immediately to decide"
+      ],
+      "answer": 2,
+      "explanation": "Readiness only decides whether traffic should reach the container. Killing is the job of liveness and startup probes. That difference is why a dependency check belongs in readiness: a slow database takes pods out of rotation instead of restarting all of them."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A container with `restartPolicy: Always` exits with code 1 a second after every start. With the kubelet's default back-off, how long does it wait before each of the first four restarts?",
+      "choices": [
+        "10s, 10s, 10s, 10s",
+        "1s, 2s, 4s, 8s",
+        "10s, 20s, 40s, 80s",
+        "0s, 10s, 20s, 40s: the first restart is immediate, then the delay starts at 10s and doubles up to a 300s cap"
+      ],
+      "answer": 3,
+      "explanation": "The first crash finds no back-off entry, so the container restarts at once and the entry is set to 10s. Each later crash waits the current delay, measured from when the container finished, and doubles it, up to 300 seconds. After 10 minutes of clean running the entry expires and the curve starts over."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "On a kubeadm control-plane node you run `kubectl delete pod -n kube-system kube-apiserver-node1`. What happens?",
+      "choices": [
+        "The API server process stops until someone recreates the pod",
+        "Nothing on the node changes: the kubelet runs the static pod from /etc/kubernetes/manifests and recreates the mirror pod with a new UID",
+        "The scheduler places a new API server on another node",
+        "The kubelet deletes kube-apiserver.yaml"
+      ],
+      "answer": 1,
+      "explanation": "The mirror pod is a read-only reflection that the kubelet creates in the API so you can see a static pod. The file is the source of truth. To stop a static pod, remove or move its manifest; to change it, edit the file, and the kubelet replaces the pod because the config hash changed."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "During a 40-second database slowdown every replica of a service was restarted. Its liveness probe calls `/health`, which queries the database. What is the fix?",
+      "choices": [
+        "Raise the liveness failureThreshold to 100",
+        "Remove every probe",
+        "Raise terminationGracePeriodSeconds",
+        "Make liveness check only that the process itself can answer, move the database check into a readiness probe, and use a startup probe for slow starts"
+      ],
+      "answer": 3,
+      "explanation": "A liveness probe that depends on another service turns that service's slowness into a restart of every replica, and the restarted pods then hit the same slow dependency in back-off. Readiness removes pods from endpoints without killing them, and a startup probe protects a slow start without delaying hang detection afterwards."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`kubectl delete pod web` takes 30 seconds, and `crictl ps -a` on the node shows the old container exited with code 137. The container's command is `python3 -m http.server`. Why?",
+      "choices": [
+        "The API server was slow to delete the object",
+        "The process is PID 1 in its container and installs no SIGTERM handler, so the kernel drops SIGTERM; the kubelet waits out the default 30s grace period and then sends SIGKILL (128 + 9 = 137)",
+        "137 means the container ran out of memory",
+        "The preStop hook failed and blocked the deletion"
+      ],
+      "answer": 1,
+      "explanation": "A PID namespace's init process only receives signals it has a handler for, apart from SIGKILL and SIGSTOP sent from outside. An application that does not handle SIGTERM never starts its shutdown, so every deletion costs the full terminationGracePeriodSeconds. Exit code 137 only says SIGKILL; an out-of-memory kill would also show reason OOMKilled. Handle SIGTERM, or run a small init such as tini that forwards it."
+    }
+  ]
+}

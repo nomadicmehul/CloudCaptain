@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/helm-from-scratch",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A release was installed with `helm install web ./chart -f prod.yaml`. Today you run `helm upgrade web ./chart --set image.tag=1.4`. Which values does the new revision render with?",
+      "choices": [
+        "The chart's defaults plus image.tag=1.4: passing any value makes Helm start again from the defaults and ignore the previous release's values",
+        "Revision 1's computed values plus the new tag, because an upgrade always reuses the previous values",
+        "prod.yaml plus the new tag: Helm merges every value it has ever been given",
+        "Only image.tag; every other value renders empty"
+      ],
+      "answer": 0,
+      "explanation": "Helm reuses the previous release's user-supplied values only when the upgrade passes none. Any -f or --set makes the new config just what you typed, layered on the chart defaults. --reuse-values or --reset-then-reuse-values keep the old values; otherwise pass the same -f files on every upgrade."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "What does the `release` key of the Secret `sh.helm.release.v1.web.v3` contain?",
+      "choices": [
+        "Only the values passed with --set for that revision",
+        "The rendered manifest as plain YAML",
+        "A reference to the chart's location in a registry, which Helm downloads again on rollback",
+        "The release record (chart, user-supplied values, rendered manifest, status) as JSON, gzipped and base64-encoded by Helm, and base64-encoded once more by the Secret API"
+      ],
+      "answer": 3,
+      "explanation": "Each revision is one Secret of type helm.sh/release.v1, labelled owner=helm, name, status and version. The record inside holds everything a rollback or helm get needs, which is why decoding it by hand is base64 -d | base64 -d | gunzip and why minihelm's decode does the same two steps."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "values.yaml has `replicas: 1000000` and a template says `replicas: {{ .Values.replicas }}`. What does `helm template` print?",
+      "choices": [
+        "replicas: 1000000",
+        "replicas: 1e+06, because numbers read from a values file become float64 and Go prints large floats in exponent form",
+        "An error, because replicas must be an integer",
+        "replicas: \"1000000\""
+      ],
+      "answer": 1,
+      "explanation": "Values files go through YAML and then JSON, so every number is a float64, and Go's fmt switches to exponent notation at a million. The same value passed with --set is an int64 and prints as 1000000. The fix is to quote the value or format it with printf or int."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "After `helm upgrade` (revision 2) you run `helm rollback web 1`. What does the history look like, and what was applied?",
+      "choices": [
+        "Revision 2 is deleted and revision 1 is marked deployed again",
+        "Helm re-renders the current chart on disk with revision 1's values and stores that as revision 1",
+        "A new revision 3 is written with revision 1's manifest and values copied, not re-rendered; revisions 1 and 2 stay in the history as superseded",
+        "The cluster objects are restored from an etcd snapshot taken at revision 1"
+      ],
+      "answer": 2,
+      "explanation": "Rollback reads the old record and writes revision N+1 with the description \"Rollback to 1\" and rollback_revision 1. Because nothing is rendered, .Release.Revision inside the manifest still says 1, which the lesson's rendered-at-revision annotation makes visible."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A CI job was killed during `helm upgrade`. Every upgrade now fails with `another operation (install/upgrade/rollback) is in progress`. What is the safest fix?",
+      "choices": [
+        "Delete the namespace and install again",
+        "Wait: Helm clears the lock on its own after the upgrade timeout",
+        "Check helm history, confirm the last record is pending-upgrade, and helm rollback to the last deployed revision, which writes a new deployed revision and leaves an audit trail",
+        "Run helm upgrade --force-replace, which ignores the lock"
+      ],
+      "answer": 2,
+      "explanation": "The pending status is written before Helm applies anything and is never cleared by a timeout; it is a lock for the next upgrade. Rollback does not check it, so rolling back to the last good revision unblocks the release without deleting objects or records. Deleting only the pending Secret also works but erases the evidence."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A Deployment template carries `checksum/config: {{ include (print $.Template.BasePath \"/configmap.yaml\") . | sha256sum }}` in its pod template annotations. What does that achieve?",
+      "choices": [
+        "Pods restart when the rendered ConfigMap changes, because its hash changes the pod template; an upgrade that only changes the replica count does not restart them",
+        "Helm verifies the ConfigMap's integrity on every install and refuses tampered files",
+        "Kubernetes rejects the Deployment if someone edited the ConfigMap by hand",
+        "It pins the ConfigMap so that later upgrades cannot change it"
+      ],
+      "answer": 0,
+      "explanation": "include renders the ConfigMap template a second time and sha256sum hashes the text. Any change to the configuration changes the annotation, which changes the pod template and triggers a rolling update; Kubernetes itself never restarts pods when a ConfigMap they read changes."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {"name": "urgent", "namespace": "default", "labels": {"app": "urgent"}},
+  "spec": {
+    "priorityClassName": "incident",
+    "priority": 1000,
+    "containers": [
+      {"name": "urgent", "image": "shop/train:1.0", "resources": {"requests": {"cpu": "2", "memory": "1Gi"}}}
+    ]
+  }
+}
