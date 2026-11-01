@@ -106,6 +106,7 @@ export default function CurriculumHome(): React.JSX.Element {
             Retired, removed or relicensed tech that tutorials across the web still teach as current. Every lesson and reference page is
             scanned for these.
           </p>
+          <div className={styles.tableScroll}>
           <table className={styles.watchTable}>
             <thead>
               <tr>
@@ -126,6 +127,7 @@ export default function CurriculumHome(): React.JSX.Element {
               ))}
             </tbody>
           </table>
+          </div>
         </>
       )}
 

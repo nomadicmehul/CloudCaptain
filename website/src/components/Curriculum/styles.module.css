@@ -429,3 +429,10 @@ a.chip:hover {
 .watchTable th {
   vertical-align: top;
 }
+
+/* Wide tables scroll inside their own box on narrow screens instead of widening the page */
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
