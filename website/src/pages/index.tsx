@@ -5,6 +5,7 @@ import Layout from '@theme/Layout';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import ResumeReadingWidget from '@site/src/components/Progress/ResumeReadingWidget';
 import HomeCurriculum from '@site/src/components/Curriculum/HomeCurriculum';
+import useScrollReveal from '@site/src/hooks/useScrollReveal';
 
 /* ─── Data (loaded from JSON — edit the JSON files to update content) ─── */
 import categories from '../data/categories.json';
@@ -87,29 +88,6 @@ function formatNumber(n: number): string {
 }
 
 /* ─── Hooks ─── */
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-    const targets = el.querySelectorAll('.reveal');
-    targets.forEach((t) => observer.observe(t));
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return ref;
-}
-
 function useCountUp(target: number, suffix = '', duration = 1500) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
