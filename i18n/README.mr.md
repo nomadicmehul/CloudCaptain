@@ -75,7 +75,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 | Path | कोणासाठी | Lessons |
 |:--|:--|:--|
 | [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एका Linux process पासून Kubernetes, IaC, cloud आणि AIOps पर्यंत | 47 |
-| [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | ज्या engineers ना models चालवायचे आहेत: GPUs, serving, gateways, routing, cost | 17 |
+| [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | ज्या engineers ना models चालवायचे आहेत: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | infrastructure वर agents सुरक्षितपणे कामाला लावण्यासाठी | 9 |
 
 ## तुमच्या agent मधील tutor

@@ -208,10 +208,14 @@
       "lessons": [
         "setup/lab-doctor",
         "containers/process-isolation",
+        "containers/image-layers",
         "containers/registry-pull",
         "containers/image-build",
+        "containers/container-networking",
+        "containers/compose",
         "orchestration/reconciler",
         "orchestration/scheduler",
+        "orchestration/kubelet-lite",
         "orchestration/services-dns",
         "orchestration/gateway-api",
         "ai-infra/gpu-scheduling",
@@ -222,6 +226,8 @@
         "ai-infra/vector-search",
         "ai-infra/model-artifacts",
         "ai-infra/ai-finops",
+        "aiops/mcp-kubectl-server",
+        "aiops/incident-triage-agent",
         "aiops/llm-observability"
       ]
     }

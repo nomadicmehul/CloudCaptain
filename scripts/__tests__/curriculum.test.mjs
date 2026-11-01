@@ -103,6 +103,24 @@ test('prerequisite cycles are detected', () => {
   assert.ok(errors.some((e) => e.includes('prerequisite cycle')), errors.join('\n'));
 });
 
+test('a path must list every prerequisite, before the lesson that needs it', () => {
+  const dir = tmpCurriculum();
+  const manifestFile = path.join(dir, 'manifest.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+  const devops = manifest.paths.find((p) => p.id === 'devops');
+  const at = devops.lessons.indexOf('containers/image-layers');
+  assert.ok(at > 0);
+  devops.lessons.splice(at, 1);
+  fs.writeFileSync(manifestFile, JSON.stringify(manifest));
+  let {errors} = validateAll(dir);
+  assert.ok(errors.some((e) => e.includes('path "devops" lists containers/registry-pull but not its prerequisite containers/image-layers')), errors.join('\n'));
+
+  devops.lessons.push('containers/image-layers');
+  fs.writeFileSync(manifestFile, JSON.stringify(manifest));
+  ({errors} = validateAll(dir));
+  assert.ok(errors.some((e) => e.includes('path "devops" lists containers/registry-pull before its prerequisite containers/image-layers')), errors.join('\n'));
+});
+
 test('draft lessons are excluded from the model and sidebar', () => {
   const dir = tmpCurriculum();
   const phaseDir = path.join(dir, 'phases', SAMPLE_PHASE);

@@ -75,7 +75,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 | Trilha | Para | Lições |
 |:--|:--|:--|
 | [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de um único processo Linux a Kubernetes, IaC, cloud e AIOps | 47 |
-| [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engenheiros que precisam rodar modelos: GPUs, serving, gateways, roteamento, custo | 17 |
+| [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engenheiros que precisam rodar modelos: GPUs, serving, gateways, roteamento, custo | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | colocar agentes para trabalhar na infraestrutura com segurança | 9 |
 
 ## O tutor no seu agente
