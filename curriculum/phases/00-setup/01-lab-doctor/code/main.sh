@@ -16,5 +16,10 @@ fi
 
 kubectl cluster-info --context "kind-$CLUSTER"
 kubectl get nodes -o wide
-kubectl run lab-check --image=alpine:3.22 --restart=Never --rm -i --quiet -- sh -c 'echo "pod ok on $(uname -r)"'
+CTX=(--context "kind-$CLUSTER")
+kubectl "${CTX[@]}" delete pod lab-check --ignore-not-found --wait=true >/dev/null
+kubectl "${CTX[@]}" run lab-check --image=alpine:3.22 --restart=Never -- sh -c 'echo "pod ok on $(uname -r)"' >/dev/null
+kubectl "${CTX[@]}" wait --for=jsonpath='{.status.phase}'=Succeeded pod/lab-check --timeout=180s >/dev/null
+kubectl "${CTX[@]}" logs lab-check
+kubectl "${CTX[@]}" delete pod lab-check --wait=false >/dev/null
 echo "lab ready: kind-$CLUSTER  (delete with: kind delete cluster --name $CLUSTER)"
