@@ -330,7 +330,9 @@ grep -q "kubectl.kubernetes.io/restartedAt" "$WORK/restart-annotation.txt" || fa
 echo "  scale kept 2 ReplicaSets; rollout restart added a third with the same image and a new hash"
 
 echo "▸ quarantine: removing the selector label releases the pod and the ReplicaSet creates a replacement"
-SICK="$(k get pods -n "$NS" -l app=web -o jsonpath='{.items[0].metadata.name}')"
+k get pods -n "$NS" -l app=web -o json > "$WORK/pods-now.json"
+SICK="$(python3 -c 'import json, sys; ready = [p["metadata"]["name"] for p in json.load(open(sys.argv[1]))["items"] if not p["metadata"].get("deletionTimestamp") and any(c.get("type") == "Ready" and c.get("status") == "True" for c in p["status"].get("conditions", []))]; print(ready[0] if ready else "")' "$WORK/pods-now.json")"
+[[ -n "$SICK" ]] || fail "no Ready web pod that is not terminating: $(k get pods -n "$NS" -l app=web 2>&1)"
 k label pod "$SICK" app- -n "$NS" >/dev/null || fail "remove the app label from $SICK"
 poll "2 ready pods without $SICK" 120 ready_without web 2 "$SICK"
 poll "$SICK to lose its owner reference" 60 released "$SICK"
