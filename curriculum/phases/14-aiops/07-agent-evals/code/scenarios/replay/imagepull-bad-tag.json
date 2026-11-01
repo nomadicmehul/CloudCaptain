@@ -1,0 +1,19 @@
+[
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 1700, "output_tokens": 80},
+   "content": [{"type": "tool_use", "id": "toolu_01", "name": "list_events", "input": {"namespace": "default", "warnings_only": true}},
+               {"type": "tool_use", "id": "toolu_02", "name": "list_pods", "input": {"namespace": "default"}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 2500, "output_tokens": 60},
+   "content": [{"type": "tool_use", "id": "toolu_03", "name": "describe_pod", "input": {"namespace": "default", "name": "payments-5f8d9b7c6-q7mzt"}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 3200, "output_tokens": 50},
+   "content": [{"type": "tool_use", "id": "toolu_04", "name": "pod_logs", "input": {"namespace": "default", "name": "payments-5f8d9b7c6-q7mzt", "tail_lines": 50}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 4300, "output_tokens": 220},
+   "content": [{"type": "text", "text": "No logs exist because the container never started; the image reference is the problem."},
+               {"type": "tool_use", "id": "toolu_05", "name": "write_report", "input": {
+       "summary": "The payments rollout is stuck: the new ReplicaSet pod payments-5f8d9b7c6-q7mzt is in ImagePullBackOff because registry.example.com/shop/payments:v1.4.3-rc does not exist; the two old pods still serve traffic.",
+       "severity": "sev2",
+       "evidence": ["list_events: Failed to pull image registry.example.com/shop/payments:v1.4.3-rc: not found, then ImagePullBackOff", "list_pods: one pod 0/1 ImagePullBackOff, two old pods 1/1 Running", "pod_logs: container is waiting to start, no logs"],
+       "root_cause_hypothesis": "The deployment references a tag that was never pushed (v1.4.3-rc); most likely a typo for v1.4.3 or a pipeline that tagged the image differently. A restart cannot help; the image reference has to change.",
+       "confidence": "high",
+       "proposed_actions": ["Fix the image tag in the payments Deployment (kubectl set image deployment/payments payments=registry.example.com/shop/payments:v1.4.3 -n default) after confirming the tag exists in the registry"],
+       "next_checks": ["list the tags of shop/payments in registry.example.com", "check the CI job that built the release for the tag it pushed"]}}]}
+]

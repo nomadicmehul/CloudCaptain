@@ -1,0 +1,14 @@
+[
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 2300, "output_tokens": 210},
+   "content": [{"type": "thinking", "thinking": "", "signature": ""},
+               {"type": "text", "text": "One story: everything that is NEW starts at the marker and names the same release."},
+               {"type": "tool_use", "id": "toolu_01", "name": "explain_digest", "input": {
+                   "headline": "The checkout release at the marker cannot read DATABASE_URL and is failing on every request path that loads config.",
+                   "likely_cause": "The new release renamed or dropped the DATABASE_URL key (ConfigMap or env) that config.py line 42 still expects; the payments timeouts are a downstream effect of checkout retrying without a database.",
+                   "confidence": "high",
+                   "severity": "sev2",
+                   "affected_components": ["checkout", "payments (secondary)"],
+                   "evidence": ["T01", "T02", "T03", "T04"],
+                   "noise": ["T05", "T06"],
+                   "next_checks": ["kubectl get configmap checkout -o yaml | grep -n DATABASE", "kubectl rollout history deployment/checkout", "kubectl logs deploy/checkout --since=15m | grep -c DATABASE_URL"]}}]}
+]

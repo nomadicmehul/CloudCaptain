@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/llm-observability",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "The triage agent prints `≈ $0.0774` at the end of every run. Finance asks which incidents cost the most last month and whether the agent is getting slower. What is missing?",
+      "choices": [
+        "A cheaper model",
+        "Nothing; search the terminal scrollback",
+        "The cost, tokens and duration as attributes on spans in a store you can query, instead of a number on a screen",
+        "A larger max_tokens so runs finish faster"
+      ],
+      "answer": 2,
+      "explanation": "A printed cost line is observability that stops at the screen. Every other service answers these questions because its requests become spans with durations and attributes that a backend aggregates; a model call needs the same treatment with four extra attributes (model, input tokens, output tokens, finish reason)."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "How does OTLP/HTTP JSON encode the attribute `gen_ai.usage.input_tokens` with the value 1800?",
+      "choices": [
+        "`{\"key\": \"gen_ai.usage.input_tokens\", \"value\": {\"intValue\": \"1800\"}}`",
+        "`{\"gen_ai.usage.input_tokens\": 1800}`",
+        "`{\"key\": \"gen_ai.usage.input_tokens\", \"value\": 1800}`",
+        "`{\"key\": \"gen_ai.usage.input_tokens\", \"value\": {\"intValue\": 1800}}`"
+      ],
+      "answer": 0,
+      "explanation": "OTLP attributes are a list of key/value pairs whose value carries exactly one typed field (stringValue, intValue, doubleValue, boolValue, arrayValue). The protobuf JSON mapping writes int64 as a string, so the correct form is \"1800\" in quotes; collectors accept a bare number, but the mapping is the string."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "You start the collector container with `-p 4318:4318`, `docker logs` shows the OTLP receiver starting, yet `agenttrace export` gets connection refused from the host. Most likely cause?",
+      "choices": [
+        "The debug exporter is missing from the pipeline",
+        "OTLP only works over gRPC on 4317",
+        "The container needs --privileged to open ports",
+        "The receiver bound to localhost inside the container (the default in recent releases); set `endpoint: 0.0.0.0:4318`"
+      ],
+      "answer": 3,
+      "explanation": "Recent collector releases default the OTLP receiver to localhost for safety. Inside a container that interface is unreachable from the published port, so the receiver must listen on 0.0.0.0 (or the container's address). The pipeline and the protocol are fine."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "In `agenttrace view` the `execute_tool` spans show `~832 ms` with a tilde. Why?",
+      "choices": [
+        "The collector rounded the durations to the nearest millisecond",
+        "The agent's audit records no tool timing, so the converter shares the run time not spent in model calls across the tool calls and flags each one as estimated",
+        "OpenTelemetry always estimates tool call durations from token counts",
+        "Nanosecond timestamps lose precision when written as JSON strings"
+      ],
+      "answer": 1,
+      "explanation": "The trace line records the model latency per step and the outcome records the whole run, but no entry times a tool call. The converter is honest about it: the unaccounted time is split evenly, `triage.duration_estimated` is true, and the tree marks it. Real instrumentation times the call itself, which is the Easy exercise."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A run ends because the model answered with `stop_reason: refusal`. How should the trace record that?",
+      "choices": [
+        "Drop the span; a refusal is not a model call",
+        "Set the chat span's status to ERROR because the request failed",
+        "Keep `refusal` in `gen_ai.response.finish_reasons` on the chat span and `stop=refusal` on the root; the HTTP call succeeded, so the refusal is an attribute to count, and `metrics` reports it as a refusal rate",
+        "Retry the call until the finish reason changes"
+      ],
+      "answer": 2,
+      "explanation": "Span status describes whether the operation failed; a refusal is a completed call whose answer you did not want. Recording it as a finish reason keeps error rates meaningful and makes refusal rate its own series, which is what you alert on. The root span may carry ERROR because the run produced no report."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "An agent gets stuck re-reading the same log with ever larger `tail_lines` until `max_steps`. Which alert catches this before the monthly invoice does?",
+      "choices": [
+        "p95 of tool calls per run above a threshold, together with the count of runs that ended without a report",
+        "p50 chat latency per model",
+        "CPU usage of the collector",
+        "Token count of the system prompt"
+      ],
+      "answer": 0,
+      "explanation": "A loop shows up as many tool calls in one run and as a run that never calls write_report, both visible from the spans within minutes. Latency percentiles and prompt size do not move much; cost does, but only once the bill arrives."
+    }
+  ]
+}

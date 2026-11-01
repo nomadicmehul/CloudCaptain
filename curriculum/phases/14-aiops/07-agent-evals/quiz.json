@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/agent-evals",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "The triage agent has 14 passing unit tests. Someone rewrites its system prompt and the tests still pass. What do you know about the agent's behaviour on a real incident?",
+      "choices": [
+        "It is unchanged, because the tests cover the loop",
+        "It is better, because the prompt was improved on purpose",
+        "Nothing: the tests drive the loop with a scripted model, so the model's behaviour under the new prompt was never sampled",
+        "It will fail, because prompt changes always need new tests"
+      ],
+      "answer": 2,
+      "explanation": "Unit tests feed the loop fixed responses; they prove that budgets, scope and the write path behave. The model's reaction to the prompt is a sample from a distribution, and only an eval that runs the model against scripted incidents, several times, measures it."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A scenario in agenteval has three parts. Which three?",
+      "choices": [
+        "A prompt, a temperature and a seed",
+        "The world (a fake kubectl behaviour table), the expectations (component, severity, evidence substrings, forbidden actions, budgets) and a scripted model replay",
+        "A kind cluster, a Helm chart and a dashboard",
+        "The agent's source code, its tests and a README"
+      ],
+      "answer": 1,
+      "explanation": "The behaviour table becomes a fake kubectl on PATH, so the real MCP server and the real loop run against a reproducible cluster; the expectations drive the graders; the replay lets the whole thing run without an API key. Live mode swaps only the model."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The `no_forbidden_actions` grader reads the audit, not just the violations list. Why does a refused `propose_action(delete_pod)` still fail the trial?",
+      "choices": [
+        "Because refused calls cost money",
+        "Because the loop's refusal is a defence, while the eval measures the model's intent: an agent that tries to delete a pod on an OOM incident is unsafe even when the gate held",
+        "Because the audit format changed in this lesson",
+        "It does not; only executed actions count"
+      ],
+      "answer": 1,
+      "explanation": "The triage lesson built the gates; this lesson asks whether the model walks into them. attempted_actions() lists every tool the model asked for, including refused ones, so a prompt that makes the model reach for a forbidden action shows up as a failing scenario."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "You add a fourth scenario to the suite and the live pass rate drops from 1.00 to 0.80. The gate with `--max-drop 0.1` fails. What should you look at first?",
+      "choices": [
+        "Raise --max-drop to 0.25 so CI goes green",
+        "Delete the new scenario",
+        "The per-scenario rows and failed-grader counts in results.md: a new scenario failing is a finding about the agent, an old scenario failing is a regression, and the gate also tells you if a baseline scenario was not run at all",
+        "Switch the judge to a cheaper model"
+      ],
+      "answer": 2,
+      "explanation": "The gate compares overall and per-scenario pass rates and complains about baseline scenarios that vanished. The Markdown report names which grader failed on which trial, which is the difference between a brittle evidence substring and an agent that really stopped naming the component."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Why do the deterministic graders run before the LLM judge, and why is the judge limited to hypothesis quality?",
+      "choices": [
+        "Deterministic graders are cheaper to write",
+        "The judge is more accurate, so it should run last",
+        "Facts a program can check (component named, severity, evidence present, zero violations, budgets) should never be delegated to a model with position and length biases; the judge is reserved for the one thing a substring cannot measure, and it grades against an anchored rubric so its score is reproducible",
+        "The API rate limit requires it"
+      ],
+      "answer": 2,
+      "explanation": "A judge model prefers longer answers and the first of two options, and it drifts between runs. Using it only where it is the sole option, with a 1 to 5 rubric that quotes the deciding sentence, keeps the pass rate meaningful; everything else is a plain assertion."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "In replay mode every trial of a scenario produces the same result, so `--trials 3` looks pointless. When does the trial count matter?",
+      "choices": [
+        "Never; one trial is always enough",
+        "In live mode: the model samples, so a scenario that passes 2 of 3 times has a 0.67 pass rate, and p95 tool calls and mean cost only mean something across several runs",
+        "Only when the fake kubectl is slow",
+        "When the baseline file is missing"
+      ],
+      "answer": 1,
+      "explanation": "Replay is for testing the harness and running CI without a key. The numbers that decide whether a prompt change ships come from live trials, where the same incident can end in different reports; the trial count sets how finely the pass rate can resolve."
+    }
+  ]
+}

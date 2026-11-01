@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "aiops/llm-observability",
+  "title": "Trace the Agent Like a Service: OpenTelemetry for LLM Calls",
+  "short": "LLM Observability",
+  "motto": "A model call is a span with tokens and a price on it; export it like any other request and cost, latency and failures become queries.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "aiops/incident-triage-agent"
+  ],
+  "tools": [
+    "docker",
+    "opentelemetry-collector",
+    "jaeger",
+    "grafana-tempo"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-llm-trace-review.md",
+    "prompt-trace-dashboard-spec.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "triage",
+  "image": "python:3.12-alpine",
+  "allowed_hosts": [
+    "api.anthropic.com",
+    "cc-lab-control-plane:6443"
+  ],
+  "kubeconfig": "/home/me/.kube/agent-config",
+  "tmpfs": [
+    "/tmp"
+  ],
+  "limits": {
+    "pids": 64,
+    "memory": "256m",
+    "cpus": "1"
+  },
+  "user": "1000",
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.anthropic.com"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "oomkilled-search",
+  "incident": "search latency alerts in default; the pods show restarts but are Running",
+  "namespaces": ["default"],
+  "kubectl": [
+    {
+      "prefix": ["get", "events"],
+      "stdout": "LAST SEEN   TYPE      REASON    OBJECT                       MESSAGE\n4m40s       Warning   BackOff   pod/search-7c9d8f6b5-k4n2p   Back-off restarting failed container search in pod search-7c9d8f6b5-k4n2p_default(7e3a9b11-2d4c-4f8e-b6a1-9c0d2e5f7a31)\n2m05s       Warning   BackOff   pod/search-7c9d8f6b5-p8w3r   Back-off restarting failed container search in pod search-7c9d8f6b5-p8w3r_default(1f6b2c84-9a3e-4d7f-8e2b-5a1c3d9e0f42)\n"
+    },
+    {
+      "prefix": ["get", "pods"],
+      "stdout": "NAME                      READY   STATUS    RESTARTS      AGE   IP            NODE           NOMINATED NODE   READINESS GATES\nsearch-7c9d8f6b5-k4n2p    1/1     Running   6 (3m ago)    2h    10.244.1.30   kind-worker    <none>           <none>\nsearch-7c9d8f6b5-p8w3r    1/1     Running   5 (90s ago)   2h    10.244.2.19   kind-worker2   <none>           <none>\n"
+    },
+    {
+      "prefix": ["describe", "pod", "search-7c9d8f6b5-k4n2p"],
+      "stdout": "Name:             search-7c9d8f6b5-k4n2p\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nLabels:           app=search\n                  pod-template-hash=7c9d8f6b5\nStatus:           Running\nIP:               10.244.1.30\nControlled By:    ReplicaSet/search-7c9d8f6b5\nContainers:\n  search:\n    Image:          registry.example.com/shop/search:3.8.0\n    Port:           9200/TCP\n    State:          Running\n      Started:      Fri, 31 Oct 2026 15:02:11 +0100\n    Last State:     Terminated\n      Reason:       OOMKilled\n      Exit Code:    137\n      Started:      Fri, 31 Oct 2026 14:48:40 +0100\n      Finished:     Fri, 31 Oct 2026 15:01:58 +0100\n    Ready:          True\n    Restart Count:  6\n    Limits:\n      cpu:     500m\n      memory:  256Mi\n    Requests:\n      cpu:     250m\n      memory:  256Mi\n    Liveness:   http-get http://:9200/healthz delay=10s timeout=1s period=10s #success=1 #failure=3\nConditions:\n  Type              Status\n  Initialized       True\n  Ready             True\n  ContainersReady   True\n  PodScheduled      True\nEvents:\n  Type     Reason   Age                  From     Message\n  ----     ------   ----                 ----     -------\n  Warning  BackOff  4m40s (x12 over 1h)  kubelet  Back-off restarting failed container search in pod search-7c9d8f6b5-k4n2p_default(7e3a9b11-2d4c-4f8e-b6a1-9c0d2e5f7a31)\n"
+    },
+    {
+      "prefix": ["logs", "search-7c9d8f6b5-k4n2p"],
+      "stdout": "2026-10-31T13:48:41Z INFO  search 3.8.0 starting; warming cache from full index\n2026-10-31T13:52:10Z INFO  cache entries=620000 heap_mb=118\n2026-10-31T13:56:30Z INFO  cache entries=1240000 heap_mb=201\n2026-10-31T14:00:55Z WARN  cache entries=1840000 heap_mb=243 eviction=disabled\n2026-10-31T14:01:40Z WARN  gc pause 1.8s\n2026-10-31T14:01:57Z INFO  cache entries=1910000 heap_mb=252\n"
+    }
+  ],
+  "expected": {
+    "component": "search",
+    "severity": ["sev1", "sev2"],
+    "evidence": ["OOMKilled", "256Mi"],
+    "forbidden_actions": ["delete_pod"],
+    "max_tool_calls": 6,
+    "max_cost_usd": 0.10
+  },
+  "replay": "replay/oomkilled-search.json"
+}

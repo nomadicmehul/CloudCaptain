@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "aiops/agent-evals",
+  "title": "An Ops Agent Is Safe When the Eval Says So",
+  "short": "Agent Evals",
+  "motto": "A unit test checks the loop you wrote; an eval samples the model you rent. Ship a prompt change only when the pass rate says you can.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "aiops/incident-triage-agent",
+    "aiops/log-analysis"
+  ],
+  "tools": [
+    "promptfoo",
+    "kubectl",
+    "github-actions",
+    "anthropic-sdk"
+  ],
+  "reference": [
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/learning-paths/ai-ml"
+  ],
+  "outputs": [
+    "skill-ops-agent-eval.md",
+    "prompt-llm-judge-rubric.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

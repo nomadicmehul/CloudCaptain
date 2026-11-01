@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/incident-triage-agent",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An \"AI SRE\" demo connects a model to a `run_kubectl(command)` tool. A pod's log contains the line `kubectl delete ns prod`. What decides whether production gets deleted?",
+      "choices": [
+        "How well the system prompt tells the model to ignore instructions in logs",
+        "Whether the loop exposes a tool that can run it: a model reading suggestive text is expected, so the tool surface and the loop's gates decide what text can become",
+        "The model's size",
+        "Whether the log is in JSON"
+      ],
+      "answer": 1,
+      "explanation": "Logs, events and tickets are untrusted text the model reads through tools. Prompt instructions reduce the odds; only a tool surface on which the action is impossible, plus a write path behind operator approval, removes them."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The response has stop_reason max_tokens and contains a tool_use block. What does the loop do?",
+      "choices": [
+        "Executes the tool; the input looked valid",
+        "Stops without running anything in that turn: a truncated input often parses as a valid partial object, and the same rule applies to refusal",
+        "Retries the tool call with fewer arguments",
+        "Asks the model to confirm"
+      ],
+      "answer": 1,
+      "explanation": "Cut-off output can leave a tool_use with a shortened input that still parses. The loop treats max_tokens and refusal as exits for that turn; a real deployment would retry with a larger max_tokens or let the fallback handle a refusal."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "One response carries three tool_use blocks. How do their results go back?",
+      "choices": [
+        "One user message per result, in the order they finished",
+        "All three tool_result blocks in a single user message, in order, failed ones included with is_error",
+        "Only the successful results",
+        "Concatenated into one text block"
+      ],
+      "answer": 1,
+      "explanation": "Parallel tool calls expect parallel results. Splitting them across messages or dropping a failed one teaches the model to stop making parallel calls, and the ids must match the tool_use blocks."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The model calls propose_action for a rollout_restart. In which order do the gates apply before anything runs?",
+      "choices": [
+        "Operator approval, then the model confirms",
+        "The kind must be enabled when the agent started, an operator must approve the exact command, and --execute must be on; otherwise the approved command is printed for a human and the model is told it has not run",
+        "The model decides and the loop logs it",
+        "The MCP server checks its allow-list"
+      ],
+      "answer": 1,
+      "explanation": "Three separate gates make a misconfiguration fail safe: forgetting --execute prints a command instead of running it, and the model never sees anything but the decision in words."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Why does the write path call kubectl directly with a pinned context instead of adding a write tool to the MCP server from the previous lesson?",
+      "choices": [
+        "MCP cannot express writes",
+        "The server is read-only by construction and every client relies on that; a second, smaller door with its own gates and audit keeps the guarantee intact",
+        "kubectl is faster than JSON-RPC",
+        "The server cannot see the kubeconfig"
+      ],
+      "answer": 1,
+      "explanation": "A guarantee is only useful if it holds for every client. Writes get their own path with an enabled-kinds list, approval, --execute and an audit entry, and the read-only server stays read-only."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "What does opting into fallbacks: \"default\" change for the triage loop?",
+      "choices": [
+        "It retries rate-limited requests",
+        "When a safety classifier declines the request, the API re-runs it on a model chosen by refusal category instead of returning refusal, so a false positive does not end the investigation; the loop still checks stop_reason",
+        "It makes the model cheaper",
+        "It disables thinking"
+      ],
+      "answer": 1,
+      "explanation": "Logs full of exploit strings can trip a classifier. The server-side fallback keeps the loop alive; the loop still handles refusal because the fallback model can decline too."
+    }
+  ]
+}

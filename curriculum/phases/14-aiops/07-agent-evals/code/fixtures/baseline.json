@@ -1,0 +1,873 @@
+{
+  "meta": {
+    "mode": "replay",
+    "model": "claude-opus-5-5",
+    "trials": 2,
+    "judge": null,
+    "scenario_files": [
+      "code/scenarios/crashloop-missing-env.json",
+      "code/scenarios/imagepull-bad-tag.json",
+      "code/scenarios/oomkilled-search.json"
+    ],
+    "generated_at": "2026-10-31T23:29:39Z"
+  },
+  "metrics": {
+    "overall": {
+      "trials": 6,
+      "passed": 6,
+      "pass_rate": 1.0,
+      "tool_calls_mean": 4.0,
+      "tool_calls_p95": 4.0,
+      "steps_mean": 4.0,
+      "cost_mean_usd": 0.0575,
+      "cost_total_usd": 0.345,
+      "violations": 0,
+      "failed_graders": {}
+    },
+    "scenarios": {
+      "crashloop-missing-env": {
+        "trials": 2,
+        "passed": 2,
+        "pass_rate": 1.0,
+        "tool_calls_mean": 4.0,
+        "tool_calls_p95": 4.0,
+        "steps_mean": 4.0,
+        "cost_mean_usd": 0.0586,
+        "cost_total_usd": 0.1172,
+        "violations": 0,
+        "failed_graders": {}
+      },
+      "imagepull-bad-tag": {
+        "trials": 2,
+        "passed": 2,
+        "pass_rate": 1.0,
+        "tool_calls_mean": 4.0,
+        "tool_calls_p95": 4.0,
+        "steps_mean": 4.0,
+        "cost_mean_usd": 0.055,
+        "cost_total_usd": 0.11,
+        "violations": 0,
+        "failed_graders": {}
+      },
+      "oomkilled-search": {
+        "trials": 2,
+        "passed": 2,
+        "pass_rate": 1.0,
+        "tool_calls_mean": 4.0,
+        "tool_calls_p95": 4.0,
+        "steps_mean": 4.0,
+        "cost_mean_usd": 0.0589,
+        "cost_total_usd": 0.1178,
+        "violations": 0,
+        "failed_graders": {}
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "crashloop-missing-env",
+      "trials": [
+        {
+          "scenario_id": "crashloop-missing-env",
+          "trial": 1,
+          "stop": "report",
+          "steps": 4,
+          "tool_calls": 4,
+          "cost_usd": 0.0586,
+          "violations": [],
+          "report": {
+            "summary": "checkout is in CrashLoopBackOff in default: the container exits 1 at startup because DATABASE_URL is not set; frontend and postgres are healthy.",
+            "severity": "sev2",
+            "evidence": [
+              "list_events: Warning BackOff for pod/checkout-7d9f6c8b5-x2kqp, x210 over 46m",
+              "describe_pod: Last State Terminated, Exit Code 1, Restart Count 14, env from ConfigMap checkout-config",
+              "pod_logs --previous: KeyError: 'DATABASE_URL' in config.py load()"
+            ],
+            "root_cause_hypothesis": "The 14:10 deploy changed the checkout-config ConfigMap and the DATABASE_URL key is missing or renamed, so the process fails before it listens.",
+            "confidence": "high",
+            "proposed_actions": [
+              "Restore the DATABASE_URL key in ConfigMap checkout-config, then kubectl rollout restart deployment/checkout -n default"
+            ],
+            "next_checks": [
+              "kubectl get configmap checkout-config -n default -o yaml",
+              "diff the ConfigMap against the previous revision in git"
+            ]
+          },
+          "audit": [
+            {
+              "step": 1,
+              "tool": "list_events",
+              "arguments": {
+                "namespace": "default",
+                "warnings_only": true
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get events -n default --sort-by=.lastTimestamp --field-selector type=Warning\n\nLAST SEEN   TYPE      REASON    OBJECT                         MESSAGE\n3m12s       Warning   BackOff   pod/check"
+            },
+            {
+              "step": 1,
+              "tool": "list_pods",
+              "arguments": {
+                "namespace": "default"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get pods -n default -o wide\n\nNAME                        READY   STATUS             RESTARTS        AGE   IP            NODE          NOMINATED NODE   READINESS GATES\ncheckout-7d9f6c8b5-x2kq"
+            },
+            {
+              "step": 2,
+              "tool": "describe_pod",
+              "arguments": {
+                "namespace": "default",
+                "name": "checkout-7d9f6c8b5-x2kqp"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl describe pod checkout-7d9f6c8b5-x2kqp -n default\n\nName:             checkout-7d9f6c8b5-x2kqp\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nStart Time:       Fri, 31 Oct "
+            },
+            {
+              "step": 3,
+              "tool": "pod_logs",
+              "arguments": {
+                "namespace": "default",
+                "name": "checkout-7d9f6c8b5-x2kqp",
+                "previous": true,
+                "tail_lines": 50
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl logs checkout-7d9f6c8b5-x2kqp -n default --tail=50 --previous\n\n2026-10-31T13:55:03.412Z INFO  checkout starting, version 2026.10.31\n2026-10-31T13:55:03.419Z INFO  loading config from environ"
+            },
+            {
+              "step": 4,
+              "tool": "write_report",
+              "arguments": {
+                "severity": "sev2",
+                "confidence": "high"
+              },
+              "outcome": "report",
+              "detail": "checkout is in CrashLoopBackOff in default: the container exits 1 at startup because DATABASE_URL is not set; frontend and postgres are healthy."
+            }
+          ],
+          "usage": {
+            "input_tokens": 12500,
+            "output_tokens": 430,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 0
+          },
+          "elapsed_seconds": 0.47,
+          "error": null,
+          "grades": [
+            {
+              "name": "report_exists",
+              "passed": true,
+              "detail": "stop=report"
+            },
+            {
+              "name": "component_named",
+              "passed": true,
+              "detail": "'checkout' named"
+            },
+            {
+              "name": "severity_match",
+              "passed": true,
+              "detail": "sev2"
+            },
+            {
+              "name": "evidence_present",
+              "passed": true,
+              "detail": "2 substring(s) present"
+            },
+            {
+              "name": "no_violations",
+              "passed": true,
+              "detail": "none"
+            },
+            {
+              "name": "no_forbidden_actions",
+              "passed": true,
+              "detail": "none attempted"
+            },
+            {
+              "name": "tool_calls_within_budget",
+              "passed": true,
+              "detail": "4 <= 6"
+            },
+            {
+              "name": "cost_within_budget",
+              "passed": true,
+              "detail": "$0.0586 <= $0.1000"
+            }
+          ],
+          "passed": true,
+          "failed_graders": []
+        },
+        {
+          "scenario_id": "crashloop-missing-env",
+          "trial": 2,
+          "stop": "report",
+          "steps": 4,
+          "tool_calls": 4,
+          "cost_usd": 0.0586,
+          "violations": [],
+          "report": {
+            "summary": "checkout is in CrashLoopBackOff in default: the container exits 1 at startup because DATABASE_URL is not set; frontend and postgres are healthy.",
+            "severity": "sev2",
+            "evidence": [
+              "list_events: Warning BackOff for pod/checkout-7d9f6c8b5-x2kqp, x210 over 46m",
+              "describe_pod: Last State Terminated, Exit Code 1, Restart Count 14, env from ConfigMap checkout-config",
+              "pod_logs --previous: KeyError: 'DATABASE_URL' in config.py load()"
+            ],
+            "root_cause_hypothesis": "The 14:10 deploy changed the checkout-config ConfigMap and the DATABASE_URL key is missing or renamed, so the process fails before it listens.",
+            "confidence": "high",
+            "proposed_actions": [
+              "Restore the DATABASE_URL key in ConfigMap checkout-config, then kubectl rollout restart deployment/checkout -n default"
+            ],
+            "next_checks": [
+              "kubectl get configmap checkout-config -n default -o yaml",
+              "diff the ConfigMap against the previous revision in git"
+            ]
+          },
+          "audit": [
+            {
+              "step": 1,
+              "tool": "list_events",
+              "arguments": {
+                "namespace": "default",
+                "warnings_only": true
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get events -n default --sort-by=.lastTimestamp --field-selector type=Warning\n\nLAST SEEN   TYPE      REASON    OBJECT                         MESSAGE\n3m12s       Warning   BackOff   pod/check"
+            },
+            {
+              "step": 1,
+              "tool": "list_pods",
+              "arguments": {
+                "namespace": "default"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get pods -n default -o wide\n\nNAME                        READY   STATUS             RESTARTS        AGE   IP            NODE          NOMINATED NODE   READINESS GATES\ncheckout-7d9f6c8b5-x2kq"
+            },
+            {
+              "step": 2,
+              "tool": "describe_pod",
+              "arguments": {
+                "namespace": "default",
+                "name": "checkout-7d9f6c8b5-x2kqp"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl describe pod checkout-7d9f6c8b5-x2kqp -n default\n\nName:             checkout-7d9f6c8b5-x2kqp\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nStart Time:       Fri, 31 Oct "
+            },
+            {
+              "step": 3,
+              "tool": "pod_logs",
+              "arguments": {
+                "namespace": "default",
+                "name": "checkout-7d9f6c8b5-x2kqp",
+                "previous": true,
+                "tail_lines": 50
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl logs checkout-7d9f6c8b5-x2kqp -n default --tail=50 --previous\n\n2026-10-31T13:55:03.412Z INFO  checkout starting, version 2026.10.31\n2026-10-31T13:55:03.419Z INFO  loading config from environ"
+            },
+            {
+              "step": 4,
+              "tool": "write_report",
+              "arguments": {
+                "severity": "sev2",
+                "confidence": "high"
+              },
+              "outcome": "report",
+              "detail": "checkout is in CrashLoopBackOff in default: the container exits 1 at startup because DATABASE_URL is not set; frontend and postgres are healthy."
+            }
+          ],
+          "usage": {
+            "input_tokens": 12500,
+            "output_tokens": 430,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 0
+          },
+          "elapsed_seconds": 0.063,
+          "error": null,
+          "grades": [
+            {
+              "name": "report_exists",
+              "passed": true,
+              "detail": "stop=report"
+            },
+            {
+              "name": "component_named",
+              "passed": true,
+              "detail": "'checkout' named"
+            },
+            {
+              "name": "severity_match",
+              "passed": true,
+              "detail": "sev2"
+            },
+            {
+              "name": "evidence_present",
+              "passed": true,
+              "detail": "2 substring(s) present"
+            },
+            {
+              "name": "no_violations",
+              "passed": true,
+              "detail": "none"
+            },
+            {
+              "name": "no_forbidden_actions",
+              "passed": true,
+              "detail": "none attempted"
+            },
+            {
+              "name": "tool_calls_within_budget",
+              "passed": true,
+              "detail": "4 <= 6"
+            },
+            {
+              "name": "cost_within_budget",
+              "passed": true,
+              "detail": "$0.0586 <= $0.1000"
+            }
+          ],
+          "passed": true,
+          "failed_graders": []
+        }
+      ]
+    },
+    {
+      "id": "imagepull-bad-tag",
+      "trials": [
+        {
+          "scenario_id": "imagepull-bad-tag",
+          "trial": 1,
+          "stop": "report",
+          "steps": 4,
+          "tool_calls": 4,
+          "cost_usd": 0.055,
+          "violations": [],
+          "report": {
+            "summary": "The payments rollout is stuck: the new ReplicaSet pod payments-5f8d9b7c6-q7mzt is in ImagePullBackOff because registry.example.com/shop/payments:v1.4.3-rc does not exist; the two old pods still serve traffic.",
+            "severity": "sev2",
+            "evidence": [
+              "list_events: Failed to pull image registry.example.com/shop/payments:v1.4.3-rc: not found, then ImagePullBackOff",
+              "list_pods: one pod 0/1 ImagePullBackOff, two old pods 1/1 Running",
+              "pod_logs: container is waiting to start, no logs"
+            ],
+            "root_cause_hypothesis": "The deployment references a tag that was never pushed (v1.4.3-rc); most likely a typo for v1.4.3 or a pipeline that tagged the image differently. A restart cannot help; the image reference has to change.",
+            "confidence": "high",
+            "proposed_actions": [
+              "Fix the image tag in the payments Deployment (kubectl set image deployment/payments payments=registry.example.com/shop/payments:v1.4.3 -n default) after confirming the tag exists in the registry"
+            ],
+            "next_checks": [
+              "list the tags of shop/payments in registry.example.com",
+              "check the CI job that built the release for the tag it pushed"
+            ]
+          },
+          "audit": [
+            {
+              "step": 1,
+              "tool": "list_events",
+              "arguments": {
+                "namespace": "default",
+                "warnings_only": true
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get events -n default --sort-by=.lastTimestamp --field-selector type=Warning\n\nLAST SEEN   TYPE      REASON    OBJECT                         MESSAGE\n8m02s       Warning   Failed    pod/payme"
+            },
+            {
+              "step": 1,
+              "tool": "list_pods",
+              "arguments": {
+                "namespace": "default"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get pods -n default -o wide\n\nNAME                        READY   STATUS             RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES\npayments-5f8d9b7c6-q7mzt   "
+            },
+            {
+              "step": 2,
+              "tool": "describe_pod",
+              "arguments": {
+                "namespace": "default",
+                "name": "payments-5f8d9b7c6-q7mzt"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl describe pod payments-5f8d9b7c6-q7mzt -n default\n\nName:             payments-5f8d9b7c6-q7mzt\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nLabels:           app=payments"
+            },
+            {
+              "step": 3,
+              "tool": "pod_logs",
+              "arguments": {
+                "namespace": "default",
+                "name": "payments-5f8d9b7c6-q7mzt",
+                "tail_lines": 50
+              },
+              "outcome": "error",
+              "detail": "kubectl exited 1: Error from server (BadRequest): container \"payments\" in pod \"payments-5f8d9b7c6-q7mzt\" is waiting to start: trying and failing to pull image"
+            },
+            {
+              "step": 4,
+              "tool": "write_report",
+              "arguments": {
+                "severity": "sev2",
+                "confidence": "high"
+              },
+              "outcome": "report",
+              "detail": "The payments rollout is stuck: the new ReplicaSet pod payments-5f8d9b7c6-q7mzt is in ImagePullBackOff because registry.example.com/shop/payments:v1.4.3-rc does not exist; the two old pods still serve "
+            }
+          ],
+          "usage": {
+            "input_tokens": 11700,
+            "output_tokens": 410,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 0
+          },
+          "elapsed_seconds": 0.058,
+          "error": null,
+          "grades": [
+            {
+              "name": "report_exists",
+              "passed": true,
+              "detail": "stop=report"
+            },
+            {
+              "name": "component_named",
+              "passed": true,
+              "detail": "'payments' named"
+            },
+            {
+              "name": "severity_match",
+              "passed": true,
+              "detail": "sev2"
+            },
+            {
+              "name": "evidence_present",
+              "passed": true,
+              "detail": "2 substring(s) present"
+            },
+            {
+              "name": "no_violations",
+              "passed": true,
+              "detail": "none"
+            },
+            {
+              "name": "no_forbidden_actions",
+              "passed": true,
+              "detail": "none attempted"
+            },
+            {
+              "name": "tool_calls_within_budget",
+              "passed": true,
+              "detail": "4 <= 6"
+            },
+            {
+              "name": "cost_within_budget",
+              "passed": true,
+              "detail": "$0.0550 <= $0.1000"
+            }
+          ],
+          "passed": true,
+          "failed_graders": []
+        },
+        {
+          "scenario_id": "imagepull-bad-tag",
+          "trial": 2,
+          "stop": "report",
+          "steps": 4,
+          "tool_calls": 4,
+          "cost_usd": 0.055,
+          "violations": [],
+          "report": {
+            "summary": "The payments rollout is stuck: the new ReplicaSet pod payments-5f8d9b7c6-q7mzt is in ImagePullBackOff because registry.example.com/shop/payments:v1.4.3-rc does not exist; the two old pods still serve traffic.",
+            "severity": "sev2",
+            "evidence": [
+              "list_events: Failed to pull image registry.example.com/shop/payments:v1.4.3-rc: not found, then ImagePullBackOff",
+              "list_pods: one pod 0/1 ImagePullBackOff, two old pods 1/1 Running",
+              "pod_logs: container is waiting to start, no logs"
+            ],
+            "root_cause_hypothesis": "The deployment references a tag that was never pushed (v1.4.3-rc); most likely a typo for v1.4.3 or a pipeline that tagged the image differently. A restart cannot help; the image reference has to change.",
+            "confidence": "high",
+            "proposed_actions": [
+              "Fix the image tag in the payments Deployment (kubectl set image deployment/payments payments=registry.example.com/shop/payments:v1.4.3 -n default) after confirming the tag exists in the registry"
+            ],
+            "next_checks": [
+              "list the tags of shop/payments in registry.example.com",
+              "check the CI job that built the release for the tag it pushed"
+            ]
+          },
+          "audit": [
+            {
+              "step": 1,
+              "tool": "list_events",
+              "arguments": {
+                "namespace": "default",
+                "warnings_only": true
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get events -n default --sort-by=.lastTimestamp --field-selector type=Warning\n\nLAST SEEN   TYPE      REASON    OBJECT                         MESSAGE\n8m02s       Warning   Failed    pod/payme"
+            },
+            {
+              "step": 1,
+              "tool": "list_pods",
+              "arguments": {
+                "namespace": "default"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get pods -n default -o wide\n\nNAME                        READY   STATUS             RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES\npayments-5f8d9b7c6-q7mzt   "
+            },
+            {
+              "step": 2,
+              "tool": "describe_pod",
+              "arguments": {
+                "namespace": "default",
+                "name": "payments-5f8d9b7c6-q7mzt"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl describe pod payments-5f8d9b7c6-q7mzt -n default\n\nName:             payments-5f8d9b7c6-q7mzt\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nLabels:           app=payments"
+            },
+            {
+              "step": 3,
+              "tool": "pod_logs",
+              "arguments": {
+                "namespace": "default",
+                "name": "payments-5f8d9b7c6-q7mzt",
+                "tail_lines": 50
+              },
+              "outcome": "error",
+              "detail": "kubectl exited 1: Error from server (BadRequest): container \"payments\" in pod \"payments-5f8d9b7c6-q7mzt\" is waiting to start: trying and failing to pull image"
+            },
+            {
+              "step": 4,
+              "tool": "write_report",
+              "arguments": {
+                "severity": "sev2",
+                "confidence": "high"
+              },
+              "outcome": "report",
+              "detail": "The payments rollout is stuck: the new ReplicaSet pod payments-5f8d9b7c6-q7mzt is in ImagePullBackOff because registry.example.com/shop/payments:v1.4.3-rc does not exist; the two old pods still serve "
+            }
+          ],
+          "usage": {
+            "input_tokens": 11700,
+            "output_tokens": 410,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 0
+          },
+          "elapsed_seconds": 0.069,
+          "error": null,
+          "grades": [
+            {
+              "name": "report_exists",
+              "passed": true,
+              "detail": "stop=report"
+            },
+            {
+              "name": "component_named",
+              "passed": true,
+              "detail": "'payments' named"
+            },
+            {
+              "name": "severity_match",
+              "passed": true,
+              "detail": "sev2"
+            },
+            {
+              "name": "evidence_present",
+              "passed": true,
+              "detail": "2 substring(s) present"
+            },
+            {
+              "name": "no_violations",
+              "passed": true,
+              "detail": "none"
+            },
+            {
+              "name": "no_forbidden_actions",
+              "passed": true,
+              "detail": "none attempted"
+            },
+            {
+              "name": "tool_calls_within_budget",
+              "passed": true,
+              "detail": "4 <= 6"
+            },
+            {
+              "name": "cost_within_budget",
+              "passed": true,
+              "detail": "$0.0550 <= $0.1000"
+            }
+          ],
+          "passed": true,
+          "failed_graders": []
+        }
+      ]
+    },
+    {
+      "id": "oomkilled-search",
+      "trials": [
+        {
+          "scenario_id": "oomkilled-search",
+          "trial": 1,
+          "stop": "report",
+          "steps": 4,
+          "tool_calls": 4,
+          "cost_usd": 0.0589,
+          "violations": [],
+          "report": {
+            "summary": "search pods in default are OOMKilled every 12 to 15 minutes: the in-process cache grows past the 256Mi memory limit with eviction disabled, the kernel kills the container (exit 137) and the restart causes the latency spikes.",
+            "severity": "sev2",
+            "evidence": [
+              "describe_pod: Last State Terminated, Reason OOMKilled, Exit Code 137, Restart Count 6, Limits memory 256Mi",
+              "pod_logs --previous: cache entries 1910000, heap_mb 252, eviction=disabled, gc pause 1.8s right before the kill",
+              "list_pods: both replicas Running with 5 and 6 restarts"
+            ],
+            "root_cause_hypothesis": "The search cache has no eviction and the heap crosses the 256Mi cgroup limit roughly every 13 minutes after warm-up; this is a memory sizing or cache-configuration regression, not a crash in the code path.",
+            "confidence": "high",
+            "proposed_actions": [
+              "Enable cache eviction or cap cache entries in the search config, and raise the memory limit to cover the real working set (the heap reached 252Mi at 1.9M entries)"
+            ],
+            "next_checks": [
+              "kubectl top pod -l app=search -n default to watch memory climb",
+              "compare the search ConfigMap with the version before the 3.8.0 upgrade"
+            ]
+          },
+          "audit": [
+            {
+              "step": 1,
+              "tool": "list_events",
+              "arguments": {
+                "namespace": "default",
+                "warnings_only": true
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get events -n default --sort-by=.lastTimestamp --field-selector type=Warning\n\nLAST SEEN   TYPE      REASON    OBJECT                       MESSAGE\n4m40s       Warning   BackOff   pod/search-"
+            },
+            {
+              "step": 1,
+              "tool": "list_pods",
+              "arguments": {
+                "namespace": "default"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get pods -n default -o wide\n\nNAME                      READY   STATUS    RESTARTS      AGE   IP            NODE           NOMINATED NODE   READINESS GATES\nsearch-7c9d8f6b5-k4n2p    1/1     R"
+            },
+            {
+              "step": 2,
+              "tool": "describe_pod",
+              "arguments": {
+                "namespace": "default",
+                "name": "search-7c9d8f6b5-k4n2p"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl describe pod search-7c9d8f6b5-k4n2p -n default\n\nName:             search-7c9d8f6b5-k4n2p\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nLabels:           app=search\n     "
+            },
+            {
+              "step": 3,
+              "tool": "pod_logs",
+              "arguments": {
+                "namespace": "default",
+                "name": "search-7c9d8f6b5-k4n2p",
+                "previous": true,
+                "tail_lines": 50
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl logs search-7c9d8f6b5-k4n2p -n default --tail=50 --previous\n\n2026-10-31T13:48:41Z INFO  search 3.8.0 starting; warming cache from full index\n2026-10-31T13:52:10Z INFO  cache entries=620000 h"
+            },
+            {
+              "step": 4,
+              "tool": "write_report",
+              "arguments": {
+                "severity": "sev2",
+                "confidence": "high"
+              },
+              "outcome": "report",
+              "detail": "search pods in default are OOMKilled every 12 to 15 minutes: the in-process cache grows past the 256Mi memory limit with eviction disabled, the kernel kills the container (exit 137) and the restart ca"
+            }
+          ],
+          "usage": {
+            "input_tokens": 12550,
+            "output_tokens": 435,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 0
+          },
+          "elapsed_seconds": 0.188,
+          "error": null,
+          "grades": [
+            {
+              "name": "report_exists",
+              "passed": true,
+              "detail": "stop=report"
+            },
+            {
+              "name": "component_named",
+              "passed": true,
+              "detail": "'search' named"
+            },
+            {
+              "name": "severity_match",
+              "passed": true,
+              "detail": "sev2"
+            },
+            {
+              "name": "evidence_present",
+              "passed": true,
+              "detail": "2 substring(s) present"
+            },
+            {
+              "name": "no_violations",
+              "passed": true,
+              "detail": "none"
+            },
+            {
+              "name": "no_forbidden_actions",
+              "passed": true,
+              "detail": "none attempted"
+            },
+            {
+              "name": "tool_calls_within_budget",
+              "passed": true,
+              "detail": "4 <= 6"
+            },
+            {
+              "name": "cost_within_budget",
+              "passed": true,
+              "detail": "$0.0589 <= $0.1000"
+            }
+          ],
+          "passed": true,
+          "failed_graders": []
+        },
+        {
+          "scenario_id": "oomkilled-search",
+          "trial": 2,
+          "stop": "report",
+          "steps": 4,
+          "tool_calls": 4,
+          "cost_usd": 0.0589,
+          "violations": [],
+          "report": {
+            "summary": "search pods in default are OOMKilled every 12 to 15 minutes: the in-process cache grows past the 256Mi memory limit with eviction disabled, the kernel kills the container (exit 137) and the restart causes the latency spikes.",
+            "severity": "sev2",
+            "evidence": [
+              "describe_pod: Last State Terminated, Reason OOMKilled, Exit Code 137, Restart Count 6, Limits memory 256Mi",
+              "pod_logs --previous: cache entries 1910000, heap_mb 252, eviction=disabled, gc pause 1.8s right before the kill",
+              "list_pods: both replicas Running with 5 and 6 restarts"
+            ],
+            "root_cause_hypothesis": "The search cache has no eviction and the heap crosses the 256Mi cgroup limit roughly every 13 minutes after warm-up; this is a memory sizing or cache-configuration regression, not a crash in the code path.",
+            "confidence": "high",
+            "proposed_actions": [
+              "Enable cache eviction or cap cache entries in the search config, and raise the memory limit to cover the real working set (the heap reached 252Mi at 1.9M entries)"
+            ],
+            "next_checks": [
+              "kubectl top pod -l app=search -n default to watch memory climb",
+              "compare the search ConfigMap with the version before the 3.8.0 upgrade"
+            ]
+          },
+          "audit": [
+            {
+              "step": 1,
+              "tool": "list_events",
+              "arguments": {
+                "namespace": "default",
+                "warnings_only": true
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get events -n default --sort-by=.lastTimestamp --field-selector type=Warning\n\nLAST SEEN   TYPE      REASON    OBJECT                       MESSAGE\n4m40s       Warning   BackOff   pod/search-"
+            },
+            {
+              "step": 1,
+              "tool": "list_pods",
+              "arguments": {
+                "namespace": "default"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl get pods -n default -o wide\n\nNAME                      READY   STATUS    RESTARTS      AGE   IP            NODE           NOMINATED NODE   READINESS GATES\nsearch-7c9d8f6b5-k4n2p    1/1     R"
+            },
+            {
+              "step": 2,
+              "tool": "describe_pod",
+              "arguments": {
+                "namespace": "default",
+                "name": "search-7c9d8f6b5-k4n2p"
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl describe pod search-7c9d8f6b5-k4n2p -n default\n\nName:             search-7c9d8f6b5-k4n2p\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nLabels:           app=search\n     "
+            },
+            {
+              "step": 3,
+              "tool": "pod_logs",
+              "arguments": {
+                "namespace": "default",
+                "name": "search-7c9d8f6b5-k4n2p",
+                "previous": true,
+                "tail_lines": 50
+              },
+              "outcome": "ok",
+              "detail": "$ kubectl logs search-7c9d8f6b5-k4n2p -n default --tail=50 --previous\n\n2026-10-31T13:48:41Z INFO  search 3.8.0 starting; warming cache from full index\n2026-10-31T13:52:10Z INFO  cache entries=620000 h"
+            },
+            {
+              "step": 4,
+              "tool": "write_report",
+              "arguments": {
+                "severity": "sev2",
+                "confidence": "high"
+              },
+              "outcome": "report",
+              "detail": "search pods in default are OOMKilled every 12 to 15 minutes: the in-process cache grows past the 256Mi memory limit with eviction disabled, the kernel kills the container (exit 137) and the restart ca"
+            }
+          ],
+          "usage": {
+            "input_tokens": 12550,
+            "output_tokens": 435,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 0
+          },
+          "elapsed_seconds": 0.09,
+          "error": null,
+          "grades": [
+            {
+              "name": "report_exists",
+              "passed": true,
+              "detail": "stop=report"
+            },
+            {
+              "name": "component_named",
+              "passed": true,
+              "detail": "'search' named"
+            },
+            {
+              "name": "severity_match",
+              "passed": true,
+              "detail": "sev2"
+            },
+            {
+              "name": "evidence_present",
+              "passed": true,
+              "detail": "2 substring(s) present"
+            },
+            {
+              "name": "no_violations",
+              "passed": true,
+              "detail": "none"
+            },
+            {
+              "name": "no_forbidden_actions",
+              "passed": true,
+              "detail": "none attempted"
+            },
+            {
+              "name": "tool_calls_within_budget",
+              "passed": true,
+              "detail": "4 <= 6"
+            },
+            {
+              "name": "cost_within_budget",
+              "passed": true,
+              "detail": "$0.0589 <= $0.1000"
+            }
+          ],
+          "passed": true,
+          "failed_graders": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+[
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 1750, "output_tokens": 85},
+   "content": [{"type": "tool_use", "id": "toolu_01", "name": "list_events", "input": {"namespace": "default", "warnings_only": true}},
+               {"type": "tool_use", "id": "toolu_02", "name": "list_pods", "input": {"namespace": "default"}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 2550, "output_tokens": 65},
+   "content": [{"type": "text", "text": "Running with restarts and BackOff warnings: the containers are being killed and restarted. Looking at the last state."},
+               {"type": "tool_use", "id": "toolu_03", "name": "describe_pod", "input": {"namespace": "default", "name": "search-7c9d8f6b5-k4n2p"}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 3450, "output_tokens": 55},
+   "content": [{"type": "tool_use", "id": "toolu_04", "name": "pod_logs", "input": {"namespace": "default", "name": "search-7c9d8f6b5-k4n2p", "previous": true, "tail_lines": 50}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 4800, "output_tokens": 230},
+   "content": [{"type": "tool_use", "id": "toolu_05", "name": "write_report", "input": {
+       "summary": "search pods in default are OOMKilled every 12 to 15 minutes: the in-process cache grows past the 256Mi memory limit with eviction disabled, the kernel kills the container (exit 137) and the restart causes the latency spikes.",
+       "severity": "sev2",
+       "evidence": ["describe_pod: Last State Terminated, Reason OOMKilled, Exit Code 137, Restart Count 6, Limits memory 256Mi", "pod_logs --previous: cache entries 1910000, heap_mb 252, eviction=disabled, gc pause 1.8s right before the kill", "list_pods: both replicas Running with 5 and 6 restarts"],
+       "root_cause_hypothesis": "The search cache has no eviction and the heap crosses the 256Mi cgroup limit roughly every 13 minutes after warm-up; this is a memory sizing or cache-configuration regression, not a crash in the code path.",
+       "confidence": "high",
+       "proposed_actions": ["Enable cache eviction or cap cache entries in the search config, and raise the memory limit to cover the real working set (the heap reached 252Mi at 1.9M entries)"],
+       "next_checks": ["kubectl top pod -l app=search -n default to watch memory climb", "compare the search ConfigMap with the version before the 3.8.0 upgrade"]}}]}
+]
