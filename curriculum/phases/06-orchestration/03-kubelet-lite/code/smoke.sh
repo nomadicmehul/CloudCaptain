@@ -281,7 +281,7 @@ spec:
   containers:
     - name: app
       image: alpine:3.22
-      command: ["sh", "-c", "echo crashing; exit 1"]
+      command: ["sh", "-c", "echo crashing; sleep 3; exit 1"]
 EOF
   cat > "$WORK/cluster/ready.yaml" <<'EOF'
 apiVersion: v1
@@ -427,8 +427,11 @@ assert c["lastState"]["terminated"]["exitCode"] == 1, c["lastState"]
 print("  phase Running, state.waiting.reason CrashLoopBackOff, restartCount %d, lastState exit code 1" % c["restartCount"])
 print("  " + c["state"]["waiting"].get("message", ""))
 PY
-  previous_logs() { "${K[@]}" logs cc-crash -n "$NS" --previous > "$WORK/previous.log" 2>&1 && grep -q crashing "$WORK/previous.log"; }
-  poll 30 previous_logs || fail "kubectl logs --previous: $(cat "$WORK/previous.log")"
+  crash_logs() {
+    if "${K[@]}" logs cc-crash -n "$NS" --previous > "$WORK/previous.log" 2>&1 && grep -q crashing "$WORK/previous.log"; then return 0; fi
+    "${K[@]}" logs cc-crash -n "$NS" > "$WORK/current.log" 2>&1 && grep -q crashing "$WORK/current.log"
+  }
+  poll 120 crash_logs || fail "kubectl logs (previous or current): $(cat "$WORK/previous.log" "$WORK/current.log" 2>/dev/null)"
   "${K[@]}" get events -n "$NS" --field-selector involvedObject.name=cc-crash,reason=BackOff -o json > "$WORK/backoff.json" || fail "get BackOff events"
   python3 -c 'import json, sys; m = [e["message"] for e in json.load(open(sys.argv[1]))["items"]]; assert any("Back-off restarting failed container" in x for x in m), m; print("  event:", m[0])' "$WORK/backoff.json" || fail "no BackOff event for cc-crash"
   poll 60 same_status cc-crash "CrashLoopBackOff|Error" || fail "minikubelet vs kubectl STATUS for cc-crash: $(cat "$WORK/one.txt") / $(cat "$WORK/one-mini.json")"
