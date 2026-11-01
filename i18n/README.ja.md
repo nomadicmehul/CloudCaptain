@@ -34,6 +34,10 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 
 あとはエージェントに `/captain-start` と頼むだけです。短いレベル判定クイズ、学習パスの選択、そして最初のレッスンへと進みます。
 
+<div align="center">
+  <img src="../website/static/img/tutor-demo.gif" width="760" alt="The CloudCaptain tutor: npx skills add, then /captain-start asks your goal, level and time and starts the placement quiz" />
+</div>
+
 ---
 
 ## 作るもの

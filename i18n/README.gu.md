@@ -34,6 +34,10 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 
 પછી તમારા agent ને `/captain-start` કહો: એક ટૂંકી placement quiz, એક learning path અને પહેલો lesson.
 
+<div align="center">
+  <img src="../website/static/img/tutor-demo.gif" width="760" alt="The CloudCaptain tutor: npx skills add, then /captain-start asks your goal, level and time and starts the placement quiz" />
+</div>
+
 ---
 
 ## તમે શું બનાવશો
