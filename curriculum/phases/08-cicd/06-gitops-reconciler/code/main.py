@@ -1321,11 +1321,11 @@ class Kubectl:
         return ["-n", namespace] if namespace and obj.get("kind") not in CLUSTER_SCOPED else []
 
     def get(self, obj: Obj) -> Optional[Obj]:
-        out = self.run(["get", resource_name(obj), obj["metadata"]["name"]] + self.scope(obj) + ["-o", "json", "--ignore-not-found"])
+        out = self.run(["get", resource_name(obj), obj["metadata"]["name"]] + self.scope(obj) + ["-o", "json", "--show-managed-fields", "--ignore-not-found"])
         return json.loads(out) if out.strip() else None
 
     def list(self, namespace: str, selector: str, kinds: Sequence[str]) -> List[Obj]:
-        out = self.run(["get", ",".join(kinds), "-n", namespace, "-l", selector, "-o", "json"])
+        out = self.run(["get", ",".join(kinds), "-n", namespace, "-l", selector, "-o", "json", "--show-managed-fields"])
         return json.loads(out).get("items") or [] if out.strip() else []
 
     def apply(self, obj: Obj, manager: str = FIELD_MANAGER, force: bool = True) -> Obj:

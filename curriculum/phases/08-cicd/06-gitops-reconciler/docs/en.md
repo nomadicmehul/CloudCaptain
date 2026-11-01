@@ -168,7 +168,7 @@ A container is found by `name`, not by position, so reordering containers in Git
 
 ### Step 6: fields deleted from Git, and who owns a field
 
-"Compare only what Git says" has a blind spot: a field removed from Git is not in the desired object, so nothing compares it, and it stays live. Server-side apply closes the gap. Every object carries `metadata.managedFields`: for each field manager, the operation (`Apply` or `Update`) and the set of fields it owns, in `fieldsV1`. `minigitops` applies as field manager `minigitops`, so the fields it owns that the new commit no longer sets are exactly the removed ones:
+"Compare only what Git says" has a blind spot: a field removed from Git is not in the desired object, so nothing compares it, and it stays live. Server-side apply closes the gap. Every object carries `metadata.managedFields`: for each field manager, the operation (`Apply` or `Update`) and the set of fields it owns, in `fieldsV1`. `kubectl get -o json` hides it unless you add `--show-managed-fields`, so `KubectlCluster.get()` and `list()` pass that flag; without it this check silently finds nothing. `minigitops` applies as field manager `minigitops`, so the fields it owns that the new commit no longer sets are exactly the removed ones:
 
 ```python
 for owned in owned_paths(live, manager):

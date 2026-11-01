@@ -248,7 +248,7 @@ print("  " + "; ".join("%s %s %s" % step for step in steps))
 PY
 
 echo "▸ the live objects carry the tracking label, the Apply entry of minigitops, and the hook Job completed"
-k get deployment prod-web -n "$NS" -o json > "$WORK/deploy1.json" || fail "get deployment prod-web"
+k get deployment prod-web -n "$NS" -o json --show-managed-fields > "$WORK/deploy1.json" || fail "get deployment prod-web"
 python3 - "$WORK/deploy1.json" "$APP" <<'PY' || fail "live Deployment: $(head -c 3000 "$WORK/deploy1.json")"
 import json, sys
 d, app = json.load(open(sys.argv[1])), sys.argv[2]
@@ -309,13 +309,13 @@ PIDS=()
 
 echo "▸ without a watcher the same drift is reported (exit 1) and one sync takes the field back with --force-conflicts"
 k scale deployment prod-web -n "$NS" --replicas=4 >/dev/null || fail "kubectl scale"
-k get deployment prod-web -n "$NS" -o json > "$WORK/deploy-scaled.json"
+k get deployment prod-web -n "$NS" -o json --show-managed-fields > "$WORK/deploy-scaled.json"
 CODE=0
 mg status "${COMMON[@]}" > "$WORK/status2.txt" 2>&1 || CODE=$?
 [[ "$CODE" == "1" ]] || fail "status with drift should exit 1, got $CODE: $(cat "$WORK/status2.txt")"
 grep -q "spec.replicas: Git 2, live 4" "$WORK/status2.txt" || fail "status should print the drift: $(cat "$WORK/status2.txt")"
 mg sync "${COMMON[@]}" --prune --json > "$WORK/sync2.json" 2> "$WORK/sync2.err" || fail "sync after drift: $(cat "$WORK/sync2.err") $(head -c 3000 "$WORK/sync2.json")"
-k get deployment prod-web -n "$NS" -o json > "$WORK/deploy2.json"
+k get deployment prod-web -n "$NS" -o json --show-managed-fields > "$WORK/deploy2.json"
 python3 - "$WORK/deploy-scaled.json" "$WORK/deploy2.json" <<'PY' || fail "field ownership of spec.replicas"
 import json, sys
 def owners(path):
@@ -435,8 +435,8 @@ argo_state() { k -n argocd get application "$APP" -o jsonpath='sync={.status.syn
 k -n argocd wait --for=jsonpath='{.status.sync.status}'=Synced "application/$APP" --timeout=240s >/dev/null || fail "Application never became Synced: $(argo_state)"
 k -n argocd wait --for=jsonpath='{.status.health.status}'=Healthy "application/$APP" --timeout=240s >/dev/null || fail "Application never became Healthy: $(argo_state)"
 k -n argocd get application "$APP" -o json > "$WORK/application.json"
-k get deployment prod-web -n "$ARGO_NS" -o json > "$WORK/argo-deploy.json" || fail "Argo CD did not create prod-web"
-k get deployment prod-web -n "$NS" -o json > "$WORK/mini-deploy.json"
+k get deployment prod-web -n "$ARGO_NS" -o json --show-managed-fields > "$WORK/argo-deploy.json" || fail "Argo CD did not create prod-web"
+k get deployment prod-web -n "$NS" -o json --show-managed-fields > "$WORK/mini-deploy.json"
 python3 - "$WORK/application.json" "$WORK/argo-deploy.json" "$WORK/mini-deploy.json" "$REV3" "$APP" "$ARGO_NS" <<'PY' || fail "Argo CD result: $(argo_state)"
 import json, sys
 app, argo, mini = (json.load(open(p)) for p in sys.argv[1:4])

@@ -7,6 +7,7 @@ WORK="$(mktemp -d)"
 NS="cc-progressive-delivery"
 CTX="${CC_SMOKE_CONTEXT:-kind-cc-smoke}"
 ROLLOUTS_VERSION="v1.10.1"
+ROLLOUTS_INSTALL_SHA256=149148429a6f8258b789003ffb9bc6698a526d611ecb1b185624217cf51bae7f
 ROLLOUTS_NS="argo-rollouts"
 F="code/fixtures"
 PIDS=()
@@ -267,20 +268,18 @@ echo "  minirollout measured $MINI for v3; stable v2 serves $SERVED req/s with $
 k -n "$NS" get deployments -L track > "$WORK/deployments.txt"
 cat "$WORK/deployments.txt"
 
-echo "▸ Argo Rollouts $ROLLOUTS_VERSION: install.yaml and the kubectl plugin, sha256 checked against argo-rollouts-checksums.txt"
+echo "▸ Argo Rollouts $ROLLOUTS_VERSION: install.yaml checked against its pinned sha256 (the release publishes none for it), the kubectl plugin against argo-rollouts-checksums.txt"
 BASE="https://github.com/argoproj/argo-rollouts/releases/download/$ROLLOUTS_VERSION"
 case "$(uname -m)" in x86_64|amd64) ARCH=amd64 ;; aarch64|arm64) ARCH=arm64 ;; *) fail "unsupported architecture $(uname -m)" ;; esac
 PLUGIN="kubectl-argo-rollouts-linux-$ARCH"
 curl -fsSL --retry 3 -o "$WORK/dl/checksums.txt" "$BASE/argo-rollouts-checksums.txt" || fail "download $BASE/argo-rollouts-checksums.txt"
 curl -fsSL --retry 3 -o "$WORK/install.yaml" "$BASE/install.yaml" || fail "download $BASE/install.yaml"
 curl -fsSL --retry 3 -o "$WORK/bin/kubectl-argo-rollouts" "$BASE/$PLUGIN" || fail "download $BASE/$PLUGIN"
-for pair in "install.yaml:$WORK/install.yaml" "$PLUGIN:$WORK/bin/kubectl-argo-rollouts"; do
-  NAME="${pair%%:*}"
-  FILE="${pair#*:}"
-  WANT="$(awk -v f="$NAME" '$2 == f {print $1}' "$WORK/dl/checksums.txt")"
-  GOT="$(sha256_of "$FILE")"
-  [[ -n "$WANT" && "$WANT" == "$GOT" ]] || fail "$NAME checksum mismatch: want '$WANT' got '$GOT'"
-done
+GOT="$(sha256_of "$WORK/install.yaml")"
+[[ "$GOT" == "$ROLLOUTS_INSTALL_SHA256" ]] || fail "install.yaml checksum mismatch: want '$ROLLOUTS_INSTALL_SHA256' got '$GOT'"
+WANT="$(awk -v f="$PLUGIN" '$2 == f {print $1}' "$WORK/dl/checksums.txt")"
+GOT="$(sha256_of "$WORK/bin/kubectl-argo-rollouts")"
+[[ -n "$WANT" && "$WANT" == "$GOT" ]] || fail "$PLUGIN checksum mismatch: want '$WANT' got '$GOT'"
 chmod +x "$WORK/bin/kubectl-argo-rollouts"
 kubectl argo rollouts version > "$WORK/plugin-version.txt" 2>&1 || fail "kubectl argo rollouts version: $(cat "$WORK/plugin-version.txt")"
 sed 's/^/  /' "$WORK/plugin-version.txt"

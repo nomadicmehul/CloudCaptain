@@ -530,8 +530,8 @@ class KubectlTests(unittest.TestCase):
         kubectl.delete(obj, wait=True)
         kubectl.delete({"apiVersion": "v1", "kind": "Namespace", "metadata": {"name": "shop"}})
         argv = [c[0] for c in calls]
-        self.assertEqual(argv[0], ["kubectl", "--context", "kind-cc-smoke", "get", "deployment.apps", "web", "-n", "shop", "-o", "json", "--ignore-not-found"])
-        self.assertEqual(argv[1][3:], ["get", "configmap,deployment.apps", "-n", "shop", "-l", "app.kubernetes.io/instance=web", "-o", "json"])
+        self.assertEqual(argv[0], ["kubectl", "--context", "kind-cc-smoke", "get", "deployment.apps", "web", "-n", "shop", "-o", "json", "--show-managed-fields", "--ignore-not-found"])
+        self.assertEqual(argv[1][3:], ["get", "configmap,deployment.apps", "-n", "shop", "-l", "app.kubernetes.io/instance=web", "-o", "json", "--show-managed-fields"])
         self.assertEqual(argv[2][3:], ["apply", "--server-side", "--field-manager=minigitops", "--force-conflicts", "-o", "json", "-f", "-"])
         self.assertEqual(json.loads(calls[2][1]), obj)
         self.assertEqual(argv[3][3:], ["delete", "deployment.apps", "web", "-n", "shop", "--ignore-not-found", "--cascade=background", "--wait=true", "--timeout=120s"])
