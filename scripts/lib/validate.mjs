@@ -280,6 +280,13 @@ export function validateGlobal(phases, manifest, ctx) {
     seenPath.add(p.id);
     if (!exists(path.join(ctx.curriculumRoot, 'paths', `${p.id}.md`))) errors.push(`manifest: path "${p.id}" needs curriculum/paths/${p.id}.md`);
     for (const id of p.lessons || []) if (!byId.has(id)) errors.push(`manifest: path "${p.id}" lists unknown lesson ${id}`);
+    const position = new Map((p.lessons || []).map((id, i) => [id, i]));
+    (p.lessons || []).forEach((id, i) => {
+      for (const pre of byId.get(id)?.lesson.json.prereqs || []) {
+        if (!position.has(pre)) errors.push(`manifest: path "${p.id}" lists ${id} but not its prerequisite ${pre}`);
+        else if (position.get(pre) > i) errors.push(`manifest: path "${p.id}" lists ${id} before its prerequisite ${pre}`);
+      }
+    });
   }
 
   const slugs = new Set();

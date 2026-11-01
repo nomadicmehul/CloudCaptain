@@ -71,7 +71,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 | パス | 対象 | レッスン数 |
 |:--|:--|:--|
 | [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 47 |
-| [AI プラットフォームエンジニア](https://cloudcaptain.io/learn/paths/ai-platform) | モデルの運用を任されたエンジニア：GPU、サービング、ゲートウェイ、ルーティング、コスト | 17 |
+| [AI プラットフォームエンジニア](https://cloudcaptain.io/learn/paths/ai-platform) | モデルの運用を任されたエンジニア：GPU、サービング、ゲートウェイ、ルーティング、コスト | 23 |
 | [AIOps エンジニア](https://cloudcaptain.io/learn/paths/aiops) | エージェントにインフラ作業を安全に任せたい人 | 9 |
 
 ## エージェントで使えるチューター

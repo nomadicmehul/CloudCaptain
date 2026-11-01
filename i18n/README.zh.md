@@ -71,7 +71,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 | 路径 | 适合人群 | 课程数 |
 |:--|:--|:--|
 | [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 47 |
-| [AI 平台工程师](https://cloudcaptain.io/learn/paths/ai-platform) | 需要负责运行模型的工程师：GPU、推理服务、网关、路由、成本 | 17 |
+| [AI 平台工程师](https://cloudcaptain.io/learn/paths/ai-platform) | 需要负责运行模型的工程师：GPU、推理服务、网关、路由、成本 | 23 |
 | [AIOps 工程师](https://cloudcaptain.io/learn/paths/aiops) | 让智能体安全地在基础设施上干活 | 9 |
 
 ## 装进智能体里的导师
