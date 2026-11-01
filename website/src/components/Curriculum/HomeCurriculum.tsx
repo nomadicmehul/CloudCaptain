@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import {curriculumModel} from './curriculumTitles';
+import useScrollReveal from '@site/src/hooks/useScrollReveal';
 import styles from './styles.module.css';
 
 const PILLARS = [
@@ -12,8 +13,9 @@ const PILLARS = [
 export default function HomeCurriculum(): React.JSX.Element {
   const {stats, phases, site} = curriculumModel;
   const live = phases.filter((p) => p.live);
+  const sectionRef = useScrollReveal();
   return (
-    <div className="section">
+    <div className="section" ref={sectionRef}>
       <div className="container">
         <h2 className="section__title reveal">
           <span className="section-prompt">$ ./start-learning.sh</span> Learn Cloud, DevOps &amp; AIOps from scratch
