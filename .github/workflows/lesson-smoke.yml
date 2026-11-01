@@ -18,9 +18,30 @@ permissions:
   contents: read
 
 jobs:
-  smoke:
+  # One job per phase, in parallel, each with its own kind cluster: the whole
+  # curriculum no longer fits one runner's time budget, and a failure points at
+  # its phase directly.
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    outputs:
+      phases: ${{ steps.list.outputs.phases }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - id: list
+        run: echo "phases=$(node scripts/run-lesson-tests.mjs --list-phases --smoke)" >> "$GITHUB_OUTPUT"
+
+  smoke:
+    needs: plan
+    name: smoke (${{ matrix.phase }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        phase: ${{ fromJSON(needs.plan.outputs.phases) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -49,5 +70,5 @@ jobs:
           python3 --version
           uname -r
 
-      - name: Run every lesson's smoke script
-        run: node scripts/run-lesson-tests.mjs --all --smoke
+      - name: Run the smoke scripts of phase ${{ matrix.phase }}
+        run: node scripts/run-lesson-tests.mjs --all --smoke --phase=${{ matrix.phase }}
