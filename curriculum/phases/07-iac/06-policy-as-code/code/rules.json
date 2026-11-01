@@ -1,0 +1,87 @@
+{
+  "rules": [
+    {
+      "id": "require-owner-tag",
+      "level": "deny",
+      "type": "terraform_data",
+      "path": "input.tags.owner",
+      "op": "exists",
+      "message": "every resource carries an owner tag so an incident has someone to page"
+    },
+    {
+      "id": "require-env-tag",
+      "level": "deny",
+      "type": "terraform_data",
+      "path": "input.tags.env",
+      "op": "in",
+      "value": ["dev", "staging", "prod"],
+      "message": "env is one of dev, staging, prod"
+    },
+    {
+      "id": "require-cost-center",
+      "level": "warn",
+      "type": "terraform_data",
+      "actions": ["create"],
+      "path": "input.tags.cost_center",
+      "op": "exists",
+      "message": "new resources carry a cost_center tag (a warning this quarter, a deny from the next)"
+    },
+    {
+      "id": "forbid-huge-sizes",
+      "level": "deny",
+      "type": "terraform_data",
+      "path": "input.size",
+      "op": "not_in",
+      "value": ["xlarge", "metal"],
+      "message": "xlarge and metal sizes need a capacity review"
+    },
+    {
+      "id": "disk-limit",
+      "level": "deny",
+      "type": "terraform_data",
+      "path": "input.disk_gb",
+      "op": "lte",
+      "value": 500,
+      "message": "disks above 500 GB need a capacity review"
+    },
+    {
+      "id": "name-convention",
+      "level": "warn",
+      "type": "terraform_data",
+      "path": "input.name",
+      "op": "matches",
+      "value": "^[a-z][a-z0-9-]*$",
+      "message": "names are lowercase words joined by dashes"
+    },
+    {
+      "id": "no-world-writable-files",
+      "level": "deny",
+      "type": ["local_file", "local_sensitive_file"],
+      "path": "file_permission",
+      "op": "not_matches",
+      "value": "[2367]$",
+      "message": "files are not world-writable; set file_permission (the provider default is 0777)"
+    },
+    {
+      "id": "protect-audit-log",
+      "level": "deny",
+      "check": "no_delete",
+      "address": ["terraform_data.audit_log", "module.*.terraform_data.audit_log"],
+      "message": "the audit log is protected; remove it from this rule in a reviewed PR before deleting it"
+    },
+    {
+      "id": "no-replace-stateful",
+      "level": "deny",
+      "check": "no_replace",
+      "address": ["*.db", "*.db_*", "*aws_db_instance.*", "*aws_rds_cluster.*", "*google_sql_database_instance.*", "*aws_ebs_volume.*", "*aws_s3_bucket.*"],
+      "message": "stateful resources are not replaced by a routine apply; write a migration plan"
+    },
+    {
+      "id": "module-source-allow-list",
+      "level": "deny",
+      "check": "module_source",
+      "allow": ["^\\./modules/", "^registry\\.opentofu\\.org/acme/", "^git::https://github\\.com/acme/"],
+      "message": "modules come from ./modules, the acme registry namespace or the acme Git organisation"
+    }
+  ]
+}

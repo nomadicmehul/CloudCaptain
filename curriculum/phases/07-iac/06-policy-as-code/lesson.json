@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/policy-as-code",
+  "title": "Policy Is a Function Over the Plan JSON",
+  "short": "Policy as Code",
+  "motto": "A policy reads the plan JSON and returns violations; run it between plan and apply, and let deny be an exit code.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/drift-detection"
+  ],
+  "tools": [
+    "tofu",
+    "terraform",
+    "conftest",
+    "opa"
+  ],
+  "reference": [
+    "/docs/tools/terraform/advanced",
+    "/docs/tools/terraform/cheatsheet",
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/github-actions/fundamentals"
+  ],
+  "outputs": [
+    "skill-policy-gate-design.md",
+    "prompt-write-policy.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

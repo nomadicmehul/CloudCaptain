@@ -1,0 +1,167 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.13.2",
+  "planned_values": {"root_module": {}},
+  "resource_changes": [
+    {
+      "address": "local_file.motd",
+      "mode": "managed",
+      "type": "local_file",
+      "name": "motd",
+      "provider_name": "registry.opentofu.org/hashicorp/local",
+      "change": {
+        "actions": ["no-op"],
+        "before": {"content": "hello from web-1", "file_permission": "0644", "filename": "./out/motd.txt", "id": "3c5b0a7d"},
+        "after": {"content": "hello from web-1", "file_permission": "0644", "filename": "./out/motd.txt", "id": "3c5b0a7d"},
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "local_file.scratch",
+      "mode": "managed",
+      "type": "local_file",
+      "name": "scratch",
+      "provider_name": "registry.opentofu.org/hashicorp/local",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"content": "tmp", "content_base64": null, "directory_permission": "0777", "file_permission": "0777", "filename": "./out/scratch.txt", "sensitive_content": null, "source": null},
+        "after_unknown": {"content_base64sha256": true, "content_base64sha512": true, "content_md5": true, "content_sha1": true, "content_sha256": true, "content_sha512": true, "id": true}
+      }
+    },
+    {
+      "address": "module.legacy.terraform_data.thing",
+      "module_address": "module.legacy",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "thing",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"input": {"disk_gb": 10, "kind": "vm", "size": "small", "tags": {"cost_center": "cc-01", "env": "dev", "owner": "platform"}}, "triggers_replace": null},
+        "after_unknown": {"id": true, "input": {"tags": {}}, "output": true}
+      }
+    },
+    {
+      "address": "module.web.terraform_data.page",
+      "module_address": "module.web",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "page",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["no-op"],
+        "before": {"id": "6f1c", "input": {"disk_gb": 5, "kind": "page", "size": "small", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "output": {"disk_gb": 5, "kind": "page", "size": "small", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "triggers_replace": null},
+        "after": {"id": "6f1c", "input": {"disk_gb": 5, "kind": "page", "size": "small", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "output": {"disk_gb": 5, "kind": "page", "size": "small", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "triggers_replace": null},
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "random_pet.api",
+      "mode": "managed",
+      "type": "random_pet",
+      "name": "api",
+      "provider_name": "registry.opentofu.org/hashicorp/random",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"keepers": null, "length": 2, "prefix": null, "separator": "-"},
+        "after_unknown": {"id": true}
+      }
+    },
+    {
+      "address": "terraform_data.api",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "api",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"input": {"disk_gb": 20, "kind": "vm", "size": "small", "tags": {"cost_center": "cc-42", "env": "qa", "owner": "storefront"}}, "triggers_replace": null},
+        "after_unknown": {"id": true, "input": {"name": true, "tags": {}}, "output": true}
+      }
+    },
+    {
+      "address": "terraform_data.audit_log",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "audit_log",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["delete"],
+        "before": {"id": "9a2e", "input": {"disk_gb": 50, "kind": "bucket", "size": "small", "tags": {"cost_center": "cc-07", "env": "prod", "owner": "security"}}, "output": {"disk_gb": 50, "kind": "bucket", "size": "small", "tags": {"cost_center": "cc-07", "env": "prod", "owner": "security"}}, "triggers_replace": null},
+        "after": null,
+        "after_unknown": false
+      },
+      "action_reason": "delete_because_no_resource_config"
+    },
+    {
+      "address": "terraform_data.cache",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "cache",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"input": {"disk_gb": 1000, "kind": "cache", "size": "xlarge", "tags": {"env": "dev"}}, "triggers_replace": null},
+        "after_unknown": {"id": true, "input": {"tags": {}}, "output": true}
+      }
+    },
+    {
+      "address": "terraform_data.db",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "db",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": {"id": "51d0", "input": {"disk_gb": 100, "kind": "database", "size": "medium", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "payments"}}, "output": {"disk_gb": 100, "kind": "database", "size": "medium", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "payments"}}, "triggers_replace": ["engine-16"]},
+        "after": {"input": {"disk_gb": 100, "kind": "database", "size": "medium", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "payments"}}, "triggers_replace": ["engine-17"]},
+        "after_unknown": {"id": true, "input": {"tags": {}}, "output": true, "triggers_replace": [false]},
+        "replace_paths": [["triggers_replace"]]
+      },
+      "action_reason": "replace_because_cannot_update"
+    },
+    {
+      "address": "terraform_data.web",
+      "mode": "managed",
+      "type": "terraform_data",
+      "name": "web",
+      "provider_name": "terraform.io/builtin/terraform",
+      "change": {
+        "actions": ["update"],
+        "before": {"id": "77ab", "input": {"disk_gb": 20, "kind": "vm", "name": "web-1", "size": "small", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "output": {"disk_gb": 20, "kind": "vm", "name": "web-1", "size": "small", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "triggers_replace": null},
+        "after": {"id": "77ab", "input": {"disk_gb": 20, "kind": "vm", "name": "web-1", "size": "medium", "tags": {"cost_center": "cc-42", "env": "prod", "owner": "storefront"}}, "triggers_replace": null},
+        "after_unknown": {"input": {"tags": {}}, "output": true}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {"address": "local_file.motd", "mode": "managed", "type": "local_file", "name": "motd"},
+        {"address": "local_file.scratch", "mode": "managed", "type": "local_file", "name": "scratch"},
+        {"address": "random_pet.api", "mode": "managed", "type": "random_pet", "name": "api"},
+        {"address": "random_pet.suffix", "mode": "managed", "type": "random_pet", "name": "suffix"},
+        {"address": "terraform_data.api", "mode": "managed", "type": "terraform_data", "name": "api"},
+        {"address": "terraform_data.cache", "mode": "managed", "type": "terraform_data", "name": "cache"},
+        {"address": "terraform_data.db", "mode": "managed", "type": "terraform_data", "name": "db"},
+        {"address": "terraform_data.web", "mode": "managed", "type": "terraform_data", "name": "web"}
+      ],
+      "module_calls": {
+        "legacy": {
+          "source": "./vendor/legacy",
+          "module": {"resources": [{"address": "terraform_data.thing", "mode": "managed", "type": "terraform_data", "name": "thing"}]}
+        },
+        "web": {
+          "source": "./modules/web",
+          "module": {"resources": [{"address": "terraform_data.page", "mode": "managed", "type": "terraform_data", "name": "page"}]}
+        }
+      }
+    }
+  },
+  "errored": false
+}

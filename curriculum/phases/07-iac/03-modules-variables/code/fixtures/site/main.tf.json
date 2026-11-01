@@ -1,0 +1,63 @@
+{
+  "variable": {
+    "env": {
+      "type": "string",
+      "default": "dev",
+      "description": "Deployment environment.",
+      "validation": [
+        {
+          "condition": "${contains([\"dev\", \"prod\"], var.env)}",
+          "error_message": "The env variable must be dev or prod."
+        }
+      ]
+    },
+    "sites": {
+      "type": "map(string)",
+      "default": {
+        "blog": "Hello from the blog",
+        "docs": "Hello from the docs"
+      }
+    },
+    "copies": {
+      "type": "number",
+      "default": 1
+    },
+    "token": {
+      "type": "string",
+      "default": "s3cr3t-token",
+      "sensitive": true
+    }
+  },
+  "locals": {
+    "prefix": "${var.env}-site"
+  },
+  "module": {
+    "web": {
+      "source": "./modules/web",
+      "for_each": "${var.sites}",
+      "name": "${local.prefix}-${each.key}",
+      "body": "${each.value}",
+      "copies": "${var.copies}"
+    }
+  },
+  "resource": {
+    "local_file": {
+      "index": {
+        "filename": "${path.module}/out/index.txt",
+        "content": "${local.prefix}: ${join(\", \", keys(var.sites))}\n"
+      }
+    }
+  },
+  "output": {
+    "blog_files": {
+      "value": "${module.web[\"blog\"].files}"
+    },
+    "index_file": {
+      "value": "${local_file.index.filename}"
+    },
+    "token": {
+      "value": "${var.token}",
+      "sensitive": true
+    }
+  }
+}

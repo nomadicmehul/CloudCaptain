@@ -1,0 +1,102 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.13.2",
+  "planned_values": {
+    "root_module": {}
+  },
+  "resource_changes": [
+    {
+      "address": "kubernetes_config_map_v1.flags",
+      "mode": "managed",
+      "type": "kubernetes_config_map_v1",
+      "name": "flags",
+      "provider_name": "registry.opentofu.org/hashicorp/kubernetes",
+      "change": {
+        "actions": ["update"],
+        "before": {"data": {"checkout": "on", "color": "red"}},
+        "after": {"data": {"checkout": "on", "color": "blue"}},
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "local_file.motd",
+      "mode": "managed",
+      "type": "local_file",
+      "name": "motd",
+      "provider_name": "registry.opentofu.org/hashicorp/local",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"content": "hello from tofu\n", "filename": "./out/motd.txt"},
+        "after_unknown": {"id": true}
+      }
+    },
+    {
+      "address": "kubernetes_config_map_v1.routing",
+      "mode": "managed",
+      "type": "kubernetes_config_map_v1",
+      "name": "routing",
+      "provider_name": "registry.opentofu.org/hashicorp/kubernetes",
+      "change": {
+        "actions": ["no-op"],
+        "before": {"data": {"upstream": "v1"}},
+        "after": {"data": {"upstream": "v1"}},
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "google_compute_instance.worker",
+      "mode": "managed",
+      "type": "google_compute_instance",
+      "name": "worker",
+      "provider_name": "registry.opentofu.org/hashicorp/google",
+      "action_reason": "replace_because_cannot_update",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": {"metadata_startup_script": "apt-get install -y nginx\nsystemctl enable --now nginx"},
+        "after": {"metadata_startup_script": "apt-get install -y nginx"},
+        "after_unknown": {"id": true},
+        "replace_paths": [["metadata_startup_script"]]
+      }
+    },
+    {
+      "address": "kubernetes_secret_v1.db",
+      "mode": "managed",
+      "type": "kubernetes_secret_v1",
+      "name": "db",
+      "provider_name": "registry.opentofu.org/hashicorp/kubernetes",
+      "change": {
+        "actions": ["update"],
+        "before": {"data": {"password": "rotated-by-hand"}},
+        "after": {"data": {"password": "hunter2-from-tofu"}},
+        "before_sensitive": {"data": true},
+        "after_sensitive": {"data": true}
+      }
+    },
+    {
+      "address": "local_file.banner",
+      "mode": "managed",
+      "type": "local_file",
+      "name": "banner",
+      "provider_name": "registry.opentofu.org/hashicorp/local",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"content": "maintenance window on Sunday\n", "filename": "./out/banner.txt"},
+        "after_unknown": {"id": true}
+      }
+    },
+    {
+      "address": "data.http.ip",
+      "mode": "data",
+      "type": "http",
+      "name": "ip",
+      "provider_name": "registry.opentofu.org/hashicorp/http",
+      "change": {
+        "actions": ["read"]
+      }
+    }
+  ],
+  "timestamp": "2026-11-01T02:00:21Z",
+  "errored": false
+}

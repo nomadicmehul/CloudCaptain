@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/remote-state-locking",
+  "title": "Two Applies, One State: Locking Is the Product",
+  "short": "Remote State Locking",
+  "motto": "A remote backend is a file server with one hard job: let exactly one apply write at a time, and refuse every write built on an old read.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/state-reconciler"
+  ],
+  "tools": [
+    "tofu",
+    "terraform",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/terraform/advanced",
+    "/docs/tools/terraform/cheatsheet",
+    "/docs/tools/terraform/fundamentals",
+    "/docs/cloud/aws/databases-storage"
+  ],
+  "outputs": [
+    "skill-state-lock-incident.md",
+    "prompt-explain-state-file.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/policy-as-code",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A CI job greps every `*.tf` file for `file_permission = \"0777\"` and finds nothing, yet the apply creates a world-writable file. Why?",
+      "choices": [
+        "grep cannot read HCL",
+        "The file was created by a different provider",
+        "OpenTofu changes permissions after apply",
+        "The attribute was never written in the source; the provider's default (0777) only appears in the plan, so a check over source cannot see it"
+      ],
+      "answer": 3,
+      "explanation": "Defaults, module internals, `count` and `for_each` expansion and provider-forced replacements are all resolved by the plan, not written in the source. The plan JSON is the only place every one of them is visible before apply."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In `tofu show -json` output, which field tells a policy that a resource will be destroyed and created again?",
+      "choices": [
+        "`change.actions` contains both \"delete\" and \"create\"",
+        "`action_reason` is set",
+        "`resource_drift` lists it",
+        "`change.after` is null"
+      ],
+      "answer": 0,
+      "explanation": "A replacement is `[\"delete\", \"create\"]`, or `[\"create\", \"delete\"]` with `create_before_destroy`. `after` is null only for a plain delete, and `action_reason` explains why but is not always present."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A rule requires `input.name` to match a naming regex, and the name contains `${random_pet.api.id}`. The plan has `\"after_unknown\": {\"input\": {\"name\": true}}`. What should the policy do?",
+      "choices": [
+        "Crash, because the JSON is incomplete",
+        "Pass it, because the attribute is missing from `after`",
+        "Report it: the value is known after apply, so the rule cannot confirm it and fails closed unless it explicitly allows unknowns",
+        "Wait for apply and check the state instead"
+      ],
+      "answer": 2,
+      "explanation": "Unknown values are omitted from `after` and marked `true` in `after_unknown`. A policy that only reads `after` silently passes them. Fail closed by default and let a rule opt in to `unknown: allow` when the computed value cannot matter."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "planguard and the Rego version report the same violations on a plan. What makes that comparison meaningful?",
+      "choices": [
+        "Both are written in the same language",
+        "Both read the same plan JSON and the comparison is on (level, rule, address) sets, so any difference in selection or operator semantics shows up as a set difference",
+        "Rego is faster",
+        "Conftest calls planguard internally"
+      ],
+      "answer": 1,
+      "explanation": "Messages can be worded differently; the identity of a finding is which rule fired on which address at which level. Comparing those sets catches a missing rule, a wrong glob or a different reading of 'missing' or 'unknown'."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Where does a policy gate belong in a pipeline so that what passed policy is exactly what gets applied?",
+      "choices": [
+        "Between `tofu plan -out=plan.out` and `tofu apply plan.out`, evaluating `tofu show -json plan.out`, with apply skipped on a non-zero exit",
+        "After `tofu apply`, checking the state",
+        "Before `tofu init`, on the raw HCL only",
+        "In a nightly job that opens an issue"
+      ],
+      "answer": 0,
+      "explanation": "Policy over a saved plan, then applying that same saved plan, closes the gap between what was checked and what runs. Checking state is detection after the fact; a nightly job is drift detection, not a gate."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Which tool evaluates policy at the Kubernetes API server, the analogue of a plan gate for objects applied with `kubectl`?",
+      "choices": [
+        "Checkov",
+        "Trivy",
+        "OPA Gatekeeper or Kyverno, running as admission webhooks",
+        "Sentinel"
+      ],
+      "answer": 2,
+      "explanation": "Gatekeeper (OPA and Rego) and Kyverno (YAML policies) run as admission controllers, so they see every create and update the API server receives. Checkov and Trivy scan files statically; Sentinel runs inside HCP Terraform and Terraform Enterprise."
+    }
+  ]
+}

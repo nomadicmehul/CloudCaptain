@@ -1,0 +1,71 @@
+{
+  "apiVersion": "apiextensions.crossplane.io/v1",
+  "kind": "Composition",
+  "metadata": {"name": "apps.platform.example.org"},
+  "spec": {
+    "compositeTypeRef": {"apiVersion": "platform.example.org/v1alpha1", "kind": "App"},
+    "mode": "Pipeline",
+    "pipeline": [
+      {
+        "step": "patch-and-transform",
+        "functionRef": {"name": "function-patch-and-transform"},
+        "input": {
+          "apiVersion": "pt.fn.crossplane.io/v1beta1",
+          "kind": "Resources",
+          "patchSets": [
+            {
+              "name": "team-label",
+              "patches": [
+                {"type": "FromCompositeFieldPath", "fromFieldPath": "spec.team", "toFieldPath": "metadata.labels.team",
+                 "transforms": [{"type": "string", "string": {"type": "Convert", "convert": "ToLower"}}]}
+              ]
+            }
+          ],
+          "resources": [
+            {
+              "name": "deployment",
+              "base": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "spec": {
+                  "replicas": 1,
+                  "selector": {"matchLabels": {}},
+                  "template": {"metadata": {"labels": {}}, "spec": {"containers": [{"name": "app", "image": "placeholder"}]}}
+                }
+              },
+              "patches": [
+                {"type": "PatchSet", "patchSetName": "team-label"},
+                {"type": "FromCompositeFieldPath", "fromFieldPath": "metadata.name", "toFieldPath": "spec.selector.matchLabels.app",
+                 "transforms": [{"type": "string", "string": {"type": "Format", "fmt": "%s-web"}}]},
+                {"type": "FromCompositeFieldPath", "fromFieldPath": "metadata.name", "toFieldPath": "spec.template.metadata.labels.app",
+                 "transforms": [{"type": "string", "string": {"type": "Format", "fmt": "%s-web"}}]},
+                {"type": "FromCompositeFieldPath", "fromFieldPath": "spec.image", "toFieldPath": "spec.template.spec.containers[0].image"},
+                {"type": "FromCompositeFieldPath", "fromFieldPath": "spec.size", "toFieldPath": "spec.replicas",
+                 "transforms": [{"type": "map", "map": {"small": 1, "medium": 2, "large": 3}}]},
+                {"type": "CombineFromComposite", "toFieldPath": "metadata.annotations[platform.example.org/description]",
+                 "combine": {"variables": [{"fromFieldPath": "metadata.name"}, {"fromFieldPath": "spec.team"}], "strategy": "string", "string": {"fmt": "%s, owned by %s"}}},
+                {"type": "ToCompositeFieldPath", "fromFieldPath": "status.availableReplicas", "toFieldPath": "status.availableReplicas"}
+              ],
+              "readinessChecks": [{"type": "MatchCondition", "matchCondition": {"type": "Available", "status": "True"}}]
+            },
+            {
+              "name": "service",
+              "base": {
+                "apiVersion": "v1",
+                "kind": "Service",
+                "spec": {"selector": {}, "ports": [{"port": 80, "targetPort": 80}]}
+              },
+              "patches": [
+                {"type": "PatchSet", "patchSetName": "team-label"},
+                {"type": "FromCompositeFieldPath", "fromFieldPath": "metadata.name", "toFieldPath": "spec.selector.app",
+                 "transforms": [{"type": "string", "string": {"type": "Format", "fmt": "%s-web"}}]},
+                {"type": "ToCompositeFieldPath", "fromFieldPath": "spec.clusterIP", "toFieldPath": "status.address"}
+              ],
+              "readinessChecks": [{"type": "NonEmpty", "fieldPath": "spec.clusterIP"}]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

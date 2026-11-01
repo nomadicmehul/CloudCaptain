@@ -1,0 +1,7 @@
+name: ccsmoke
+description: Three random resources wired together by Outputs; runs under pulumi and under minipulumi
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv

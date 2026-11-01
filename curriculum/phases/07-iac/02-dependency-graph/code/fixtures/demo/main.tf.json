@@ -1,0 +1,49 @@
+{
+  "terraform": {
+    "required_providers": {
+      "local": {"source": "hashicorp/local"},
+      "random": {"source": "hashicorp/random"},
+      "time": {"source": "hashicorp/time"}
+    }
+  },
+  "locals": {
+    "out_dir": "${path.module}/out"
+  },
+  "resource": {
+    "random_pet": {
+      "name": {"length": 2}
+    },
+    "time_sleep": {
+      "warm_a": {"create_duration": "1s"},
+      "warm_b": {"create_duration": "1s"},
+      "warm_c": {"create_duration": "1s"},
+      "warm_d": {"create_duration": "1s"}
+    },
+    "terraform_data": {
+      "release": {"input": "${random_pet.name.id}"}
+    },
+    "local_file": {
+      "config": {
+        "filename": "${local.out_dir}/config.txt",
+        "content": "release=${terraform_data.release.output}\n"
+      },
+      "index": {
+        "filename": "${local.out_dir}/index.html",
+        "content": "see ${local_file.config.filename}\n",
+        "depends_on": ["time_sleep.warm_a", "time_sleep.warm_b"]
+      },
+      "versioned": {
+        "filename": "${local.out_dir}/v1.txt",
+        "content": "build 1\n",
+        "lifecycle": {"create_before_destroy": true}
+      },
+      "pointer": {
+        "filename": "${local.out_dir}/pointer.txt",
+        "content": "current=${local_file.versioned.filename}\n"
+      }
+    }
+  },
+  "output": {
+    "pet": {"value": "${random_pet.name.id}"}
+  }
+}

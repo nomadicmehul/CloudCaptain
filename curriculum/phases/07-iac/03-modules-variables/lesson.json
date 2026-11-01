@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/modules-variables",
+  "title": "A Module Is a Function With a Namespace",
+  "short": "Modules & Variables",
+  "motto": "A module call is a function call: typed variables in, outputs back, and every resource inside lives under the address of the call.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/dependency-graph"
+  ],
+  "tools": [
+    "tofu",
+    "terraform"
+  ],
+  "reference": [
+    "/docs/tools/terraform/advanced",
+    "/docs/tools/terraform/fundamentals",
+    "/docs/tools/terraform/cheatsheet"
+  ],
+  "outputs": [
+    "skill-module-design-review.md",
+    "prompt-refactor-with-moved.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}
