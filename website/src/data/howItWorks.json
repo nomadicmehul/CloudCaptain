@@ -1,6 +1,6 @@
 [
-  { "num": "01", "icon": "🐧", "title": "Choose Your Distro", "desc": "Pick a learning path based on your experience level and goals — like choosing the right Linux distro." },
-  { "num": "02", "icon": "⚡", "title": "sudo apt install skills", "desc": "Follow structured resources, work through hands-on exercises, and build real projects in the terminal." },
-  { "num": "03", "icon": "🚀", "title": "chmod +x career.sh", "desc": "Prepare for interviews, earn certifications, and make yourself executable in the job market." },
-  { "num": "04", "icon": "🤝", "title": "fork && contribute", "desc": "Share your knowledge — fork the repo, submit PRs, and help fellow learners level up." }
+  {"num": "01", "icon": "🐧", "title": "npx skills add", "desc": "Install the tutor into your coding agent, take the placement quiz and get a path: DevOps, AIOps or AI Platform."},
+  {"num": "02", "icon": "⚡", "title": "./build-it.sh", "desc": "Every lesson starts from a production problem. You build the mechanism in plain Python or Bash, with tests that prove it works."},
+  {"num": "03", "icon": "🚀", "title": "kubectl apply", "desc": "Then you do the same job with the real tool, Docker, Kubernetes, OpenTofu or an MCP server, so every flag maps onto code you wrote."},
+  {"num": "04", "icon": "🤝", "title": "git push", "desc": "Ship a prompt, skill or MCP server into your own toolbox, check yourself with the quiz, and contribute a lesson back."}
 ]

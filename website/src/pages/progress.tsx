@@ -112,11 +112,14 @@ function ProgressPageInner(): JSX.Element {
         pagesComplete={pagesComplete}
         sectionsRead={sectionsRead}
         lastUpdated={lastUpdated}
+        showStats={sectionsRead + pagesTouched + pagesComplete > 0}
       />
+
+      <CurriculumProgress entries={entries} />
 
       {!hasEntries && (
         <section className={styles.emptyState}>
-          <h2>No progress yet — start somewhere 🚀</h2>
+          <h2>Reading progress starts with your first section 🚀</h2>
           <p>
             CloudCaptain's Captain's Bridge reading mode tracks what you've read on each doc page.
             Open any learning path or tool doc and use the <kbd>m</kbd> key or the{' '}
@@ -126,7 +129,7 @@ function ProgressPageInner(): JSX.Element {
             <Link className={`button button--primary button--lg`} to="/learn">
               🎓 Start the curriculum
             </Link>
-            <Link className={`button button--secondary button--lg`} to="/docs/tools/docker/">
+            <Link className={`button button--secondary button--lg`} to="/docs/tools/docker">
               🐳 Start with Docker
             </Link>
           </div>
@@ -136,8 +139,6 @@ function ProgressPageInner(): JSX.Element {
           </p>
         </section>
       )}
-
-      <CurriculumProgress entries={entries} />
 
       <ProgressByTool allDocs={allDocs} entries={entries} />
 

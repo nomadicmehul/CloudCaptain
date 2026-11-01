@@ -1955,20 +1955,6 @@ img.category-card__icon { width: 2.2rem; height: 2.2rem; object-fit: contain; }
   font-weight: 700;
 }
 
-/* Navbar — subtle version indicator */
-.navbar::after {
-  content: 'v3.0-oss';
-  position: absolute;
-  bottom: 2px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.55rem;
-  color: rgba(16,185,129,0.15);
-  letter-spacing: 0.08em;
-  pointer-events: none;
-}
-
 /* Selection color — green tinted */
 ::selection {
   background: rgba(16,185,129,0.2);
@@ -2149,3 +2135,49 @@ body.cc-bridge-focus article h3:hover { opacity: 1; }
     filter: none;
   }
 }
+
+/* ═══ CURRICULUM PHASE PAGES ═══
+   The phase README's "How this phase is built" table reads as lesson cards on
+   the site (GitHub keeps the table). */
+.cc-kind-phase table {
+  display: block;
+  width: 100%;
+  border: 0;
+  overflow: visible;
+  margin: 1rem 0 1.5rem;
+}
+.cc-kind-phase table thead { display: none; }
+.cc-kind-phase table tbody {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.cc-kind-phase table tr,
+.cc-kind-phase table tr:nth-child(2n) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  background: var(--ifm-background-surface-color);
+}
+.cc-kind-phase table td {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.cc-kind-phase table td:nth-child(1) { font-size: 1.05rem; font-weight: 700; }
+.cc-kind-phase table td:nth-child(2) {
+  order: -1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+}
+.cc-kind-phase table td:nth-child(4) { font-size: 0.82rem; color: var(--ifm-color-emphasis-700); }
+.cc-kind-phase table td:nth-child(4)::before { content: 'Then you use: '; font-weight: 600; }

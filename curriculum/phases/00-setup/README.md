@@ -8,7 +8,7 @@ Nothing in this curriculum needs a cloud account to start. It needs a Linux kern
 
 | Lesson | Type | What you build | What you then use |
 |---|---|---|---|
-| Lab Doctor | Build | a probe that compares the machine against the course's requirements and prints the install plan | `docker run`, `kind create cluster`, `kubectl get nodes`, `tofu version`, `npx skills add` |
+| [Lab Doctor](01-lab-doctor/docs/en.md) | Build | a probe that compares the machine against the course's requirements and prints the install plan | `docker run`, `kind create cluster`, `kubectl get nodes`, `tofu version`, `npx skills add` |
 
 More lessons in this phase are listed in [ROADMAP.md](https://github.com/nomadicmehul/CloudCaptain/blob/main/ROADMAP.md): a Linux VM on macOS and Windows with Lima and WSL 2, free-tier cloud accounts with spend guards, and setting up your coding agent with the tutor.
 

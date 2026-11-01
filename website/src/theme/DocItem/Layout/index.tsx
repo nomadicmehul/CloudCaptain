@@ -32,10 +32,10 @@ export default function DocItemLayout({children}: Props): ReactNode {
   }
   // Reference docs that a lesson builds on get a "Build this from scratch" card.
   const content = (
-    <>
+    <div className={kind ? `cc-kind-${kind}` : undefined}>
       <FromScratchCard />
       {children}
-    </>
+    </div>
   );
   // SSR renders classic layout so there's no hydration flash and search
   // engines see stable markup. BrowserOnly swaps to BridgeLayout client-side.

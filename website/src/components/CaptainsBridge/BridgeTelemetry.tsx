@@ -60,13 +60,13 @@ export default function BridgeTelemetry({
             <span className={styles.telemetryLabel}>progress</span>
             <span className={styles.telemetryValue}>{pct}%</span>
           </span>
-          <span className={styles.telemetryDivider} />
-          <span className={styles.telemetryCell}>
+          <span className={`${styles.telemetryDivider} ${styles.telemetryOptional}`} />
+          <span className={`${styles.telemetryCell} ${styles.telemetryOptional}`}>
             <span className={styles.telemetryLabel}>section</span>
             <span className={styles.telemetryValue}>{sectionLabel}</span>
           </span>
-          <span className={styles.telemetryDivider} />
-          <span className={styles.telemetryCell}>
+          <span className={`${styles.telemetryDivider} ${styles.telemetryOptional}`} />
+          <span className={`${styles.telemetryCell} ${styles.telemetryOptional}`}>
             <span className={styles.telemetryLabel}>eta</span>
             <span className={styles.telemetryValue}>
               {readingTimeLeft > 0 ? `${readingTimeLeft} min` : 'done'}

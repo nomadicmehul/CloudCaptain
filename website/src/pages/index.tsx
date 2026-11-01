@@ -5,6 +5,7 @@ import Layout from '@theme/Layout';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import ResumeReadingWidget from '@site/src/components/Progress/ResumeReadingWidget';
 import HomeCurriculum from '@site/src/components/Curriculum/HomeCurriculum';
+import {curriculumModel} from '@site/src/components/Curriculum/curriculumTitles';
 import useScrollReveal from '@site/src/hooks/useScrollReveal';
 
 /* ─── Data (loaded from JSON — edit the JSON files to update content) ─── */
@@ -88,42 +89,6 @@ function formatNumber(n: number): string {
 }
 
 /* ─── Hooks ─── */
-function useCountUp(target: number, suffix = '', duration = 1500) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !started) {
-          setStarted(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [started]);
-
-  useEffect(() => {
-    if (!started) return;
-    const startTime = performance.now();
-    const step = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [started, target, duration]);
-
-  return { ref, display: `${count}${suffix}` };
-}
-
 /* ─── Neofetch-style Terminal ─── */
 function NeofetchTerminal() {
   const [visible, setVisible] = useState(false);
@@ -225,8 +190,9 @@ function HeroSection() {
             Navigate the Cloud<br />Like a Captain
           </h1>
           <p className="hero__subtitle">
-            The open-source, community-driven learning platform for Cloud, DevOps, AI & Operations.
-            Curated paths, hands-on exercises, interview prep — <strong style={{color:'#10B981'}}>100% free, forever.</strong>
+            Learn Cloud, DevOps, AI infrastructure and AIOps by building each tool yourself, then running the real one.
+            {' '}{curriculumModel.stats.lessons} lessons, {curriculumModel.stats.tests.toLocaleString('en-US')} tests and a full reference library.{' '}
+            <strong style={{color:'#10B981'}}>100% free, forever.</strong>
           </p>
           <div className="hero-buttons">
             <Link className="btn-primary" to="/learn">
@@ -251,33 +217,6 @@ function HeroSection() {
 }
 
 /* ─── STATS with count-up ─── */
-function StatCard({ number, suffix, label, icon }: { number: number; suffix: string; label: string; icon: string }) {
-  const { ref, display } = useCountUp(number, suffix);
-  return (
-    <div ref={ref} className="stat-card">
-      <div className="stat-icon">{icon}</div>
-      <div className="stat-number">{display}</div>
-      <div className="stat-label">{label}</div>
-    </div>
-  );
-}
-
-function StatsSection() {
-  const sectionRef = useScrollReveal();
-  return (
-    <div className="stats-wrapper" ref={sectionRef}>
-      <div className="container">
-        <div className="stats-section reveal">
-          <StatCard number={150} suffix="+" label="/usr/share/docs" icon="📖" />
-          <StatCard number={52} suffix="" label="/etc/diagrams" icon="📐" />
-          <StatCard number={8} suffix="" label="/opt/career-paths" icon="🗺️" />
-          <StatCard number={100} suffix="%" label="FOSS Licensed" icon="🐧" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── CATEGORIES with stagger ─── */
 function CategoriesSection() {
   const sectionRef = useScrollReveal();
@@ -421,7 +360,7 @@ function HowItWorksSection() {
     <div className="section section--how" ref={sectionRef}>
       <div className="container">
         <h2 className="section__title reveal"><span className="section-prompt">$ man</span> How It Works</h2>
-        <p className="section__subtitle reveal">Four steps from zero to cloud-native expert.</p>
+        <p className="section__subtitle reveal">The same four steps in every lesson, from your first one to your own toolbox.</p>
         <div className="how-grid">
           {howItWorksSteps.map((step, i) => (
             <div key={i} className="how-step reveal">
@@ -550,7 +489,6 @@ export default function Home(): React.ReactElement {
       <HeroSection />
       <BrowserOnly>{() => <ResumeReadingWidget />}</BrowserOnly>
       <HomeCurriculum />
-      <StatsSection />
       <CategoriesSection />
       <LearningPathsSection />
       <CaptainSection ghStats={ghStats} />

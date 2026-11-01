@@ -11,6 +11,7 @@ import type { JSX } from 'react';
  */
 import React, {useEffect, useMemo, useState} from 'react';
 import {createPortal} from 'react-dom';
+import {useDoc} from '@docusaurus/plugin-content-docs/client';
 import styles from './styles.module.css';
 import type {Section} from './useScrollProgress';
 
@@ -121,6 +122,9 @@ export default function ChapterEnhancements({
   isRead,
   onToggleRead,
 }: Props): JSX.Element | null {
+  const {frontMatter} = useDoc();
+  const kind = (frontMatter as {cc_kind?: string}).cc_kind;
+  const curriculumPage = kind === 'lesson' || kind === 'phase';
   const [chapters, setChapters] = useState<ChapterData[]>([]);
   const sectionIdsKey = useMemo(
     () =>
@@ -172,11 +176,15 @@ export default function ChapterEnhancements({
                   {read ? '●' : '○'}
                 </button>
                 <div className={styles.chapterMeta}>
-                  <span className={styles.chapterEta}>⏱ {minutes} min</span>
-                  <span className={styles.chapterDot}>·</span>
-                  <span className={styles.chapterDiff} data-level={diff.label}>
-                    <span className={styles.chapterDiffDots}>{diff.dots}</span> {diff.label}
-                  </span>
+                  <span className={styles.chapterEta}>⏱ {minutes} min{curriculumPage ? ' in this section' : ''}</span>
+                  {!curriculumPage && (
+                    <>
+                      <span className={styles.chapterDot}>·</span>
+                      <span className={styles.chapterDiff} data-level={diff.label}>
+                        <span className={styles.chapterDiffDots}>{diff.dots}</span> {diff.label}
+                      </span>
+                    </>
+                  )}
                   {ch.codeBlocks > 0 && (
                     <>
                       <span className={styles.chapterDot}>·</span>
