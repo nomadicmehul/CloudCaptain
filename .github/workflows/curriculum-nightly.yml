@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - uses: actions/setup-python@v5
         with:
@@ -28,7 +28,7 @@ jobs:
         run: node scripts/build-curriculum.mjs --check
 
       - name: Generator unit tests
-        run: node --test scripts/__tests__/
+        run: node --test scripts/__tests__/*.test.mjs
 
       - name: Lesson tests
         run: node scripts/run-lesson-tests.mjs --all

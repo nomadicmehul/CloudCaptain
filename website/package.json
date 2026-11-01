@@ -19,7 +19,7 @@
     "curriculum:validate": "node ../scripts/build-curriculum.mjs --check",
     "curriculum:scaffold": "node ../scripts/build-curriculum.mjs --scaffold",
     "curriculum:test": "node ../scripts/run-lesson-tests.mjs",
-    "curriculum:unit": "node --test ../scripts/__tests__/"
+    "curriculum:unit": "node --test ../scripts/__tests__/*.test.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
@@ -53,6 +53,6 @@
     ]
   },
   "engines": {
-    "node": ">=20.0"
+    "node": ">=22.0"
   }
 }

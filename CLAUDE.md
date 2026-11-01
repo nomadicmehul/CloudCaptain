@@ -82,7 +82,7 @@ Features built with Claude Code assistance:
 ## Claude Code Setup Guide
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 22+
 - npm
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
 
