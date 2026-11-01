@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/dependency-graph",
+  "title": "Apply Order Is a Graph Walk",
+  "short": "Dependency Graph",
+  "motto": "Every reference is an edge; apply walks the graph in parallel, destroy walks it backwards, and a cycle means no order exists.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/state-reconciler"
+  ],
+  "tools": [
+    "tofu",
+    "terraform",
+    "graphviz"
+  ],
+  "reference": [
+    "/docs/tools/terraform/fundamentals",
+    "/docs/tools/terraform/advanced",
+    "/docs/tools/terraform/cheatsheet",
+    "/docs/tools/terraform/interview-questions",
+    "/docs/cloud/aws/security-iam"
+  ],
+  "outputs": [
+    "skill-iac-dependency-review.md",
+    "prompt-explain-tofu-graph.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

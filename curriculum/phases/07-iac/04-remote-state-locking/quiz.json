@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/remote-state-locking",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Two `tofu apply` runs start against the same state file in a bucket with no locking. Both read serial 41 and both change something. What is the usual outcome?",
+      "choices": [
+        "The second run waits until the first one finishes",
+        "The bucket merges the two versions of the state",
+        "Both write serial 42; the later write replaces the earlier one, so resources the first run created exist in the cloud but are missing from state",
+        "The cloud provider rejects the second run's API calls"
+      ],
+      "answer": 2,
+      "explanation": "An apply is a long read-modify-write. Without a lock both runs build on the same read, and a plain object store keeps whichever write lands last. The lost resources are real and billed, and the next plan tries to create them again."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`tofu apply` fails with `Error acquiring the state lock`. The Lock Info shows Who: runner@ci-42, Operation: OperationTypeApply, Created three minutes ago, and pipeline ci-42 is still printing output. What do you do?",
+      "choices": [
+        "Delete the lock object in the bucket",
+        "Run `tofu force-unlock` with the ID and rerun immediately",
+        "Rerun with `-lock=false` since the change is small",
+        "Wait, or rerun yours with `-lock-timeout=10m`: the holder is alive and releases the lock when it finishes"
+      ],
+      "answer": 3,
+      "explanation": "The lock info exists so you can tell a live holder from a dead one. Force-unlocking a live apply removes the only guard while it is still going to write; `-lock-timeout` makes your run retry until the holder releases."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Why does the HTTP backend add `?ID=` with the lock ID to every state write, and what does statesrv do with a write whose ID is not the lock currently held?",
+      "choices": [
+        "The ID proves the writer holds the lock; a stale or foreign ID, such as one from an apply whose lock was force-unlocked, gets 409 and tofu saves errored.tfstate instead of overwriting newer state",
+        "It makes each URL unique so proxies do not cache the response",
+        "It tells the server which state format version to expect",
+        "It is only for logging; the server accepts the write anyway"
+      ],
+      "answer": 0,
+      "explanation": "The lock ID is a capability. Checking it on writes is what turns a dangerous force-unlock into a visible failure: the old holder's write is refused and its state lands in errored.tfstate, where a person can decide what to do with it."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "statesrv stores serial 7 with lineage L. Which of these writes does it accept as a new version?",
+      "choices": [
+        "Serial 6, lineage L",
+        "Serial 8, lineage L",
+        "Serial 9, lineage M",
+        "Serial 7, lineage L, with different bytes"
+      ],
+      "answer": 1,
+      "explanation": "Lineage is the state's identity, so M is a different state no matter how high its serial. A serial at or below the stored one was built on an older read; only the same serial with identical bytes passes, as a retry that adds no version."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "An apply's lock was force-unlocked while it was still running. It finished, its state write was refused, and it left errored.tfstate. Since then a colleague has applied once. What is the safe recovery?",
+      "choices": [
+        "`tofu state push -force errored.tfstate`",
+        "Delete errored.tfstate, because the colleague's state is newer",
+        "Restore the bucket's previous object version of the state",
+        "Do not push: pull the current state, compare its resources with errored.tfstate, and import or remove what differs until `tofu plan` shows only intended changes"
+      ],
+      "answer": 3,
+      "explanation": "Both versions hold real changes: errored.tfstate records what the old apply did, the current state what the colleague did. Pushing either over the other loses one of them; reconciling with import and state rm keeps both."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your team moves an S3 backend from a DynamoDB lock table to `use_lockfile = true`. What does the new lock rely on, and what protects you from a bad write that got past it?",
+      "choices": [
+        "Nothing changes: use_lockfile still requires the DynamoDB table",
+        "S3 Object Lock in compliance mode; S3 rejects older serials",
+        "A lease that expires after fifteen minutes; DynamoDB still checks serials",
+        "A conditional write that creates KEY.tflock only if it does not exist; bucket versioning is the undo, because S3 does not compare serials"
+      ],
+      "answer": 3,
+      "explanation": "The lock file is the same create-if-absent primitive as statesrv's link(): `If-None-Match: *` on the lock object. The S3 backend stores state as plain bytes and has no server-side serial check, so object versioning is the history you restore from."
+    }
+  ]
+}

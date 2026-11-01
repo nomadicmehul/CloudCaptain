@@ -1,0 +1,6 @@
+{
+  "apiVersion": "platform.example.org/v1alpha1",
+  "kind": "App",
+  "metadata": {"name": "checkout", "namespace": "cc-pulumi-crossplane"},
+  "spec": {"size": "medium", "team": "Payments", "image": "registry.k8s.io/pause:3.10"}
+}

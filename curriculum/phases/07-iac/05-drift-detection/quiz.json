@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/drift-detection",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Someone changes a resource OpenTofu manages through the cloud console. When does the usual plan-and-apply workflow first notice?",
+      "choices": [
+        "At the next plan, when refresh reads the resource and the plan quietly includes undoing the change, mixed in with whatever else that plan does",
+        "Never: OpenTofu only compares the configuration with the state file",
+        "Immediately: the cloud provider updates the state file",
+        "Only when the resource is destroyed"
+      ],
+      "answer": 0,
+      "explanation": "A normal plan refreshes every resource in state and then diffs the configuration against what it found, so the console change shows up as one more `~` in a plan about something else. Nobody is told until someone happens to plan, and the reviewer cannot tell drift from the intended change."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "After `tofu apply -refresh-only`, a normal `tofu plan -detailed-exitcode` exits 2 and shows `+ local_file.motd`. Is that drift?",
+      "choices": [
+        "No: exit code 2 means the plan errored",
+        "Yes: the file is still missing, so it is still drift",
+        "No: state now matches reality, so there is no drift left; the configuration still wants the file, which makes it an unapplied change",
+        "Yes: apply -refresh-only does not change the state file"
+      ],
+      "answer": 2,
+      "explanation": "Drift is reality differing from state; an unapplied change is the configuration differing from state. apply -refresh-only removed the deleted file from state, so a refresh-only plan exits 0, while a normal plan still wants to create it. driftwatch reports it under pending, not findings."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "You edit a file that `local_file` manages and run `tofu plan -refresh-only`. Why does it say `has been deleted` instead of `has changed`?",
+      "choices": [
+        "OpenTofu cannot read files on disk",
+        "The edit corrupted the state file",
+        "Refresh-only plans only ever report deletions",
+        "The provider's Read compares the SHA-1 of the file with the resource id, which is the hash of the content it wrote, and drops the resource from state when they differ"
+      ],
+      "answer": 3,
+      "explanation": "Refresh is each provider's Read, and the provider decides what drift looks like. The local provider treats a file with different bytes as a different object, so the edit appears as a deletion and the next apply plans a create. A Kubernetes ConfigMap patched with kubectl, by contrast, appears as `has changed` with the attribute diff."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A ConfigMap's labels are listed in `ignore_changes`, and someone adds a label with `kubectl label`. What do the two plans say?",
+      "choices": [
+        "Neither plan mentions it; ignore_changes hides the attribute from refresh",
+        "The refresh-only plan reports the drift and exits 2; the normal plan proposes nothing for it, because planning keeps the refreshed labels instead of the configured ones",
+        "Both plans propose removing the label",
+        "The normal plan fails with a conflict"
+      ],
+      "answer": 1,
+      "explanation": "ignore_changes acts on planning, not on refresh. The refreshed state records the new label, the refresh-only plan's exit code counts it, and the normal plan is a no-op for the resource. That is why driftwatch reads the normal plan's no-op to classify the finding as ignored and exits 0 unless --strict."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Why does `driftwatch run` also run a normal plan instead of only the refresh-only plan?",
+      "choices": [
+        "The refresh-only plan has no JSON output",
+        "To apply a fix automatically",
+        "Refreshing twice makes the result more accurate",
+        "The refresh-only plan says what changed outside; only the normal plan says what the next apply would do about each change: revert it in place, recreate it, replace it, or leave it alone"
+      ],
+      "answer": 3,
+      "explanation": "The same drift can be harmless or destructive depending on the configuration and the provider schema. A changed attribute that forces replacement shows up only in the normal plan's resource_changes as delete plus create with replace_paths, and an ignored attribute shows up there as a no-op."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A nightly job pipes `tofu show -json` of the refresh-only plan into a new GitHub issue every night. Which two problems does driftwatch fix?",
+      "choices": [
+        "The JSON is too small to be useful, and GitHub rejects JSON in issues",
+        "Sensitive values are plain text in that JSON, and every night opens another issue; driftwatch drops values marked in before_sensitive and after_sensitive, and puts a stable per-stack key in the body so the job edits one issue",
+        "Workflows cannot create issues, and plan JSON has no resource addresses",
+        "Nothing; pasting raw plan JSON into an issue is the recommended setup"
+      ],
+      "answer": 1,
+      "explanation": "tofu show -json returns sensitive values in plain text, so the report must mask them before they leave the job. The dedupe key is stable per stack; the fingerprint hashes addresses, categories and attribute paths without values, so it changes only when the drift itself changes."
+    }
+  ]
+}

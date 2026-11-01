@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/ansible-config",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A deploy script runs `echo PORT=8080 >> /etc/app/app.env` on every deploy. What does the file look like after ten deploys, and what property is the script missing?",
+      "choices": [
+        "The second deploy fails because the line exists",
+        "One PORT= line; the shell removes duplicates",
+        "Ten PORT= lines; the step is not idempotent because it writes without first checking whether the line is already there",
+        "One line, because >> overwrites the file"
+      ],
+      "answer": 2,
+      "explanation": "An append is an action, not a desired state. An idempotent step reads the file, compares it with what should be there and writes only the difference, which is what lineinfile does with regexp: ^PORT= and line: PORT=8080."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "You run the same playbook twice against the same host. The second PLAY RECAP shows `changed=2`. What does that tell you?",
+      "choices": [
+        "Two hosts were configured",
+        "Two handlers ran, which is expected on every run",
+        "Ansible caches results between runs, so the number is meaningless",
+        "Two tasks are not idempotent: they either change something the first run already set (content that differs on every render, a timestamp) or always report changed (command or shell with no creates, removes or changed_when)"
+      ],
+      "answer": 3,
+      "explanation": "On an unchanged target a correct playbook reports changed=0. Each changed task on the second run is either a real non-convergence or a task that cannot compare, and both need a fix: a module that checks, a guard, or changed_when."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Why can `--check` report exactly what `copy` would change, while a plain `command: ./migrate.sh` is skipped in check mode?",
+      "choices": [
+        "Check mode only works over SSH",
+        "copy separates reading from writing: it compares checksums and writes only on a difference, so check mode runs the comparison and skips the write; an arbitrary command has no comparison unless you give it creates or removes",
+        "command needs root and check mode drops privileges",
+        "copy is implemented in the controller and command on the target"
+      ],
+      "answer": 1,
+      "explanation": "Check mode is only as good as each module's comparison step. With creates: or removes: the command module can say whether it would run; without them it reports skipped, and miniansible's module_command does the same."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A host is in the groups `web` and `canary`, both direct children of `all`. `[web:vars]` sets `color=blue`, `[canary:vars]` sets `color=red`, and the host line sets nothing. What does the host get?",
+      "choices": [
+        "blue: groups at the same depth merge by ansible_group_priority, then alphabetically, so web is applied after canary; a priority or a host var would change it",
+        "An error about conflicting variables",
+        "Whichever group the play targets",
+        "red, because canary is declared first in the file"
+      ],
+      "answer": 0,
+      "explanation": "Inventory group vars are merged sorted by (depth from all, ansible_group_priority, name), later wins. Both groups have depth 1 and the default priority, so name decides. inventory --host --explain shows the winning layer and the one it overrode."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Two tasks in one play notify `restart nginx` and both report changed. How many times does the handler run, and when?",
+      "choices": [
+        "Once per host, after the play's tasks (or at a meta: flush_handlers), in the order handlers are defined",
+        "Twice, immediately after each notifying task",
+        "Once, immediately after the first notifying task",
+        "Never, because handlers only run on the second run"
+      ],
+      "answer": 0,
+      "explanation": "Notifications are collected per host and deduplicated; each notified handler runs once at the flush point. A host that fails before that point does not run its handlers unless --force-handlers is given."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Two hundred identical app servers are configured by a playbook on every deploy, and drift keeps appearing between runs. What is the better design?",
+      "choices": [
+        "Bake the configuration into an image (a Dockerfile or a Packer template, which may run the playbook once at build time) and replace instances instead of changing them in place; keep configuration management for long-lived hosts",
+        "Run the playbook every five minutes from cron",
+        "Switch every task to shell so it is faster",
+        "Disable check mode so the runs are shorter"
+      ],
+      "answer": 0,
+      "explanation": "A host that is never modified after boot cannot drift, and rollback is the previous image. Idempotent playbooks are still the right tool for machines you cannot replace cheaply and for building the image itself."
+    }
+  ]
+}

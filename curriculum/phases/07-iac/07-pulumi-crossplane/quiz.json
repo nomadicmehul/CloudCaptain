@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/pulumi-crossplane",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An OpenTofu configuration and a Pulumi program in Python create the same three resources. What do the two tools share under the hood?",
+      "choices": [
+        "Nothing: the Python program calls the cloud APIs directly, line by line",
+        "An engine that diffs desired state against a recorded state, then acts through provider plugins and writes the new state",
+        "Both compile to HCL before they run",
+        "Both need a Kubernetes cluster to hold their state"
+      ],
+      "answer": 1,
+      "explanation": "Pulumi's program does not touch the cloud. Each resource constructor registers desired state with an engine that diffs it against the stack's state and calls a provider, the same refresh, diff and apply loop as the state-reconciler lesson."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A program passes `Output.all(pet.id, suffix.result).apply(...)` into `RandomInteger(keepers=...)`. Nothing says depends_on. Why is the integer created after the pet and the suffix?",
+      "choices": [
+        "Because Python runs the lines in file order and nothing else matters",
+        "Because the engine sorts resources alphabetically before applying",
+        "Because every Output carries the set of resources it was derived from, so registering the integer records pet and suffix as its dependencies",
+        "Because pulumi_random always creates integers last"
+      ],
+      "answer": 2,
+      "explanation": "Dependencies flow with data. `Output.all` unions the resource sets of its inputs and `apply` keeps them, so the integer's registration carries both URNs; `pulumi stack export` shows them under `dependencies` and `propertyDependencies.keepers`."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "During `pulumi preview` on a new stack, a `print()` inside an `apply()` on a resource's output never runs. Why?",
+      "choices": [
+        "The resource does not exist yet, so its output is unknown; the engine skips the callback and the derived Output is unknown too",
+        "Preview redirects the program's stdout to /dev/null",
+        "apply() callbacks only run on the second `pulumi up`",
+        "Pulumi programs cannot use print()"
+      ],
+      "answer": 0,
+      "explanation": "Preview runs the same program, but outputs of resources that would be created or replaced are unknown. An apply on an unknown value is not called, which is why previews show `output<string>` and why side effects in apply are a bug."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A Composition with function-patch-and-transform renders a Deployment. It is running with all replicas available, yet the XR stays Ready=False. The template has no readinessChecks. What is the most likely cause?",
+      "choices": [
+        "The provider controller is not installed",
+        "The Composition must be re-applied after every XR change",
+        "Patches are applied only once, at creation",
+        "With no readinessChecks the function waits for a Ready condition, which a Deployment never has; add a MatchCondition check on Available"
+      ],
+      "answer": 3,
+      "explanation": "The default readiness check is the Ready condition, which managed resources carry and core Kubernetes types do not. A Deployment reports Available, so the check must say so, exactly as the lesson's composition does."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "When does a continuously reconciling control plane such as Crossplane beat a run you trigger, such as OpenTofu or Pulumi in CI?",
+      "choices": [
+        "Always, because reconcilers are the newer design",
+        "When a human-reviewed plan before every change is the main safety control",
+        "When many teams self-serve infrastructure through a Kubernetes API and drift must be corrected without anyone running a pipeline",
+        "When the organisation has no Kubernetes cluster"
+      ],
+      "answer": 2,
+      "explanation": "A reconciler that never stops repairs drift within minutes and lets teams request infrastructure with kubectl and GitOps under RBAC. The price is that there is no plan to approve and the control plane itself becomes production infrastructure."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A RandomString's length changes and the resource must be replaced. What does Pulumi do by default, and how does that differ from Terraform and OpenTofu?",
+      "choices": [
+        "Pulumi asks the provider to rename the old resource",
+        "Both destroy first and then create",
+        "Pulumi updates the resource in place because Python objects are mutable",
+        "Pulumi creates the replacement first and deletes the original at the end; Terraform and OpenTofu destroy first unless create_before_destroy is set"
+      ],
+      "answer": 3,
+      "explanation": "Pulumi's default replacement is create-before-delete, to minimise downtime; deleteBeforeReplace opts out. That ordering also means two copies exist for a moment, which matters for resources with unique names."
+    }
+  ]
+}

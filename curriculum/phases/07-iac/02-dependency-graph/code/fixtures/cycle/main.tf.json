@@ -1,0 +1,10 @@
+{
+  "resource": {
+    "terraform_data": {
+      "a": {"input": "${terraform_data.c.output}"},
+      "b": {"input": "${terraform_data.a.output}"},
+      "c": {"input": "x", "depends_on": ["terraform_data.b"]},
+      "d": {"input": "${terraform_data.a.id}"}
+    }
+  }
+}

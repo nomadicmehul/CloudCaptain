@@ -1,0 +1,21 @@
+{
+  "resource": {
+    "local_file": {
+      "motd": {
+        "filename": "${path.module}/out/motd.txt",
+        "content": "hello from tofu\n"
+      }
+    },
+    "kubernetes_config_map_v1": {
+      "flags": {
+        "metadata": {"name": "flags", "namespace": "shop"},
+        "data": {"checkout": "on", "color": "blue"}
+      },
+      "routing": {
+        "metadata": {"name": "routing", "namespace": "shop", "labels": {"app": "shop"}},
+        "data": {"upstream": "v1"},
+        "lifecycle": {"ignore_changes": ["metadata[0].labels"]}
+      }
+    }
+  }
+}

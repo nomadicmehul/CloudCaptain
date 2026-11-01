@@ -1,0 +1,2 @@
+pulumi==3.273.0
+pulumi-random==4.21.4

@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/ansible-config",
+  "title": "Idempotence Is a Check Before Every Change",
+  "short": "Ansible Config",
+  "motto": "A playbook is safe to run twice because every module reads the current state first and writes only the difference.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/state-reconciler"
+  ],
+  "tools": [
+    "ansible-playbook",
+    "ansible-inventory",
+    "ansible",
+    "ansible-lint",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/ansible/fundamentals",
+    "/docs/tools/ansible/cheatsheet",
+    "/docs/tools/ansible/examples",
+    "/docs/tools/yaml/fundamentals",
+    "/docs/tools/docker/dockerfile-guide"
+  ],
+  "outputs": [
+    "skill-idempotent-playbook-review.md",
+    "prompt-shell-script-to-playbook.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

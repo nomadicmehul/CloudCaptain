@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "iac/drift-detection",
+  "title": "Drift Is a Plan You Did Not Ask For",
+  "short": "Drift Detection",
+  "motto": "Drift is reality moving away from your last apply; a refresh-only plan shows it on its own, before your next change hides it.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/remote-state-locking"
+  ],
+  "tools": [
+    "tofu",
+    "terraform",
+    "kubectl",
+    "kind",
+    "github-actions"
+  ],
+  "reference": [
+    "/docs/tools/terraform/advanced",
+    "/docs/tools/terraform/cheatsheet",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/cicd/gitops"
+  ],
+  "outputs": [
+    "skill-drift-triage.md",
+    "prompt-drift-report.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

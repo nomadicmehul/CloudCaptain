@@ -1,0 +1,146 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.13.2",
+  "planned_values": {
+    "root_module": {}
+  },
+  "resource_drift": [
+    {
+      "address": "kubernetes_config_map_v1.flags",
+      "mode": "managed",
+      "type": "kubernetes_config_map_v1",
+      "name": "flags",
+      "provider_name": "registry.opentofu.org/hashicorp/kubernetes",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "binary_data": null,
+          "data": {"checkout": "on", "color": "blue"},
+          "id": "shop/flags",
+          "immutable": false,
+          "metadata": [{"annotations": null, "generate_name": "", "generation": 0, "labels": null, "name": "flags", "namespace": "shop", "resource_version": "1201", "uid": "5d0c9a3e-41b2-4c55-9f1e-0a3c1f7e2b11"}]
+        },
+        "after": {
+          "binary_data": null,
+          "data": {"checkout": "on", "color": "red"},
+          "id": "shop/flags",
+          "immutable": false,
+          "metadata": [{"annotations": null, "generate_name": "", "generation": 0, "labels": null, "name": "flags", "namespace": "shop", "resource_version": "1388", "uid": "5d0c9a3e-41b2-4c55-9f1e-0a3c1f7e2b11"}]
+        },
+        "after_unknown": {},
+        "before_sensitive": {"data": {}, "metadata": [{}]},
+        "after_sensitive": {"data": {}, "metadata": [{}]}
+      }
+    },
+    {
+      "address": "local_file.motd",
+      "mode": "managed",
+      "type": "local_file",
+      "name": "motd",
+      "provider_name": "registry.opentofu.org/hashicorp/local",
+      "change": {
+        "actions": ["delete"],
+        "before": {
+          "content": "hello from tofu\n",
+          "directory_permission": "0777",
+          "file_permission": "0777",
+          "filename": "./out/motd.txt",
+          "id": "2f3a1c0f4a3d1b1c9f1e7a1d2d0e8c5b6a7f9e01"
+        },
+        "after": null,
+        "after_unknown": {},
+        "before_sensitive": {},
+        "after_sensitive": false
+      }
+    },
+    {
+      "address": "kubernetes_config_map_v1.routing",
+      "mode": "managed",
+      "type": "kubernetes_config_map_v1",
+      "name": "routing",
+      "provider_name": "registry.opentofu.org/hashicorp/kubernetes",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "data": {"upstream": "v1"},
+          "id": "shop/routing",
+          "metadata": [{"labels": {"app": "shop"}, "name": "routing", "namespace": "shop", "resource_version": "1202"}]
+        },
+        "after": {
+          "data": {"upstream": "v1"},
+          "id": "shop/routing",
+          "metadata": [{"labels": {"app": "shop", "owner": "oncall"}, "name": "routing", "namespace": "shop", "resource_version": "1391"}]
+        },
+        "after_unknown": {},
+        "before_sensitive": {"data": {}, "metadata": [{"labels": {}}]},
+        "after_sensitive": {"data": {}, "metadata": [{"labels": {}}]}
+      }
+    },
+    {
+      "address": "google_compute_instance.worker",
+      "mode": "managed",
+      "type": "google_compute_instance",
+      "name": "worker",
+      "provider_name": "registry.opentofu.org/hashicorp/google",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "labels": {"team": "shop"},
+          "machine_type": "e2-small",
+          "metadata_startup_script": "apt-get install -y nginx",
+          "name": "worker-1",
+          "zone": "europe-west3-a"
+        },
+        "after": {
+          "labels": {"team": "shop"},
+          "machine_type": "e2-small",
+          "metadata_startup_script": "apt-get install -y nginx\nsystemctl enable --now nginx",
+          "name": "worker-1",
+          "zone": "europe-west3-a"
+        },
+        "after_unknown": {},
+        "before_sensitive": {"labels": {}},
+        "after_sensitive": {"labels": {}}
+      }
+    },
+    {
+      "address": "kubernetes_secret_v1.db",
+      "mode": "managed",
+      "type": "kubernetes_secret_v1",
+      "name": "db",
+      "provider_name": "registry.opentofu.org/hashicorp/kubernetes",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "data": {"password": "hunter2-from-tofu"},
+          "id": "shop/db",
+          "metadata": [{"name": "db", "namespace": "shop", "resource_version": "1203"}],
+          "type": "Opaque"
+        },
+        "after": {
+          "data": {"password": "rotated-by-hand"},
+          "id": "shop/db",
+          "metadata": [{"name": "db", "namespace": "shop", "resource_version": "1402"}],
+          "type": "Opaque"
+        },
+        "after_unknown": {},
+        "before_sensitive": {"data": true, "metadata": [{}]},
+        "after_sensitive": {"data": true, "metadata": [{}]}
+      }
+    },
+    {
+      "address": "data.http.ip",
+      "mode": "data",
+      "type": "http",
+      "name": "ip",
+      "provider_name": "registry.opentofu.org/hashicorp/http",
+      "change": {
+        "actions": ["update"],
+        "before": {"response_body": "203.0.113.7"},
+        "after": {"response_body": "203.0.113.9"}
+      }
+    }
+  ],
+  "timestamp": "2026-11-01T02:00:13Z",
+  "errored": false
+}

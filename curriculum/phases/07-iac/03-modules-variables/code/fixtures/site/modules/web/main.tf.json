@@ -1,0 +1,37 @@
+{
+  "variable": {
+    "name": {
+      "type": "string",
+      "validation": [
+        {
+          "condition": "${can(regex(\"^[a-z][a-z0-9-]*$\", var.name)) && length(var.name) <= 24}",
+          "error_message": "The name must be lowercase letters, digits and dashes, at most 24 characters."
+        }
+      ]
+    },
+    "body": {
+      "type": "string"
+    },
+    "copies": {
+      "type": "number",
+      "default": 1
+    }
+  },
+  "locals": {
+    "header": "# ${var.name}"
+  },
+  "resource": {
+    "local_file": {
+      "page": {
+        "count": "${var.copies}",
+        "filename": "${path.root}/out/${var.name}-${count.index}.txt",
+        "content": "${local.header}\n${var.body}\n"
+      }
+    }
+  },
+  "output": {
+    "files": {
+      "value": "${local_file.page[*].filename}"
+    }
+  }
+}

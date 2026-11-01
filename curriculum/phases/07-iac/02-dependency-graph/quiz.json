@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/dependency-graph",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Resource B has `bucket_arn = aws_s3_bucket.a.arn` and is written above resource A in the file. In what order are they created?",
+      "choices": [
+        "B first, because it comes first in the file",
+        "A first: the reference is an edge in the dependency graph, and B cannot be created until A's arn exists",
+        "Alphabetically by resource name",
+        "Both at once, because the default parallelism is 10"
+      ],
+      "answer": 1,
+      "explanation": "File order means nothing to the engine. Every reference becomes an edge from the resource that holds it to the resource it names, and apply follows a topological order of that graph. Parallelism only lets independent nodes overlap."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A configuration has four independent `time_sleep` resources of one second each. What does `-parallelism=1` change compared with the default?",
+      "choices": [
+        "Only how many nodes run at once: the four sleeps now run one after another, so the apply takes about four seconds instead of one, in an order the edges still decide",
+        "It reverses the order in which dependent resources are created",
+        "It makes OpenTofu ignore depends_on so the apply is deterministic",
+        "It writes the state file after every resource instead of at the end"
+      ],
+      "answer": 0,
+      "explanation": "-parallelism is the size of the worker pool, a semaphore on node execution. Edges alone decide what waits for what; the pool decides how many ready nodes run together, so lowering it costs time roughly equal to the work that would have overlapped."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "On a fresh plan, `local_file.config.content` is `(known after apply)` but `local_file.index.content` is a literal, even though index depends on config. Why?",
+      "choices": [
+        "index is created before config",
+        "OpenTofu caches literal values from the previous run",
+        "The local provider computes content lazily",
+        "config's content interpolates `terraform_data.release.output`, which only exists after apply, while index only uses `local_file.config.filename`, an argument already known at plan time"
+      ],
+      "answer": 3,
+      "explanation": "Unknowns follow values, not edges. index still waits for config during apply because of the edge, but the attribute it reads is known during plan, so its planned content is a literal."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A resource with `create_before_destroy = true` must be replaced, and another resource references it. In what order do the steps run?",
+      "choices": [
+        "Destroy the old object, create the new one, update the dependent",
+        "Create the new object and leave the old one until the next apply",
+        "Create the new object, update or replace the dependent so it uses the new one, then destroy the old (deposed) object",
+        "Update the dependent first, then replace the resource"
+      ],
+      "answer": 2,
+      "explanation": "The flag flips the replacement's two nodes and makes the destroy of the deposed object wait for every dependent. That is why it removes downtime, and why it propagates to the resource's own dependencies: otherwise the reversed edges would form a cycle."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After a refactor, two security groups' inline ingress rules reference each other's ids and the plan fails with `Error: Cycle: aws_security_group.a, aws_security_group.b`. What fixes it?",
+      "choices": [
+        "Add depends_on from a to b",
+        "Move the rules into separate rule resources (for example `aws_vpc_security_group_ingress_rule`) that reference both groups, so the groups no longer depend on each other",
+        "Run the apply with -parallelism=1",
+        "Set create_before_destroy on both groups"
+      ],
+      "answer": 1,
+      "explanation": "A cycle means no order exists, and depends_on can only add edges. The fix removes an edge: the groups become independent nodes and the rule resources depend on both, which is a valid DAG."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "An instance's boot script reads from S3 and fails with AccessDenied on the first apply only. The instance references its instance profile but nothing references the policy attachment. What is the right change?",
+      "choices": [
+        "Run apply twice in CI",
+        "Raise -parallelism so the attachment finishes sooner",
+        "Add `depends_on = [aws_iam_role_policy_attachment.read]` to the instance, because this is a hidden runtime dependency the graph cannot infer, and make the script retry because IAM is eventually consistent",
+        "Set create_before_destroy on the instance"
+      ],
+      "answer": 2,
+      "explanation": "Without a reference there is no edge, so the instance and the attachment are independent and run in parallel. depends_on adds the missing edge; a retry in the boot script covers the propagation delay that no ordering can remove."
+    }
+  ]
+}

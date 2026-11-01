@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "iac/modules-variables",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "You move the block for `aws_db_instance.main` into a new module directory and call it with `module \"db\"`. Nothing else changes. What does the next plan propose?",
+      "choices": [
+        "No changes: the resource arguments are identical",
+        "An in-place update of the resource's module path",
+        "Destroy `aws_db_instance.main` and create `module.db.aws_db_instance.main`, because the address is the object's identity in state",
+        "An error, because resources cannot move into modules"
+      ],
+      "answer": 2,
+      "explanation": "State maps addresses to real objects. A new address with no state entry is a create, and an old address no longer in configuration is a destroy. A moved block from aws_db_instance.main to module.db.aws_db_instance.main turns the pair into a move."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In JSON syntax, `\"for_each\": \"${var.sites}\"` passes a map, but `\"for_each\": \"sites: ${var.sites}\"` fails. Why?",
+      "choices": [
+        "JSON strings cannot contain maps",
+        "The second form needs the `$${...}` escape",
+        "for_each accepts only literal JSON objects",
+        "A string that is exactly one interpolation evaluates to the expression's value; any extra text makes it a string template, and a map cannot be interpolated into a string"
+      ],
+      "answer": 3,
+      "explanation": "compile_template() unwraps a template with a single interpolation and nothing else, which is how JSON configuration passes maps, lists and numbers. With surrounding text the result must be a string, and rendering a map into it is an Invalid template interpolation value error."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The list `[\"a\", \"b\", \"c\"]` drives one resource with `count = length(var.names)` and another with `for_each = toset(var.names)`. You remove \"b\". What does the plan do?",
+      "choices": [
+        "Both resources delete only the b instance",
+        "count replaces [1] (it now holds c) and deletes [2]; for_each deletes only [\"b\"]",
+        "Both resources replace every instance",
+        "count deletes [1]; for_each deletes [\"b\"]"
+      ],
+      "answer": 1,
+      "explanation": "count keys instances by position, so every element after the removed one shifts into a different address and the last position disappears. for_each keys them by value, so exactly one key goes away. This is the test minimod's ExpansionTests run."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why is `for_each = toset([aws_instance.web.id])` rejected during plan?",
+      "choices": [
+        "The id is computed by the provider at apply time, so the keys, and therefore the instance addresses, cannot be known during plan",
+        "Sets cannot hold strings",
+        "for_each cannot reference other resources at all",
+        "toset() is not allowed inside for_each"
+      ],
+      "answer": 0,
+      "explanation": "Expansion decides how many addresses exist before anything is applied. An attribute the provider fills in is unknown during plan, so a key built from it is an Invalid for_each argument. Keys must come from configuration: variables, locals or other known values."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A shared module renames its `module \"web\"` call to `module \"site\"`. It is used by 30 environments, each with its own state. What keeps every object safely?",
+      "choices": [
+        "Run `tofu state mv` by hand in each environment before merging",
+        "Ship `moved { from = module.web  to = module.site }` with the change, so every environment's plan shows moves and 0 to destroy, and review that plan",
+        "Delete each state file and import every resource again",
+        "Keep the old name forever"
+      ],
+      "answer": 1,
+      "explanation": "A moved block travels with the code. Each environment rewrites its own prior addresses during plan, the plan shows the moves for review, and repeating it is harmless once the state is moved. state mv is imperative, unreviewed and has to be repeated by someone with state access everywhere."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A root output `db_url` is built from `var.db_password`, which is marked sensitive, and the plan fails with \"Output refers to sensitive values\". Which statement is true?",
+      "choices": [
+        "Outputs can never be derived from sensitive variables",
+        "Sensitive values are encrypted in state, so marking the output is all the protection needed",
+        "The only fix is to wrap the value in nonsensitive()",
+        "Adding `sensitive = true` to the output lets the plan proceed and hides the value in output, but the value is still stored in clear in the state file"
+      ],
+      "answer": 3,
+      "explanation": "Sensitivity is a mark that propagates to derived values and controls display, not storage. The root output must opt in with sensitive = true. Anyone who can read the state can read the password, so state access is a secret-level permission; OpenTofu can additionally encrypt state."
+    }
+  ]
+}
