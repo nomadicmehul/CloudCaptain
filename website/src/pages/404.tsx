@@ -7,10 +7,10 @@ const popularDestinations = [
   { label: '🐧 Linux Master Path', to: '/docs/learning-paths/linux-master' },
   { label: '🚀 DevOps Path', to: '/docs/learning-paths/devops' },
   { label: '🤖 AI / ML Ops Path', to: '/docs/learning-paths/ai-ml' },
-  { label: '🐳 Docker', to: '/docs/tools/docker/' },
-  { label: '☸️  Kubernetes', to: '/docs/tools/kubernetes/' },
-  { label: '🏗️  Terraform', to: '/docs/tools/terraform/' },
-  { label: '☁️  AWS', to: '/docs/cloud/aws/' },
+  { label: '🐳 Docker', to: '/docs/tools/docker' },
+  { label: '☸️  Kubernetes', to: '/docs/tools/kubernetes' },
+  { label: '🏗️  Terraform', to: '/docs/tools/terraform' },
+  { label: '☁️  AWS', to: '/docs/cloud/aws' },
   { label: '🎯 Career Paths', to: '/career-paths' },
 ];
 

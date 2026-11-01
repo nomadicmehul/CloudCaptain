@@ -7,6 +7,13 @@ const SITE = 'https://cloudcaptain.io';
 
 type Node = {type?: string; url?: string; children?: Node[]};
 
+// Pages are built as path.html (trailingSlash: false), so link to /path, not /path/.
+export function stripTrailingSlash(url: string): string {
+  const match = url.match(/^([^?#]*?)\/+([?#].*)?$/);
+  if (!match || match[1] === '') return url;
+  return match[1] + (match[2] ?? '');
+}
+
 function visit(node: Node, fn: (n: Node) => void): void {
   fn(node);
   if (Array.isArray(node.children)) {
@@ -19,7 +26,7 @@ export default function remarkSiteLinks() {
     visit(tree, (node) => {
       if ((node.type === 'link' || node.type === 'definition') && typeof node.url === 'string') {
         if (node.url === SITE || node.url === `${SITE}/`) node.url = '/';
-        else if (node.url.startsWith(`${SITE}/`)) node.url = node.url.slice(SITE.length);
+        else if (node.url.startsWith(`${SITE}/`)) node.url = stripTrailingSlash(node.url.slice(SITE.length));
       }
     });
   };

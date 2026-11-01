@@ -3,6 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import {curriculumFrontMatter, isCurriculumFile} from './plugins/curriculum-frontmatter';
 import remarkSiteLinks from './plugins/remark-site-links';
+import trailingSlashPages from './plugins/trailing-slash-pages';
 
 const config: Config = {
   title: 'CloudCaptain',
@@ -14,9 +15,11 @@ const config: Config = {
   projectName: 'CloudCaptain',
   trailingSlash: false,
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
     // Curriculum lessons keep their markdown clean; slug/title/cc_* come from lesson.json.
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
@@ -228,10 +231,10 @@ const config: Config = {
         {
           title: 'Tools & Tech',
           items: [
-            {label: 'Docker', to: '/docs/tools/docker/'},
-            {label: 'Kubernetes', to: '/docs/tools/kubernetes/'},
-            {label: 'Terraform', to: '/docs/tools/terraform/'},
-            {label: 'Ansible', to: '/docs/tools/ansible/'},
+            {label: 'Docker', to: '/docs/tools/docker'},
+            {label: 'Kubernetes', to: '/docs/tools/kubernetes'},
+            {label: 'Terraform', to: '/docs/tools/terraform'},
+            {label: 'Ansible', to: '/docs/tools/ansible'},
           ],
         },
         {
@@ -290,6 +293,8 @@ const config: Config = {
         beforeDefaultRemarkPlugins: [remarkSiteLinks],
       },
     ],
+    // "/path/" serves the same page as "/path" (pages are built as path.html)
+    trailingSlashPages,
     // Old stub/pointer URLs keep working (see website/redirects.json)
     ['@docusaurus/plugin-client-redirects', {redirects: require('./redirects.json')}],
     // Zoom on images in docs/blog for cheatsheets and diagrams
