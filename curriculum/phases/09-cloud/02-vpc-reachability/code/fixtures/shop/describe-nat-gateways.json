@@ -1,0 +1,27 @@
+{
+  "NatGateways": [
+    {
+      "NatGatewayId": "nat-0shop",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0public-a",
+      "State": "available",
+      "ConnectivityType": "public",
+      "NatGatewayAddresses": [
+        {
+          "AllocationId": "eipalloc-0nat",
+          "NetworkInterfaceId": "eni-0nat",
+          "PrivateIp": "10.0.1.50",
+          "PublicIp": "203.0.113.50",
+          "IsPrimary": true,
+          "Status": "succeeded"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "shop"
+        }
+      ]
+    }
+  ]
+}

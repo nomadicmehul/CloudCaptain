@@ -1,0 +1,264 @@
+{
+  "NetworkInterfaces": [
+    {
+      "NetworkInterfaceId": "eni-0web",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0public-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.0.1.10",
+      "Groups": [
+        {
+          "GroupId": "sg-0web",
+          "GroupName": "web"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.0.1.10",
+          "Association": {
+            "PublicIp": "203.0.113.20",
+            "IpOwnerId": "amazon"
+          }
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0web",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0web",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      },
+      "Association": {
+        "PublicIp": "203.0.113.20",
+        "IpOwnerId": "amazon"
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0worker",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0public-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.0.1.30",
+      "Groups": [
+        {
+          "GroupId": "sg-0batch",
+          "GroupName": "batch"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.0.1.30"
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0worker",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0worker",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0db",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0private-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.0.2.20",
+      "Groups": [
+        {
+          "GroupId": "sg-0db",
+          "GroupName": "db"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.0.2.20"
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0db",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0db",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0batch",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0private-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.0.2.30",
+      "Groups": [
+        {
+          "GroupId": "sg-0batch",
+          "GroupName": "batch"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.0.2.30"
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0batch",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0batch",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0report",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0private-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.0.2.40",
+      "Groups": [
+        {
+          "GroupId": "sg-0report",
+          "GroupName": "report"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.0.2.40",
+          "Association": {
+            "PublicIp": "203.0.113.40",
+            "IpOwnerId": "amazon"
+          }
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0report",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0report",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      },
+      "Association": {
+        "PublicIp": "203.0.113.40",
+        "IpOwnerId": "amazon"
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0etl",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0analytics",
+      "SubnetId": "subnet-0analytics-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.1.1.40",
+      "Groups": [
+        {
+          "GroupId": "sg-0etl",
+          "GroupName": "etl"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.1.1.40"
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0etl",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0etl",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0ldap",
+      "InterfaceType": "interface",
+      "Description": "Primary network interface",
+      "VpcId": "vpc-0legacy",
+      "SubnetId": "subnet-0legacy-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "172.16.1.5",
+      "Groups": [
+        {
+          "GroupId": "sg-0ldap",
+          "GroupName": "ldap"
+        }
+      ],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "172.16.1.5"
+        }
+      ],
+      "TagSet": [],
+      "Attachment": {
+        "AttachmentId": "eni-attach-0ldap",
+        "DeviceIndex": 0,
+        "InstanceId": "i-0ldap",
+        "Status": "attached",
+        "DeleteOnTermination": true
+      }
+    },
+    {
+      "NetworkInterfaceId": "eni-0nat",
+      "InterfaceType": "nat_gateway",
+      "Description": "Interface for NAT Gateway nat-0shop",
+      "VpcId": "vpc-0shop",
+      "SubnetId": "subnet-0public-a",
+      "OwnerId": "111122223333",
+      "Status": "in-use",
+      "SourceDestCheck": true,
+      "PrivateIpAddress": "10.0.1.50",
+      "Groups": [],
+      "PrivateIpAddresses": [
+        {
+          "Primary": true,
+          "PrivateIpAddress": "10.0.1.50",
+          "Association": {
+            "PublicIp": "203.0.113.50",
+            "IpOwnerId": "111122223333"
+          }
+        }
+      ],
+      "TagSet": [],
+      "Association": {
+        "PublicIp": "203.0.113.50",
+        "IpOwnerId": "111122223333"
+      }
+    }
+  ]
+}

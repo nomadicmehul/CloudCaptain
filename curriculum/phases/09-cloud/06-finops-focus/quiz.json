@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/finops-focus",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "October's invoice is 412,000 USD, but Cost Explorer's amortised cost for October is 430,000 USD. Nobody changed anything in Cost Explorer. What is the most likely explanation?",
+      "choices": [
+        "Cost Explorer double counts Savings Plans and should not be trusted",
+        "Amortised cost moves the monthly share of commitment fees paid upfront in earlier months onto October's usage, while the invoice charges only what is billed in October",
+        "Taxes are left out of the invoice",
+        "The invoice is still an estimate and will be corrected"
+      ],
+      "answer": 1,
+      "explanation": "Billed (cash) and effective (accrual) views are both correct and differ whenever a commitment was paid outside the period. FOCUS keeps both on every row: BilledCost for the invoice, EffectiveCost for what was consumed."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A FOCUS row has ChargeCategory Purchase, a CommitmentDiscountId, BilledCost 459024.00 and EffectiveCost 0.00. What does it tell you?",
+      "choices": [
+        "The provider gave the commitment away for free",
+        "The purchase was refunded later in the month",
+        "The row is invalid, because EffectiveCost must always equal BilledCost",
+        "It is a commitment purchase: its cost is carried by the EffectiveCost of the Used and Unused rows it covers, so summing EffectiveCost counts it exactly once"
+      ],
+      "answer": 3,
+      "explanation": "FOCUS requires EffectiveCost to be 0 for a purchase that covers other charges and requires the covered rows to include their share. A non-zero EffectiveCost on such a row would count the commitment twice, which is why billjoin's rule checks look for it."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Four database reservations show 1,008 used hours and 336 unused hours over 14 days, and every database hour in the account ran on a reservation. What are utilisation and coverage?",
+      "choices": [
+        "75% utilisation and 100% coverage: you bought more than you ran",
+        "75% utilisation and 75% coverage",
+        "25% utilisation and 100% coverage",
+        "100% utilisation and 75% coverage"
+      ],
+      "answer": 0,
+      "explanation": "Utilisation is used over used plus unused in the commitment's unit: 1008 / 1344 = 75%. Coverage is the share of eligible usage that a commitment covered, and all of it was. High coverage with low utilisation is over-buying; the 336 unused hours are waste on their own Unused rows."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "aws ce get-cost-and-usage grouped by Type=TAG,Key=team returns a group with the key team$ and an AmortizedCost of 220.48. Which of billjoin's showback lines does it correspond to?",
+      "choices": [
+        "Only (untagged)",
+        "A team whose tag value is a dollar sign",
+        "(untagged), (unused commitment) and (shared) together: every cost without a team tag, including tax, credits and the waste of untagged commitments",
+        "Only the resources whose tag value failed the tag policy"
+      ],
+      "answer": 2,
+      "explanation": "Cost Explorer reports rows without the tag under key$ with an empty value. It has no separate notion of unused commitments or shared charges, so a showback copied from it pushes all of them into one unexplained remainder. Capitalised values such as team$Platform come back as their own group."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Three teams each own exactly one third of 1.00 USD. Rounding each share to cents gives 0.33 + 0.33 + 0.33 = 0.99. What does billjoin do, and why?",
+      "choices": [
+        "It books the missing cent to (untagged)",
+        "It leaves 0.99, because a cent is inside the invoice tolerance",
+        "It rounds every line up to 0.34 so no team is undercharged",
+        "It floors every line and gives the leftover cents to the lines with the largest remainders, 0.34, 0.33 and 0.33, so the lines add up to the total exactly"
+      ],
+      "answer": 3,
+      "explanation": "The largest-remainder method keeps the rounded lines summing to the rounded total, which is what lets a chargeback journal entry balance. The invoice tolerance applies to comparing BilledCost with the invoice, not to the allocation, which must reconcile to the cent."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Every instance listed by aws resourcegroupstaggingapi get-resources has a team tag, yet the bill shows 6,000 USD of untagged EC2. What explains it, and what should you work from?",
+      "choices": [
+        "The tag policy hides noncompliant resources from the Tagging API",
+        "The Tagging API only returns resources in us-east-1",
+        "GetResources returns only tagged or previously tagged resources, so instances created with no tags never appear in it; the bill still charges them, so work from the bill's untagged ResourceIds and the service's describe calls",
+        "Untagged EC2 on the bill is always the Savings Plan purchase"
+      ],
+      "answer": 2,
+      "explanation": "The smoke test shows it on moto: a never-tagged instance is missing from get-resources but present in describe-instances and in the bill's untagged list. The bill is the inventory of what costs money; tags are attached to it, not the other way round."
+    }
+  ]
+}

@@ -189,7 +189,7 @@ Lambda is a serverless compute service for running code without managing servers
 
 ### Serverless Compute and Event-Driven Architecture
 
-Lambda functions execute in response to events and scale automatically. You pay only for execution time (100ms increments).
+Lambda functions execute in response to events and scale automatically. You pay for requests and for execution time, billed per millisecond (since December 2020; it used to be 100 ms increments).
 
 **Key Advantages:**
 - No server management

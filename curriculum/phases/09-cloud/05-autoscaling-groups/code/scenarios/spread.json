@@ -1,0 +1,37 @@
+{
+  "description": "desired capacity across three zones: launches go to the emptiest zone, scale-in takes from the fullest zone first, then the oldest launch template version",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 1,
+    "MaxSize": 6,
+    "DesiredCapacity": 3
+  },
+  "events": [
+    {
+      "at": 300,
+      "op": "set-desired-capacity",
+      "DesiredCapacity": 5
+    },
+    {
+      "at": 600,
+      "op": "update-auto-scaling-group",
+      "LaunchTemplateVersion": "2"
+    },
+    {
+      "at": 700,
+      "op": "set-desired-capacity",
+      "DesiredCapacity": 6
+    },
+    {
+      "at": 900,
+      "op": "set-desired-capacity",
+      "DesiredCapacity": 2
+    }
+  ],
+  "until": 1200
+}

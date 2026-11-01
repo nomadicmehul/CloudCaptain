@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cloud/finops-focus",
+  "title": "The Bill Is a Join Between Usage and a Price List",
+  "short": "FinOps and FOCUS",
+  "motto": "Every cost row is usage times a price; showback groups the same rows by owner, and it is only right when it adds up to the bill to the cent.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cloud/autoscaling-groups"
+  ],
+  "tools": [
+    "aws-cli",
+    "moto",
+    "duckdb"
+  ],
+  "reference": [
+    "/docs/cloud/finops/fundamentals",
+    "/docs/cloud/finops/interview-questions",
+    "/docs/cloud/aws/cheatsheet",
+    "/docs/learning-paths/cloud"
+  ],
+  "outputs": [
+    "skill-cost-allocation-review.md",
+    "prompt-explain-cost-spike.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

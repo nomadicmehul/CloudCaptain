@@ -1,0 +1,30 @@
+{
+  "TransitGatewayAttachments": [
+    {
+      "TransitGatewayAttachmentId": "tgw-attach-0shop",
+      "TransitGatewayId": "tgw-0core",
+      "TransitGatewayOwnerId": "111122223333",
+      "ResourceOwnerId": "111122223333",
+      "ResourceType": "vpc",
+      "ResourceId": "vpc-0shop",
+      "State": "available",
+      "Association": {
+        "TransitGatewayRouteTableId": "tgw-rtb-0core",
+        "State": "associated"
+      }
+    },
+    {
+      "TransitGatewayAttachmentId": "tgw-attach-0legacy",
+      "TransitGatewayId": "tgw-0core",
+      "TransitGatewayOwnerId": "111122223333",
+      "ResourceOwnerId": "111122223333",
+      "ResourceType": "vpc",
+      "ResourceId": "vpc-0legacy",
+      "State": "available",
+      "Association": {
+        "TransitGatewayRouteTableId": "tgw-rtb-0core",
+        "State": "associated"
+      }
+    }
+  ]
+}

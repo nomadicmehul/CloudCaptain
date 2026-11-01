@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AliceAndTheAccount",
+      "Effect": "Allow",
+      "Principal": {"AWS": ["arn:aws:iam::123456789012:user/alice", "arn:aws:iam::123456789012:root"]},
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}

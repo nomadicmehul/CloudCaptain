@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cloud/lambda-runtime",
+  "title": "A Function Is a Process the Platform Starts for You",
+  "short": "Lambda Runtime",
+  "motto": "Your handler lives in a process the platform starts, freezes and kills; cold starts, timeouts and throttles are steps in that lifecycle.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/pid1-supervisor"
+  ],
+  "tools": [
+    "docker",
+    "curl",
+    "aws-lambda-rie",
+    "aws"
+  ],
+  "reference": [
+    "/docs/cloud/aws/compute-networking",
+    "/docs/cloud/aws/cheatsheet",
+    "/docs/cloud/aws/exam-prep",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-cold-start-triage.md",
+    "prompt-review-lambda-config.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

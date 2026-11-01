@@ -1,0 +1,70 @@
+{
+  "Vpcs": [
+    {
+      "VpcId": "vpc-0shop",
+      "CidrBlock": "10.0.0.0/16",
+      "State": "available",
+      "OwnerId": "111122223333",
+      "IsDefault": false,
+      "CidrBlockAssociationSet": [
+        {
+          "AssociationId": "vpc-cidr-assoc-shop",
+          "CidrBlock": "10.0.0.0/16",
+          "CidrBlockState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "shop"
+        }
+      ]
+    },
+    {
+      "VpcId": "vpc-0analytics",
+      "CidrBlock": "10.1.0.0/16",
+      "State": "available",
+      "OwnerId": "111122223333",
+      "IsDefault": false,
+      "CidrBlockAssociationSet": [
+        {
+          "AssociationId": "vpc-cidr-assoc-analytics",
+          "CidrBlock": "10.1.0.0/16",
+          "CidrBlockState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "analytics"
+        }
+      ]
+    },
+    {
+      "VpcId": "vpc-0legacy",
+      "CidrBlock": "172.16.0.0/16",
+      "State": "available",
+      "OwnerId": "111122223333",
+      "IsDefault": false,
+      "CidrBlockAssociationSet": [
+        {
+          "AssociationId": "vpc-cidr-assoc-legacy",
+          "CidrBlock": "172.16.0.0/16",
+          "CidrBlockState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "legacy"
+        }
+      ]
+    }
+  ]
+}

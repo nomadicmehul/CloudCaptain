@@ -1,0 +1,102 @@
+{
+  "description": "the step scaling example from the AWS user guide: 10 -> 11 -> 14 -> 13 -> 10 with PercentChangeInCapacity rounding",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 1,
+    "MaxSize": 20,
+    "DesiredCapacity": 10
+  },
+  "policies": [
+    {
+      "PolicyName": "step-out",
+      "PolicyType": "StepScaling",
+      "AdjustmentType": "PercentChangeInCapacity",
+      "EstimatedInstanceWarmup": 300,
+      "StepAdjustments": [
+        {
+          "MetricIntervalLowerBound": 0,
+          "MetricIntervalUpperBound": 10,
+          "ScalingAdjustment": 0
+        },
+        {
+          "MetricIntervalLowerBound": 10,
+          "MetricIntervalUpperBound": 20,
+          "ScalingAdjustment": 10
+        },
+        {
+          "MetricIntervalLowerBound": 20,
+          "ScalingAdjustment": 30
+        }
+      ]
+    },
+    {
+      "PolicyName": "step-in",
+      "PolicyType": "StepScaling",
+      "AdjustmentType": "PercentChangeInCapacity",
+      "EstimatedInstanceWarmup": 300,
+      "StepAdjustments": [
+        {
+          "MetricIntervalLowerBound": -10,
+          "MetricIntervalUpperBound": 0,
+          "ScalingAdjustment": 0
+        },
+        {
+          "MetricIntervalLowerBound": -20,
+          "MetricIntervalUpperBound": -10,
+          "ScalingAdjustment": -10
+        },
+        {
+          "MetricIntervalUpperBound": -20,
+          "ScalingAdjustment": -30
+        }
+      ]
+    }
+  ],
+  "alarms": {
+    "step-out": {
+      "AlarmName": "web-cpu-high",
+      "Threshold": 50,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "EvaluationPeriods": 1
+    },
+    "step-in": {
+      "AlarmName": "web-cpu-low",
+      "Threshold": 50,
+      "ComparisonOperator": "LessThanThreshold",
+      "EvaluationPeriods": 1
+    }
+  },
+  "metric": {
+    "mode": "observed",
+    "period": 60,
+    "start": 600,
+    "values": [
+      50,
+      60,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      70,
+      55,
+      55,
+      55,
+      55,
+      55,
+      55,
+      40,
+      45,
+      30,
+      45,
+      45
+    ]
+  },
+  "until": 1900
+}

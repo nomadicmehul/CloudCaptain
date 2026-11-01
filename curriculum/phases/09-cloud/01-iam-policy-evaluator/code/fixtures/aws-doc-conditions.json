@@ -1,0 +1,798 @@
+{
+ "rows": [
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/job-category": "iamuser-admin"
+    }
+   },
+   "context": {
+    "aws:PrincipalTag/job-category": "iamuser-admin"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/job-category": "iamuser-admin"
+    }
+   },
+   "context": {
+    "aws:PrincipalTag/job-category": "dev-ops"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/job-category": "iamuser-admin"
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringLike": {
+     "s3:prefix": [
+      "home/",
+      "home/${aws:username}/"
+     ]
+    }
+   },
+   "context": {
+    "s3:prefix": "home/martha_rivera/",
+    "aws:username": "martha_rivera"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringLike": {
+     "s3:prefix": [
+      "home/",
+      "home/${aws:username}/"
+     ]
+    }
+   },
+   "context": {
+    "s3:prefix": "home/martha_rivera/"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment"
+    ],
+    "aws:RequestTag/environment": "preprod"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment",
+     "costcenter"
+    ],
+    "aws:RequestTag/environment": "PreProd"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "Environment"
+    ],
+    "aws:RequestTag/Environment": "preprod"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "costcenter"
+    ],
+    "aws:RequestTag/environment": "preprod"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {
+    "aws:RequestTag/environment": "storage"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment"
+    ]
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_String",
+   "condition": {
+    "StringEqualsIgnoreCase": {
+     "aws:RequestTag/environment": [
+      "preprod",
+      "storage"
+     ]
+    },
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": "environment"
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_Boolean",
+   "condition": {
+    "Bool": {
+     "aws:SecureTransport": "false"
+    }
+   },
+   "context": {
+    "aws:SecureTransport": "false"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_Boolean",
+   "condition": {
+    "Bool": {
+     "aws:SecureTransport": "false"
+    }
+   },
+   "context": {
+    "aws:SecureTransport": "true"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_Boolean",
+   "condition": {
+    "Bool": {
+     "aws:SecureTransport": "false"
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_BinaryEquals",
+   "condition": {
+    "BinaryEquals": {
+     "key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="
+    }
+   },
+   "context": {
+    "key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_BinaryEquals",
+   "condition": {
+    "BinaryEquals": {
+     "key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="
+    }
+   },
+   "context": {
+    "key": "ASIAIOSFODNN7EXAMPLE"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_BinaryEquals",
+   "condition": {
+    "BinaryEquals": {
+     "key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_IPAddress",
+   "condition": {
+    "IpAddress": {
+     "aws:SourceIp": "203.0.113.0/24"
+    }
+   },
+   "context": {
+    "aws:SourceIp": "203.0.113.1"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_IPAddress",
+   "condition": {
+    "IpAddress": {
+     "aws:SourceIp": "203.0.113.0/24"
+    }
+   },
+   "context": {
+    "aws:SourceIp": "198.51.100.1"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ArnEquals": {
+     "aws:SourceArn": "arn:aws:sns:us-west-2:123456789012:TOPIC-ID"
+    }
+   },
+   "context": {
+    "aws:SourceArn": "arn:aws:sns:us-west-2:123456789012:TOPIC-ID"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ArnEquals": {
+     "aws:SourceArn": "arn:aws:sns:us-west-2:123456789012:TOPIC-ID"
+    }
+   },
+   "context": {
+    "aws:SourceArn": "arn:aws:sns:us-west-2:777788889999:TOPIC-ID"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ArnEquals": {
+     "aws:SourceArn": "arn:aws:sns:us-west-2:123456789012:TOPIC-ID"
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ForAllValues:ArnLike": {
+     "logs:LogGeneratingResourceArns": [
+      "arn:aws::cloudfront:123456789012:distribution/*",
+      "arn:aws::cloudfront:123456789012:distribution/support*"
+     ]
+    }
+   },
+   "context": {
+    "logs:LogGeneratingResourceArns": [
+     "arn:aws::cloudfront:123456789012:distribution/costcenter"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ForAllValues:ArnLike": {
+     "logs:LogGeneratingResourceArns": [
+      "arn:aws::cloudfront:123456789012:distribution/*",
+      "arn:aws::cloudfront:123456789012:distribution/support*"
+     ]
+    }
+   },
+   "context": {
+    "logs:LogGeneratingResourceArns": [
+     "arn:aws::cloudfront:123456789012:distribution/costcenter",
+     "arn:aws::cloudfront:123456789012:distribution/support2025"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ForAllValues:ArnLike": {
+     "logs:LogGeneratingResourceArns": [
+      "arn:aws::cloudfront:123456789012:distribution/*",
+      "arn:aws::cloudfront:123456789012:distribution/support*"
+     ]
+    }
+   },
+   "context": {
+    "logs:LogGeneratingResourceArns": [
+     "arn:aws::cloudfront:123456789012:distribution/costcenter",
+     "arn:aws::cloudfront:123456789012:distribution/admin"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ForAllValues:ArnLike": {
+     "logs:LogGeneratingResourceArns": [
+      "arn:aws::cloudfront:123456789012:distribution/*",
+      "arn:aws::cloudfront:123456789012:distribution/support*"
+     ]
+    }
+   },
+   "context": {
+    "logs:LogGeneratingResourceArns": [
+     "arn:aws::cloudfront:777788889999:distribution/costcenter"
+    ]
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_ARN",
+   "condition": {
+    "ForAllValues:ArnLike": {
+     "logs:LogGeneratingResourceArns": [
+      "arn:aws::cloudfront:123456789012:distribution/*",
+      "arn:aws::cloudfront:123456789012:distribution/support*"
+     ]
+    }
+   },
+   "context": {},
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_IfExists",
+   "condition": {
+    "StringLikeIfExists": {
+     "ec2:InstanceType": [
+      "t1.*",
+      "t2.*",
+      "m3.*"
+     ]
+    }
+   },
+   "context": {
+    "ec2:InstanceType": "t1.micro"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_IfExists",
+   "condition": {
+    "StringLikeIfExists": {
+     "ec2:InstanceType": [
+      "t1.*",
+      "t2.*",
+      "m3.*"
+     ]
+    }
+   },
+   "context": {
+    "ec2:InstanceType": "m2.micro"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html#Conditions_IfExists",
+   "condition": {
+    "StringLikeIfExists": {
+     "ec2:InstanceType": [
+      "t1.*",
+      "t2.*",
+      "m3.*"
+     ]
+    }
+   },
+   "context": {},
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-forallvalues",
+   "condition": {
+    "ForAllValues:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    },
+    "Null": {
+     "aws:TagKeys": "false"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-forallvalues",
+   "condition": {
+    "ForAllValues:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    },
+    "Null": {
+     "aws:TagKeys": "false"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "cost-center"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-forallvalues",
+   "condition": {
+    "ForAllValues:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    },
+    "Null": {
+     "aws:TagKeys": "false"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment",
+     "cost-center"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-forallvalues",
+   "condition": {
+    "ForAllValues:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    },
+    "Null": {
+     "aws:TagKeys": "false"
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment",
+     "dept"
+    ]
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-forallvalues",
+   "condition": {
+    "ForAllValues:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    },
+    "Null": {
+     "aws:TagKeys": "false"
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-foranyvalue",
+   "condition": {
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-foranyvalue",
+   "condition": {
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "cost-center"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-foranyvalue",
+   "condition": {
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment",
+     "cost-center"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-foranyvalue",
+   "condition": {
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "environment",
+     "dept"
+    ]
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-foranyvalue",
+   "condition": {
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    }
+   },
+   "context": {
+    "aws:TagKeys": [
+     "dept"
+    ]
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-single-vs-multi-valued-context-keys.html#reference_policies_condition-foranyvalue",
+   "condition": {
+    "ForAnyValue:StringEquals": {
+     "aws:TagKeys": [
+      "environment",
+      "cost-center"
+     ]
+    }
+   },
+   "context": {},
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html#reference_policies_multiple-conditions-negated-matching-eval",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/department": [
+      "finance",
+      "hr",
+      "legal"
+     ],
+     "aws:PrincipalTag/role": [
+      "audit",
+      "security"
+     ]
+    },
+    "ArnNotLike": {
+     "aws:PrincipalArn": [
+      "arn:aws:iam::222222222222:user/Ana",
+      "arn:aws:iam::222222222222:user/Mary"
+     ]
+    }
+   },
+   "context": {
+    "aws:PrincipalTag/department": "legal",
+    "aws:PrincipalTag/role": "audit",
+    "aws:PrincipalArn": "arn:aws:iam::222222222222:user/Nikki"
+   },
+   "expect": true
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html#reference_policies_multiple-conditions-negated-matching-eval",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/department": [
+      "finance",
+      "hr",
+      "legal"
+     ],
+     "aws:PrincipalTag/role": [
+      "audit",
+      "security"
+     ]
+    },
+    "ArnNotLike": {
+     "aws:PrincipalArn": [
+      "arn:aws:iam::222222222222:user/Ana",
+      "arn:aws:iam::222222222222:user/Mary"
+     ]
+    }
+   },
+   "context": {
+    "aws:PrincipalTag/department": "hr",
+    "aws:PrincipalTag/role": "audit",
+    "aws:PrincipalArn": "arn:aws:iam::222222222222:user/Mary"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html#reference_policies_multiple-conditions-negated-matching-eval",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/department": [
+      "finance",
+      "hr",
+      "legal"
+     ],
+     "aws:PrincipalTag/role": [
+      "audit",
+      "security"
+     ]
+    },
+    "ArnNotLike": {
+     "aws:PrincipalArn": [
+      "arn:aws:iam::222222222222:user/Ana",
+      "arn:aws:iam::222222222222:user/Mary"
+     ]
+    }
+   },
+   "context": {
+    "aws:PrincipalTag/department": "hr",
+    "aws:PrincipalTag/role": "payroll",
+    "aws:PrincipalArn": "arn:aws:iam::222222222222:user/Nikki"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html#reference_policies_multiple-conditions-negated-matching-eval",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/department": [
+      "finance",
+      "hr",
+      "legal"
+     ],
+     "aws:PrincipalTag/role": [
+      "audit",
+      "security"
+     ]
+    },
+    "ArnNotLike": {
+     "aws:PrincipalArn": [
+      "arn:aws:iam::222222222222:user/Ana",
+      "arn:aws:iam::222222222222:user/Mary"
+     ]
+    }
+   },
+   "context": {
+    "aws:PrincipalTag/department": "hr",
+    "aws:PrincipalArn": "arn:aws:iam::222222222222:user/Nikki"
+   },
+   "expect": false
+  },
+  {
+   "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html#reference_policies_multiple-conditions-negated-matching-eval",
+   "condition": {
+    "StringEquals": {
+     "aws:PrincipalTag/department": [
+      "finance",
+      "hr",
+      "legal"
+     ],
+     "aws:PrincipalTag/role": [
+      "audit",
+      "security"
+     ]
+    },
+    "ArnNotLike": {
+     "aws:PrincipalArn": [
+      "arn:aws:iam::222222222222:user/Ana",
+      "arn:aws:iam::222222222222:user/Mary"
+     ]
+    }
+   },
+   "context": {
+    "aws:PrincipalArn": "arn:aws:iam::222222222222:user/Nikki"
+   },
+   "expect": false
+  }
+ ]
+}

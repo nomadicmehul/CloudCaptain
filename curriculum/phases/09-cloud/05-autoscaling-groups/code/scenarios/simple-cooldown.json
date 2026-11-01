@@ -1,0 +1,64 @@
+{
+  "description": "a simple scaling policy under a sustained alarm: each step waits for the launch to finish plus the cooldown",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 2,
+    "MaxSize": 10,
+    "DesiredCapacity": 2
+  },
+  "policies": [
+    {
+      "PolicyName": "add2",
+      "PolicyType": "SimpleScaling",
+      "AdjustmentType": "ChangeInCapacity",
+      "ScalingAdjustment": 2,
+      "Cooldown": 300
+    }
+  ],
+  "alarms": {
+    "add2": {
+      "AlarmName": "web-cpu-over-70",
+      "Threshold": 70,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "EvaluationPeriods": 1
+    }
+  },
+  "metric": {
+    "mode": "observed",
+    "period": 60,
+    "start": 600,
+    "values": [
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90,
+      90
+    ]
+  },
+  "until": 2200
+}

@@ -1,0 +1,1369 @@
+{
+  "scenarios": [
+    {
+      "name": "cross-account: Carlos and the production bucket",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html",
+      "principal": "arn:aws:sts::111111111111:assumed-role/Demo/carlos",
+      "identity": [
+        {
+          "name": "role/Demo/demo-policy",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowS3ListRead",
+                "Effect": "Allow",
+                "Action": "s3:ListAllMyBuckets",
+                "Resource": "*"
+              },
+              {
+                "Sid": "AllowS3ProductionObjectActions",
+                "Effect": "Allow",
+                "Action": "s3:*Object*",
+                "Resource": "arn:aws:s3:::amzn-s3-demo-bucket-production/*"
+              },
+              {
+                "Sid": "DenyS3Logs",
+                "Effect": "Deny",
+                "Action": "s3:*",
+                "Resource": [
+                  "arn:aws:s3:::*log*",
+                  "arn:aws:s3:::*log*/*"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "resource_policy": {
+        "name": "amzn-s3-demo-bucket-production bucket policy",
+        "document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject*",
+                "s3:PutObject*",
+                "s3:ReplicateObject",
+                "s3:RestoreObject"
+              ],
+              "Principal": {
+                "AWS": "arn:aws:iam::111111111111:role/Demo"
+              },
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket-production/*"
+            }
+          ]
+        }
+      },
+      "resource_account": "222222222222",
+      "requests": [
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-production/report.csv",
+          "expect": "allowed",
+          "expect_type": "identity",
+          "expect_sid": "AllowS3ProductionObjectActions"
+        },
+        {
+          "action": "s3:DeleteObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-production/report.csv",
+          "expect": "implicitDeny",
+          "expect_type": "resource"
+        },
+        {
+          "action": "s3:PutBucketPolicy",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-production",
+          "expect": "implicitDeny"
+        }
+      ]
+    },
+    {
+      "name": "cross-account: the logs bucket matches DenyS3Logs",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html",
+      "principal": "arn:aws:sts::111111111111:assumed-role/Demo/carlos",
+      "identity": [
+        {
+          "name": "role/Demo/demo-policy",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowS3ListRead",
+                "Effect": "Allow",
+                "Action": "s3:ListAllMyBuckets",
+                "Resource": "*"
+              },
+              {
+                "Sid": "AllowS3ProductionObjectActions",
+                "Effect": "Allow",
+                "Action": "s3:*Object*",
+                "Resource": "arn:aws:s3:::amzn-s3-demo-bucket-production/*"
+              },
+              {
+                "Sid": "DenyS3Logs",
+                "Effect": "Deny",
+                "Action": "s3:*",
+                "Resource": [
+                  "arn:aws:s3:::*log*",
+                  "arn:aws:s3:::*log*/*"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "resource_account": "222222222222",
+      "requests": [
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-production-logs/report.csv",
+          "expect": "explicitDeny",
+          "expect_type": "identity",
+          "expect_sid": "DenyS3Logs"
+        }
+      ]
+    },
+    {
+      "name": "Shirley: the boundary caps what identity policies grant",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+      "principal": "arn:aws:iam::111122223333:user/Shirley",
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:*",
+              "cloudwatch:*",
+              "ec2:*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      },
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "iam:CreateUser",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "iam:CreateUser",
+          "resource": "arn:aws:iam::111122223333:user/new-hire",
+          "expect": "implicitDeny",
+          "expect_type": "boundary"
+        },
+        {
+          "action": "s3:ListAllMyBuckets",
+          "resource": "*",
+          "expect": "implicitDeny",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "HRPayroll: Deny with NotResource grants nothing",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_notresource.html",
+      "principal": "arn:aws:iam::111122223333:user/payroll-clerk",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Deny",
+              "Action": "s3:*",
+              "NotResource": [
+                "arn:aws:s3:::HRBucket/Payroll",
+                "arn:aws:s3:::HRBucket/Payroll/*"
+              ]
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::HRBucket/Payroll/june.csv",
+          "expect": "implicitDeny",
+          "expect_type": "identity"
+        },
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::HRBucket/Marketing/plan.csv",
+          "expect": "explicitDeny",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "same account: a bucket policy naming the IAM user is enough",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html",
+      "principal": "arn:aws:iam::111122223333:user/exampleuser",
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:user/exampleuser"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "allowed",
+          "expect_type": "resource"
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "same account: a grant to the role ARN is limited by the boundary",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html",
+      "principal": "arn:aws:sts::111122223333:assumed-role/examplerole/examplerolesessionname",
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/examplerole"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "boundary"
+        }
+      ]
+    },
+    {
+      "name": "same account: a grant to the role session ARN is not limited",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html",
+      "principal": "arn:aws:sts::111122223333:assumed-role/examplerole/examplerolesessionname",
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "session": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "ec2:DescribeInstances",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:sts::111122223333:assumed-role/examplerole/examplerolesessionname"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "allowed",
+          "expect_type": "resource"
+        }
+      ]
+    },
+    {
+      "name": "same account: a grant to the role ARN is limited by the session policy",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html",
+      "principal": "arn:aws:sts::111122223333:assumed-role/examplerole/examplerolesessionname",
+      "session": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:role/examplerole"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "session"
+        }
+      ]
+    },
+    {
+      "name": "same account: naming the account delegates to identity policies",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html",
+      "principal": "arn:aws:iam::111122223333:user/exampleuser",
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "111122223333"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "same account: account principal plus an identity Allow",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html",
+      "principal": "arn:aws:iam::111122223333:user/exampleuser",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:GetObject",
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+            }
+          ]
+        }
+      ],
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::111122223333:root"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "allowed",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "cross-account: Principal * still needs the caller's identity policy",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html",
+      "principal": "arn:aws:iam::444455556666:user/outsider",
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "resource_account": "111122223333",
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "anonymous: Principal * is public access",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html",
+      "principal": "anonymous",
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "BucketGrant",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "resource_account": "111122223333",
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "allowed",
+          "expect_type": "resource"
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "resource"
+        }
+      ]
+    },
+    {
+      "name": "John: no SCP allows codecommit",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "codecommit:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "scps": [
+        [
+          {
+            "name": "AllowS3Only",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "s3:*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "requests": [
+        {
+          "action": "codecommit:ListRepositories",
+          "resource": "*",
+          "expect": "implicitDeny",
+          "expect_type": "scp",
+          "expect_message": "User: arn:aws:iam::123456789012:user/John is not authorized to perform: codecommit:ListRepositories because no service control policy allows the codecommit:ListRepositories action"
+        }
+      ]
+    },
+    {
+      "name": "John: an SCP denies codecommit",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "codecommit:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "scps": [
+        [
+          {
+            "name": "FullAWSAccess",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          },
+          {
+            "name": "DenyCodeCommit",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Deny",
+                  "Action": "codecommit:*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ],
+        [
+          {
+            "name": "FullAWSAccess",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "requests": [
+        {
+          "action": "codecommit:ListRepositories",
+          "resource": "*",
+          "expect": "explicitDeny",
+          "expect_type": "scp",
+          "expect_message": "User: arn:aws:iam::123456789012:user/John is not authorized to perform: codecommit:ListRepositories with an explicit deny in a service control policy"
+        }
+      ]
+    },
+    {
+      "name": "John: one OU level without FullAWSAccess",
+      "source": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "scps": [
+        [
+          {
+            "name": "FullAWSAccess",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ],
+        [
+          {
+            "name": "DenyEC2",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Deny",
+                  "Action": "ec2:*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "requests": [
+        {
+          "action": "s3:ListAllMyBuckets",
+          "resource": "*",
+          "expect": "implicitDeny",
+          "expect_type": "scp"
+        }
+      ]
+    },
+    {
+      "name": "John: the boundary does not allow codedeploy",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "codedeploy:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "codedeploy:ListDeployments",
+          "resource": "arn:aws:codedeploy:us-east-1:123456789012:deploymentgroup:*",
+          "expect": "implicitDeny",
+          "expect_type": "boundary",
+          "expect_message": "User: arn:aws:iam::123456789012:user/John is not authorized to perform: codedeploy:ListDeployments on resource: arn:aws:codedeploy:us-east-1:123456789012:deploymentgroup:* because no permissions boundary allows the codedeploy:ListDeployments action"
+        }
+      ]
+    },
+    {
+      "name": "John: the boundary denies sagemaker",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+          },
+          {
+            "Effect": "Deny",
+            "Action": "sagemaker:*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "sagemaker:ListModels",
+          "resource": "*",
+          "expect": "explicitDeny",
+          "expect_type": "boundary",
+          "expect_message": "User: arn:aws:iam::123456789012:user/John is not authorized to perform: sagemaker:ListModels with an explicit deny in a permissions boundary"
+        }
+      ]
+    },
+    {
+      "name": "John: an RCP denies the secret",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "secretsmanager:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "rcps": [
+        [
+          {
+            "name": "RCPFullAWSAccess",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": "*",
+                  "Action": "*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          },
+          {
+            "name": "DenySecrets",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Deny",
+                  "Principal": "*",
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "requests": [
+        {
+          "action": "secretsmanager:GetSecretValue",
+          "resource": "arn:aws:secretsmanager:us-east-1:123456789012:secret:*",
+          "expect": "explicitDeny",
+          "expect_type": "rcp",
+          "expect_message": "User: arn:aws:iam::123456789012:user/John is not authorized to perform: secretsmanager:GetSecretValue on resource: arn:aws:secretsmanager:us-east-1:123456789012:secret:* with an explicit deny in a resource control policy"
+        }
+      ]
+    },
+    {
+      "name": "John: the secret's resource policy denies",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "secretsmanager:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Deny",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:user/John"
+            },
+            "Action": "secretsmanager:GetSecretValue",
+            "Resource": "*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "secretsmanager:GetSecretValue",
+          "resource": "arn:aws:secretsmanager:us-east-1:123456789012:secret:*",
+          "expect": "explicitDeny",
+          "expect_type": "resource",
+          "expect_message": "User: arn:aws:iam::123456789012:user/John is not authorized to perform: secretsmanager:GetSecretValue on resource: arn:aws:secretsmanager:us-east-1:123456789012:secret:* with an explicit deny in a resource-based policy"
+        }
+      ]
+    },
+    {
+      "name": "HR role: no identity-based policy allows",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:role/HR",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListAllMyBuckets",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "codecommit:ListRepositories",
+          "resource": "*",
+          "expect": "implicitDeny",
+          "expect_type": "identity",
+          "expect_message": "User: arn:aws:iam::123456789012:role/HR is not authorized to perform: codecommit:ListRepositories because no identity-based policy allows the codecommit:ListRepositories action"
+        }
+      ]
+    },
+    {
+      "name": "HR role: an identity-based policy denies",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:role/HR",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            },
+            {
+              "Effect": "Deny",
+              "Action": "codedeploy:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "codedeploy:ListDeployments",
+          "resource": "arn:aws:codedeploy:us-east-1:123456789012:deploymentgroup:*",
+          "expect": "explicitDeny",
+          "expect_type": "identity",
+          "expect_message": "User: arn:aws:iam::123456789012:role/HR is not authorized to perform: codedeploy:ListDeployments on resource: arn:aws:codedeploy:us-east-1:123456789012:deploymentgroup:* with an explicit deny in an identity-based policy"
+        }
+      ]
+    },
+    {
+      "name": "John: the role trust policy does not name him",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+      "principal": "arn:aws:iam::123456789012:user/John",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "sts:AssumeRole",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "resource_policy_type": "trust",
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:user/Ana"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "sts:AssumeRole",
+          "resource": "arn:aws:iam::123456789012:role/Deploy",
+          "expect": "implicitDeny",
+          "expect_type": "trust"
+        }
+      ]
+    },
+    {
+      "name": "session policies intersect with the role's policies",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+      "principal": "arn:aws:sts::111122223333:assumed-role/examplerole/examplerolesessionname",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "session": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:GetObject",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "allowed",
+          "expect_type": "identity"
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "implicitDeny",
+          "expect_type": "session"
+        }
+      ]
+    },
+    {
+      "name": "the root user has full access, except what an SCP denies",
+      "source": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "principal": "arn:aws:iam::111122223333:root",
+      "scps": [
+        [
+          {
+            "name": "FullAWSAccess",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          },
+          {
+            "name": "DenyLeaveOrg",
+            "document": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Deny",
+                  "Action": "organizations:LeaveOrganization",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "requests": [
+        {
+          "action": "s3:DeleteBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+          "expect": "allowed"
+        },
+        {
+          "action": "organizations:LeaveOrganization",
+          "resource": "*",
+          "expect": "explicitDeny",
+          "expect_type": "scp"
+        }
+      ]
+    },
+    {
+      "name": "NotPrincipal with Deny always denies a principal that has a boundary",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+      "principal": "arn:aws:iam::111122223333:user/exampleuser",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:GetObject",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "boundary": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DenyAllButExampleUser",
+            "Effect": "Deny",
+            "NotPrincipal": {
+              "AWS": "arn:aws:iam::111122223333:user/exampleuser"
+            },
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "explicitDeny",
+          "expect_type": "resource",
+          "expect_sid": "DenyAllButExampleUser"
+        }
+      ]
+    },
+    {
+      "name": "NotPrincipal with Deny exempts the listed user without a boundary",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+      "principal": "arn:aws:iam::111122223333:user/exampleuser",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:GetObject",
+              "Resource": "*"
+            }
+          ]
+        }
+      ],
+      "resource_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DenyAllButExampleUser",
+            "Effect": "Deny",
+            "NotPrincipal": {
+              "AWS": "arn:aws:iam::111122223333:user/exampleuser"
+            },
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "action": "s3:GetObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/doc.txt",
+          "expect": "allowed",
+          "expect_type": "identity"
+        }
+      ]
+    },
+    {
+      "name": "home directories with ${aws:username}",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html",
+      "principal": "arn:aws:iam::111122223333:user/martha_rivera",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": "arn:aws:s3:::*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": [
+                    "",
+                    "home/",
+                    "home/${aws:username}/"
+                  ]
+                }
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": [
+                "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}",
+                "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}/*"
+              ]
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+          "expect": "allowed",
+          "context": {
+            "s3:prefix": "home/martha_rivera/"
+          }
+        },
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+          "expect": "allowed",
+          "context": {
+            "s3:prefix": ""
+          }
+        },
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+          "expect": "implicitDeny",
+          "context": {
+            "s3:prefix": "home/nikki_wolf/"
+          }
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/home/martha_rivera/notes.txt",
+          "expect": "allowed"
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/home/nikki_wolf/notes.txt",
+          "expect": "implicitDeny"
+        }
+      ]
+    },
+    {
+      "name": "a role session has no aws:username to substitute",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html",
+      "principal": "arn:aws:sts::111122223333:assumed-role/examplerole/examplerolesessionname",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": "arn:aws:s3:::*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": [
+                    "",
+                    "home/",
+                    "home/${aws:username}/"
+                  ]
+                }
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": [
+                "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}",
+                "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}/*"
+              ]
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+          "expect": "implicitDeny",
+          "context": {
+            "s3:prefix": "home/examplerole/"
+          }
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/home/examplerole/notes.txt",
+          "expect": "implicitDeny"
+        }
+      ]
+    },
+    {
+      "name": "Version 2008-10-17 treats ${aws:username} as text",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_variables.html",
+      "principal": "arn:aws:iam::111122223333:user/martha_rivera",
+      "identity": [
+        {
+          "Version": "2008-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+              ],
+              "Resource": "arn:aws:s3:::*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket",
+              "Condition": {
+                "StringLike": {
+                  "s3:prefix": [
+                    "",
+                    "home/",
+                    "home/${aws:username}/"
+                  ]
+                }
+              }
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": [
+                "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}",
+                "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}/*"
+              ]
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/home/martha_rivera/notes.txt",
+          "expect": "implicitDeny"
+        },
+        {
+          "action": "s3:PutObject",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket/home/${aws:username}/notes.txt",
+          "expect": "allowed"
+        }
+      ]
+    },
+    {
+      "name": "a default value for a missing principal tag",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_variables.html",
+      "principal": "arn:aws:iam::111122223333:user/new-joiner",
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket-${aws:PrincipalTag/team, 'company-wide'}"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-company-wide",
+          "expect": "allowed"
+        },
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-yellow",
+          "expect": "implicitDeny"
+        }
+      ]
+    },
+    {
+      "name": "the team tag picks the team bucket",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_variables.html",
+      "principal": "arn:aws:iam::111122223333:user/yellow-dev",
+      "principal_tags": {
+        "team": "yellow"
+      },
+      "identity": [
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": "arn:aws:s3:::amzn-s3-demo-bucket-${aws:PrincipalTag/team, 'company-wide'}"
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-yellow",
+          "expect": "allowed"
+        },
+        {
+          "action": "s3:ListBucket",
+          "resource": "arn:aws:s3:::amzn-s3-demo-bucket-company-wide",
+          "expect": "implicitDeny"
+        }
+      ]
+    }
+  ]
+}

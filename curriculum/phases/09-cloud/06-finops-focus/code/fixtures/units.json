@@ -1,0 +1,18 @@
+{
+  "period": "2026-10-01/2026-10-15",
+  "source": "product analytics export, 2026-10-15",
+  "units": {
+    "payments": {
+      "unit": "1k payments",
+      "quantity": 840
+    },
+    "search": {
+      "unit": "1k queries",
+      "quantity": 2520
+    },
+    "platform": {
+      "unit": "1k API requests",
+      "quantity": 3696
+    }
+  }
+}

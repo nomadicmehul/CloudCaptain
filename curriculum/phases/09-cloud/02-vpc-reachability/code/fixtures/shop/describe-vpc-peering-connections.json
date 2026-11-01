@@ -1,0 +1,39 @@
+{
+  "VpcPeeringConnections": [
+    {
+      "VpcPeeringConnectionId": "pcx-0analytics",
+      "Status": {
+        "Code": "active",
+        "Message": "Active"
+      },
+      "RequesterVpcInfo": {
+        "VpcId": "vpc-0shop",
+        "OwnerId": "111122223333",
+        "CidrBlock": "10.0.0.0/16",
+        "CidrBlockSet": [
+          {
+            "CidrBlock": "10.0.0.0/16"
+          }
+        ],
+        "Region": "eu-central-1"
+      },
+      "AccepterVpcInfo": {
+        "VpcId": "vpc-0analytics",
+        "OwnerId": "111122223333",
+        "CidrBlock": "10.1.0.0/16",
+        "CidrBlockSet": [
+          {
+            "CidrBlock": "10.1.0.0/16"
+          }
+        ],
+        "Region": "eu-central-1"
+      },
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "shop-analytics"
+        }
+      ]
+    }
+  ]
+}

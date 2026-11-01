@@ -1,0 +1,1512 @@
+{
+  "posture_bundle": 1,
+  "account": "123456789012",
+  "region": "us-east-1",
+  "collected_at": "2026-11-01T20:15:49+00:00",
+  "calls": {
+    "sts get-caller-identity": {
+      "ok": true,
+      "output": {
+        "UserId": "AKIAIOSFODNN7EXAMPLE",
+        "Account": "123456789012",
+        "Arn": "arn:aws:sts::123456789012:user/moto"
+      }
+    },
+    "s3api list-buckets": {
+      "ok": true,
+      "output": {
+        "Buckets": [
+          {
+            "Name": "cc-public-acl",
+            "CreationDate": "2026-11-01T20:15:18.000Z"
+          },
+          {
+            "Name": "cc-public-policy",
+            "CreationDate": "2026-11-01T20:15:18.000Z"
+          },
+          {
+            "Name": "cc-private",
+            "CreationDate": "2026-11-01T20:15:19.000Z"
+          },
+          {
+            "Name": "cc-vpc-wildcard",
+            "CreationDate": "2026-11-01T20:15:19.000Z"
+          }
+        ],
+        "Owner": {
+          "DisplayName": "webfile",
+          "ID": "bcaf1ffd86f41161ca5fb16fd081034f"
+        },
+        "Prefix": null
+      }
+    },
+    "ec2 describe-vpcs": {
+      "ok": true,
+      "output": {
+        "Vpcs": [
+          {
+            "OwnerId": "123456789012",
+            "InstanceTenancy": "default",
+            "Ipv6CidrBlockAssociationSet": [],
+            "CidrBlockAssociationSet": [
+              {
+                "AssociationId": "vpc-cidr-assoc-9bfcfee2f92b8f8d9",
+                "CidrBlock": "172.31.0.0/16",
+                "CidrBlockState": {
+                  "State": "associated"
+                }
+              }
+            ],
+            "IsDefault": true,
+            "Tags": [],
+            "VpcId": "vpc-d6e3141304d89ff53",
+            "State": "available",
+            "CidrBlock": "172.31.0.0/16",
+            "DhcpOptionsId": "default"
+          },
+          {
+            "OwnerId": "123456789012",
+            "InstanceTenancy": "default",
+            "Ipv6CidrBlockAssociationSet": [],
+            "CidrBlockAssociationSet": [
+              {
+                "AssociationId": "vpc-cidr-assoc-932b3f2960a16b475",
+                "CidrBlock": "10.20.0.0/16",
+                "CidrBlockState": {
+                  "State": "associated"
+                }
+              }
+            ],
+            "IsDefault": false,
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-app"
+              }
+            ],
+            "VpcId": "vpc-054e493a52041b07d",
+            "State": "available",
+            "CidrBlock": "10.20.0.0/16",
+            "DhcpOptionsId": "default"
+          },
+          {
+            "OwnerId": "123456789012",
+            "InstanceTenancy": "default",
+            "Ipv6CidrBlockAssociationSet": [],
+            "CidrBlockAssociationSet": [
+              {
+                "AssociationId": "vpc-cidr-assoc-a162eaa2bf535ebe3",
+                "CidrBlock": "10.30.0.0/16",
+                "CidrBlockState": {
+                  "State": "associated"
+                }
+              }
+            ],
+            "IsDefault": false,
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-legacy"
+              }
+            ],
+            "VpcId": "vpc-fb3fad4479c06de4d",
+            "State": "available",
+            "CidrBlock": "10.30.0.0/16",
+            "DhcpOptionsId": "default"
+          }
+        ]
+      }
+    },
+    "ec2 describe-security-groups": {
+      "ok": true,
+      "output": {
+        "SecurityGroups": [
+          {
+            "GroupId": "sg-0124288bcc5f63712",
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-d6e3141304d89ff53",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-0124288bcc5f63712",
+            "OwnerId": "123456789012",
+            "GroupName": "default",
+            "Description": "default VPC security group",
+            "IpPermissions": []
+          },
+          {
+            "GroupId": "sg-055a4440082df8d13",
+            "IpPermissionsEgress": [],
+            "Tags": [],
+            "VpcId": "vpc-054e493a52041b07d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-055a4440082df8d13",
+            "OwnerId": "123456789012",
+            "GroupName": "default",
+            "Description": "default VPC security group",
+            "IpPermissions": []
+          },
+          {
+            "GroupId": "sg-79ae2af42f53b0d69",
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-054e493a52041b07d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-79ae2af42f53b0d69",
+            "OwnerId": "123456789012",
+            "GroupName": "cc-ssh-open",
+            "Description": "cc-ssh-open",
+            "IpPermissions": [
+              {
+                "IpProtocol": "tcp",
+                "FromPort": 22,
+                "ToPort": 22,
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ]
+          },
+          {
+            "GroupId": "sg-ebdadbb9d6daac53f",
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-054e493a52041b07d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-ebdadbb9d6daac53f",
+            "OwnerId": "123456789012",
+            "GroupName": "cc-rdp-open-v6",
+            "Description": "cc-rdp-open-v6",
+            "IpPermissions": [
+              {
+                "IpProtocol": "tcp",
+                "FromPort": 3389,
+                "ToPort": 3389,
+                "UserIdGroupPairs": [],
+                "IpRanges": [],
+                "Ipv6Ranges": [
+                  {
+                    "CidrIpv6": "::/0"
+                  }
+                ],
+                "PrefixListIds": []
+              }
+            ]
+          },
+          {
+            "GroupId": "sg-1075a031a5e224ddd",
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-054e493a52041b07d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-1075a031a5e224ddd",
+            "OwnerId": "123456789012",
+            "GroupName": "cc-all-open",
+            "Description": "cc-all-open",
+            "IpPermissions": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ]
+          },
+          {
+            "GroupId": "sg-b86b2b776be9d758b",
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-054e493a52041b07d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-b86b2b776be9d758b",
+            "OwnerId": "123456789012",
+            "GroupName": "cc-web",
+            "Description": "cc-web",
+            "IpPermissions": [
+              {
+                "IpProtocol": "tcp",
+                "FromPort": 443,
+                "ToPort": 443,
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ]
+          },
+          {
+            "GroupId": "sg-5770c22f5b9e54057",
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "UserIdGroupPairs": [],
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": []
+              }
+            ],
+            "Tags": [],
+            "VpcId": "vpc-fb3fad4479c06de4d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-5770c22f5b9e54057",
+            "OwnerId": "123456789012",
+            "GroupName": "default",
+            "Description": "default VPC security group",
+            "IpPermissions": []
+          }
+        ]
+      }
+    },
+    "ec2 describe-network-acls": {
+      "ok": true,
+      "output": {
+        "NetworkAcls": [
+          {
+            "Associations": [
+              {
+                "NetworkAclAssociationId": "aclassoc-d9b3623d80562cbcc",
+                "NetworkAclId": "acl-7a483d3bd3f73f794",
+                "SubnetId": "subnet-be41364c84d69b906"
+              },
+              {
+                "NetworkAclAssociationId": "aclassoc-70328937067a3655c",
+                "NetworkAclId": "acl-7a483d3bd3f73f794",
+                "SubnetId": "subnet-51396590f21adadf4"
+              },
+              {
+                "NetworkAclAssociationId": "aclassoc-314138a9830cd2c17",
+                "NetworkAclId": "acl-7a483d3bd3f73f794",
+                "SubnetId": "subnet-93f45bf1ea91d96d6"
+              },
+              {
+                "NetworkAclAssociationId": "aclassoc-146969a4c17092855",
+                "NetworkAclId": "acl-7a483d3bd3f73f794",
+                "SubnetId": "subnet-eaa493eca622bbc4a"
+              },
+              {
+                "NetworkAclAssociationId": "aclassoc-4124ba48e0abe7356",
+                "NetworkAclId": "acl-7a483d3bd3f73f794",
+                "SubnetId": "subnet-5a9284638949e3872"
+              },
+              {
+                "NetworkAclAssociationId": "aclassoc-ac2f69e938507db5c",
+                "NetworkAclId": "acl-7a483d3bd3f73f794",
+                "SubnetId": "subnet-05dfd234900a037ba"
+              }
+            ],
+            "Entries": [
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "Protocol": "-1",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "Protocol": "-1",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+              }
+            ],
+            "IsDefault": true,
+            "NetworkAclId": "acl-7a483d3bd3f73f794",
+            "Tags": [],
+            "VpcId": "vpc-d6e3141304d89ff53",
+            "OwnerId": "123456789012"
+          },
+          {
+            "Associations": [],
+            "Entries": [
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "Protocol": "-1",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "Protocol": "-1",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+              }
+            ],
+            "IsDefault": true,
+            "NetworkAclId": "acl-b391e69e960bba934",
+            "Tags": [],
+            "VpcId": "vpc-054e493a52041b07d",
+            "OwnerId": "123456789012"
+          },
+          {
+            "Associations": [],
+            "Entries": [
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "Protocol": "-1",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": true,
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "Protocol": "-1",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "Protocol": "-1",
+                "RuleAction": "deny",
+                "RuleNumber": 32767
+              }
+            ],
+            "IsDefault": true,
+            "NetworkAclId": "acl-31bb1a1511415f4b1",
+            "Tags": [],
+            "VpcId": "vpc-fb3fad4479c06de4d",
+            "OwnerId": "123456789012"
+          },
+          {
+            "Associations": [],
+            "Entries": [
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "PortRange": {
+                  "From": 22,
+                  "To": 22
+                },
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              }
+            ],
+            "IsDefault": false,
+            "NetworkAclId": "acl-b58d2578613978554",
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-admin-open"
+              }
+            ],
+            "VpcId": "vpc-054e493a52041b07d",
+            "OwnerId": "123456789012"
+          },
+          {
+            "Associations": [],
+            "Entries": [
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "PortRange": {
+                  "From": 22,
+                  "To": 22
+                },
+                "Protocol": "6",
+                "RuleAction": "deny",
+                "RuleNumber": 90
+              },
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "PortRange": {
+                  "From": 22,
+                  "To": 22
+                },
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              }
+            ],
+            "IsDefault": false,
+            "NetworkAclId": "acl-13675af0d066c5092",
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-ssh-denied-first"
+              }
+            ],
+            "VpcId": "vpc-054e493a52041b07d",
+            "OwnerId": "123456789012"
+          },
+          {
+            "Associations": [],
+            "Entries": [
+              {
+                "CidrBlock": "0.0.0.0/0",
+                "Egress": false,
+                "PortRange": {
+                  "From": 0,
+                  "To": 65535
+                },
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "RuleNumber": 100
+              }
+            ],
+            "IsDefault": false,
+            "NetworkAclId": "acl-375d0227d72ef621e",
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-wide-range"
+              }
+            ],
+            "VpcId": "vpc-054e493a52041b07d",
+            "OwnerId": "123456789012"
+          }
+        ]
+      }
+    },
+    "ec2 describe-flow-logs": {
+      "ok": true,
+      "output": {
+        "FlowLogs": [
+          {
+            "CreationTime": "2026-11-01T20:15:23.000Z",
+            "DeliverLogsStatus": "SUCCESS",
+            "FlowLogId": "fl-2641316deac55783a",
+            "FlowLogStatus": "ACTIVE",
+            "ResourceId": "vpc-054e493a52041b07d",
+            "TrafficType": "ALL",
+            "LogDestinationType": "s3",
+            "LogDestination": "arn:aws:s3:::cc-private",
+            "LogFormat": "${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}",
+            "Tags": [],
+            "MaxAggregationInterval": 600
+          }
+        ]
+      }
+    },
+    "ec2 describe-volumes": {
+      "ok": true,
+      "output": {
+        "Volumes": [
+          {
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-data-plain"
+              }
+            ],
+            "VolumeType": "gp2",
+            "VolumeId": "vol-fe6843cebb0e18c0c",
+            "Size": 8,
+            "AvailabilityZone": "us-east-1a",
+            "State": "available",
+            "CreateTime": "2026-11-01T20:15:28.000Z",
+            "Attachments": [],
+            "Encrypted": false
+          },
+          {
+            "Tags": [
+              {
+                "Key": "Name",
+                "Value": "cc-data-enc"
+              }
+            ],
+            "VolumeType": "gp2",
+            "VolumeId": "vol-2c62b0b28c7b7b448",
+            "Size": 8,
+            "AvailabilityZone": "us-east-1a",
+            "State": "available",
+            "CreateTime": "2026-11-01T20:15:28.000Z",
+            "Attachments": [],
+            "Encrypted": true,
+            "KmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6"
+          },
+          {
+            "VolumeType": "gp2",
+            "VolumeId": "vol-0c93bb55b3d9bbcc7",
+            "Size": 8,
+            "AvailabilityZone": "us-east-1a",
+            "State": "in-use",
+            "CreateTime": "2026-11-01T20:15:29.000Z",
+            "Attachments": [
+              {
+                "VolumeId": "vol-0c93bb55b3d9bbcc7",
+                "InstanceId": "i-82dc3c803f54647f8",
+                "Device": "/dev/sda1",
+                "State": "attached",
+                "AttachTime": "2026-11-01T20:15:29.000Z"
+              }
+            ],
+            "Encrypted": false
+          },
+          {
+            "VolumeType": "gp2",
+            "VolumeId": "vol-e0999750d5dfb7f5f",
+            "Size": 8,
+            "AvailabilityZone": "us-east-1a",
+            "State": "in-use",
+            "CreateTime": "2026-11-01T20:15:29.000Z",
+            "Attachments": [
+              {
+                "VolumeId": "vol-e0999750d5dfb7f5f",
+                "InstanceId": "i-b59aae47693577981",
+                "Device": "/dev/sda1",
+                "State": "attached",
+                "AttachTime": "2026-11-01T20:15:29.000Z"
+              }
+            ],
+            "Encrypted": false
+          }
+        ]
+      }
+    },
+    "ec2 describe-instances": {
+      "ok": true,
+      "output": {
+        "Reservations": [
+          {
+            "ReservationId": "r-c8e86a74c69d2b682",
+            "OwnerId": "123456789012",
+            "Groups": [],
+            "Instances": [
+              {
+                "Architecture": "x86_64",
+                "BlockDeviceMappings": [
+                  {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                      "AttachTime": "2026-11-01T20:15:29.000Z",
+                      "DeleteOnTermination": true,
+                      "Status": "attached",
+                      "VolumeId": "vol-0c93bb55b3d9bbcc7"
+                    }
+                  }
+                ],
+                "ClientToken": "64a8b1b4-3973-4872-bac5-249d021d11a3",
+                "EbsOptimized": false,
+                "Hypervisor": "xen",
+                "NetworkInterfaces": [
+                  {
+                    "Association": {
+                      "IpOwnerId": "123456789012",
+                      "PublicDnsName": "ip-54-214-55-18.ec2.internal",
+                      "PublicIp": "54.214.55.18"
+                    },
+                    "Attachment": {
+                      "AttachTime": "2026-11-01T20:15:29.000Z",
+                      "AttachmentId": "eni-attach-be0717439a1a9e8df",
+                      "DeleteOnTermination": false,
+                      "DeviceIndex": 0,
+                      "Status": "attached",
+                      "NetworkCardIndex": 0
+                    },
+                    "Description": "Primary network interface",
+                    "Groups": [
+                      {
+                        "GroupId": "sg-0124288bcc5f63712",
+                        "GroupName": "default"
+                      }
+                    ],
+                    "Ipv6Addresses": [],
+                    "MacAddress": "02:00:00:dc:8d:c0",
+                    "NetworkInterfaceId": "eni-7de75dd5372dd9e5c",
+                    "OwnerId": "123456789012",
+                    "PrivateDnsName": "ip-10-153-89-50.ec2.internal",
+                    "PrivateIpAddress": "10.153.89.50",
+                    "PrivateIpAddresses": [
+                      {
+                        "Association": {
+                          "IpOwnerId": "123456789012",
+                          "PublicDnsName": "ip-54-214-55-18.ec2.internal",
+                          "PublicIp": "54.214.55.18"
+                        },
+                        "Primary": true,
+                        "PrivateIpAddress": "10.153.89.50"
+                      }
+                    ],
+                    "SourceDestCheck": true,
+                    "Status": "in-use",
+                    "SubnetId": "subnet-be41364c84d69b906",
+                    "VpcId": "vpc-d6e3141304d89ff53",
+                    "InterfaceType": "interface"
+                  }
+                ],
+                "RootDeviceName": "/dev/sda1",
+                "RootDeviceType": "ebs",
+                "SecurityGroups": [],
+                "SourceDestCheck": true,
+                "SriovNetSupport": "simple",
+                "StateReason": {
+                  "Code": "",
+                  "Message": ""
+                },
+                "Tags": [
+                  {
+                    "Key": "Name",
+                    "Value": "cc-imdsv1"
+                  }
+                ],
+                "VirtualizationType": "hvm",
+                "HibernationOptions": {},
+                "MetadataOptions": {
+                  "State": "applied",
+                  "HttpTokens": "optional",
+                  "HttpPutResponseHopLimit": 1,
+                  "HttpEndpoint": "enabled",
+                  "HttpProtocolIpv6": "disabled",
+                  "InstanceMetadataTags": "disabled"
+                },
+                "InstanceId": "i-82dc3c803f54647f8",
+                "ImageId": "ami-12c6146b",
+                "State": {
+                  "Code": 16,
+                  "Name": "running"
+                },
+                "PrivateDnsName": "ip-10-153-89-50.ec2.internal",
+                "PublicDnsName": "ec2-54-214-55-18.compute-1.amazonaws.com",
+                "StateTransitionReason": "",
+                "AmiLaunchIndex": 0,
+                "ProductCodes": [],
+                "InstanceType": "t3.micro",
+                "LaunchTime": "2026-11-01T20:15:29.000Z",
+                "Placement": {
+                  "GroupName": "",
+                  "Tenancy": "default",
+                  "AvailabilityZone": "us-east-1a"
+                },
+                "Platform": "windows",
+                "Monitoring": {
+                  "State": "disabled"
+                },
+                "SubnetId": "subnet-be41364c84d69b906",
+                "VpcId": "vpc-d6e3141304d89ff53",
+                "PrivateIpAddress": "10.153.89.50",
+                "PublicIpAddress": "54.214.55.18"
+              }
+            ]
+          },
+          {
+            "ReservationId": "r-08ec3d13827b526c4",
+            "OwnerId": "123456789012",
+            "Groups": [],
+            "Instances": [
+              {
+                "Architecture": "x86_64",
+                "BlockDeviceMappings": [
+                  {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                      "AttachTime": "2026-11-01T20:15:29.000Z",
+                      "DeleteOnTermination": true,
+                      "Status": "attached",
+                      "VolumeId": "vol-e0999750d5dfb7f5f"
+                    }
+                  }
+                ],
+                "ClientToken": "478b8f23-8d88-4362-8bfa-0ca4838247b9",
+                "EbsOptimized": false,
+                "Hypervisor": "xen",
+                "NetworkInterfaces": [
+                  {
+                    "Association": {
+                      "IpOwnerId": "123456789012",
+                      "PublicDnsName": "ip-54-214-231-17.ec2.internal",
+                      "PublicIp": "54.214.231.17"
+                    },
+                    "Attachment": {
+                      "AttachTime": "2026-11-01T20:15:29.000Z",
+                      "AttachmentId": "eni-attach-eedf6a100a5240e28",
+                      "DeleteOnTermination": false,
+                      "DeviceIndex": 0,
+                      "Status": "attached",
+                      "NetworkCardIndex": 0
+                    },
+                    "Description": "Primary network interface",
+                    "Groups": [
+                      {
+                        "GroupId": "sg-0124288bcc5f63712",
+                        "GroupName": "default"
+                      }
+                    ],
+                    "Ipv6Addresses": [],
+                    "MacAddress": "02:00:00:4e:5e:69",
+                    "NetworkInterfaceId": "eni-161e04f7b9d08e0dc",
+                    "OwnerId": "123456789012",
+                    "PrivateDnsName": "ip-10-126-6-216.ec2.internal",
+                    "PrivateIpAddress": "10.126.6.216",
+                    "PrivateIpAddresses": [
+                      {
+                        "Association": {
+                          "IpOwnerId": "123456789012",
+                          "PublicDnsName": "ip-54-214-231-17.ec2.internal",
+                          "PublicIp": "54.214.231.17"
+                        },
+                        "Primary": true,
+                        "PrivateIpAddress": "10.126.6.216"
+                      }
+                    ],
+                    "SourceDestCheck": true,
+                    "Status": "in-use",
+                    "SubnetId": "subnet-be41364c84d69b906",
+                    "VpcId": "vpc-d6e3141304d89ff53",
+                    "InterfaceType": "interface"
+                  }
+                ],
+                "RootDeviceName": "/dev/sda1",
+                "RootDeviceType": "ebs",
+                "SecurityGroups": [],
+                "SourceDestCheck": true,
+                "SriovNetSupport": "simple",
+                "StateReason": {
+                  "Code": "",
+                  "Message": ""
+                },
+                "Tags": [
+                  {
+                    "Key": "Name",
+                    "Value": "cc-imdsv2"
+                  }
+                ],
+                "VirtualizationType": "hvm",
+                "HibernationOptions": {},
+                "MetadataOptions": {
+                  "State": "applied",
+                  "HttpTokens": "required",
+                  "HttpPutResponseHopLimit": 1,
+                  "HttpEndpoint": "enabled",
+                  "HttpProtocolIpv6": "disabled",
+                  "InstanceMetadataTags": "disabled"
+                },
+                "InstanceId": "i-b59aae47693577981",
+                "ImageId": "ami-12c6146b",
+                "State": {
+                  "Code": 16,
+                  "Name": "running"
+                },
+                "PrivateDnsName": "ip-10-126-6-216.ec2.internal",
+                "PublicDnsName": "ec2-54-214-231-17.compute-1.amazonaws.com",
+                "StateTransitionReason": "",
+                "AmiLaunchIndex": 0,
+                "ProductCodes": [],
+                "InstanceType": "t3.micro",
+                "LaunchTime": "2026-11-01T20:15:29.000Z",
+                "Placement": {
+                  "GroupName": "",
+                  "Tenancy": "default",
+                  "AvailabilityZone": "us-east-1a"
+                },
+                "Platform": "windows",
+                "Monitoring": {
+                  "State": "disabled"
+                },
+                "SubnetId": "subnet-be41364c84d69b906",
+                "VpcId": "vpc-d6e3141304d89ff53",
+                "PrivateIpAddress": "10.126.6.216",
+                "PublicIpAddress": "54.214.231.17"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ec2 get-ebs-encryption-by-default": {
+      "ok": true,
+      "output": {
+        "EbsEncryptionByDefault": false
+      }
+    },
+    "iam list-users": {
+      "ok": true,
+      "output": {
+        "Users": [
+          {
+            "Path": "/",
+            "UserName": "cc-alice",
+            "UserId": "3htm9ud9h7qy0ifyffh7",
+            "Arn": "arn:aws:iam::123456789012:user/cc-alice",
+            "CreateDate": "2026-11-01T20:15:29.904000Z"
+          },
+          {
+            "Path": "/",
+            "UserName": "cc-bob",
+            "UserId": "b2axzrz6p08cidefgyqj",
+            "Arn": "arn:aws:iam::123456789012:user/cc-bob",
+            "CreateDate": "2026-11-01T20:15:30.690614Z"
+          },
+          {
+            "Path": "/",
+            "UserName": "cc-ci",
+            "UserId": "cko6ajjrk6uquypo93qp",
+            "Arn": "arn:aws:iam::123456789012:user/cc-ci",
+            "CreateDate": "2026-11-01T20:15:31.745890Z"
+          }
+        ]
+      }
+    },
+    "iam get-account-summary": {
+      "ok": true,
+      "output": {
+        "SummaryMap": {
+          "GroupPolicySizeQuota": 5120,
+          "InstanceProfilesQuota": 1000,
+          "Policies": 0,
+          "GroupsPerUserQuota": 10,
+          "InstanceProfiles": 0,
+          "AttachedPoliciesPerUserQuota": 10,
+          "Users": 3,
+          "PoliciesQuota": 1500,
+          "Providers": 0,
+          "AccountMFAEnabled": 0,
+          "AccessKeysPerUserQuota": 2,
+          "AssumeRolePolicySizeQuota": 2048,
+          "PolicyVersionsInUseQuota": 10000,
+          "GlobalEndpointTokenVersion": 1,
+          "VersionsPerPolicyQuota": 5,
+          "AttachedPoliciesPerGroupQuota": 10,
+          "PolicySizeQuota": 6144,
+          "Groups": 0,
+          "AccountSigningCertificatesPresent": 0,
+          "UsersQuota": 5000,
+          "ServerCertificatesQuota": 20,
+          "MFADevices": 1,
+          "UserPolicySizeQuota": 2048,
+          "PolicyVersionsInUse": 0,
+          "ServerCertificates": 0,
+          "Roles": 0,
+          "RolesQuota": 1000,
+          "SigningCertificatesPerUserQuota": 2,
+          "MFADevicesInUse": 1,
+          "RolePolicySizeQuota": 10240,
+          "AttachedPoliciesPerRoleQuota": 10,
+          "AccountAccessKeysPresent": 0,
+          "GroupsQuota": 300
+        }
+      }
+    },
+    "iam get-account-password-policy": {
+      "ok": true,
+      "output": {
+        "PasswordPolicy": {
+          "MinimumPasswordLength": 8,
+          "RequireSymbols": false,
+          "RequireNumbers": false,
+          "RequireUppercaseCharacters": false,
+          "RequireLowercaseCharacters": false,
+          "AllowUsersToChangePassword": false,
+          "ExpirePasswords": false,
+          "MaxPasswordAge": 0,
+          "PasswordReusePrevention": 5,
+          "HardExpiry": false
+        }
+      }
+    },
+    "cloudtrail describe-trails": {
+      "ok": true,
+      "output": {
+        "trailList": [
+          {
+            "Name": "cc-trail",
+            "S3BucketName": "cc-private",
+            "IncludeGlobalServiceEvents": true,
+            "IsMultiRegionTrail": false,
+            "HomeRegion": "us-east-1",
+            "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/cc-trail",
+            "LogFileValidationEnabled": false,
+            "HasCustomEventSelectors": false,
+            "HasInsightSelectors": false,
+            "IsOrganizationTrail": false
+          },
+          {
+            "Name": "cc-org-trail",
+            "S3BucketName": "cc-private",
+            "IncludeGlobalServiceEvents": true,
+            "IsMultiRegionTrail": true,
+            "HomeRegion": "us-east-1",
+            "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/cc-org-trail",
+            "LogFileValidationEnabled": true,
+            "KmsKeyId": "alias/cc-rotated",
+            "HasCustomEventSelectors": false,
+            "HasInsightSelectors": false,
+            "IsOrganizationTrail": false
+          }
+        ]
+      }
+    },
+    "configservice describe-configuration-recorders": {
+      "ok": true,
+      "output": {
+        "ConfigurationRecorders": []
+      }
+    },
+    "configservice describe-configuration-recorder-status": {
+      "ok": true,
+      "output": {
+        "ConfigurationRecordersStatus": []
+      }
+    },
+    "kms list-keys": {
+      "ok": true,
+      "output": {
+        "Keys": [
+          {
+            "KeyId": "646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6",
+            "KeyArn": "arn:aws:kms:us-east-1:123456789012:key/646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6"
+          },
+          {
+            "KeyId": "2d741b51-24ab-48ed-a5ad-af396630545e",
+            "KeyArn": "arn:aws:kms:us-east-1:123456789012:key/2d741b51-24ab-48ed-a5ad-af396630545e"
+          },
+          {
+            "KeyId": "64217d59-bc9d-40de-b747-750aca2117ec",
+            "KeyArn": "arn:aws:kms:us-east-1:123456789012:key/64217d59-bc9d-40de-b747-750aca2117ec"
+          }
+        ]
+      }
+    },
+    "kms list-aliases": {
+      "ok": true,
+      "output": {
+        "Aliases": [
+          {
+            "AliasName": "alias/aws/ebs",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/ebs",
+            "TargetKeyId": "646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6"
+          },
+          {
+            "AliasName": "alias/cc-no-rotation",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/cc-no-rotation",
+            "TargetKeyId": "2d741b51-24ab-48ed-a5ad-af396630545e"
+          },
+          {
+            "AliasName": "alias/cc-rotated",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/cc-rotated",
+            "TargetKeyId": "64217d59-bc9d-40de-b747-750aca2117ec"
+          },
+          {
+            "AliasName": "alias/aws/acm",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/acm",
+            "TargetKeyId": "4f58743d-e279-4214-9270-8cc28277958d"
+          },
+          {
+            "AliasName": "alias/aws/dynamodb",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/dynamodb",
+            "TargetKeyId": "7e6aa0ea-15a4-4e72-8b32-58e46e776888"
+          },
+          {
+            "AliasName": "alias/aws/elasticfilesystem",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/elasticfilesystem",
+            "TargetKeyId": "0ef0f111-cdc8-4dda-b0bc-bf625bd5f154"
+          },
+          {
+            "AliasName": "alias/aws/es",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/es",
+            "TargetKeyId": "3c7c1880-c353-4cea-9866-d8bc12f05573"
+          },
+          {
+            "AliasName": "alias/aws/glue",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/glue",
+            "TargetKeyId": "90fd783f-e582-4cc2-a207-672ee67f8d58"
+          },
+          {
+            "AliasName": "alias/aws/kinesisvideo",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/kinesisvideo",
+            "TargetKeyId": "7fd4bff3-6eb7-4283-8f11-a7e0a793a181"
+          },
+          {
+            "AliasName": "alias/aws/lambda",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/lambda",
+            "TargetKeyId": "ff9c4f27-2f29-4d9b-bf38-02f88b52a70c"
+          },
+          {
+            "AliasName": "alias/aws/rds",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/rds",
+            "TargetKeyId": "f5f30938-abed-41a2-a0f6-5482d02a2489"
+          },
+          {
+            "AliasName": "alias/aws/redshift",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/redshift",
+            "TargetKeyId": "dcdae9aa-593a-4e0b-9153-37325591901f"
+          },
+          {
+            "AliasName": "alias/aws/s3",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/s3",
+            "TargetKeyId": "8c3faf07-f43c-4d11-abdb-9183079214c7"
+          },
+          {
+            "AliasName": "alias/aws/secretsmanager",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/secretsmanager",
+            "TargetKeyId": "fee5173a-3972-428e-ae73-cd4c2a371222"
+          },
+          {
+            "AliasName": "alias/aws/ssm",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/ssm",
+            "TargetKeyId": "cb3f6250-5078-48c0-a75f-0290bf47694e"
+          },
+          {
+            "AliasName": "alias/aws/xray",
+            "AliasArn": "arn:aws:kms:us-east-1:123456789012:alias/aws/xray",
+            "TargetKeyId": "e9b758eb-6230-4744-93d1-ad3b7d71f2f6"
+          }
+        ]
+      }
+    },
+    "s3control get-public-access-block --account-id 123456789012": {
+      "ok": false,
+      "error": "NoSuchPublicAccessBlockConfiguration",
+      "message": "An error occurred (NoSuchPublicAccessBlockConfiguration) when calling the GetPublicAccessBlock operation: The public access block configuration was not found"
+    },
+    "s3api get-public-access-block --bucket cc-public-acl": {
+      "ok": false,
+      "error": "NoSuchPublicAccessBlockConfiguration",
+      "message": "An error occurred (NoSuchPublicAccessBlockConfiguration) when calling the GetPublicAccessBlock operation: The public access block configuration was not found"
+    },
+    "s3api get-bucket-acl --bucket cc-public-acl": {
+      "ok": true,
+      "output": {
+        "Owner": {
+          "DisplayName": "webfile",
+          "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a"
+        },
+        "Grants": [
+          {
+            "Grantee": {
+              "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a",
+              "Type": "CanonicalUser"
+            },
+            "Permission": "FULL_CONTROL"
+          },
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AllUsers"
+            },
+            "Permission": "READ"
+          }
+        ]
+      }
+    },
+    "s3api get-bucket-policy --bucket cc-public-acl": {
+      "ok": false,
+      "error": "NoSuchBucketPolicy",
+      "message": "An error occurred (NoSuchBucketPolicy) when calling the GetBucketPolicy operation: The bucket policy does not exist"
+    },
+    "s3api get-public-access-block --bucket cc-public-policy": {
+      "ok": true,
+      "output": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      }
+    },
+    "s3api get-bucket-acl --bucket cc-public-policy": {
+      "ok": true,
+      "output": {
+        "Owner": {
+          "DisplayName": "webfile",
+          "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a"
+        },
+        "Grants": [
+          {
+            "Grantee": {
+              "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a",
+              "Type": "CanonicalUser"
+            },
+            "Permission": "FULL_CONTROL"
+          }
+        ]
+      }
+    },
+    "s3api get-bucket-policy --bucket cc-public-policy": {
+      "ok": true,
+      "output": {
+        "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"PublicRead\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::cc-public-policy/*\"}]}"
+      }
+    },
+    "s3api get-public-access-block --bucket cc-private": {
+      "ok": true,
+      "output": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    },
+    "s3api get-bucket-acl --bucket cc-private": {
+      "ok": true,
+      "output": {
+        "Owner": {
+          "DisplayName": "webfile",
+          "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a"
+        },
+        "Grants": [
+          {
+            "Grantee": {
+              "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a",
+              "Type": "CanonicalUser"
+            },
+            "Permission": "FULL_CONTROL"
+          }
+        ]
+      }
+    },
+    "s3api get-bucket-policy --bucket cc-private": {
+      "ok": true,
+      "output": {
+        "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"DenyInsecureTransport\",\"Effect\":\"Deny\",\"Principal\":\"*\",\"Action\":\"s3:*\",\"Resource\":[\"arn:aws:s3:::cc-private\",\"arn:aws:s3:::cc-private/*\"],\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}}},{\"Sid\":\"CloudTrailWrite\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudtrail.amazonaws.com\"},\"Action\":\"s3:PutObject\",\"Resource\":\"arn:aws:s3:::cc-private/AWSLogs/*\",\"Condition\":{\"StringEquals\":{\"aws:SourceAccount\":\"123456789012\"}}}]}"
+      }
+    },
+    "s3api get-public-access-block --bucket cc-vpc-wildcard": {
+      "ok": true,
+      "output": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      }
+    },
+    "s3api get-bucket-acl --bucket cc-vpc-wildcard": {
+      "ok": true,
+      "output": {
+        "Owner": {
+          "DisplayName": "webfile",
+          "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a"
+        },
+        "Grants": [
+          {
+            "Grantee": {
+              "ID": "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a",
+              "Type": "CanonicalUser"
+            },
+            "Permission": "FULL_CONTROL"
+          }
+        ]
+      }
+    },
+    "s3api get-bucket-policy --bucket cc-vpc-wildcard": {
+      "ok": true,
+      "output": {
+        "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AnyVpc\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::cc-vpc-wildcard/*\",\"Condition\":{\"StringLike\":{\"aws:SourceVpc\":\"vpc-*\"}}}]}"
+      }
+    },
+    "cloudtrail get-trail-status --name cc-trail": {
+      "ok": true,
+      "output": {
+        "IsLogging": true,
+        "LatestDeliveryTime": 1793560543,
+        "StartLoggingTime": 1793560534,
+        "LatestDeliveryAttemptTime": "2026-11-01T20:15:43Z",
+        "LatestNotificationAttemptTime": "",
+        "LatestNotificationAttemptSucceeded": "",
+        "LatestDeliveryAttemptSucceeded": "",
+        "TimeLoggingStarted": "2026-11-01T20:15:34Z",
+        "TimeLoggingStopped": ""
+      }
+    },
+    "cloudtrail get-event-selectors --trail-name cc-trail": {
+      "ok": true,
+      "output": {
+        "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/cc-trail",
+        "EventSelectors": [],
+        "AdvancedEventSelectors": []
+      }
+    },
+    "cloudtrail get-trail-status --name cc-org-trail": {
+      "ok": true,
+      "output": {
+        "IsLogging": false,
+        "LatestDeliveryAttemptTime": "",
+        "LatestNotificationAttemptTime": "",
+        "LatestNotificationAttemptSucceeded": "",
+        "LatestDeliveryAttemptSucceeded": "",
+        "TimeLoggingStarted": "",
+        "TimeLoggingStopped": ""
+      }
+    },
+    "cloudtrail get-event-selectors --trail-name cc-org-trail": {
+      "ok": true,
+      "output": {
+        "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/cc-org-trail",
+        "EventSelectors": [],
+        "AdvancedEventSelectors": []
+      }
+    },
+    "iam list-access-keys --user-name cc-alice": {
+      "ok": true,
+      "output": {
+        "AccessKeyMetadata": [
+          {
+            "UserName": "cc-alice",
+            "AccessKeyId": "AKIARZPUZDIKJMDOGHTQ",
+            "Status": "Active",
+            "CreateDate": "2026-11-01T20:15:30.432244Z"
+          }
+        ]
+      }
+    },
+    "iam get-access-key-last-used --access-key-id AKIARZPUZDIKJMDOGHTQ": {
+      "ok": true,
+      "output": {
+        "UserName": "cc-alice",
+        "AccessKeyLastUsed": {
+          "ServiceName": "N/A",
+          "Region": "N/A"
+        }
+      }
+    },
+    "iam list-access-keys --user-name cc-bob": {
+      "ok": true,
+      "output": {
+        "AccessKeyMetadata": []
+      }
+    },
+    "iam list-access-keys --user-name cc-ci": {
+      "ok": true,
+      "output": {
+        "AccessKeyMetadata": [
+          {
+            "UserName": "cc-ci",
+            "AccessKeyId": "AKIARZPUZDIKO7HWIYEQ",
+            "Status": "Active",
+            "CreateDate": "2026-11-01T20:15:32.025062Z"
+          },
+          {
+            "UserName": "cc-ci",
+            "AccessKeyId": "AKIARZPUZDIKOKMYMZIN",
+            "Status": "Active",
+            "CreateDate": "2026-11-01T20:15:32.285984Z"
+          }
+        ]
+      }
+    },
+    "iam get-access-key-last-used --access-key-id AKIARZPUZDIKO7HWIYEQ": {
+      "ok": true,
+      "output": {
+        "UserName": "cc-ci",
+        "AccessKeyLastUsed": {
+          "ServiceName": "N/A",
+          "Region": "N/A"
+        }
+      }
+    },
+    "iam get-access-key-last-used --access-key-id AKIARZPUZDIKOKMYMZIN": {
+      "ok": true,
+      "output": {
+        "UserName": "cc-ci",
+        "AccessKeyLastUsed": {
+          "ServiceName": "N/A",
+          "Region": "N/A"
+        }
+      }
+    },
+    "kms describe-key --key-id 646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6": {
+      "ok": true,
+      "output": {
+        "KeyMetadata": {
+          "AWSAccountId": "123456789012",
+          "KeyId": "646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6",
+          "Arn": "arn:aws:kms:us-east-1:123456789012:key/646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6",
+          "CreationDate": 1793564128.954263,
+          "Enabled": true,
+          "Description": "Default master key that protects my EBS volumes when no other key is defined",
+          "KeyUsage": "ENCRYPT_DECRYPT",
+          "KeyState": "Enabled",
+          "Origin": "AWS_KMS",
+          "KeyManager": "CUSTOMER",
+          "CustomerMasterKeySpec": "SYMMETRIC_DEFAULT",
+          "KeySpec": "SYMMETRIC_DEFAULT",
+          "EncryptionAlgorithms": [
+            "SYMMETRIC_DEFAULT"
+          ],
+          "MultiRegion": false
+        }
+      }
+    },
+    "kms get-key-rotation-status --key-id 646f76fd-3c0b-4bef-aa13-b3cde4cb6bf6": {
+      "ok": true,
+      "output": {
+        "KeyRotationEnabled": false
+      }
+    },
+    "kms describe-key --key-id 2d741b51-24ab-48ed-a5ad-af396630545e": {
+      "ok": true,
+      "output": {
+        "KeyMetadata": {
+          "AWSAccountId": "123456789012",
+          "KeyId": "2d741b51-24ab-48ed-a5ad-af396630545e",
+          "Arn": "arn:aws:kms:us-east-1:123456789012:key/2d741b51-24ab-48ed-a5ad-af396630545e",
+          "CreationDate": 1793564132.800037,
+          "Enabled": true,
+          "Description": "cc-no-rotation",
+          "KeyState": "Enabled",
+          "Origin": "AWS_KMS",
+          "KeyManager": "CUSTOMER",
+          "CustomerMasterKeySpec": "SYMMETRIC_DEFAULT",
+          "KeySpec": "SYMMETRIC_DEFAULT",
+          "EncryptionAlgorithms": [
+            "SYMMETRIC_DEFAULT"
+          ],
+          "SigningAlgorithms": []
+        }
+      }
+    },
+    "kms get-key-rotation-status --key-id 2d741b51-24ab-48ed-a5ad-af396630545e": {
+      "ok": true,
+      "output": {
+        "KeyRotationEnabled": false
+      }
+    },
+    "kms describe-key --key-id 64217d59-bc9d-40de-b747-750aca2117ec": {
+      "ok": true,
+      "output": {
+        "KeyMetadata": {
+          "AWSAccountId": "123456789012",
+          "KeyId": "64217d59-bc9d-40de-b747-750aca2117ec",
+          "Arn": "arn:aws:kms:us-east-1:123456789012:key/64217d59-bc9d-40de-b747-750aca2117ec",
+          "CreationDate": 1793564133.130391,
+          "Enabled": true,
+          "Description": "cc-rotated",
+          "KeyState": "Enabled",
+          "Origin": "AWS_KMS",
+          "KeyManager": "CUSTOMER",
+          "CustomerMasterKeySpec": "SYMMETRIC_DEFAULT",
+          "KeySpec": "SYMMETRIC_DEFAULT",
+          "EncryptionAlgorithms": [
+            "SYMMETRIC_DEFAULT"
+          ],
+          "SigningAlgorithms": []
+        }
+      }
+    },
+    "kms get-key-rotation-status --key-id 64217d59-bc9d-40de-b747-750aca2117ec": {
+      "ok": true,
+      "output": {
+        "KeyRotationEnabled": true
+      }
+    },
+    "iam generate-credential-report": {
+      "ok": true,
+      "output": {
+        "State": "COMPLETE"
+      }
+    },
+    "iam get-credential-report": {
+      "ok": true,
+      "output": {
+        "Content": "dXNlcixhcm4sdXNlcl9jcmVhdGlvbl90aW1lLHBhc3N3b3JkX2VuYWJsZWQscGFzc3dvcmRfbGFzdF91c2VkLHBhc3N3b3JkX2xhc3RfY2hhbmdlZCxwYXNzd29yZF9uZXh0X3JvdGF0aW9uLG1mYV9hY3RpdmUsYWNjZXNzX2tleV8xX2FjdGl2ZSxhY2Nlc3Nfa2V5XzFfbGFzdF9yb3RhdGVkLGFjY2Vzc19rZXlfMV9sYXN0X3VzZWRfZGF0ZSxhY2Nlc3Nfa2V5XzFfbGFzdF91c2VkX3JlZ2lvbixhY2Nlc3Nfa2V5XzFfbGFzdF91c2VkX3NlcnZpY2UsYWNjZXNzX2tleV8yX2FjdGl2ZSxhY2Nlc3Nfa2V5XzJfbGFzdF9yb3RhdGVkLGFjY2Vzc19rZXlfMl9sYXN0X3VzZWRfZGF0ZSxhY2Nlc3Nfa2V5XzJfbGFzdF91c2VkX3JlZ2lvbixhY2Nlc3Nfa2V5XzJfbGFzdF91c2VkX3NlcnZpY2UsY2VydF8xX2FjdGl2ZSxjZXJ0XzFfbGFzdF9yb3RhdGVkLGNlcnRfMl9hY3RpdmUsY2VydF8yX2xhc3Rfcm90YXRlZApjYy1hbGljZSxhcm46YXdzOmlhbTo6MTIzNDU2Nzg5MDEyOnVzZXIvY2MtYWxpY2UsMjAyNi0xMS0wMVQyMDoxNToyOSswMDowMCx0cnVlLG5vX2luZm9ybWF0aW9uLDIwMjYtMTEtMDFUMjA6MTU6MjkrMDA6MDAsbm90X3N1cHBvcnRlZCxmYWxzZSx0cnVlLDIwMjYtMTEtMDFUMjA6MTU6MzArMDA6MDAsTi9BLG5vdF9zdXBwb3J0ZWQsbm90X3N1cHBvcnRlZCxmYWxzZSxOL0EsTi9BLG5vdF9zdXBwb3J0ZWQsbm90X3N1cHBvcnRlZCxmYWxzZSxOL0EsZmFsc2UsTi9BCmNjLWJvYixhcm46YXdzOmlhbTo6MTIzNDU2Nzg5MDEyOnVzZXIvY2MtYm9iLDIwMjYtMTEtMDFUMjA6MTU6MzArMDA6MDAsdHJ1ZSxub19pbmZvcm1hdGlvbiwyMDI2LTExLTAxVDIwOjE1OjMwKzAwOjAwLG5vdF9zdXBwb3J0ZWQsdHJ1ZSxmYWxzZSxOL0EsTi9BLG5vdF9zdXBwb3J0ZWQsbm90X3N1cHBvcnRlZCxmYWxzZSxOL0EsTi9BLG5vdF9zdXBwb3J0ZWQsbm90X3N1cHBvcnRlZCxmYWxzZSxOL0EsZmFsc2UsTi9BCmNjLWNpLGFybjphd3M6aWFtOjoxMjM0NTY3ODkwMTI6dXNlci9jYy1jaSwyMDI2LTExLTAxVDIwOjE1OjMxKzAwOjAwLGZhbHNlLG5vdF9zdXBwb3J0ZWQsMjAyNi0xMS0wMVQyMDoxNTozMSswMDowMCxub3Rfc3VwcG9ydGVkLGZhbHNlLHRydWUsMjAyNi0xMS0wMVQyMDoxNTozMiswMDowMCxOL0Esbm90X3N1cHBvcnRlZCxub3Rfc3VwcG9ydGVkLHRydWUsMjAyNi0xMS0wMVQyMDoxNTozMiswMDowMCxOL0Esbm90X3N1cHBvcnRlZCxub3Rfc3VwcG9ydGVkLGZhbHNlLE4vQSxmYWxzZSxOL0EK",
+        "ReportFormat": "text/csv",
+        "GeneratedTime": "2015-02-02T20:02:02Z"
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "description": "a zone fails: its instances are replaced in the other zones; when it recovers, AZRebalance launches before it terminates",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 2,
+    "MaxSize": 6,
+    "DesiredCapacity": 6
+  },
+  "events": [
+    {
+      "at": 600,
+      "op": "zone-outage",
+      "Zone": "us-east-1b"
+    },
+    {
+      "at": 1800,
+      "op": "zone-recover",
+      "Zone": "us-east-1b"
+    }
+  ],
+  "until": 3000
+}

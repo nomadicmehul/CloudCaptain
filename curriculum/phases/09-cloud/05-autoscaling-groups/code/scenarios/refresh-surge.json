@@ -1,0 +1,29 @@
+{
+  "description": "instance refresh with MinHealthyPercentage 100 and MaxHealthyPercentage 150: launch two new instances before terminating two old ones",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 2,
+    "MaxSize": 8,
+    "DesiredCapacity": 4,
+    "HealthCheckType": "ELB",
+    "HealthCheckGracePeriod": 60,
+    "DefaultInstanceWarmup": 120
+  },
+  "events": [
+    {
+      "at": 600,
+      "op": "start-instance-refresh",
+      "Version": "2",
+      "Preferences": {
+        "MinHealthyPercentage": 100,
+        "MaxHealthyPercentage": 150
+      }
+    }
+  ],
+  "until": 2400
+}

@@ -1,0 +1,12 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AliceWithExternalId",
+      "Effect": "Allow",
+      "Principal": {"AWS": "arn:aws:iam::123456789012:user/alice"},
+      "Action": "sts:AssumeRole",
+      "Condition": {"StringEquals": {"sts:ExternalId": "cc-42"}}
+    }
+  ]
+}

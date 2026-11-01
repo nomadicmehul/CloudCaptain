@@ -1,0 +1,69 @@
+{
+    "ScalingPolicies": [
+        {
+            "AutoScalingGroupName": "cc-policies",
+            "PolicyName": "cpu50",
+            "PolicyARN": "arn:aws:autoscaling:us-east-1:123456789012:scalingPolicy:c322761b-3172-4d56-9a21-0ed9d6161d67:autoScalingGroupName/cc-policies:policyName/cpu50",
+            "PolicyType": "TargetTrackingScaling",
+            "StepAdjustments": [],
+            "EstimatedInstanceWarmup": 300,
+            "TargetTrackingConfiguration": {
+                "PredefinedMetricSpecification": {
+                    "PredefinedMetricType": "ASGAverageCPUUtilization"
+                },
+                "TargetValue": 50.0
+            },
+            "PredictiveScalingConfiguration": {}
+        },
+        {
+            "AutoScalingGroupName": "cc-policies",
+            "PolicyName": "step-out",
+            "PolicyARN": "arn:aws:autoscaling:us-east-1:123456789012:scalingPolicy:c322761b-3172-4d56-9a21-0ed9d6161d67:autoScalingGroupName/cc-policies:policyName/step-out",
+            "PolicyType": "StepScaling",
+            "AdjustmentType": "PercentChangeInCapacity",
+            "StepAdjustments": [
+                {
+                    "MetricIntervalLowerBound": 0.0,
+                    "MetricIntervalUpperBound": 10.0,
+                    "ScalingAdjustment": 0
+                },
+                {
+                    "MetricIntervalLowerBound": 10.0,
+                    "MetricIntervalUpperBound": 20.0,
+                    "ScalingAdjustment": 10
+                },
+                {
+                    "MetricIntervalLowerBound": 20.0,
+                    "ScalingAdjustment": 30
+                }
+            ],
+            "EstimatedInstanceWarmup": 300,
+            "PredictiveScalingConfiguration": {}
+        },
+        {
+            "AutoScalingGroupName": "cc-policies",
+            "PolicyName": "step-in",
+            "PolicyARN": "arn:aws:autoscaling:us-east-1:123456789012:scalingPolicy:c322761b-3172-4d56-9a21-0ed9d6161d67:autoScalingGroupName/cc-policies:policyName/step-in",
+            "PolicyType": "StepScaling",
+            "AdjustmentType": "PercentChangeInCapacity",
+            "StepAdjustments": [
+                {
+                    "MetricIntervalLowerBound": -10.0,
+                    "MetricIntervalUpperBound": 0.0,
+                    "ScalingAdjustment": 0
+                },
+                {
+                    "MetricIntervalLowerBound": -20.0,
+                    "MetricIntervalUpperBound": -10.0,
+                    "ScalingAdjustment": -10
+                },
+                {
+                    "MetricIntervalUpperBound": -20.0,
+                    "ScalingAdjustment": -30
+                }
+            ],
+            "EstimatedInstanceWarmup": 300,
+            "PredictiveScalingConfiguration": {}
+        }
+    ]
+}

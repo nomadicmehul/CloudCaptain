@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cloud/s3-signing",
+  "title": "An S3 Request Is a Signed String",
+  "short": "S3 Signing",
+  "motto": "Every S3 request carries an HMAC of its own canonical form; rebuild that string on both sides and SignatureDoesNotMatch says what changed.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cloud/iam-policy-evaluator"
+  ],
+  "tools": [
+    "aws",
+    "moto",
+    "curl"
+  ],
+  "reference": [
+    "/docs/cloud/aws/databases-storage",
+    "/docs/cloud/aws/security-iam",
+    "/docs/cloud/aws/cheatsheet",
+    "/docs/cloud/cloud-security/fundamentals"
+  ],
+  "outputs": [
+    "skill-s3-access-triage.md",
+    "prompt-explain-signaturedoesnotmatch.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}
