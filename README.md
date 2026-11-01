@@ -1,169 +1,122 @@
 <div align="center">
-  <img src="./website/static/img/cloudcaptain-logo.jpg" width="200" />
+  <img src="./website/static/img/cloudcaptain-logo.jpg" width="180" alt="CloudCaptain" />
   <h1>CloudCaptain</h1>
-  <p><strong>Full tutorials + cheat sheets + interview Q&A + exam prep for Cloud, DevOps & AI — with built-in reading progress. Free, forever.</strong></p>
+  <h3>Cloud, DevOps &amp; AIOps from scratch.<br/>Build the tool. Use the tool. Ship an artifact.</h3>
   <p>
-    <a href="https://cloudcaptain.io"><img src="https://img.shields.io/badge/Website-Live-1E9BD7?style=flat&logo=docusaurus" /></a>
-    <img src="https://img.shields.io/badge/PRs-welcome-blue" />
-    <img src="https://img.shields.io/github/last-commit/nomadicmehul/CloudCaptain" />
-    <a href="https://twitter.com/intent/follow?screen_name=nomadicmehul"><img src="https://img.shields.io/twitter/follow/nomadicmehul?style=flat&logo=twitter" /></a>
-    <a href="https://github.com/nomadicmehul/CloudCaptain/stargazers"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github" /></a>
+    <strong>55 lessons</strong> · <strong>8 phases live</strong> · <strong>80 hours</strong> · <strong>1,429 tests</strong> · <strong>107 skills, prompts &amp; MCP servers</strong>
   </p>
   <p>
-    <a href="https://cloudcaptain.io"><strong>Start Learning →</strong></a> ·
-    <a href="#-why-cloudcaptain">Why CloudCaptain</a> ·
-    <a href="#-whats-inside">What's Inside</a> ·
-    <a href="#-contributing">Contribute</a>
+    <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Start the course" /></a>
   </p>
-  <img src="./website/static/img/captains-bridge-demo.gif" width="800" alt="Captain's Bridge in action — reading progress tracked per section, with a personal /progress dashboard" />
-  <p><em>Captain's Bridge: sections tick off as you read, and <a href="https://cloudcaptain.io/progress">/progress</a> remembers everything — no account needed.</em></p>
+  <p>
+    <a href="https://github.com/nomadicmehul/CloudCaptain/actions/workflows/lesson-smoke.yml"><img src="https://github.com/nomadicmehul/CloudCaptain/actions/workflows/lesson-smoke.yml/badge.svg" alt="Lesson smoke tests" /></a>
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license" /></a>
+    <img src="https://img.shields.io/badge/PRs-welcome-blue" alt="PRs welcome" />
+    <a href="https://github.com/nomadicmehul/CloudCaptain/stargazers"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github" alt="GitHub stars" /></a>
+  </p>
+  <p>
+    <strong>English</strong> ·
+    <a href="./i18n/README.hi.md">हिन्दी</a> ·
+    <a href="./i18n/README.mr.md">मराठी</a> ·
+    <a href="./i18n/README.gu.md">ગુજરાતી</a> ·
+    <a href="./i18n/README.de.md">Deutsch</a> ·
+    <a href="./i18n/README.es.md">Español</a> ·
+    <a href="./i18n/README.pt.md">Português</a> ·
+    <a href="./i18n/README.zh.md">中文</a> ·
+    <a href="./i18n/README.ja.md">日本語</a>
+  </p>
 </div>
+
+```bash
+npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code, Cursor, Codex or any agent that reads SKILL.md
+```
+
+Then ask your agent to `/captain-start`: a short placement quiz, a learning path, and the first lesson.
 
 ---
 
-## ⚓ What is CloudCaptain?
+## What you build
 
-Most learning repos give you a **list of links**. CloudCaptain gives you the **actual content**: 150+ documentation pages and **185,000+ words** of original long-form prose, 3,300+ runnable code blocks, 50+ architecture diagrams, 21 command cheat sheets, 19 interview question sets, and 5 certification exam-prep guides — organized into structured learning paths and readable on a site that **remembers where you left off**.
+Every lesson starts from a production problem, has you build the mechanism yourself in plain Python or Bash with tests, then do the same job with the real tool, so every flag and every error message maps onto code you wrote.
 
-Built and curated over 3+ years. Open source (MIT). No paywall, no email gate, no "premium tier". 
+| Phase | You build | Then you run |
+|:--|:--|:--|
+| **00 · Setup & Lab** | a lab doctor that probes your machine and prints the install plan | kind, Docker, your coding agent |
+| **01 · Linux & Systems** | a PID 1 supervisor, an fd leak detector, an strace analyser, a capability decoder, systemd units, cgroups by hand, a mount table reader, a USE-method dashboard | `strace`, `capsh`, `systemctl`, `findmnt`, PSI |
+| **05 · Containers** | a container runtime, an image auditor, a registry client, an image builder without a Dockerfile, a veth/bridge network, Compose, rootless user namespaces, a seccomp generator | Docker, Podman, OCI registries |
+| **06 · Orchestration** | a reconciler, a scheduler, a kubelet, kube-proxy rules and cluster DNS, an RBAC authorizer, Helm, an operator, a Gateway API router | Kubernetes on kind, Helm, Envoy Gateway |
+| **07 · Infrastructure as Code** | a plan/apply engine, a dependency graph, modules, a locking state server, drift detection, a policy engine, Pulumi and Crossplane front ends, an idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **09 · Cloud (AWS first)** | an IAM policy evaluator, a VPC reachability analyser, SigV4 signing and an S3 server, the Lambda runtime API, an Auto Scaling group, a FOCUS cost allocator, a security posture scanner | the AWS CLI against moto, the Lambda emulator, Checkov |
+| **13 · AI Infrastructure** | a GPU scheduler with DRA, an LLM serving simulator, a token-counting gateway, a queue-based autoscaler, a prefix-cache router, HNSW and IVF indexes, a model artifact inspector, a token cost model | llama.cpp on CPU, LiteLLM, pgvector, llm-d, ORAS |
+| **14 · AIOps & Agentic Ops** | an MCP server for kubectl, an incident-triage agent, AI log analysis, OpenTelemetry for LLM calls, agent sandboxes, safe write tools, agent evals | Claude Code, the Claude API, OpenTelemetry, promptfoo |
 
-**[Visit cloudcaptain.io →](https://cloudcaptain.io)**
+Nine more phases (networking, Git, scripting, CI/CD, observability, security, platform engineering, MLOps, capstones) are on the [roadmap](./ROADMAP.md).
 
-## 🧪 Learn from scratch (new)
+## How a lesson works
 
-The **[/learn](https://cloudcaptain.io/learn)** curriculum teaches Cloud, DevOps and AIOps by building the tool before using it. Every lesson: a real production problem → the concept with a diagram → **Build It** from the standard library (a container runtime, a plan/apply engine, a metrics store, an incident-triage agent) → **Use It** with the real tool (Docker, Terraform, Prometheus, an MCP server) → **Ship It**, a prompt or agent skill you keep. Each lesson comes with runnable code, tests, and a six-question quiz.
-
-```bash
-npx skills add nomadicmehul/CloudCaptain    # /captain-start, /captain-learn, /captain-guide, /captain-check
+```
+The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Quiz
+ a real          one diagram     standard     the real    a skill,    six questions,
+ incident                        library +    tool, same  prompt or   before and
+                                 tests        job         MCP server  after
 ```
 
-The tutor skills work in Claude Code, Cursor, Codex and any agent that reads `SKILL.md`. Phases and progress are in [ROADMAP.md](./ROADMAP.md); the lesson contract is in [LESSON_TEMPLATE.md](./LESSON_TEMPLATE.md).
+- **Runnable and tested.** Every lesson has code with unit tests that run anywhere (no root, no Docker, no cloud account) and a `smoke.sh` that runs the Linux-only steps and the real tools on a CI runner with Docker, kind and OpenTofu. A lesson shows "last verified" only after that passes.
+- **Current.** Tool versions are tracked weekly, retired technology (ingress-nginx, PodSecurityPolicy, Swarm, Bitnami images) is flagged wherever it appears, and AI lessons use today's models and APIs.
+- **Yours to keep.** Each lesson ships an agent skill, a prompt or an MCP server into `outputs/`, so you finish with a toolbox, not just notes.
 
-## 🧭 Why CloudCaptain?
+## Learning paths
+
+| Path | For | Lessons |
+|:--|:--|:--|
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 47 |
+| [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engineers asked to run models: GPUs, serving, gateways, routing, cost | 17 |
+| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | putting agents to work on infrastructure safely | 9 |
+
+## The tutor in your agent
+
+`npx skills add nomadicmehul/CloudCaptain` installs four skills: `captain-start` (placement quiz and a plan in `LEARNING.md`), `captain-learn` (one lesson per session, Build It → Use It → Ship It, with the quiz and tests), `captain-guide` (where do I learn X, what does role Y need) and `captain-check` (a Socratic review of a phase). They work in Claude Code, Cursor, Codex and any agent that reads `SKILL.md`.
+
+## The reference library
+
+Alongside the curriculum, [cloudcaptain.io/docs](https://cloudcaptain.io/docs) keeps the long-form guides CloudCaptain started with: 150+ pages of original writing, 21 command cheat sheets, 19 interview question sets, 5 certification exam-prep guides (CKA/CKAD/CKS, Terraform, AWS, Azure, GCP), 7 learning paths and 8 career paths. Lessons link into it rather than repeating it, and the reference pages that a lesson builds on link back with a "Build this from scratch" card.
+
+The site's **Captain's Bridge** reading mode tracks progress per section, and [/progress](https://cloudcaptain.io/progress) remembers lessons, quiz scores and reading in your browser. No account, no tracking.
+
+<div align="center">
+  <img src="./website/static/img/captains-bridge-demo.gif" width="760" alt="Captain's Bridge: sections tick off as you read, and /progress remembers what you have read" />
+</div>
+
+## Why CloudCaptain
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| Full written tutorials | ✅ 185K+ words of prose, in-repo | ❌ roadmap nodes link out | ❌ Q&A only | ❌ links only |
-| Interview Q&A per topic | ✅ 19 topic sets | ❌ | ✅ | ❌ |
-| Command cheat sheets | ✅ 21 sheets | ❌ | ❌ | ❌ |
-| Certification exam prep | ✅ CKA/CKAD/CKS, Terraform, AWS, Azure, GCP | ❌ | ❌ | ❌ |
-| Reading progress tracking | ✅ built-in, per page | ✅ | ❌ | ❌ |
-| Architecture diagrams | ✅ 50+ Mermaid | ✅ | ❌ | ❌ |
-| From-scratch lessons with code, tests, quiz | ✅ `/learn` + agent tutor | ❌ | ❌ | ❌ |
+| Build each tool from scratch, with tests | ✅ 55 lessons | ❌ | ❌ | ❌ |
+| Verified against the real tools in CI | ✅ every lesson | ❌ | ❌ | ❌ |
+| AI infrastructure and AIOps | ✅ 15 lessons | partial | ❌ | links |
+| An agent tutor you install | ✅ `npx skills add` | ❌ | ❌ | ❌ |
+| Long-form guides, cheat sheets, interview Q&A, exam prep | ✅ | roadmap nodes link out | Q&A | links |
+| Reading and quiz progress | ✅ in your browser | ✅ | ❌ | ❌ |
 
-Every major topic follows the same triad: **Fundamentals guide → Cheat sheet → Interview questions** (plus exam prep where a certification exists). Learn it, reference it, get hired with it — in one place.
-
-### 🚢 The Captain's Bridge reading experience
-
-CloudCaptain isn't a wall of markdown. The site ships a custom reading layout with:
-
-- **Scroll progress + completion tracking** on every doc page
-- **[/progress](https://cloudcaptain.io/progress)** — a personal dashboard showing what you've read across every topic, with a "resume reading" widget
-- **Chapter rail navigation** and completion toasts as you finish pages
-- All client-side (localStorage) — no account, no tracking, no sign-up
-
-## 📚 What's Inside
-
-### Deep-dive topics (the heavyweights)
-
-| Topic | What you get |
-|:------|:-------------|
-| **Kubernetes** | 10 guides, ~45K words — fundamentals, workloads, networking, CKA/CKAD/CKS exam prep, cheat sheet, 60+ interview questions |
-| **AWS** | 10 guides, ~40K words — core services, architecture, CloudFormation examples guide, cert prep, interview Q&A |
-| **Docker** | 12 guides, ~30K words — fundamentals, Dockerfile deep-dive, Compose, security, cheat sheet, interview Q&A |
-| **Linux** | 7 guides, ~24K words — fundamentals through advanced administration |
-| **Bash** | 6 guides, ~14K words — with 40+ inline script examples |
-| **Git, Terraform, Networking, Azure** | 5–7 guides each with the full triad |
-
-### Also covered
-
-| Area | Topics |
-|:-----|:-------|
-| **CI/CD & Automation** | Jenkins · CI/CD Pipelines · GitHub Actions · GitOps |
-| **IaC & Config Management** | Ansible · Chef |
-| **Languages & Scripting** | Python · YAML |
-| **Cloud & Concepts** | GCP · Multi-Cloud · Cloud Security · FinOps |
-| **Security** | DevSecOps |
-| **Platform & Web** | Helm · Nginx · Gradle · Podman |
-
-### Learning & Career Paths
-
-- **7 structured learning paths** — DevOps, Cloud, Containers, AI/ML Ops, SRE, Platform Engineering, Linux Master
-- **8 career paths for the AI era** with salary ranges, skills roadmaps, and certification recommendations — **[explore →](https://cloudcaptain.io/career-paths)**
-
-### Interview Preparation
-
-**19 topic-specific question sets, 20–60+ questions each:**
-
-| Category | Question sets |
-|:---------|:--------------|
-| **Containers & Orchestration** | Docker · Kubernetes |
-| **Infrastructure & Delivery** | Terraform · Ansible · CI/CD · Jenkins · DevOps |
-| **Systems & Scripting** | Linux · Git · Python · Bash · Networking |
-| **Cloud Providers** | AWS · Azure · GCP |
-| **Cloud Concepts** | Cloud Computing · Multi-Cloud · Cloud Security · FinOps |
-
-## 🚀 Getting Started
-
-**Browse online:** [cloudcaptain.io](https://cloudcaptain.io) — start immediately, nothing to install.
-
-**Run locally:**
+## Run it locally
 
 ```bash
 git clone https://github.com/nomadicmehul/CloudCaptain.git
 cd CloudCaptain/website
 npm install
-npm start         # Dev server at localhost:3000
+npm start                                  # http://localhost:3000, lessons at /learn
+npm run curriculum:test -- linux/pid1-supervisor   # one lesson's tests
 ```
 
-## 🤝 Contributing
+Each lesson is a folder: `curriculum/phases/NN-phase/NN-lesson/` with `docs/en.md`, `code/` (with tests and `smoke.sh`), `quiz.json` and `outputs/`. The contract is [LESSON_TEMPLATE.md](./LESSON_TEMPLATE.md); the repo map is [AGENTS.md](./AGENTS.md).
 
-We welcome contributions of every size — see [CONTRIBUTING.md](./CONTRIBUTING.md) for full guidelines.
+## Contributing
 
-### Contribute in 5 minutes (no code required)
+Lessons, fixes and translations are all welcome; see [CONTRIBUTING.md](./CONTRIBUTING.md). A new lesson starts with `npm run curriculum:scaffold`, must pass the validator and its tests, and gets verified by the smoke run on its pull request. Outdated content has its own issue template, and every pull request gets a preview deployment.
 
-Homepage sections are powered by JSON files in `website/src/data/` — you can improve content by editing them directly on GitHub:
+Teaching with CloudCaptain at a bootcamp, university or company? [FORKING.md](./FORKING.md) explains how to fork and adapt it. To support the work, see [SPONSORS.md](./SPONSORS.md).
 
-| File | What it controls |
-|:-----|:-----------------|
-| `categories.json` | Technology cards (Docker, K8s, Terraform, etc.) |
-| `learningPaths.json` | Learning path cards on homepage |
-| `careerPaths.json` | Career paths page (8 roles) |
-| `howItWorks.json` | "How It Works" 4-step process |
-| `techBadges.json` | Tech badge pills in the hero section |
-
-### Contribute content
-
-1. Fork the repository and create a branch: `git checkout -b add/my-resource`
-2. Add or improve docs in `website/docs/` (Markdown with `title`, `description`, `sidebar_position` front matter)
-3. Run `npm run build` locally to verify — every PR also gets an automatic preview deployment
-4. Submit a Pull Request
-
-Looking for a place to start? Several topics (Puppet, Vagrant, Packer, CloudFormation, DigitalOcean) are stubs waiting for an author — check the [open issues](https://github.com/nomadicmehul/CloudCaptain/issues).
-
-## 🛠 Tech Stack
-
-Docusaurus 3 (TypeScript) · GitHub Pages + custom domain · GitHub Actions CI/CD with per-PR preview deploys · Mermaid diagrams · local search · JSON-driven homepage content.
-
-```
-CloudCaptain/
-  curriculum/               # From-scratch lessons: phases/NN-phase/NN-lesson/{docs,code,quiz.json,outputs}
-  scripts/                  # build-curriculum.mjs (validate + generate), run-lesson-tests.mjs
-  skills/                   # captain-* tutor skills (npx skills add nomadicmehul/CloudCaptain)
-  website/
-    docs/
-      learning-paths/         # Structured learning roadmaps
-      interview-prep/         # Interview preparation guides
-      tools/                  # Tool-specific documentation (25+ categories)
-      cloud/                  # AWS, Azure, GCP + cloud concepts
-    src/
-      data/                   # JSON data files (edit to update homepage content)
-      pages/                  # Custom pages (homepage, career paths, /progress)
-    static/img/               # Logo, favicon, social card
-  .github/workflows/          # Deploy, PR checks, PR preview deploys
-```
-
-## 📊 Site Traffic
+## Site traffic
 
 <div align="center">
   <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/.github/stats/visitors-total.json" alt="Total visits" />
@@ -174,20 +127,16 @@ CloudCaptain/
     <source media="(prefers-color-scheme: dark)" srcset="./.github/stats/chart-dark.svg">
     <img src="./.github/stats/chart-light.svg" width="800" alt="Visitor traffic over the last 90 days" />
   </picture>
-  <p><em>Updated daily via <a href="https://www.goatcounter.com">GoatCounter</a> — privacy-friendly, no cookies, no tracking of individuals.</em></p>
+  <p><em>Updated daily via <a href="https://www.goatcounter.com">GoatCounter</a>: privacy-friendly, no cookies, no tracking of individuals.</em></p>
 </div>
 
-## ⭐ Support the Project
+## License
 
-If CloudCaptain helped you learn something, prepare for an interview, or pass a certification — **[star the repo](https://github.com/nomadicmehul/CloudCaptain)**. It takes 2 seconds and genuinely helps other engineers discover a free alternative to paid courses.
-
-## 📄 License
-
-MIT — see [LICENSE](./LICENSE). Use it, fork it, learn from it.
+MIT, see [LICENSE](./LICENSE). Use it, fork it, teach with it.
 
 ---
 
 <div align="center">
-  <p>Built with love by <a href="https://nomadicmehul.dev/">Mehul Patel</a> and the open-source community</p>
-  <p><a href="https://cloudcaptain.io">cloudcaptain.io</a></p>
+  <p>Built by <a href="https://nomadicmehul.dev/">Mehul Patel</a> and the open-source community · <a href="https://cloudcaptain.io">cloudcaptain.io</a></p>
+  <p>If CloudCaptain helped you, <a href="https://github.com/nomadicmehul/CloudCaptain">star the repo</a>: it helps other engineers find a free alternative to paid courses.</p>
 </div>
