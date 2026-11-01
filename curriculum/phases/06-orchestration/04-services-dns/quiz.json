@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/services-dns",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "From a debug pod, `curl 10.96.0.20:80` (a Service's ClusterIP) works but `ping 10.96.0.20` gets no reply. Why?",
+      "choices": [
+        "A NetworkPolicy blocks ICMP by default",
+        "No interface owns the ClusterIP: it exists only as a match in DNAT rules for the Service's ports and protocols, so an ICMP echo matches nothing and nobody answers",
+        "CoreDNS does not resolve addresses for ping",
+        "kube-proxy rate-limits ICMP to protect the pods"
+      ],
+      "answer": 1,
+      "explanation": "In iptables and nftables mode the virtual IP is a match in KUBE-SERVICES (or the service-ips map) for one protocol and port. TCP to port 80 is rewritten to a pod; ICMP is not, and no interface holds the address to reply. A failed ping says nothing about the Service."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A KUBE-SVC chain has three endpoint rules: `--probability 0.33333333349`, then `--probability 0.50000000000`, then one with no statistic match. What share of new connections does each endpoint get?",
+      "choices": [
+        "33%, 50% and 100%, so the last pod is overloaded",
+        "33%, 50% and 17%",
+        "One third each: the first takes 1/3, the second takes half of the remaining 2/3, the third takes the 1/3 that is left",
+        "It depends on the order kube-proxy happened to write the pods"
+      ],
+      "answer": 2,
+      "explanation": "Rules are tried top to bottom. Rule k of n matches 1/(n-k) of the packets that reach it, which makes every endpoint's share exactly 1/n. The printed 0.33333333349 is 0.3333333333 stored as a 31-bit fraction and printed back with eleven decimals."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A pod matches the Service's selector and is Running, but its readiness probe fails. Where does it show up?",
+      "choices": [
+        "In the EndpointSlice with `ready: false`; kube-proxy writes no KUBE-SEP chain for it and headless DNS leaves it out, unless the Service sets publishNotReadyAddresses",
+        "In the rules with a lower probability",
+        "Only in the headless Service's DNS answer",
+        "Nowhere: the controller only lists ready pods"
+      ],
+      "answer": 0,
+      "explanation": "The controller keeps every matching pod with an IP that has not finished and records its conditions. Consumers decide: kube-proxy and CoreDNS use ready endpoints. publishNotReadyAddresses forces ready to true for peers that must find each other before they are ready."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The Service says `targetPort: http`. A new version of the pod names its container port `web` instead. What does the EndpointSlice controller do with the new pods?",
+      "choices": [
+        "It falls back to the Service's port number",
+        "It uses the first container port it finds",
+        "It rejects the Deployment",
+        "It cannot resolve http in those pods, so they land in a slice without that port; kube-proxy has no endpoint for them on this port and they receive no traffic"
+      ],
+      "answer": 3,
+      "explanation": "A named targetPort is looked up per pod. kube-proxy matches slices by port name and protocol, so endpoints from a slice that lacks http are invisible for that Service port. Once the old pods are gone the Service has no endpoints and becomes a REJECT rule."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A pod in namespace `batch` calls `api.partner.example.com` thousands of times a minute, with the default `ndots:5` and the three cluster search domains. What does each lookup cost, and what fixes it?",
+      "choices": [
+        "Four names (three cluster suffixes, all NXDOMAIN, then the name itself), twice over for A and AAAA, plus any node search domains; write it with a trailing dot or set dnsConfig ndots to 2",
+        "Two names, because the name has a dot",
+        "One query; CoreDNS caches it",
+        "It cannot resolve external names at all"
+      ],
+      "answer": 0,
+      "explanation": "Three dots is fewer than five, so the stub resolver appends every search domain first. CoreDNS answers the cluster ones with NXDOMAIN and only the last attempt goes upstream. A trailing dot or a lower ndots makes it one name."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "After a Deployment is scaled to zero, clients of its Service get `connection refused` instantly instead of a timeout. Which rule produces that?",
+      "choices": [
+        "kube-proxy's REJECT rule in the filter table for a Service with no endpoints",
+        "The pod's kernel refusing the connection",
+        "CoreDNS returning NXDOMAIN",
+        "The KUBE-MARK-MASQ chain"
+      ],
+      "answer": 0,
+      "explanation": "With no usable endpoints kube-proxy writes no KUBE-SVC chain and adds a REJECT with icmp-port-unreachable for the ClusterIP and port, so the client's own node refuses at once. A timeout points elsewhere: a pod that is not listening, a NetworkPolicy, or routing."
+    }
+  ]
+}

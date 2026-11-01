@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/scheduler",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A new pod is Pending with `0/4 nodes are available: 4 Insufficient cpu.`, yet `kubectl top nodes` shows every node below 30% CPU. What explains it?",
+      "choices": [
+        "The scheduler compares the pod's CPU request with allocatable minus the requests of pods already bound; actual usage is never read",
+        "The nodes are throttling CPU because of limits",
+        "metrics-server is lagging, so the scheduler sees stale usage",
+        "The pod needs a PriorityClass before it can use idle CPU"
+      ],
+      "answer": 0,
+      "explanation": "NodeResourcesFit adds up resources.requests, not consumption. Nodes full of pods that request a lot and use little are full for scheduling. The fix is right-sizing requests or adding capacity, not reading top."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The event says `0/3 nodes are available: 1 node(s) had untolerated taint(s), 2 Insufficient cpu.` The control-plane node is also short of CPU. Why is it not counted under Insufficient cpu?",
+      "choices": [
+        "The scheduler merges duplicate reasons",
+        "Control-plane nodes have no allocatable CPU",
+        "Filters run in a fixed order and stop at the first failure for each node; TaintToleration runs before NodeResourcesFit, so the taint is that node's only reason",
+        "Insufficient cpu is only reported for worker nodes"
+      ],
+      "answer": 2,
+      "explanation": "Each node contributes the reasons of exactly one plugin: the first one that said no. That is why the counts add up to the node count (or more, when one plugin reports several shortages on the same node) and why fixing the taint can reveal a second reason underneath."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A pod has `topologySpreadConstraints` on `kubernetes.io/hostname` with `maxSkew: 1` and `DoNotSchedule`. Two workers each run one matching replica; a tainted control-plane node runs none. Both workers fail the spread filter. What changes the outcome?",
+      "choices": [
+        "Raising the pod's priority",
+        "Switching to `whenUnsatisfiable: DoNotSchedule` on the zone key",
+        "Adding a third replica first",
+        "Setting `nodeTaintsPolicy: Honor`, so the tainted node stops counting as a domain with zero pods and the minimum becomes 1"
+      ],
+      "answer": 3,
+      "explanation": "With the default nodeTaintsPolicy Ignore, tainted nodes are eligible domains. The control-plane domain has zero pods, so placing a second replica on a worker gives skew 2 - 0 = 2 > 1. Honoring taints removes that domain from the minimum."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A FailedScheduling message ends with `preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling.` What does that tell you?",
+      "choices": [
+        "Every pod on those nodes has a higher priority",
+        "Every node failed for a reason that evicting pods cannot fix (a taint, a cordon, an affinity or label mismatch), so a higher priority would not help",
+        "Preemption is disabled in this cluster",
+        "The pod has preemptionPolicy: Never"
+      ],
+      "answer": 1,
+      "explanation": "Those reasons have the status UnschedulableAndUnresolvable, and the preemption plugin skips such nodes. preemptionPolicy: Never gives a different sentence (not eligible due to preemptionPolicy=Never), and nodes without lower-priority pods say No preemption victims found for incoming pod."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A pod has been Pending for an hour. `kubectl describe pod` shows no events at all and there is no PodScheduled condition in its status. What is the most likely cause?",
+      "choices": [
+        "Every node is short of memory",
+        "The image cannot be pulled",
+        "`spec.schedulerName` names a scheduler that no running kube-scheduler profile serves, so nothing ever tries to schedule it",
+        "A taint on every node"
+      ],
+      "answer": 2,
+      "explanation": "Any scheduler that attempts a pod and fails writes a FailedScheduling event and PodScheduled=False. Silence means no scheduler picked it up. Resource shortages and taints produce events; image pulls happen after binding, on the kubelet."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "cluster-autoscaler does not scale up for a pod whose event says `3 node(s) didn't match Pod's node affinity/selector.` Why not, and what is the fix?",
+      "choices": [
+        "The autoscaler only reacts to Insufficient cpu",
+        "It simulates the scheduler's filters on each node group's template node; if no template carries the label the pod selects, a new node would fail the same filter, so you add the label to a node group or fix the selector",
+        "The autoscaler needs the pod to have a PriorityClass",
+        "Scale-up is blocked until the pod is deleted and recreated"
+      ],
+      "answer": 1,
+      "explanation": "Autoscalers answer the question minisched answers, against a node that does not exist yet. A new node only helps if it would pass every filter that failed. Labels, taints and zones on the template decide that, which is why NotTriggerScaleUp names the predicate that would still fail."
+    }
+  ]
+}

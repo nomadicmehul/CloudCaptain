@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/services-dns",
+  "title": "A Service Is a Virtual IP and a Rewrite Rule",
+  "short": "Services and DNS",
+  "motto": "A ClusterIP lives on no interface: every node DNATs it to a ready pod, and CoreDNS turns the same objects into names.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/kubelet-lite",
+    "containers/container-networking"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "iptables",
+    "nft",
+    "coredns",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/linux/networking",
+    "/docs/tools/networking/fundamentals"
+  ],
+  "outputs": [
+    "skill-service-connectivity-triage.md",
+    "prompt-explain-iptables-save.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

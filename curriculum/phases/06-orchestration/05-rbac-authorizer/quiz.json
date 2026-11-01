@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/rbac-authorizer",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A ServiceAccount is bound to ClusterRole `edit` by a ClusterRoleBinding. To stop it reading Secrets, someone binds it to a new Role that grants only `get configmaps` in its namespace. What can it do afterwards?",
+      "choices": [
+        "Everything edit allows plus get configmaps: RBAC has no deny rules, so permissions are the union of every binding that applies",
+        "Nothing, because two bindings for one subject conflict and both are ignored",
+        "Only get configmaps, because the narrower Role takes precedence",
+        "Everything edit allows except in that namespace, where the Role overrides it"
+      ],
+      "answer": 0,
+      "explanation": "RBAC is deny-by-default and additive. A request is allowed when any rule of any applicable binding matches; adding a binding can only add permissions. To take Secrets away, change or delete the binding to edit."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`kubectl auth can-i get pods/log -n shop --as system:serviceaccount:shop:dashboard` prints `yes`, yet the dashboard gets a 403 when it fetches logs. Why?",
+      "choices": [
+        "The answer is cached for ten minutes and the binding was removed",
+        "Impersonation does not apply to subresources, so the answer is always yes",
+        "Logs are served by the kubelet, which ignores RBAC",
+        "kubectl read `pods/log` as a pod named `log`; the log subresource needs `--subresource=log`, and the account's rule covers `pods` but not `pods/log`"
+      ],
+      "answer": 3,
+      "explanation": "kubectl parses TYPE/NAME, so it asked about get on the pod named log, which a plain `pods` rule allows. The real log request is resource pods, subresource log, which matches only a rule naming `pods/log`, `*/log` or `*`."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`kubectl auth can-i create selfsubjectaccessreviews -A --as system:serviceaccount:shop:ci` says yes, but a SubjectAccessReview with `spec.user: system:serviceaccount:shop:ci` and no groups says not allowed. Which is right?",
+      "choices": [
+        "kubectl, because SubjectAccessReviews ignore ClusterRoleBindings",
+        "Both: impersonation adds the service-account groups and system:authenticated, which the system:basic-user binding grants to, while a SubjectAccessReview evaluates exactly the groups you send",
+        "Neither; one of them must be talking to a stale cache",
+        "The SubjectAccessReview, because impersonation is not real authorization"
+      ],
+      "answer": 1,
+      "explanation": "The impersonation filter fills in system:serviceaccounts, system:serviceaccounts:shop and system:authenticated for a service-account user with no --as-group. A SubjectAccessReview takes spec.groups literally. The grant comes from a group binding, so the answers differ for the same user name."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "You create ClusterRole `metrics-reader` with the label `rbac.authorization.k8s.io/aggregate-to-view: \"true\"`. Who gains its rules?",
+      "choices": [
+        "Nobody until you bind metrics-reader to someone",
+        "Only subjects bound to view through a ClusterRoleBinding",
+        "Every subject bound to view, and, because view aggregates into edit and edit into admin, every subject bound to edit or admin too",
+        "Only service accounts in kube-system, where the aggregation controller runs"
+      ],
+      "answer": 2,
+      "explanation": "The aggregation controller writes the union of matching ClusterRoles into view's rules. view carries aggregate-to-edit and edit carries aggregate-to-admin, so the rule flows on to both, in every namespace where those roles are bound."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A CI ServiceAccount may `create rolebindings` in `shop` and holds nothing else. It runs `kubectl create rolebinding self-edit --clusterrole=edit --serviceaccount=shop:ci -n shop`. What happens?",
+      "choices": [
+        "It succeeds, because creating the binding is all it needs",
+        "It succeeds, but the binding stays inactive until an admin approves it",
+        "Forbidden: it is attempting to grant RBAC permissions not currently held; it would need bind on clusterroles/edit or already hold every permission edit grants in shop",
+        "Forbidden, because a RoleBinding cannot reference a ClusterRole"
+      ],
+      "answer": 2,
+      "explanation": "The RBAC storage checks escalation on every binding create and update: the creator must hold bind on the referenced role or cover all of its rules in that scope. Members of system:masters skip the check. Giving the bot bind on exactly the roles it hands out is the least-privilege fix."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Which single grant is equivalent to cluster-admin for practical purposes, even though no rule in it says `*`?",
+      "choices": [
+        "`list` on pods in every namespace",
+        "`impersonate` on users and groups at cluster scope, because the holder can send any request as any user in system:masters",
+        "`get` on configmaps in kube-public",
+        "`create` on selfsubjectaccessreviews"
+      ],
+      "answer": 1,
+      "explanation": "Impersonation makes the API server authorize the request as the impersonated identity. With impersonate on groups, `--as anyone --as-group system:masters` is allowed before RBAC is consulted. bind and escalate are the other two verbs to treat the same way in a review."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "orchestration/operator",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "You apply a CustomResourceDefinition for `StaticSite`, then `kubectl apply` a StaticSite. No controller is running. What do you get?",
+      "choices": [
+        "An error: the API server refuses objects of a type no controller has registered",
+        "A Deployment and a Service, created by the API server from the CRD's schema",
+        "A stored, validated StaticSite that `kubectl get site` lists, and nothing else: no children, no status",
+        "A pod that runs the operator image named in the CRD"
+      ],
+      "answer": 2,
+      "explanation": "A CRD only registers a type: endpoints, storage, schema validation and defaulting. Behaviour lives in a controller that watches the type. Without one, the object sits in etcd with an empty status, which is also what a stuck or missing operator looks like."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does `reconcile()` add its finalizer before it publishes the external record?",
+      "choices": [
+        "Because the API server rejects updates to objects without finalizers",
+        "If the record were published first and the site deleted before the finalizer landed, the API server would delete the object with nothing guaranteed to remove the record",
+        "Because finalizers make the create faster",
+        "Because the garbage collector deletes external records only when a finalizer is present"
+      ],
+      "answer": 1,
+      "explanation": "A finalizer is the promise that cleanup will run before the object disappears. Anything created outside the cluster before that promise exists can leak. Adding the finalizer is the first write; everything that needs cleaning up comes after it."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`kubectl get site hello -o jsonpath='{.metadata.generation} {.status.observedGeneration}'` prints `2 1`, and the Ready condition says True. What does that tell you?",
+      "choices": [
+        "The site is ready at its latest spec",
+        "The status subresource is broken",
+        "Someone edited the status by hand",
+        "The spec changed and the controller has not reconciled it yet, so the Ready=True describes the previous spec"
+      ],
+      "answer": 3,
+      "explanation": "generation counts spec changes; observedGeneration is the generation the controller had when it wrote status. Until they match, the status is about an older spec. kubectl wait on Ready alone can pass too early here; wait for observedGeneration first."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The operator's watch on staticsites returns an `ERROR` event with code 410 (too old resource version). What is the correct response?",
+      "choices": [
+        "List again, replace the cache, queue every key (including objects that disappeared from the list), and watch from the list's resourceVersion",
+        "Ignore it and keep watching from the same resourceVersion",
+        "Delete and recreate every StaticSite so the history starts fresh",
+        "Restart the API server"
+      ],
+      "answer": 0,
+      "explanation": "The server no longer has the history between your version and now, so some events are gone for good. A level-triggered controller does not need them: relist, queue every key, and reconcile reads the current state. Objects deleted during the gap still get one reconcile from the old cache."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A StaticSite has been `Terminating` for an hour: `deletionTimestamp` is set and `metadata.finalizers` is `[learn.cloudcaptain.io/external-record]`. The operator pod is in CrashLoopBackOff. What is the right fix?",
+      "choices": [
+        "Fix and restart the operator; on start it lists, finds the deleting site, cleans up and removes its finalizer. Remove the finalizer by hand only if the operator is gone for good, and then delete the external record yourself",
+        "Patch the finalizers to null immediately; finalizers are optional",
+        "Delete the CRD so all StaticSites go away",
+        "`kubectl delete --force --grace-period=0` on the StaticSite"
+      ],
+      "answer": 0,
+      "explanation": "The finalizer is doing its job: holding the object until cleanup runs. Force delete does not bypass finalizers, and deleting the CRD gets stuck on the same finalizers. Patching it away unblocks the API server and leaks exactly what the finalizer protected."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`ensure()` applies a mutate function to a copy of the live Deployment and writes only if the result differs. Why not build the desired Deployment from scratch and compare it with the live one?",
+      "choices": [
+        "The live object is read-only",
+        "Building objects from scratch is not allowed for Deployments",
+        "The API server fills in defaults (imagePullPolicy, terminationMessagePath, a volume's defaultMode), so a from-scratch object never equals the live one and the operator would write on every reconcile",
+        "Comparing dicts is too slow in Python"
+      ],
+      "answer": 2,
+      "explanation": "Setting only the fields you own on top of the live object makes equality meaningful, so a settled site costs zero writes. This is controllerutil.CreateOrUpdate's design; server-side apply solves the same problem with field ownership."
+    }
+  ]
+}

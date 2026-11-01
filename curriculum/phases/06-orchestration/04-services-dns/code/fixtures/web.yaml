@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: web, track: stable}
+  template:
+    metadata:
+      labels: {app: web, track: stable}
+    spec:
+      containers:
+        - name: web
+          image: python:3.12-alpine
+          command: ["python3", "-m", "http.server", "8080"]
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            tcpSocket: {port: http}
+            periodSeconds: 2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-unready
+  labels: {app: web, track: canary}
+spec:
+  containers:
+    - name: web
+      image: python:3.12-alpine
+      command: ["python3", "-m", "http.server", "8080"]
+      ports:
+        - name: http
+          containerPort: 8080
+      readinessProbe:
+        exec: {command: ["false"]}
+        periodSeconds: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector: {app: web}
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-headless
+spec:
+  clusterIP: None
+  selector: {app: web}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "orchestration/scheduler",
+  "title": "A Scheduler Is Filter, Score, Bind",
+  "short": "Pod Scheduling",
+  "motto": "A Pending pod is a filter that rejected every node; the event names which one, and the fix is a request, a taint or a label, not a restart.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/reconciler"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "kube-scheduler"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/fundamentals",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/cheatsheet"
+  ],
+  "outputs": [
+    "skill-pending-pod-triage.md",
+    "prompt-explain-failedscheduling.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}
