@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/vpc-reachability",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A job in a private subnet reaches an external API through a NAT gateway. About half of its connections time out, the rest work, and the instance's security group allows all outbound traffic. Which cause fits best?",
+      "choices": [
+        "The NAT gateway is out of bandwidth",
+        "The security group's connection tracking table is full",
+        "DNS resolution fails every other time",
+        "The NAT gateway's subnet has a network ACL that allows return traffic only on 32768-65535, while the NAT gateway picks source ports from 1024-65535"
+      ],
+      "answer": 3,
+      "explanation": "Network ACLs are stateless, so the reply needs its own inbound rule on the NAT subnet, for the port the NAT gateway chose. With 1024-65535 in play and only 32768-65535 allowed, roughly half of the replies hit the * rule. Security groups pass replies on their own, so changing them does nothing."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A subnet's route table holds `10.0.0.0/16 -> local`, `10.1.0.0/16 -> pcx-1`, `10.1.5.0/24 -> tgw-1` and `0.0.0.0/0 -> nat-1`. Where does a packet for 10.1.5.9 go?",
+      "choices": [
+        "To nat-1, because 0.0.0.0/0 matches every address",
+        "To pcx-1, because peering routes take priority over transit gateway routes",
+        "To tgw-1: 10.1.5.0/24 is the longest prefix that contains the address, and the order of routes in the table does not matter",
+        "Nowhere: two routes overlap, so the table is rejected"
+      ],
+      "answer": 2,
+      "explanation": "The most specific matching route wins. Priority between route types (static over prefix list over propagated) only breaks ties on an identical prefix, and pcx-1 and tgw-1 are both static anyway. Overlapping routes are normal; that is how 0.0.0.0/0 coexists with everything else."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "sg-db allows TCP 5432 from sg-web. A web instance connects to the database's Elastic IP instead of its private IP and times out, although the private IP works. Why?",
+      "choices": [
+        "The connection leaves through the internet gateway and comes back with web's public IP as its source; a group reference only matches the private IPs of the group's members",
+        "sg-db needs an outbound rule for the reply",
+        "The network ACL treats public IPs as a different protocol",
+        "Elastic IPs do not support TCP 5432"
+      ],
+      "answer": 0,
+      "explanation": "Security group references match members' private IP addresses on same-VPC or peered paths. A hairpin through the internet gateway translates the source to a public address, so the rule from sg-web no longer matches. Security groups are stateful, so no outbound rule is needed for the reply."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The database subnet's custom network ACL allows inbound TCP 5432 from 10.1.0.0/16, and the security group allows it too. Flow logs on the database interface show an ACCEPT for each incoming SYN and a REJECT for each outgoing SYN-ACK. What is the fix?",
+      "choices": [
+        "Add an outbound rule for TCP 5432 to the security group",
+        "Add an outbound network ACL rule allowing TCP to 10.1.0.0/16 on the clients' ephemeral ports (1024-65535 covers every client type)",
+        "Add a route for 10.1.0.0/16 to the internet gateway",
+        "Replace the network ACL with the default one and add a deny rule for 0.0.0.0/0"
+      ],
+      "answer": 1,
+      "explanation": "An ACCEPT followed by a REJECT for the reverse 5-tuple is the fingerprint of a stateless ACL dropping the reply. The reply's destination port is the client's ephemeral port, not 5432. A security group change cannot help because the group already let the reply through."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "An instance sits in a subnet whose route table sends 0.0.0.0/0 to an attached internet gateway, and its security group and network ACL allow all traffic. It still cannot reach the internet. What is missing?",
+      "choices": [
+        "A NAT gateway in the same subnet",
+        "A second route for 0.0.0.0/1 and 128.0.0.0/1",
+        "A public IPv4 address or an Elastic IP on its network interface; the internet gateway only translates addresses it has a mapping for",
+        "An outbound security group rule for each destination port"
+      ],
+      "answer": 2,
+      "explanation": "A public subnet is only a route. The internet gateway performs a one to one translation between an interface's private IP and its public IP; with no public IP there is nothing to translate to, which Reachability Analyzer reports as IGW_PUBLIC_IP_ASSOCIATION_FOR_EGRESS."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "You attach an Elastic IP to an instance in a private subnet whose 0.0.0.0/0 route points at a NAT gateway, and open the security group and network ACL for TCP 443 from 0.0.0.0/0. Connections from the internet still time out. Why?",
+      "choices": [
+        "Elastic IPs cannot be attached to instances in private subnets",
+        "The request arrives through the internet gateway, but the reply follows the subnet's default route to the NAT gateway, which rewrites the source, so the client never matches it to its connection",
+        "The security group also needs an outbound rule for 443",
+        "The NAT gateway blocks all inbound traffic for the whole VPC"
+      ],
+      "answer": 1,
+      "explanation": "Routing is per subnet and applies to replies too, so the path is asymmetric. Put the instance in a subnet that routes to the internet gateway, or keep it private behind a load balancer in a public subnet. vpcpath reports this as VPCPATH_ASYMMETRIC_RETURN at the return route."
+    }
+  ]
+}

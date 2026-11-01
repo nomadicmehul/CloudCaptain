@@ -1,0 +1,42 @@
+{
+  "description": "health checks: a stopped instance is replaced at once, a failing load balancer target only after the grace period, set-instance-health immediately",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 3,
+    "MaxSize": 6,
+    "DesiredCapacity": 3,
+    "HealthCheckType": "ELB",
+    "HealthCheckGracePeriod": 120
+  },
+  "events": [
+    {
+      "at": 300,
+      "op": "stop-instance",
+      "InstanceId": "i-00000000000000001"
+    },
+    {
+      "at": 370,
+      "op": "elb-health",
+      "InstanceId": "i-00000000000000004",
+      "Healthy": false
+    },
+    {
+      "at": 700,
+      "op": "elb-health",
+      "InstanceId": "i-00000000000000002",
+      "Healthy": false
+    },
+    {
+      "at": 900,
+      "op": "set-instance-health",
+      "InstanceId": "i-00000000000000003",
+      "HealthStatus": "Unhealthy"
+    }
+  ],
+  "until": 1500
+}

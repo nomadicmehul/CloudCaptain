@@ -1,0 +1,293 @@
+{
+  "Reservations": [
+    {
+      "ReservationId": "r-0web",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0web",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0shop",
+          "SubnetId": "subnet-0public-a",
+          "PrivateIpAddress": "10.0.1.10",
+          "PublicIpAddress": "203.0.113.20",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0web",
+              "GroupName": "web"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "web"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0web",
+              "SubnetId": "subnet-0public-a",
+              "VpcId": "vpc-0shop",
+              "PrivateIpAddress": "10.0.1.10",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ReservationId": "r-0worker",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0worker",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0shop",
+          "SubnetId": "subnet-0public-a",
+          "PrivateIpAddress": "10.0.1.30",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0batch",
+              "GroupName": "batch"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "worker"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0worker",
+              "SubnetId": "subnet-0public-a",
+              "VpcId": "vpc-0shop",
+              "PrivateIpAddress": "10.0.1.30",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ReservationId": "r-0db",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0db",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0shop",
+          "SubnetId": "subnet-0private-a",
+          "PrivateIpAddress": "10.0.2.20",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0db",
+              "GroupName": "db"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "db"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0db",
+              "SubnetId": "subnet-0private-a",
+              "VpcId": "vpc-0shop",
+              "PrivateIpAddress": "10.0.2.20",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ReservationId": "r-0batch",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0batch",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0shop",
+          "SubnetId": "subnet-0private-a",
+          "PrivateIpAddress": "10.0.2.30",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0batch",
+              "GroupName": "batch"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "batch"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0batch",
+              "SubnetId": "subnet-0private-a",
+              "VpcId": "vpc-0shop",
+              "PrivateIpAddress": "10.0.2.30",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ReservationId": "r-0report",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0report",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0shop",
+          "SubnetId": "subnet-0private-a",
+          "PrivateIpAddress": "10.0.2.40",
+          "PublicIpAddress": "203.0.113.40",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0report",
+              "GroupName": "report"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "report"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0report",
+              "SubnetId": "subnet-0private-a",
+              "VpcId": "vpc-0shop",
+              "PrivateIpAddress": "10.0.2.40",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ReservationId": "r-0etl",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0etl",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0analytics",
+          "SubnetId": "subnet-0analytics-a",
+          "PrivateIpAddress": "10.1.1.40",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0etl",
+              "GroupName": "etl"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "etl"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0etl",
+              "SubnetId": "subnet-0analytics-a",
+              "VpcId": "vpc-0analytics",
+              "PrivateIpAddress": "10.1.1.40",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ReservationId": "r-0ldap",
+      "OwnerId": "111122223333",
+      "Instances": [
+        {
+          "InstanceId": "i-0ldap",
+          "InstanceType": "t3.micro",
+          "State": {
+            "Code": 16,
+            "Name": "running"
+          },
+          "VpcId": "vpc-0legacy",
+          "SubnetId": "subnet-0legacy-a",
+          "PrivateIpAddress": "172.16.1.5",
+          "SecurityGroups": [
+            {
+              "GroupId": "sg-0ldap",
+              "GroupName": "ldap"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "ldap"
+            }
+          ],
+          "NetworkInterfaces": [
+            {
+              "NetworkInterfaceId": "eni-0ldap",
+              "SubnetId": "subnet-0legacy-a",
+              "VpcId": "vpc-0legacy",
+              "PrivateIpAddress": "172.16.1.5",
+              "Attachment": {
+                "DeviceIndex": 0,
+                "Status": "attached"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

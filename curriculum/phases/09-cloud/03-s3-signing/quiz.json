@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/s3-signing",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An app's presigned uploads to S3 fail with `403 SignatureDoesNotMatch` for about a third of the files and work for the rest. The same backend, key and code sign all of them. What is the most likely kind of cause?",
+      "choices": [
+        "Something in the failing requests is rendered differently on the client and on the server, such as how special characters in the key are encoded",
+        "The bucket policy denies the failing object keys",
+        "The secret access key is wrong for the failing uploads",
+        "The failing URLs expired before they were used"
+      ],
+      "answer": 0,
+      "explanation": "A wrong secret would fail every request, a policy denial is AccessDenied, and an expired URL says Request has expired. A signature that fails for some inputs only means the canonical request differs for those inputs: a space turned into `+`, a header a proxy changed, a different method. The CanonicalRequest in the error body shows which."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Which change to a working presigned GET URL leaves its signature valid?",
+      "choices": [
+        "Sending it with PUT instead of GET",
+        "Changing `X-Amz-Expires` from 300 to 600",
+        "Changing the key from `report.csv` to `Report.csv`",
+        "Reordering the query parameters in the URL"
+      ],
+      "answer": 3,
+      "explanation": "The canonical query string is sorted after encoding, so parameter order in the URL does not matter. `X-Amz-Expires` is itself a signed query parameter, the key is part of the canonical URI and case-sensitive, and the method is the first line of the canonical request."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "minis3 answers `400 AuthorizationHeaderMalformed: the region 'eu-west-1' is wrong; expecting 'us-east-1'`. Why can it reject the request before computing any HMAC?",
+      "choices": [
+        "The server cannot parse region names it does not serve",
+        "The region is taken from the Host header, which was wrong",
+        "The region is part of the credential scope the signing key was derived from, so a key derived for eu-west-1 can never produce a signature that us-east-1 accepts",
+        "A bucket policy denies requests from eu-west-1"
+      ],
+      "answer": 2,
+      "explanation": "The signing key is an HMAC chain over date, region, service and aws4_request. A request scoped to another region was signed with a different key, so comparing signatures is pointless; the scope check gives a precise error, and SDKs read the Region element and retry with the right one."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "You upload the same 20 MiB file with the AWS CLI twice, once with `multipart_chunksize = 8MB` and once with `16MB`. What happens to the two ETags?",
+      "choices": [
+        "Both are the MD5 of the file",
+        "They differ: each is the MD5 of that upload's part MD5s, one ending in `-3` and the other in `-2`",
+        "Both end in `-1` because the file is under 5 GB",
+        "S3 recomputes both to the same value when the upload completes"
+      ],
+      "answer": 1,
+      "explanation": "A multipart ETag is the MD5 of the concatenated binary MD5s of the parts plus `-` and the part count. 8 MiB parts give three parts (8, 8, 4), 16 MiB parts give two (16, 4), so the digests and suffixes differ. Compare multipart objects with checksums, not with md5sum."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A Lambda function signs presigned PUT URLs with its execution role and sets `X-Amz-Expires=604800`. Users report that the URLs stop working after a few hours. What explains it, and what is the better design?",
+      "choices": [
+        "A presigned URL is only valid while the credentials that signed it are; the role session ends long before seven days. Sign short-lived URLs on demand instead of long-lived ones",
+        "Versioning invalidates old URLs; suspend versioning on the bucket",
+        "S3 caps presigned URLs at one hour; generate them in the console instead",
+        "The phone clocks are skewed by more than 15 minutes"
+      ],
+      "answer": 0,
+      "explanation": "AWS documents that a URL signed with temporary credentials expires when those credentials do, whatever X-Amz-Expires says. A week-long URL is also a week-long bearer capability if it leaks. Short URLs minted per upload fix both."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Security wants presigned URLs to stop working for reads in one bucket, while applications that call S3 through an SDK keep working. Which bucket policy statement does exactly that?",
+      "choices": [
+        "Deny `s3:GetObject` with `StringEquals` on `s3:authType` equal to `REST-QUERY-STRING`",
+        "Allow `s3:GetObject` only when `aws:SecureTransport` is true",
+        "Deny `s3:GetObject` when `s3:signatureversion` equals `AWS4-HMAC-SHA256`",
+        "Remove `s3:GetObject` from the identity policy of the role that signs the URLs"
+      ],
+      "answer": 0,
+      "explanation": "s3:authType is REST-QUERY-STRING for presigned URLs and REST-HEADER for SDK calls with an Authorization header, so the deny hits only the URLs. HTTPS applies to both, SigV4 is used by both, and removing the role's permission would also break the role's own SDK calls."
+    }
+  ]
+}

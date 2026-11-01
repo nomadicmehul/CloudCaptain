@@ -1,0 +1,59 @@
+{
+  "description": "launch and termination hooks: Pending:Wait holds capacity, CONTINUE puts the instance in service, a timeout with ABANDON replaces it",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 2,
+    "MaxSize": 4,
+    "DesiredCapacity": 2
+  },
+  "hooks": [
+    {
+      "LifecycleHookName": "bootstrap",
+      "LifecycleTransition": "autoscaling:EC2_INSTANCE_LAUNCHING",
+      "HeartbeatTimeout": 300,
+      "DefaultResult": "ABANDON"
+    },
+    {
+      "LifecycleHookName": "drain",
+      "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+      "HeartbeatTimeout": 120,
+      "DefaultResult": "CONTINUE"
+    }
+  ],
+  "events": [
+    {
+      "at": 150,
+      "op": "complete-lifecycle-action",
+      "InstanceId": "i-00000000000000001",
+      "LifecycleActionResult": "CONTINUE"
+    },
+    {
+      "at": 160,
+      "op": "complete-lifecycle-action",
+      "InstanceId": "i-00000000000000002",
+      "LifecycleActionResult": "CONTINUE"
+    },
+    {
+      "at": 600,
+      "op": "set-desired-capacity",
+      "DesiredCapacity": 3
+    },
+    {
+      "at": 1100,
+      "op": "complete-lifecycle-action",
+      "InstanceId": "i-00000000000000004",
+      "LifecycleActionResult": "CONTINUE"
+    },
+    {
+      "at": 1500,
+      "op": "set-desired-capacity",
+      "DesiredCapacity": 2
+    }
+  ],
+  "until": 1900
+}

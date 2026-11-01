@@ -1,0 +1,12 @@
+{
+  "_sources": {
+    "step-scaling": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html (Step adjustments for step scaling): desired and current 10; 60 adds 10% of 10 = 1; 70 after warmup adds 30% of 11 = 3.3 rounded down to 3; 40 removes 10% of 14 = 1.4 rounded to 1; 30 removes 30% of 13 = 3.9 rounded to 3",
+    "step-warmup": "same page (Instance warmup): 60 adds 1 (desired 11); 62 while warming computes 10 + 1 = 11, already the desired capacity, so nothing; 70 while warming computes 30% of 10 = 3, desired is already 11, so only 2 more (13); scale-in is blocked until the new instances finish warming up",
+    "target-tracking": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html: capacity proportional to metric / target, rounded up when adding and removing; warming instances excluded from the metric and counted in desired capacity; scale-in blocked while warming. Datapoint i is at 600 + 60 i seconds; CPU = demand / ready instances, capped at 100. i=7: third datapoint above 50, ceil(2 x 100 / 50) = 4. i=13: the two new instances finished warmup (in service at 1080, warmup 300), CPU 300 / 4 = 75, ceil(4 x 75 / 50) = 6. i=49: fifteenth datapoint below 50 since i=35, CPU 120 / 6 = 20, ceil(6 x 20 / 50) = 3. i=50: ceil(3 x 40 / 50) = 3, no further scale-in",
+    "simple-cooldown-times": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html: the cooldown starts when the last instance finishes launching. Alarm in ALARM from t=600; launch takes 60 s; cooldown 300 s; so each step is 360 s after the previous one: 600, 960, 1320, 1680; at 10 (MaxSize) nothing more"
+  },
+  "step-scaling": [[1, 10, 11], [8, 11, 14], [15, 14, 13], [17, 13, 10]],
+  "step-warmup": [[1, 10, 11], [3, 11, 13]],
+  "target-tracking": [[7, 2, 4], [13, 4, 6], [49, 6, 3]],
+  "simple-cooldown-times": [600, 960, 1320, 1680]
+}

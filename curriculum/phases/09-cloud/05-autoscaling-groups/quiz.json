@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/autoscaling-groups",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A release to an Auto Scaling group with the default health check type returns 502 from every new instance, yet the instance refresh reports `Successful` and the group calls every instance `Healthy`. Why?",
+      "choices": [
+        "Instance refresh never checks health; it only replaces instances",
+        "`MinHealthyPercentage` was set too low, so the refresh skipped the checks",
+        "Health checks are suspended for the whole duration of an instance refresh",
+        "With health check type `EC2` the group only checks that instances are running and pass EC2 status checks; the load balancer's failing targets are never consulted"
+      ],
+      "answer": 3,
+      "explanation": "The group's idea of healthy is its health check type. `EC2` sees a running instance with passing status checks and counts it. With `ELB` the same refresh would see the targets fail after the grace period, keep replacing the first new instance, never take a second old one, and fail with the old instances still serving."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A group has 3 instances in zone a and 2 each in zones b and c, with the termination policy `OldestInstance`. The oldest instance of the group is in zone b. Desired capacity drops by one. Which instance is terminated?",
+      "choices": [
+        "A random instance from any zone",
+        "The oldest instance in zone b, because the termination policy names it",
+        "The oldest instance in zone a, because zone balance is decided before the termination policy is applied",
+        "The newest instance in zone a, because scale-in always removes the newest first"
+      ],
+      "answer": 2,
+      "explanation": "The group first picks the zone with the most instances that has at least one unprotected instance, then applies the termination policy inside it. That is why `OldestInstance` can terminate an instance that is not the oldest in the group."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A step scaling policy with `PercentChangeInCapacity` has the step `(null, -20] -> -30` relative to an alarm threshold of 50. Desired and current capacity are 13 and the metric is 30. What is the new desired capacity?",
+      "choices": [
+        "10, because -3.9 is below -1 and rounds up toward zero to -3",
+        "13, because scale-in is never applied by step policies",
+        "4, because 30% of 13 is kept",
+        "9, because -3.9 rounds to -4"
+      ],
+      "answer": 0,
+      "explanation": "The metric is 20 below the threshold, so it falls in the open-ended step. 30% of 13 is 3.9; the user guide rounds values less than -1 up (toward zero), so the change is -3 and desired becomes 10. This is the last step of the guide's own example."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A group has a launch lifecycle hook with a 300-second heartbeat timeout and no default result set. The bootstrap job that should call `complete-lifecycle-action` crashes. What happens to the new instance?",
+      "choices": [
+        "It stays in `Pending:Wait` until someone completes the action by hand",
+        "After 300 seconds the default result `ABANDON` applies: the instance is terminated and the group launches a replacement",
+        "After 300 seconds it enters service, because `CONTINUE` is the default result",
+        "The group launches another instance at once, because instances in `Pending:Wait` do not count toward desired capacity"
+      ],
+      "answer": 1,
+      "explanation": "`DefaultResult` defaults to `ABANDON`. At launch that terminates the instance, and because it no longer counts, the capacity diff launches another, which waits in the same hook. While it waits, the instance does count toward desired capacity, so no extra instance is launched."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A target tracking policy at 50% CPU sees 2 instances at 100% CPU. The real load needs 6 instances. It scales to 4, and only several minutes later to 6. Why not straight to 6?",
+      "choices": [
+        "Target tracking never more than doubles a group in one activity",
+        "CPU cannot read above 100%, so `ceil(2 x 100 / 50) = 4` underestimates the load; the next decision has to wait until the new instances finish warming up and the metric reflects four instances",
+        "The high alarm needs fifteen datapoints before each step",
+        "The 300-second default cooldown delays the second step"
+      ],
+      "answer": 1,
+      "explanation": "The formula assumes the metric is proportional to load per instance. A saturated metric breaks that, and warming instances are excluded from the metric while counting toward desired, so the second step comes only after the warmup. Cooldowns do not apply to target tracking."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "After a zone recovers, a group at `MaxSize` 6 with desired 6 briefly runs 7 instances and then terminates healthy instances in the other zones. What is happening?",
+      "choices": [
+        "The load balancer health check is failing the old instances; a longer grace period fixes it",
+        "A scaling policy is flapping; a longer cooldown fixes it",
+        "The group ignores `MaxSize` after an outage until it is set again",
+        "AZRebalance: the group launches in the emptiest zone first, may exceed `MaxSize` by 10% or one instance to do so, and terminates in the fullest zone once the new instance is in service; suspend the `AZRebalance` process if the instances must stay put"
+      ],
+      "answer": 3,
+      "explanation": "Rebalancing launches before it terminates so that capacity never drops, which needs room above the maximum. Desired capacity does not change, which is how the activity causes tell a rebalance from a policy."
+    }
+  ]
+}

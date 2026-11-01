@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/lambda-runtime",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A Python Lambda function imports a large SDK and fetches secrets at module level, outside the handler. Which requests pay for that work?",
+      "choices": [
+        "Every request, because the handler module is imported again for each invocation",
+        "Requests that land on a new execution environment: on every scale-out as well as after idle time. Their REPORT line carries Init Duration",
+        "Only the first request after each deployment",
+        "None of them; Lambda shares imported modules between all environments of a function"
+      ],
+      "answer": 1,
+      "explanation": "Module-level code runs in the init phase, once per execution environment, before the runtime first calls GET /runtime/invocation/next. A burst that needs ten more environments pays it ten more times, and since 1 August 2025 that time is billed too."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A handler raises ValueError. What does a synchronous caller of the Invoke API receive, and what happens to the execution environment?",
+      "choices": [
+        "HTTP 200 with X-Amz-Function-Error: Unhandled and the runtime's error JSON (errorType, errorMessage, stackTrace) as the body; the environment stays warm for the next request",
+        "HTTP 500, and the environment is destroyed",
+        "HTTP 200 with an empty body; the error only appears in CloudWatch Logs",
+        "HTTP 429, because failed invocations count against concurrency"
+      ],
+      "answer": 0,
+      "explanation": "The runtime catches the exception, posts it to /runtime/invocation/ID/error and calls next again. The platform returns that body with the function-error header and keeps the process: only timeouts, crashes and failed inits reset an environment."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A function times out at 3 seconds. The very next request on it takes 900 ms, although the handler normally needs 20 ms, and its REPORT line has no Init Duration. Why?",
+      "choices": [
+        "The timed-out handler was still running, and the next request waited for it to finish",
+        "Lambda throttled the next request for a moment after the timeout",
+        "Provisioned concurrency was being recalculated",
+        "The timeout killed the runtime process (a reset). The next invocation started a new one inside its own duration, a suppressed init, which REPORT does not label as Init Duration"
+      ],
+      "answer": 3,
+      "explanation": "After a timeout the process is in an unknown state, so the platform kills it. The environment is reused, but its next invocation pays for the runtime start and module-level code as part of Duration. minilambda's dispatch() and invoke() do exactly this; the RIE does it too."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A payment webhook returns TooManyRequestsException while a different function in the same account handles a traffic burst, and the webhook's logs show nothing for the failed calls. Which change protects the webhook?",
+      "choices": [
+        "Raise the webhook's timeout",
+        "Increase the webhook's memory size",
+        "Give the webhook reserved concurrency: capacity set aside that the other function cannot take, at the cost of a hard cap at that number",
+        "Add a retry loop inside the webhook's handler"
+      ],
+      "answer": 2,
+      "explanation": "Throttles happen in the frontend when a concurrency limit is reached, before any process runs, so the function cannot log them; the Throttles metric and the caller see them. Functions without reserved concurrency share the account's unreserved pool (1,000 per Region by default)."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A handler starts a background thread to flush metrics and returns at once. On Lambda the metrics arrive late or never; in a long-running local server they always arrive. What explains it?",
+      "choices": [
+        "Lambda kills every thread after each response",
+        "The Python runtime disables threading",
+        "Between invocations the environment is frozen: the thread gets no CPU until the next event arrives, and never runs again if the environment is destroyed. Flush before returning, or use an extension",
+        "Outbound traffic is blocked after the response is sent"
+      ],
+      "answer": 2,
+      "explanation": "Once the runtime calls next, the environment is frozen until there is another event. minilambda reproduces this with SIGSTOP and SIGCONT on the process group, and its freeze test shows a ticking thread stop between invocations and resume during the next one."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Under the Runtime Interface Emulator the first REPORT shows Init Duration: 0.42 ms and a timeout comes back as plain text with HTTP 200. Why should you not size provisioned concurrency or alarms from these local results?",
+      "choices": [
+        "The emulator runs one environment and its Init Duration measures only its own setup, with the real runtime start hidden inside the first Duration; it emulates no concurrency, freezing or Lambda error format. Measure init from REPORT lines on Lambda",
+        "The emulator's numbers are accurate; 0.42 ms means the imports were cached",
+        "The emulator only supports Python base images",
+        "Provisioned concurrency is sized by memory, not by init time"
+      ],
+      "answer": 0,
+      "explanation": "The RIE checks the runtime contract and your handler, not the platform. For cold-start sizing use Lambda's own REPORT lines (Logs Insights @initDuration) or a platform like minilambda that models init, reset and concurrency."
+    }
+  ]
+}

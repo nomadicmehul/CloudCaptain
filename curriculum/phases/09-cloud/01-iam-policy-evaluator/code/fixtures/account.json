@@ -1,0 +1,336 @@
+{
+  "UserDetailList": [
+    {
+      "Path": "/",
+      "UserName": "alice",
+      "UserId": "AIDAEXAMPLEALICE0001",
+      "Arn": "arn:aws:iam::123456789012:user/alice",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "UserPolicyList": [
+        {
+          "PolicyName": "deny-secret",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "NoSecrets",
+                "Effect": "Deny",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::cc-data/secret/*"
+              }
+            ]
+          }
+        },
+        {
+          "PolicyName": "assume-roles",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AssumeTeamRoles",
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": [
+                  "arn:aws:iam::123456789012:role/reader",
+                  "arn:aws:iam::123456789012:role/auditor"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "GroupList": [
+        "readers"
+      ],
+      "AttachedManagedPolicies": [],
+      "Tags": [
+        {
+          "Key": "team",
+          "Value": "data"
+        }
+      ]
+    },
+    {
+      "Path": "/",
+      "UserName": "bob",
+      "UserId": "AIDAEXAMPLEBOB000002",
+      "Arn": "arn:aws:iam::123456789012:user/bob",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "UserPolicyList": [
+        {
+          "PolicyName": "poweruser",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "PowerUser",
+                "Effect": "Allow",
+                "NotAction": [
+                  "iam:*",
+                  "sts:*",
+                  "organizations:*"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        },
+        {
+          "PolicyName": "no-delete",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "NoDeletes",
+                "Effect": "Deny",
+                "Action": "s3:Delete*",
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      ],
+      "GroupList": [],
+      "AttachedManagedPolicies": [],
+      "Tags": []
+    },
+    {
+      "Path": "/",
+      "UserName": "carol",
+      "UserId": "AIDAEXAMPLECAROL0003",
+      "Arn": "arn:aws:iam::123456789012:user/carol",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "UserPolicyList": [
+        {
+          "PolicyName": "home",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "OwnHome",
+                "Effect": "Allow",
+                "Action": [
+                  "s3:GetObject",
+                  "s3:PutObject"
+                ],
+                "Resource": "arn:aws:s3:::cc-data/home/${aws:username}/*"
+              },
+              {
+                "Sid": "ListOwnHome",
+                "Effect": "Allow",
+                "Action": "s3:ListBucket",
+                "Resource": "arn:aws:s3:::cc-data",
+                "Condition": {
+                  "StringLike": {
+                    "s3:prefix": [
+                      "home/${aws:username}/*"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "GroupList": [],
+      "AttachedManagedPolicies": [],
+      "Tags": []
+    },
+    {
+      "Path": "/",
+      "UserName": "erin",
+      "UserId": "AIDAEXAMPLEERIN00004",
+      "Arn": "arn:aws:iam::123456789012:user/erin",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "UserPolicyList": [],
+      "GroupList": [],
+      "AttachedManagedPolicies": [],
+      "Tags": []
+    }
+  ],
+  "GroupDetailList": [
+    {
+      "Path": "/",
+      "GroupName": "readers",
+      "GroupId": "AGPAEXAMPLEREADERS01",
+      "Arn": "arn:aws:iam::123456789012:group/readers",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "GroupPolicyList": [],
+      "AttachedManagedPolicies": [
+        {
+          "PolicyName": "ReadData",
+          "PolicyArn": "arn:aws:iam::123456789012:policy/ReadData"
+        }
+      ]
+    }
+  ],
+  "RoleDetailList": [
+    {
+      "Path": "/",
+      "RoleName": "reader",
+      "RoleId": "AROAEXAMPLEREADER001",
+      "Arn": "arn:aws:iam::123456789012:role/reader",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AliceWithExternalId",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam::123456789012:user/alice"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+              "StringEquals": {
+                "sts:ExternalId": "cc-42"
+              }
+            }
+          }
+        ]
+      },
+      "InstanceProfileList": [],
+      "RolePolicyList": [
+        {
+          "PolicyName": "read",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "ReadData",
+                "Effect": "Allow",
+                "Action": [
+                  "s3:Get*",
+                  "s3:List*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cc-data",
+                  "arn:aws:s3:::cc-data/*"
+                ]
+              },
+              {
+                "Sid": "Publish",
+                "Effect": "Allow",
+                "Action": "s3:PutObject",
+                "Resource": "arn:aws:s3:::cc-data/public/*"
+              }
+            ]
+          }
+        }
+      ],
+      "AttachedManagedPolicies": [],
+      "Tags": [
+        {
+          "Key": "team",
+          "Value": "data"
+        }
+      ],
+      "RoleLastUsed": {},
+      "PermissionsBoundary": {
+        "PermissionsBoundaryType": "PermissionsBoundaryPolicy",
+        "PermissionsBoundaryArn": "arn:aws:iam::123456789012:policy/ListOnly"
+      }
+    },
+    {
+      "Path": "/",
+      "RoleName": "auditor",
+      "RoleId": "AROAEXAMPLEAUDITOR01",
+      "Arn": "arn:aws:iam::123456789012:role/auditor",
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AliceAndTheAccount",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::123456789012:user/alice",
+                "arn:aws:iam::123456789012:root"
+              ]
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "InstanceProfileList": [],
+      "RolePolicyList": [],
+      "AttachedManagedPolicies": [
+        {
+          "PolicyName": "ReadData",
+          "PolicyArn": "arn:aws:iam::123456789012:policy/ReadData"
+        }
+      ],
+      "Tags": [],
+      "RoleLastUsed": {}
+    }
+  ],
+  "Policies": [
+    {
+      "PolicyName": "ReadData",
+      "PolicyId": "ANPAEXAMPLEREADDATA1",
+      "Arn": "arn:aws:iam::123456789012:policy/ReadData",
+      "Path": "/",
+      "DefaultVersionId": "v1",
+      "AttachmentCount": 2,
+      "PermissionsBoundaryUsageCount": 0,
+      "IsAttachable": true,
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "UpdateDate": "2026-11-01T09:00:00+00:00",
+      "PolicyVersionList": [
+        {
+          "Document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "ReadData",
+                "Effect": "Allow",
+                "Action": [
+                  "s3:Get*",
+                  "s3:List*"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::cc-data",
+                  "arn:aws:s3:::cc-data/*"
+                ]
+              }
+            ]
+          },
+          "VersionId": "v1",
+          "IsDefaultVersion": true,
+          "CreateDate": "2026-11-01T09:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "PolicyName": "ListOnly",
+      "PolicyId": "ANPAEXAMPLELISTONLY1",
+      "Arn": "arn:aws:iam::123456789012:policy/ListOnly",
+      "Path": "/",
+      "DefaultVersionId": "v1",
+      "AttachmentCount": 0,
+      "PermissionsBoundaryUsageCount": 1,
+      "IsAttachable": true,
+      "CreateDate": "2026-11-01T09:00:00+00:00",
+      "UpdateDate": "2026-11-01T09:00:00+00:00",
+      "PolicyVersionList": [
+        {
+          "Document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "ListOnly",
+                "Effect": "Allow",
+                "Action": "s3:List*",
+                "Resource": "*"
+              }
+            ]
+          },
+          "VersionId": "v1",
+          "IsDefaultVersion": true,
+          "CreateDate": "2026-11-01T09:00:00+00:00"
+        }
+      ]
+    }
+  ]
+}

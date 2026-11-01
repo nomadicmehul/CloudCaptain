@@ -18,7 +18,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 | 06 | Orchestration | 8 | in progress |
 | 07 | Infrastructure as Code | 8 | in progress |
 | 08 | CI/CD & GitOps | 0 | planned |
-| 09 | Cloud Providers | 0 | planned |
+| 09 | Cloud Providers | 7 | in progress |
 | 10 | Observability & SRE | 0 | planned |
 | 11 | Security & DevSecOps | 0 | planned |
 | 12 | Platform Engineering | 0 | planned |

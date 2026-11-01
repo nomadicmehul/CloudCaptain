@@ -1,0 +1,198 @@
+{
+  "RouteTables": [
+    {
+      "RouteTableId": "rtb-0shop-main",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "Associations": [
+        {
+          "Main": true,
+          "RouteTableAssociationId": "rtbassoc-0shop-main-main",
+          "RouteTableId": "rtb-0shop-main",
+          "AssociationState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Routes": [
+        {
+          "DestinationCidrBlock": "10.0.0.0/16",
+          "GatewayId": "local",
+          "Origin": "CreateRouteTable",
+          "State": "active"
+        }
+      ],
+      "PropagatingVgws": [],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "shop-main"
+        }
+      ]
+    },
+    {
+      "RouteTableId": "rtb-0public",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "Associations": [
+        {
+          "Main": false,
+          "RouteTableAssociationId": "rtbassoc-0public-0",
+          "RouteTableId": "rtb-0public",
+          "SubnetId": "subnet-0public-a",
+          "AssociationState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Routes": [
+        {
+          "DestinationCidrBlock": "10.0.0.0/16",
+          "GatewayId": "local",
+          "Origin": "CreateRouteTable",
+          "State": "active"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationCidrBlock": "0.0.0.0/0",
+          "GatewayId": "igw-0shop"
+        }
+      ],
+      "PropagatingVgws": [],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "public"
+        }
+      ]
+    },
+    {
+      "RouteTableId": "rtb-0private",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "Associations": [
+        {
+          "Main": false,
+          "RouteTableAssociationId": "rtbassoc-0private-0",
+          "RouteTableId": "rtb-0private",
+          "SubnetId": "subnet-0private-a",
+          "AssociationState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Routes": [
+        {
+          "DestinationCidrBlock": "10.0.0.0/16",
+          "GatewayId": "local",
+          "Origin": "CreateRouteTable",
+          "State": "active"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationCidrBlock": "0.0.0.0/0",
+          "NatGatewayId": "nat-0shop"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationCidrBlock": "10.1.0.0/16",
+          "VpcPeeringConnectionId": "pcx-0analytics"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationCidrBlock": "172.16.0.0/12",
+          "TransitGatewayId": "tgw-0core"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationPrefixListId": "pl-0s3",
+          "GatewayId": "vpce-0s3"
+        }
+      ],
+      "PropagatingVgws": [],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "private"
+        }
+      ]
+    },
+    {
+      "RouteTableId": "rtb-0analytics",
+      "VpcId": "vpc-0analytics",
+      "OwnerId": "111122223333",
+      "Associations": [
+        {
+          "Main": true,
+          "RouteTableAssociationId": "rtbassoc-0analytics-main",
+          "RouteTableId": "rtb-0analytics",
+          "AssociationState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Routes": [
+        {
+          "DestinationCidrBlock": "10.1.0.0/16",
+          "GatewayId": "local",
+          "Origin": "CreateRouteTable",
+          "State": "active"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationCidrBlock": "10.0.2.0/24",
+          "VpcPeeringConnectionId": "pcx-0analytics"
+        }
+      ],
+      "PropagatingVgws": [],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "analytics-main"
+        }
+      ]
+    },
+    {
+      "RouteTableId": "rtb-0legacy",
+      "VpcId": "vpc-0legacy",
+      "OwnerId": "111122223333",
+      "Associations": [
+        {
+          "Main": true,
+          "RouteTableAssociationId": "rtbassoc-0legacy-main",
+          "RouteTableId": "rtb-0legacy",
+          "AssociationState": {
+            "State": "associated"
+          }
+        }
+      ],
+      "Routes": [
+        {
+          "DestinationCidrBlock": "172.16.0.0/16",
+          "GatewayId": "local",
+          "Origin": "CreateRouteTable",
+          "State": "active"
+        },
+        {
+          "Origin": "CreateRoute",
+          "State": "active",
+          "DestinationCidrBlock": "10.0.0.0/8",
+          "TransitGatewayId": "tgw-0core"
+        }
+      ],
+      "PropagatingVgws": [],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "legacy-main"
+        }
+      ]
+    }
+  ]
+}

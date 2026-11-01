@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadData",
+      "Effect": "Allow",
+      "Action": ["s3:Get*", "s3:List*"],
+      "Resource": ["arn:aws:s3:::cc-data", "arn:aws:s3:::cc-data/*"]
+    }
+  ]
+}

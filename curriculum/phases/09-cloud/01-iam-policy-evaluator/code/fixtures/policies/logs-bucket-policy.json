@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ErinReadsLogs",
+      "Effect": "Allow",
+      "Principal": {"AWS": "arn:aws:iam::123456789012:user/erin"},
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::cc-logs/*"
+    },
+    {
+      "Sid": "TlsOnly",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": ["arn:aws:s3:::cc-logs", "arn:aws:s3:::cc-logs/*"],
+      "Condition": {"Bool": {"aws:SecureTransport": "false"}}
+    }
+  ]
+}

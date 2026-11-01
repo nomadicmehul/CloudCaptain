@@ -1,0 +1,10 @@
+2026-10-30T09:14:02.120Z START RequestId: 0f1e2d3c-0000-4000-8000-000000000001 Version: $LATEST
+2026-10-30T09:14:02.402Z END RequestId: 0f1e2d3c-0000-4000-8000-000000000001
+2026-10-30T09:14:02.402Z REPORT RequestId: 0f1e2d3c-0000-4000-8000-000000000001	Duration: 250.06 ms	Billed Duration: 351 ms	Memory Size: 1024 MB	Max Memory Used: 350 MB	Init Duration: 100.77 ms
+2026-10-30T09:14:05.010Z REPORT RequestId: 0f1e2d3c-0000-4000-8000-000000000002	Duration: 12.40 ms	Billed Duration: 13 ms	Memory Size: 1024 MB	Max Memory Used: 351 MB
+2026-10-30T09:14:06.200Z REPORT RequestId: 0f1e2d3c-0000-4000-8000-000000000003	Duration: 10.02 ms	Billed Duration: 11 ms	Memory Size: 1024 MB	Max Memory Used: 351 MB
+2026-10-30T09:15:00.000Z REPORT RequestId: 527cb862-4f5e-49a9-9ae4-a7edc90f0fda Duration: 3016.78 ms Billed Duration: 3101 ms Memory Size: 128 MB Max Memory Used: 31 MB Init Duration: 84.00 ms Status: timeout
+2026-10-30T09:16:00.000Z REPORT RequestId: 5b866fb1-7154-4af6-8078-6ef6ca4c2ddd Duration: 133.61 ms Billed Duration: 214 ms Memory Size: 128 MB Max Memory Used: 31 MB Init Duration: 80.00 ms Status: error Error Type: Runtime.ExitError
+2026-10-30T09:17:00.000Z INIT_REPORT Init Duration: 1236.04 ms Phase: init Status: timeout
+REPORT RequestId: 8f6a2c1e-1111-4222-8333-944455556666	Init Duration: 0.41 ms	Duration: 61.37 ms	Billed Duration: 62 ms	Memory Size: 3008 MB	Max Memory Used: 3008 MB	
+{"time":"2026-10-30T09:18:00.000Z","type":"platform.report","record":{"requestId":"6d0c9b3a-2222-4333-8444-955566667777","metrics":{"durationMs":4.12,"billedDurationMs":5,"memorySizeMB":256,"maxMemoryUsedMB":70},"status":"success"}}

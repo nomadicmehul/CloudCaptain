@@ -1,0 +1,350 @@
+{
+  "NetworkAcls": [
+    {
+      "NetworkAclId": "acl-0shop-default",
+      "VpcId": "vpc-0shop",
+      "IsDefault": true,
+      "OwnerId": "111122223333",
+      "Entries": [
+        {
+          "RuleNumber": 100,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 100,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "shop-default"
+        }
+      ],
+      "Associations": []
+    },
+    {
+      "NetworkAclId": "acl-0public",
+      "VpcId": "vpc-0shop",
+      "IsDefault": false,
+      "OwnerId": "111122223333",
+      "Entries": [
+        {
+          "RuleNumber": 100,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 443,
+            "To": 443
+          }
+        },
+        {
+          "RuleNumber": 110,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "192.0.2.0/24",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 22,
+            "To": 22
+          }
+        },
+        {
+          "RuleNumber": 120,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 32768,
+            "To": 65535
+          }
+        },
+        {
+          "RuleNumber": 130,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "10.0.0.0/16",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 100,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "public"
+        }
+      ],
+      "Associations": [
+        {
+          "NetworkAclAssociationId": "aclassoc-0public-0",
+          "NetworkAclId": "acl-0public",
+          "SubnetId": "subnet-0public-a"
+        }
+      ]
+    },
+    {
+      "NetworkAclId": "acl-0private",
+      "VpcId": "vpc-0shop",
+      "IsDefault": false,
+      "OwnerId": "111122223333",
+      "Entries": [
+        {
+          "RuleNumber": 100,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "10.0.1.0/24",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 5432,
+            "To": 5432
+          }
+        },
+        {
+          "RuleNumber": 105,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "10.1.0.0/16",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 5432,
+            "To": 5432
+          }
+        },
+        {
+          "RuleNumber": 110,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 1024,
+            "To": 65535
+          }
+        },
+        {
+          "RuleNumber": 115,
+          "Egress": false,
+          "Protocol": "6",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 443,
+            "To": 443
+          }
+        },
+        {
+          "RuleNumber": 100,
+          "Egress": true,
+          "Protocol": "6",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 443,
+            "To": 443
+          }
+        },
+        {
+          "RuleNumber": 110,
+          "Egress": true,
+          "Protocol": "6",
+          "CidrBlock": "10.0.1.0/24",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 1024,
+            "To": 65535
+          }
+        },
+        {
+          "RuleNumber": 120,
+          "Egress": true,
+          "Protocol": "6",
+          "CidrBlock": "172.16.0.0/12",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 389,
+            "To": 389
+          }
+        },
+        {
+          "RuleNumber": 125,
+          "Egress": true,
+          "Protocol": "6",
+          "CidrBlock": "172.16.0.0/12",
+          "RuleAction": "allow",
+          "PortRange": {
+            "From": 636,
+            "To": 636
+          }
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "private"
+        }
+      ],
+      "Associations": [
+        {
+          "NetworkAclAssociationId": "aclassoc-0private-0",
+          "NetworkAclId": "acl-0private",
+          "SubnetId": "subnet-0private-a"
+        }
+      ]
+    },
+    {
+      "NetworkAclId": "acl-0analytics",
+      "VpcId": "vpc-0analytics",
+      "IsDefault": true,
+      "OwnerId": "111122223333",
+      "Entries": [
+        {
+          "RuleNumber": 100,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 100,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "analytics-default"
+        }
+      ],
+      "Associations": [
+        {
+          "NetworkAclAssociationId": "aclassoc-0analytics-0",
+          "NetworkAclId": "acl-0analytics",
+          "SubnetId": "subnet-0analytics-a"
+        }
+      ]
+    },
+    {
+      "NetworkAclId": "acl-0legacy",
+      "VpcId": "vpc-0legacy",
+      "IsDefault": true,
+      "OwnerId": "111122223333",
+      "Entries": [
+        {
+          "RuleNumber": 100,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 100,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "allow"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": false,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        },
+        {
+          "RuleNumber": 32767,
+          "Egress": true,
+          "Protocol": "-1",
+          "CidrBlock": "0.0.0.0/0",
+          "RuleAction": "deny"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "legacy-default"
+        }
+      ],
+      "Associations": [
+        {
+          "NetworkAclAssociationId": "aclassoc-0legacy-0",
+          "NetworkAclId": "acl-0legacy",
+          "SubnetId": "subnet-0legacy-a"
+        }
+      ]
+    }
+  ]
+}

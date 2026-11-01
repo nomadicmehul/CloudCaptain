@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/iam-policy-evaluator",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A user's group policy allows `s3:*` on a bucket. Their own inline policy denies `s3:DeleteObject` on the same bucket. What happens when they delete an object?",
+      "choices": [
+        "Allowed, because group policies take precedence over user policies",
+        "Allowed, because `s3:*` is more general and was attached first",
+        "Denied, because an explicit Deny in any applicable policy ends evaluation, whatever else allows",
+        "It depends on which of the two policies was created more recently"
+      ],
+      "answer": 2,
+      "explanation": "AWS first looks for a Deny that applies, across every policy type. One match gives explicitDeny. Order of attachment, specificity and where the policy is attached play no part."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A role in account 111111111111 has `AdministratorAccess`. Writing to a bucket in account 222222222222 fails with `because no resource-based policy allows the s3:PutObject action`. What fixes it with the least access?",
+      "choices": [
+        "Ask for the SCP on account 111111111111 to be removed",
+        "Attach `AmazonS3FullAccess` to the role as well",
+        "Change the bucket policy's principal to `\"*\"`",
+        "Add a statement to the bucket's policy in 222222222222 that allows that role's ARN `s3:PutObject` on the objects it writes"
+      ],
+      "answer": 3,
+      "explanation": "A cross-account request is evaluated in both accounts. The caller's side already allows (administrator access), and the resource account's policy is the gate that failed, as the message says. A principal of `*` would open the bucket far wider than one role."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A role's policies allow `s3:*`, its permissions boundary allows only `s3:List*`, and the session was created with a session policy that allows `s3:GetObject`. Which call succeeds?",
+      "choices": [
+        "`s3:GetObject`, because the session policy names it explicitly",
+        "Neither `s3:GetObject` nor `s3:ListBucket`: every action must be allowed by the identity policy, the boundary and the session policy, and no action is allowed by all three",
+        "`s3:ListBucket`, because the boundary allows it",
+        "Both, because the identity policy allows `s3:*`"
+      ],
+      "answer": 1,
+      "explanation": "Identity-based policies, the boundary and the session policy intersect. `s3:GetObject` fails the boundary, and `s3:ListBucket` fails the session policy. None of the three grants anything the others do not."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "An Allow statement has `\"Condition\": {\"ForAllValues:StringEquals\": {\"aws:TagKeys\": [\"env\", \"team\"]}}` on `ec2:CreateTags`. A caller sends a request that carries no tags at all. What does the condition evaluate to?",
+      "choices": [
+        "True: `ForAllValues` holds when the key is absent, so the statement applies. Add `\"Null\": {\"aws:TagKeys\": \"false\"}` to require tags",
+        "An error: the request is rejected as malformed",
+        "False, because `ForAllValues` needs at least one value to compare",
+        "False, because the key is missing"
+      ],
+      "answer": 0,
+      "explanation": "The IAM documentation says ForAllValues returns true when the key is missing or empty. That makes Allow statements wider than they read. Access Analyzer flags it, and so does `iameval validate`."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In one account, a bucket policy allows `\"Principal\": {\"AWS\": \"arn:aws:iam::111122223333:root\"}` to `s3:GetObject`. The user `analyst` in that account has no identity-based policies. Can they read objects?",
+      "choices": [
+        "No: naming the account delegates to identity-based policies, so the user needs their own Allow. A grant that named the user's ARN would stand on its own",
+        "Yes, because the account principal includes every user in the account",
+        "Yes, but only from the AWS console",
+        "No, because bucket policies never apply to principals in the bucket owner's account"
+      ],
+      "answer": 0,
+      "explanation": "An account principal grants the account, and the account's administrator still has to grant the identity. In the same account, a resource-based policy works on its own only when it names the IAM user or the role session directly (or `*`)."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your tests run against moto with IAM enforcement on and pass. Which statement about production is correct?",
+      "choices": [
+        "Production will behave the same, because moto implements IAM",
+        "Production will be stricter only for SCPs",
+        "The tests proved identity-based allows and denies. moto does not enforce permissions boundaries, session policies, conditions outside trust policies or policy variables, and it never lets a bucket policy grant, so check those against AWS's evaluation logic or the policy simulator",
+        "Nothing can be concluded, because moto ignores IAM entirely"
+      ],
+      "answer": 2,
+      "explanation": "moto checks signatures and identity-based policies for the principals it issued keys to, and role trust policies with a limited `StringEquals`. The smoke test records exactly six request types where it differs from AWS, and those need fixtures from the documentation or a real simulator."
+    }
+  ]
+}

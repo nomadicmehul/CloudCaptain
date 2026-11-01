@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cloud/security-posture",
+  "title": "Secure Defaults Are Checks You Can Run",
+  "short": "Security Posture",
+  "motto": "Every benchmark line is a predicate over describe output: write each one as a function and the security audit becomes a command.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cloud/iam-policy-evaluator",
+    "cloud/vpc-reachability"
+  ],
+  "tools": [
+    "aws",
+    "moto",
+    "checkov",
+    "prowler",
+    "tofu"
+  ],
+  "reference": [
+    "/docs/cloud/aws/security-iam",
+    "/docs/cloud/cloud-security/fundamentals",
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/cloud/aws/exam-prep"
+  ],
+  "outputs": [
+    "skill-cloud-security-review.md",
+    "prompt-prioritise-findings.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cloud/iam-policy-evaluator",
+  "title": "Every AWS API Call Is a Policy Evaluation",
+  "short": "IAM Policy Evaluator",
+  "motto": "AWS walks every policy type in a fixed order: a Deny anywhere ends it, every gate must allow, and AccessDenied names the gate that failed.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/rbac-authorizer"
+  ],
+  "tools": [
+    "aws",
+    "moto"
+  ],
+  "reference": [
+    "/docs/cloud/aws/security-iam",
+    "/docs/cloud/aws/exam-prep",
+    "/docs/cloud/cloud-security/fundamentals",
+    "/docs/cloud/azure/security-identity",
+    "/docs/cloud/gcp/fundamentals"
+  ],
+  "outputs": [
+    "skill-iam-least-privilege.md",
+    "prompt-explain-access-denied.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

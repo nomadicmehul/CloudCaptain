@@ -1,0 +1,24 @@
+{
+  "TransitGateways": [
+    {
+      "TransitGatewayId": "tgw-0core",
+      "State": "available",
+      "OwnerId": "111122223333",
+      "Options": {
+        "AmazonSideAsn": 64512,
+        "AutoAcceptSharedAttachments": "disable",
+        "DefaultRouteTableAssociation": "enable",
+        "DefaultRouteTablePropagation": "enable",
+        "VpnEcmpSupport": "enable",
+        "DnsSupport": "enable",
+        "SecurityGroupReferencingSupport": "disable"
+      },
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "core"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "VpcEndpoints": [
+    {
+      "VpcEndpointId": "vpce-0s3",
+      "VpcEndpointType": "Gateway",
+      "VpcId": "vpc-0shop",
+      "ServiceName": "com.amazonaws.eu-central-1.s3",
+      "State": "available",
+      "RouteTableIds": [
+        "rtb-0private"
+      ],
+      "SubnetIds": [],
+      "Groups": [],
+      "PrivateDnsEnabled": false,
+      "OwnerId": "111122223333"
+    }
+  ]
+}

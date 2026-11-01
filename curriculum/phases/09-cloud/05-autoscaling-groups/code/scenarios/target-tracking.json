@@ -1,0 +1,100 @@
+{
+  "description": "target tracking on average CPU 50: ceil(current x metric / target), out after 3 high datapoints, in after 15 low ones, warming instances excluded",
+  "group": {
+    "AutoScalingGroupName": "web",
+    "AvailabilityZones": [
+      "us-east-1a",
+      "us-east-1b",
+      "us-east-1c"
+    ],
+    "MinSize": 2,
+    "MaxSize": 12,
+    "DesiredCapacity": 2
+  },
+  "policies": [
+    {
+      "PolicyName": "cpu50",
+      "PolicyType": "TargetTrackingScaling",
+      "EstimatedInstanceWarmup": 300,
+      "TargetTrackingConfiguration": {
+        "PredefinedMetricSpecification": {
+          "PredefinedMetricType": "ASGAverageCPUUtilization"
+        },
+        "TargetValue": 50.0
+      }
+    }
+  ],
+  "metric": {
+    "mode": "demand",
+    "period": 60,
+    "start": 600,
+    "values": [
+      80,
+      80,
+      80,
+      80,
+      80,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      300,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120,
+      120
+    ]
+  },
+  "until": 4500
+}

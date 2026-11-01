@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cloud/security-posture",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A bucket policy allows `s3:GetObject` to `Principal: \"*\"` with the condition `StringLike` on `aws:SourceVpc` = `vpc-*`. Is the bucket public?",
+      "choices": [
+        "Yes: S3 treats a wildcard-principal statement as public unless a condition pins it to fixed values; anyone can send requests through a VPC endpoint in their own account, and every VPC ID matches vpc-*",
+        "No: requests from the internet carry no aws:SourceVpc and are refused, and that is all public means",
+        "No: the condition limits access to requests that come from a VPC",
+        "Only if the bucket also has an ACL that grants AllUsers"
+      ],
+      "answer": 0,
+      "explanation": "S3 assumes a policy is public and clears it only when the statement is pinned by fixed values (no wildcards or policy variables) of keys such as aws:SourceVpc, aws:SourceVpce or aws:PrincipalOrgID. The AWS documentation uses this exact vpc-* policy as an example of a public one."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A bucket's ACL grants READ to the AllUsers group. The bucket has no Block Public Access configuration, and the account-level settings are all four true. What should a posture scanner report?",
+      "choices": [
+        "A critical public bucket, because the bucket itself has no Block Public Access configuration",
+        "The public ACL at low severity, marked neutralised: IgnorePublicAcls at the account level makes S3 ignore it, and turning that setting off would make the bucket public again",
+        "Nothing: the account-level settings make the ACL irrelevant for good, so there is nothing to record",
+        "A gap, because the bucket and account settings conflict and the effective value is unknown"
+      ],
+      "answer": 1,
+      "explanation": "S3 enforces the most restrictive combination of bucket, account and organization settings, so the effective IgnorePublicAcls is true. The grant is still stored on the bucket; block public access does not modify ACLs, so the finding stays, at low severity, until the ACL itself is fixed."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A network ACL has inbound rule 90 deny tcp 22 from 0.0.0.0/0 and rule 100 allow tcp 0-65535 from 0.0.0.0/0. Which admin ports can the internet reach through it?",
+      "choices": [
+        "Neither 22 nor 3389, because a deny for the whole internet exists",
+        "Both, because rule 100 allows every port and allows take precedence in a network ACL",
+        "Only 22, because the higher rule number is evaluated first",
+        "Only 3389: rules are evaluated in rule-number order and the first match wins, so 22 hits the deny at 90 and 3389 falls through to the allow at 100"
+      ],
+      "answer": 3,
+      "explanation": "Network ACLs are stateless and ordered: the lowest-numbered matching rule decides. A posture check that only asks whether an allow exists reports 22 wrongly; one that ignores port ranges misses 3389. posture walks the rules in order for each port."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A scan shows no security group findings, and its gaps list contains `ec2 describe-security-groups: UnauthorizedOperation`. What do you conclude about the security groups?",
+      "choices": [
+        "They are fine: no findings means no group is open to the internet",
+        "The account has no security groups in this Region",
+        "Nothing: the scanner could not read them, so those checks did not run; give the collecting role read access (for example SecurityAudit) and collect again",
+        "They are fine, but the instances that use them are not"
+      ],
+      "answer": 2,
+      "explanation": "An error that means 'not configured' (NoSuchBucketPolicy) is data; an error that means 'could not look' (AccessDenied, UnauthorizedOperation) is a gap. Reporting gaps separately is what stops a scanner with missing permissions from printing a clean account."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Checkov passes the Terraform for an account's trail and IAM users, yet posture reports cloudtrail-no-multi-region and user-key-old on the running account. Which explanation fits?",
+      "choices": [
+        "Both are runtime facts: whether a trail IsLogging and how old an access key is exist only in the running account, which a scan of source code cannot see",
+        "posture reads the Terraform state file and Checkov reads the source, so they disagree",
+        "The two tools use different CIS benchmark numbering, so the same finding looks different",
+        "Checkov is misconfigured, because both tools read the same data"
+      ],
+      "answer": 0,
+      "explanation": "Static scanners evaluate what the code declares before deploy; posture scanners evaluate what the APIs report after. A multi-Region trail that was created but never started, keys made outside Terraform, console changes and root MFA are invisible to the first and visible to the second."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "An audit report says an account 'fails CIS 1.4' because the root user has no MFA. Why is that statement incomplete, and what makes it unambiguous?",
+      "choices": [
+        "It needs the AWS Region, because CIS sections are numbered per Region",
+        "It is complete, because CIS section numbers never change between versions",
+        "CIS numbers move between versions (root MFA is 1.5 in v3.0.0 and 1.4 in v5.0.0), so name the benchmark version and add the stable Security Hub control ID, IAM.9",
+        "It needs the Checkov check ID, because Checkov defines the CIS sections"
+      ],
+      "answer": 2,
+      "explanation": "CIS v5.0.0 removed a section 1 recommendation, renumbering everything after it; EBS default encryption moved from 2.2.1 to 5.1.1. Security Hub control IDs map to several standards and versions and stay fixed, so a finding should carry both."
+    }
+  ]
+}

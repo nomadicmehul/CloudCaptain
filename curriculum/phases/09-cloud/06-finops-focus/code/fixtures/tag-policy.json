@@ -1,0 +1,22 @@
+{
+  "tags": {
+    "team": {
+      "tag_key": {
+        "@@assign": "team"
+      },
+      "tag_value": {
+        "@@assign": [
+          "payments",
+          "search",
+          "platform"
+        ]
+      },
+      "enforced_for": {
+        "@@assign": [
+          "ec2:instance",
+          "ec2:volume"
+        ]
+      }
+    }
+  }
+}

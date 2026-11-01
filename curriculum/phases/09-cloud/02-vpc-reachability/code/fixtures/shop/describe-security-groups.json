@@ -1,0 +1,235 @@
+{
+  "SecurityGroups": [
+    {
+      "GroupId": "sg-0web",
+      "GroupName": "web",
+      "Description": "HTTPS from anywhere, SSH from the office",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 443,
+          "ToPort": 443,
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 22,
+          "ToPort": 22,
+          "IpRanges": [
+            {
+              "CidrIp": "192.0.2.0/24"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "Tags": []
+    },
+    {
+      "GroupId": "sg-0db",
+      "GroupName": "db",
+      "Description": "PostgreSQL from web and analytics",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 5432,
+          "ToPort": 5432,
+          "IpRanges": [],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": [
+            {
+              "GroupId": "sg-0web",
+              "UserId": "111122223333"
+            }
+          ]
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 5432,
+          "ToPort": 5432,
+          "IpRanges": [
+            {
+              "CidrIp": "10.1.0.0/16"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 443,
+          "ToPort": 443,
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "Tags": []
+    },
+    {
+      "GroupId": "sg-0batch",
+      "GroupName": "batch",
+      "Description": "outbound only",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "IpPermissions": [],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "Tags": []
+    },
+    {
+      "GroupId": "sg-0report",
+      "GroupName": "report",
+      "Description": "HTTPS from anywhere",
+      "VpcId": "vpc-0shop",
+      "OwnerId": "111122223333",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 443,
+          "ToPort": 443,
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "Tags": []
+    },
+    {
+      "GroupId": "sg-0etl",
+      "GroupName": "etl",
+      "Description": "outbound only",
+      "VpcId": "vpc-0analytics",
+      "OwnerId": "111122223333",
+      "IpPermissions": [],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "Tags": []
+    },
+    {
+      "GroupId": "sg-0ldap",
+      "GroupName": "ldap",
+      "Description": "LDAPS from batch, LDAP from private-a",
+      "VpcId": "vpc-0legacy",
+      "OwnerId": "111122223333",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 636,
+          "ToPort": 636,
+          "IpRanges": [],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": [
+            {
+              "GroupId": "sg-0batch",
+              "UserId": "111122223333"
+            }
+          ]
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 389,
+          "ToPort": 389,
+          "IpRanges": [
+            {
+              "CidrIp": "10.0.2.0/24"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": [],
+          "PrefixListIds": [],
+          "UserIdGroupPairs": []
+        }
+      ],
+      "Tags": []
+    }
+  ]
+}

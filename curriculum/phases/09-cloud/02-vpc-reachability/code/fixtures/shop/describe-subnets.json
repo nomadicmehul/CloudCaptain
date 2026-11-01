@@ -1,0 +1,68 @@
+{
+  "Subnets": [
+    {
+      "SubnetId": "subnet-0public-a",
+      "VpcId": "vpc-0shop",
+      "CidrBlock": "10.0.1.0/24",
+      "AvailabilityZone": "eu-central-1a",
+      "State": "available",
+      "MapPublicIpOnLaunch": true,
+      "AvailableIpAddressCount": 250,
+      "OwnerId": "111122223333",
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "public-a"
+        }
+      ]
+    },
+    {
+      "SubnetId": "subnet-0private-a",
+      "VpcId": "vpc-0shop",
+      "CidrBlock": "10.0.2.0/24",
+      "AvailabilityZone": "eu-central-1a",
+      "State": "available",
+      "MapPublicIpOnLaunch": false,
+      "AvailableIpAddressCount": 250,
+      "OwnerId": "111122223333",
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "private-a"
+        }
+      ]
+    },
+    {
+      "SubnetId": "subnet-0analytics-a",
+      "VpcId": "vpc-0analytics",
+      "CidrBlock": "10.1.1.0/24",
+      "AvailabilityZone": "eu-central-1b",
+      "State": "available",
+      "MapPublicIpOnLaunch": false,
+      "AvailableIpAddressCount": 250,
+      "OwnerId": "111122223333",
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "analytics-a"
+        }
+      ]
+    },
+    {
+      "SubnetId": "subnet-0legacy-a",
+      "VpcId": "vpc-0legacy",
+      "CidrBlock": "172.16.1.0/24",
+      "AvailabilityZone": "eu-central-1a",
+      "State": "available",
+      "MapPublicIpOnLaunch": false,
+      "AvailableIpAddressCount": 250,
+      "OwnerId": "111122223333",
+      "Tags": [
+        {
+          "Key": "Name",
+          "Value": "legacy-a"
+        }
+      ]
+    }
+  ]
+}

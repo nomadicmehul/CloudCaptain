@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cloud/vpc-reachability",
+  "title": "A VPC Is Route Tables and Rules You Can Evaluate",
+  "short": "VPC Reachability",
+  "motto": "Every packet in a VPC crosses a security group, a network ACL and a route table, there and back; the drop is one rule you can name.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "containers/container-networking"
+  ],
+  "tools": [
+    "aws",
+    "moto"
+  ],
+  "reference": [
+    "/docs/cloud/aws/compute-networking",
+    "/docs/tools/networking/fundamentals",
+    "/docs/tools/networking/security",
+    "/docs/cloud/aws/exam-prep"
+  ],
+  "outputs": [
+    "skill-vpc-connectivity-triage.md",
+    "prompt-explain-sg-nacl.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

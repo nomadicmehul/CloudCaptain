@@ -1,0 +1,104 @@
+{
+    "AutoScalingGroups": [
+        {
+            "AutoScalingGroupName": "cc-web",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:123456789012:autoScalingGroup:5a5a1afd-d632-4da6-9edb-3569004f9494:autoScalingGroupName/cc-web",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-77f87aaacf9790618",
+                "LaunchTemplateName": "cc-web",
+                "Version": "$Latest"
+            },
+            "MinSize": 1,
+            "MaxSize": 6,
+            "DesiredCapacity": 5,
+            "DefaultCooldown": 300,
+            "AvailabilityZones": [
+                "us-east-1a",
+                "us-east-1b",
+                "us-east-1c"
+            ],
+            "LoadBalancerNames": [],
+            "TargetGroupARNs": [],
+            "HealthCheckType": "ELB",
+            "HealthCheckGracePeriod": 120,
+            "Instances": [
+                {
+                    "InstanceId": "i-bdd307ff7b13a37eb",
+                    "InstanceType": "t3.micro",
+                    "AvailabilityZone": "us-east-1a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Unhealthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-77f87aaacf9790618",
+                        "LaunchTemplateName": "cc-web",
+                        "Version": "1"
+                    },
+                    "ProtectedFromScaleIn": false
+                },
+                {
+                    "InstanceId": "i-2dc1951c3758d60f3",
+                    "InstanceType": "t3.micro",
+                    "AvailabilityZone": "us-east-1a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-77f87aaacf9790618",
+                        "LaunchTemplateName": "cc-web",
+                        "Version": "1"
+                    },
+                    "ProtectedFromScaleIn": false
+                },
+                {
+                    "InstanceId": "i-b084fdce8836c482c",
+                    "InstanceType": "t3.micro",
+                    "AvailabilityZone": "us-east-1a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-77f87aaacf9790618",
+                        "LaunchTemplateName": "cc-web",
+                        "Version": "1"
+                    },
+                    "ProtectedFromScaleIn": false
+                },
+                {
+                    "InstanceId": "i-0c5e05727d7dc8e40",
+                    "InstanceType": "t3.micro",
+                    "AvailabilityZone": "us-east-1a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-77f87aaacf9790618",
+                        "LaunchTemplateName": "cc-web",
+                        "Version": "1"
+                    },
+                    "ProtectedFromScaleIn": false
+                },
+                {
+                    "InstanceId": "i-28dadb350e8ad064a",
+                    "InstanceType": "t3.micro",
+                    "AvailabilityZone": "us-east-1a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-77f87aaacf9790618",
+                        "LaunchTemplateName": "cc-web",
+                        "Version": "1"
+                    },
+                    "ProtectedFromScaleIn": false
+                }
+            ],
+            "CreatedTime": "2026-11-01T20:42:17.061037Z",
+            "SuspendedProcesses": [],
+            "VPCZoneIdentifier": "subnet-08722fe5de8944375,subnet-6f8a6525aede649a7,subnet-dda5cd553429fe216",
+            "EnabledMetrics": [],
+            "Tags": [],
+            "TerminationPolicies": [
+                "Default"
+            ],
+            "NewInstancesProtectedFromScaleIn": false,
+            "ServiceLinkedRoleARN": "arn:aws:iam::123456789012:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+            "CapacityRebalance": false
+        }
+    ]
+}

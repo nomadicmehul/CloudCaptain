@@ -1,0 +1,106 @@
+{
+ "source": "Amazon S3 API Reference, Authenticating Requests (AWS Signature Version 4): examples on https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-header-based-auth.html and https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html",
+ "publisher": "Amazon Web Services",
+ "retrieved": "2026-11-01",
+ "format": "same as aws-sigv4-test-suite.json; header_payload_hash and query_payload_hash override the payload hash where S3 differs from other services",
+ "vectors": {
+  "s3-get-object-range": {
+   "context": {
+    "credentials": {
+     "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "region": "us-east-1",
+    "service": "s3",
+    "timestamp": "2013-05-24T00:00:00Z",
+    "normalize": false,
+    "sign_body": true
+   },
+   "request": "GET /test.txt HTTP/1.1\nHost:examplebucket.s3.amazonaws.com\nRange:bytes=0-9\n",
+   "expected": {
+    "header": {
+     "canonical-request": "GET\n/test.txt\n\nhost:examplebucket.s3.amazonaws.com\nrange:bytes=0-9\nx-amz-content-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date:20130524T000000Z\n\nhost;range;x-amz-content-sha256;x-amz-date\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "signature": "f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41"
+    }
+   }
+  },
+  "s3-put-object": {
+   "context": {
+    "credentials": {
+     "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "region": "us-east-1",
+    "service": "s3",
+    "timestamp": "2013-05-24T00:00:00Z",
+    "normalize": false,
+    "sign_body": true
+   },
+   "request": "PUT /test$file.text HTTP/1.1\nHost:examplebucket.s3.amazonaws.com\nDate:Fri, 24 May 2013 00:00:00 GMT\nx-amz-storage-class:REDUCED_REDUNDANCY\n\nWelcome to Amazon S3.",
+   "expected": {
+    "header": {
+     "signature": "98ad721746da40c64f1a55b78f14c238d841ea1380cd77a1b5971af0ece108bd"
+    }
+   }
+  },
+  "s3-get-bucket-lifecycle": {
+   "context": {
+    "credentials": {
+     "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "region": "us-east-1",
+    "service": "s3",
+    "timestamp": "2013-05-24T00:00:00Z",
+    "normalize": false,
+    "sign_body": true
+   },
+   "request": "GET /?lifecycle HTTP/1.1\nHost:examplebucket.s3.amazonaws.com\n",
+   "expected": {
+    "header": {
+     "signature": "fea454ca298b7da1c68078a5d1bdbfbbe0d65c699e0f91ac7a200a0136783543"
+    }
+   }
+  },
+  "s3-list-objects": {
+   "context": {
+    "credentials": {
+     "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "region": "us-east-1",
+    "service": "s3",
+    "timestamp": "2013-05-24T00:00:00Z",
+    "normalize": false,
+    "sign_body": true
+   },
+   "request": "GET /?max-keys=2&prefix=J HTTP/1.1\nHost:examplebucket.s3.amazonaws.com\n",
+   "expected": {
+    "header": {
+     "signature": "34b48302e7b5fa45bde8084f4b7868a86f0a534bc59db6670ed5711ef69dc6f7"
+    }
+   }
+  },
+  "s3-presigned-get": {
+   "context": {
+    "credentials": {
+     "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "region": "us-east-1",
+    "service": "s3",
+    "timestamp": "2013-05-24T00:00:00Z",
+    "normalize": false,
+    "sign_body": false,
+    "expiration_in_seconds": 86400,
+    "query_payload_hash": "UNSIGNED-PAYLOAD"
+   },
+   "request": "GET /test.txt HTTP/1.1\nHost:examplebucket.s3.amazonaws.com\n",
+   "expected": {
+    "query": {
+     "signature": "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404"
+    }
+   }
+  }
+ }
+}

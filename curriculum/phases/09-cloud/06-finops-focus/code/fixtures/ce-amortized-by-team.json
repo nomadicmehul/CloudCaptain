@@ -1,0 +1,76 @@
+{
+  "GroupDefinitions": [
+    {
+      "Type": "TAG",
+      "Key": "team"
+    }
+  ],
+  "ResultsByTime": [
+    {
+      "TimePeriod": {
+        "Start": "2026-10-01",
+        "End": "2026-10-15"
+      },
+      "Total": {},
+      "Groups": [
+        {
+          "Keys": [
+            "team$"
+          ],
+          "Metrics": {
+            "AmortizedCost": {
+              "Amount": "220.48",
+              "Unit": "USD"
+            }
+          }
+        },
+        {
+          "Keys": [
+            "team$Platform"
+          ],
+          "Metrics": {
+            "AmortizedCost": {
+              "Amount": "33.6",
+              "Unit": "USD"
+            }
+          }
+        },
+        {
+          "Keys": [
+            "team$payments"
+          ],
+          "Metrics": {
+            "AmortizedCost": {
+              "Amount": "403.2000000001",
+              "Unit": "USD"
+            }
+          }
+        },
+        {
+          "Keys": [
+            "team$platform"
+          ],
+          "Metrics": {
+            "AmortizedCost": {
+              "Amount": "369.6",
+              "Unit": "USD"
+            }
+          }
+        },
+        {
+          "Keys": [
+            "team$search"
+          ],
+          "Metrics": {
+            "AmortizedCost": {
+              "Amount": "252",
+              "Unit": "USD"
+            }
+          }
+        }
+      ],
+      "Estimated": false
+    }
+  ],
+  "DimensionValueAttributes": []
+}
