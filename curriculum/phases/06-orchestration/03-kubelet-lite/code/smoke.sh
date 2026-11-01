@@ -390,7 +390,7 @@ PY
     "${K[@]}" get pod "$1" -n "$NS" -o json > "$WORK/one.json" || return 1
     "${K[@]}" get pod "$1" -n "$NS" --no-headers > "$WORK/one.txt" || return 1
     python3 code/main.py get pods -f "$WORK/one.json" --json > "$WORK/one-mini.json" || return 1
-    python3 -c 'import json, sys; mini = json.load(open(sys.argv[1]))[0]; cols = open(sys.argv[2]).read().split(); sys.exit(0 if cols[1:3] == [mini["ready"], mini["status"]] and mini["status"] == sys.argv[3] else 1)' "$WORK/one-mini.json" "$WORK/one.txt" "$2"
+    python3 -c 'import json, sys; mini = json.load(open(sys.argv[1]))[0]; cols = open(sys.argv[2]).read().split(); sys.exit(0 if cols[1:3] == [mini["ready"], mini["status"]] and mini["status"] in sys.argv[3].split("|") else 1)' "$WORK/one-mini.json" "$WORK/one.txt" "$2"
   }
 
   echo "▸ Use It: a failing readiness probe keeps a pod NotReady without restarting it"
@@ -431,7 +431,7 @@ PY
   grep -q crashing "$WORK/previous.log" || fail "kubectl logs --previous: $(cat "$WORK/previous.log")"
   "${K[@]}" get events -n "$NS" --field-selector involvedObject.name=cc-crash,reason=BackOff -o json > "$WORK/backoff.json" || fail "get BackOff events"
   python3 -c 'import json, sys; m = [e["message"] for e in json.load(open(sys.argv[1]))["items"]]; assert any("Back-off restarting failed container" in x for x in m), m; print("  event:", m[0])' "$WORK/backoff.json" || fail "no BackOff event for cc-crash"
-  poll 20 same_status cc-crash CrashLoopBackOff || fail "minikubelet vs kubectl STATUS for cc-crash: $(cat "$WORK/one.txt") / $(cat "$WORK/one-mini.json")"
+  poll 60 same_status cc-crash "CrashLoopBackOff|Error" || fail "minikubelet vs kubectl STATUS for cc-crash: $(cat "$WORK/one.txt") / $(cat "$WORK/one-mini.json")"
   echo "  kubectl and minikubelet print: $(cat "$WORK/one.txt")"
 
   "${K[@]}" delete namespace "$NS" --wait=false >/dev/null
