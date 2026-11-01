@@ -105,23 +105,24 @@ FC
   grep -q "effective    0x0000000000000000" "$WORK/container.txt" || fail "a non-root user gets no effective capabilities from --cap-add"
   grep -q "bounding     0x0000000000000400" "$WORK/container.txt" || fail "the bit should be in the bounding set only"
 
-  echo "▸ binding :80: uid 0 needs the bit, uid 1000 needs it as a file capability"
-  docker run --rm --cap-drop ALL --cap-add NET_BIND_SERVICE -v "$WORK/bind80.py:/bind80.py:ro" python:3.12-alpine python3 /bind80.py | tee "$WORK/bind-root.txt"
+  echo "▸ binding :80: Docker's default lets any uid bind it; with the kernel default restored, uid 0 needs the bit and uid 1000 a file capability"
+  echo "  ip_unprivileged_port_start inside a default container: $(docker run --rm alpine:3.22 cat /proc/sys/net/ipv4/ip_unprivileged_port_start)"
+  docker run --rm --sysctl net.ipv4.ip_unprivileged_port_start=1024 --cap-drop ALL --cap-add NET_BIND_SERVICE -v "$WORK/bind80.py:/bind80.py:ro" python:3.12-alpine python3 /bind80.py | tee "$WORK/bind-root.txt"
   grep -q "bound :80 as uid 0 with CapEff 0000000000000400" "$WORK/bind-root.txt" || fail "uid 0 with CAP_NET_BIND_SERVICE should bind :80"
   set +e
-  OUT=$(docker run --rm --cap-drop ALL -v "$WORK/bind80.py:/bind80.py:ro" python:3.12-alpine python3 /bind80.py 2>&1); CODE=$?
+  OUT=$(docker run --rm --sysctl net.ipv4.ip_unprivileged_port_start=1024 --cap-drop ALL -v "$WORK/bind80.py:/bind80.py:ro" python:3.12-alpine python3 /bind80.py 2>&1); CODE=$?
   set -e
   { [[ "$CODE" != "0" ]] && grep -q "Permission denied" <<<"$OUT"; } || fail "uid 0 without CAP_NET_BIND_SERVICE should get EACCES, got ($CODE): $OUT"
   echo "  uid 0 with --cap-drop ALL: $(grep -o 'Errno 13.*' <<<"$OUT")"
   set +e
-  OUT=$(docker run --rm --user 1000 --cap-add NET_BIND_SERVICE -v "$WORK/bind80.py:/bind80.py:ro" python:3.12-alpine python3 /bind80.py 2>&1); CODE=$?
+  OUT=$(docker run --rm --sysctl net.ipv4.ip_unprivileged_port_start=1024 --user 1000 --cap-add NET_BIND_SERVICE -v "$WORK/bind80.py:/bind80.py:ro" python:3.12-alpine python3 /bind80.py 2>&1); CODE=$?
   set -e
   { [[ "$CODE" != "0" ]] && grep -q "Permission denied" <<<"$OUT"; } || fail "--user 1000 with --cap-add should still fail (non-root gets only the bounding set), got ($CODE): $OUT"
   echo "  uid 1000 with --cap-add NET_BIND_SERVICE: still $(grep -o 'Errno 13.*' <<<"$OUT")"
-  docker run --rm -v "$WORK/bind80.py:/bind80.py:ro" -v "$WORK/filecap.sh:/filecap.sh:ro" python:3.12-alpine sh /filecap.sh | tee "$WORK/filecap.txt"
+  docker run --rm --sysctl net.ipv4.ip_unprivileged_port_start=1024 -v "$WORK/bind80.py:/bind80.py:ro" -v "$WORK/filecap.sh:/filecap.sh:ro" python:3.12-alpine sh /filecap.sh | tee "$WORK/filecap.txt"
   grep -q "bound :80 as uid 1000 with CapEff 0000000000000400" "$WORK/filecap.txt" || fail "a file capability should give uid 1000 exactly CAP_NET_BIND_SERVICE"
   set +e
-  OUT=$(docker run --rm --security-opt no-new-privileges -v "$WORK/bind80.py:/bind80.py:ro" -v "$WORK/filecap.sh:/filecap.sh:ro" python:3.12-alpine sh /filecap.sh 2>&1); CODE=$?
+  OUT=$(docker run --rm --sysctl net.ipv4.ip_unprivileged_port_start=1024 --security-opt no-new-privileges -v "$WORK/bind80.py:/bind80.py:ro" -v "$WORK/filecap.sh:/filecap.sh:ro" python:3.12-alpine sh /filecap.sh 2>&1); CODE=$?
   set -e
   { [[ "$CODE" != "0" ]] && grep -q "Permission denied" <<<"$OUT"; } || fail "no-new-privileges should make execve ignore the file capability, got ($CODE): $OUT"
   echo "  with --security-opt no-new-privileges the file capability is ignored: $(grep -o 'Errno 13.*' <<<"$OUT")"

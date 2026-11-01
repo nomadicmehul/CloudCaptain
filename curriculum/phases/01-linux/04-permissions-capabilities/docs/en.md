@@ -290,8 +290,11 @@ docker run --rm --user 1000 --cap-add NET_BIND_SERVICE alpine:3.22 grep Cap /pro
 docker run --rm --privileged alpine:3.22 grep CapEff /proc/self/status                   # 000001ffffffffff, plus /dev/* and no seccomp or AppArmor
 docker run --rm --security-opt no-new-privileges alpine:3.22 grep NoNewPrivs /proc/self/status
 docker inspect -f '{{.HostConfig.CapAdd}} {{.HostConfig.CapDrop}} {{.HostConfig.SecurityOpt}} {{.HostConfig.Privileged}}' CONTAINER
+docker run --rm alpine:3.22 cat /proc/sys/net/ipv4/ip_unprivileged_port_start            # 0: Docker's default inside every container
 docker run --rm --user 1000 --cap-drop ALL --sysctl net.ipv4.ip_unprivileged_port_start=0 python:3.12-alpine python3 -m http.server 80   # port 80 with zero capabilities
 ```
+
+Read that sysctl before you debug a bind error. Docker Engine has set `net.ipv4.ip_unprivileged_port_start=0` in every container's network namespace since 20.10, so under a plain `docker run` any uid can bind port 80 and `CAP_NET_BIND_SERVICE` changes nothing. The capability decides on the host, under runtimes that keep the kernel default of 1024, and whenever the sysctl is set back to 1024, which is what the smoke test does with `--sysctl net.ipv4.ip_unprivileged_port_start=1024` to show each case.
 
 Kubernetes spells the same knobs as a `securityContext`; the restricted Pod Security Standard is this block made mandatory per namespace (`pod-security.kubernetes.io/enforce: restricted`). PodSecurityPolicy, which used to enforce it, was removed; Pod Security Admission does it now:
 

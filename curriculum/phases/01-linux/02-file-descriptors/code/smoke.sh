@@ -90,7 +90,7 @@ if command -v docker >/dev/null; then
   CODE=$?
   set -e
   [[ "$CODE" != "0" ]] || fail "opening 100 files under a 16-descriptor limit should fail"
-  grep -q "Too many open files" <<<"$ERR" || fail "expected EMFILE, got: $ERR"
+  grep -q "Errno 24" <<<"$ERR" || fail "expected EMFILE (errno 24), got: $ERR"
   echo "  EMFILE reproduced under --ulimit nofile=64:64; default in a container here: $(docker run --rm alpine:3.22 sh -c 'ulimit -n')"
 else
   echo "  (docker not available; Use It skipped)"
