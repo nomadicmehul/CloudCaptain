@@ -1,0 +1,44 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Rollout",
+  "metadata": {"name": "demo"},
+  "spec": {
+    "replicas": 4,
+    "revisionHistoryLimit": 2,
+    "selector": {"matchLabels": {"app": "demo"}},
+    "template": {
+      "metadata": {"labels": {"app": "demo"}},
+      "spec": {
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "app",
+            "image": "python:3.12-alpine",
+            "command": ["python3", "/app/main.py", "app", "--host", "0.0.0.0", "--port", "8080"],
+            "env": [
+              {"name": "APP_VERSION", "value": "v2"},
+              {"name": "ERROR_RATE", "value": "0"},
+              {"name": "LATENCY_MS", "value": "0"}
+            ],
+            "ports": [{"name": "http", "containerPort": 8080}],
+            "readinessProbe": {"httpGet": {"path": "/healthz", "port": 8080}, "periodSeconds": 1},
+            "resources": {"requests": {"cpu": "10m", "memory": "32Mi"}},
+            "volumeMounts": [{"name": "code", "mountPath": "/app"}]
+          }
+        ],
+        "volumes": [{"name": "code", "configMap": {"name": "minirollout-code"}}]
+      }
+    },
+    "strategy": {
+      "canary": {
+        "steps": [
+          {"setWeight": 25},
+          {"analysis": {"templates": [{"templateName": "success-rate"}], "args": [{"name": "version", "value": "v2"}]}},
+          {"setWeight": 50},
+          {"pause": {"duration": "2s"}},
+          {"analysis": {"templates": [{"templateName": "success-rate"}], "args": [{"name": "version", "value": "v2"}]}}
+        ]
+      }
+    }
+  }
+}

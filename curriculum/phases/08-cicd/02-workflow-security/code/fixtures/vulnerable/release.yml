@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Restore the build cache
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+      - name: Build
+        run: npm ci && npm run build
+      - name: Publish the package
+        run: |
+          echo "token starts with ${REGISTRY_TOKEN:0:4}"
+          ./scripts/publish.sh --token "${{ secrets.REGISTRY_TOKEN }}"
+        env:
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.tgz --generate-notes

@@ -1,0 +1,9 @@
+{
+  "Url": "gitlab.com",
+  "ClientIDList": [
+    "sts.amazonaws.com"
+  ],
+  "ThumbprintList": [],
+  "CreateDate": "2026-11-01T09:00:00Z",
+  "Tags": []
+}

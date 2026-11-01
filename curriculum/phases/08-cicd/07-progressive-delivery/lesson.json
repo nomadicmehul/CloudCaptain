@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/progressive-delivery",
+  "title": "A Rollout Is a Loop That Watches a Metric",
+  "short": "Progressive Delivery",
+  "motto": "A canary is a weight, a wait and a query; the step sizes and the analysis interval decide how many users meet a bad version.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/gitops-reconciler",
+    "orchestration/services-dns"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "argo-rollouts",
+    "kubectl-argo-rollouts",
+    "prometheus",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/cicd/gitops",
+    "/docs/tools/observability"
+  ],
+  "outputs": [
+    "skill-rollout-review.md",
+    "prompt-design-canary-analysis.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

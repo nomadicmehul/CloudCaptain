@@ -1,0 +1,38 @@
+name: PR preview
+
+on: pull_request
+
+permissions: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Check out the pull request
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Cache npm downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+      - name: Changed files
+        id: changed
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+      - name: Build the preview
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          CHANGED: ${{ steps.changed.outputs.all_changed_files }}
+        run: |
+          echo "Building $HEAD_REF, changed: $CHANGED"
+          npm ci
+          npm run build
+      - name: Upload the preview
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: preview
+          path: dist

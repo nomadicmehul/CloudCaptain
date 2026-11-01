@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+namePrefix: prod-
+labels:
+  - pairs:
+      team: shop
+images:
+  - name: registry.k8s.io/pause
+    newTag: "3.9"
+patches:
+  - path: deployment-patch.yaml

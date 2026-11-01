@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/release-versioning",
+  "title": "A Release Is a Version, a Changelog and a Tag",
+  "short": "Release Versioning",
+  "motto": "The next version is a function of the commits since the last tag: compute it, write it down for humans, and tag the commit it names.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/pipeline-runner"
+  ],
+  "tools": [
+    "git",
+    "git-cliff",
+    "release-please",
+    "semantic-release",
+    "renovate",
+    "dependabot"
+  ],
+  "reference": [
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-release-checklist.md",
+    "prompt-write-release-notes.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

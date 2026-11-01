@@ -1,0 +1,50 @@
+[changelog]
+header = """
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+"""
+body = """
+{% if version %}\
+    ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+    ## [Unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | striptags | trim }}
+    {% for commit in commits %}
+        - {% if commit.breaking %}**BREAKING** {% endif %}\
+            {% if commit.scope %}**{{ commit.scope }}:** {% endif %}\
+            {{ commit.message }}\
+    {% endfor %}
+{% endfor %}
+"""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+protect_breaking_commits = true
+filter_commits = true
+tag_pattern = "v[0-9].*"
+topo_order = false
+topo_order_commits = true
+sort_commits = "oldest"
+commit_parsers = [
+    { message = '^(build|chore|ci|docs|style|test)(\(.*\))?!?:', skip = true },
+    { message = '^[a-z]+\(security\)!?:', group = "<!-- 5 -->Security" },
+    { message = '^[a-z]+(\(.*\))?!?: (?i:deprecate)', group = "<!-- 2 -->Deprecated" },
+    { message = '^[a-z]+(\(.*\))?!?: (?i:remove|drop)', group = "<!-- 3 -->Removed" },
+    { message = '^feat(\(.*\))?!?:', group = "<!-- 0 -->Added" },
+    { message = '^fix(\(.*\))?!?:', group = "<!-- 4 -->Fixed" },
+    { message = '^(perf|refactor|revert)(\(.*\))?!?:', group = "<!-- 1 -->Changed" },
+]
+
+[bump]
+features_always_bump_minor = false
+breaking_always_bump_major = false
+initial_tag = "0.1.0"

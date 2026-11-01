@@ -1,0 +1,14 @@
+{
+  "_about": "GitHub Actions job contexts. minioidc turns each one into the claims GitHub's OIDC provider puts in its token; unset fields take the defaults in main.JOB_DEFAULTS.",
+  "deploy-prod": {"repository": "octo-org/octo-repo", "ref": "refs/heads/main", "environment": "prod", "event_name": "push", "workflow": "deploy"},
+  "main-push": {"repository": "octo-org/octo-repo", "ref": "refs/heads/main", "event_name": "push", "workflow": "ci"},
+  "feature-push": {"repository": "octo-org/octo-repo", "ref": "refs/heads/feature/login", "event_name": "push", "workflow": "ci"},
+  "pull-request": {"repository": "octo-org/octo-repo", "ref": "refs/pull/42/merge", "event_name": "pull_request", "head_ref": "feature/login", "base_ref": "main", "workflow": "ci"},
+  "release-tag": {"repository": "octo-org/octo-repo", "ref": "refs/tags/v1.4.0", "event_name": "push", "workflow": "release"},
+  "sibling-repo": {"repository": "octo-org/sandbox", "ref": "refs/heads/main", "repository_id": "81", "workflow": "ci"},
+  "lookalike-org": {"repository": "octo-org-evil/octo-repo", "ref": "refs/heads/main", "repository_owner_id": "9001", "repository_id": "31337", "actor": "mallory", "repository_visibility": "public"},
+  "stranger": {"repository": "mallory/anything", "ref": "refs/heads/main", "repository_owner_id": "9002", "repository_id": "31338", "actor": "mallory", "repository_visibility": "public"},
+  "immutable-main": {"repository": "octo-org/octo-repo", "ref": "refs/heads/main", "immutable_subject": true, "repository_owner_id": "123456", "repository_id": "456789"},
+  "reusable-deploy": {"repository": "octo-org/octo-repo", "ref": "refs/heads/main", "environment": "prod", "job_workflow_ref": "octo-org/octo-automation/.github/workflows/oidc.yml@refs/heads/main", "include_claim_keys": ["repo", "context", "job_workflow_ref"]},
+  "colon-environment": {"repository": "octo-org/octo-repo", "ref": "refs/heads/main", "environment": "Production:V1"}
+}

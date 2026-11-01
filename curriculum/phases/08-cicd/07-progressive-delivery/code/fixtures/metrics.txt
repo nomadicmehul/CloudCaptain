@@ -1,0 +1,15 @@
+# HELP http_requests_total HTTP requests by status code.
+# TYPE http_requests_total counter
+http_requests_total{code="200",version="v1"} 1027
+http_requests_total{code="500",version="v1"} 3 1730000000000
+http_requests_total{code="200",path="/say \"hi\"\\n",version="v2"} 12
+# HELP http_request_duration_seconds HTTP request latency in seconds.
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{version="v1",le="0.005"} 400
+http_request_duration_seconds_bucket{version="v1",le="0.01"} 700
+http_request_duration_seconds_bucket{version="v1",le="0.025"} 1000
+http_request_duration_seconds_bucket{version="v1",le="+Inf"} 1030
+http_request_duration_seconds_sum{version="v1"} 9.87
+http_request_duration_seconds_count{version="v1"} 1030
+process_start_time_seconds 1.73e+09
+go_gc_duration_seconds{quantile="0.5"} NaN

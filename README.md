@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps from scratch.<br/>Build the tool. Use the tool. Ship an artifact.</h3>
   <p>
-    <strong>55 lessons</strong> · <strong>8 phases live</strong> · <strong>80 hours</strong> · <strong>1,429 tests</strong> · <strong>107 skills, prompts &amp; MCP servers</strong>
+    <strong>63 lessons</strong> · <strong>9 phases live</strong> · <strong>92 hours</strong> · <strong>1,725 tests</strong> · <strong>123 skills, prompts &amp; MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Start the course" /></a>
@@ -50,11 +50,12 @@ Every lesson starts from a production problem, has you build the mechanism yours
 | **05 · Containers** | a container runtime, an image auditor, a registry client, an image builder without a Dockerfile, a veth/bridge network, Compose, rootless user namespaces, a seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | a reconciler, a scheduler, a kubelet, kube-proxy rules and cluster DNS, an RBAC authorizer, Helm, an operator, a Gateway API router | Kubernetes on kind, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | a plan/apply engine, a dependency graph, modules, a locking state server, drift detection, a policy engine, Pulumi and Crossplane front ends, an idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **08 · CI/CD & GitOps** | a workflow runner, a workflow security auditor, an OIDC issuer and verifier, an SBOM generator, a signer with a transparency log, a GitOps reconciler, a canary controller, a release tool | GitHub Actions and act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (AWS first)** | an IAM policy evaluator, a VPC reachability analyser, SigV4 signing and an S3 server, the Lambda runtime API, an Auto Scaling group, a FOCUS cost allocator, a security posture scanner | the AWS CLI against moto, the Lambda emulator, Checkov |
 | **13 · AI Infrastructure** | a GPU scheduler with DRA, an LLM serving simulator, a token-counting gateway, a queue-based autoscaler, a prefix-cache router, HNSW and IVF indexes, a model artifact inspector, a token cost model | llama.cpp on CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | an MCP server for kubectl, an incident-triage agent, AI log analysis, OpenTelemetry for LLM calls, agent sandboxes, safe write tools, agent evals | Claude Code, the Claude API, OpenTelemetry, promptfoo |
 
-Nine more phases (networking, Git, scripting, CI/CD, observability, security, platform engineering, MLOps, capstones) are on the [roadmap](./ROADMAP.md).
+Eight more phases (networking, Git, scripting, observability, security, platform engineering, MLOps, capstones) are on the [roadmap](./ROADMAP.md).
 
 ## How a lesson works
 
@@ -73,7 +74,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | For | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 47 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 55 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engineers asked to run models: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | putting agents to work on infrastructure safely | 9 |
 
@@ -95,7 +96,7 @@ The site's **Captain's Bridge** reading mode tracks progress per section, and [/
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| Build each tool from scratch, with tests | ✅ 55 lessons | ❌ | ❌ | ❌ |
+| Build each tool from scratch, with tests | ✅ 63 lessons | ❌ | ❌ | ❌ |
 | Verified against the real tools in CI | ✅ every lesson | ❌ | ❌ | ❌ |
 | AI infrastructure and AIOps | ✅ 15 lessons | partial | ❌ | links |
 | An agent tutor you install | ✅ `npx skills add` | ❌ | ❌ | ❌ |

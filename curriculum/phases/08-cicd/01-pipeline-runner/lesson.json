@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/pipeline-runner",
+  "title": "A Pipeline Is a Graph of Jobs in Clean Rooms",
+  "short": "Pipeline Runner",
+  "motto": "Jobs are nodes, needs are edges, and every job starts in an empty room; outputs, artifacts and caches are the only doors between them.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "iac/dependency-graph"
+  ],
+  "tools": [
+    "github-actions",
+    "act",
+    "actionlint",
+    "gitlab-ci"
+  ],
+  "reference": [
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/github-actions/cheatsheet",
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/cicd/cheatsheet",
+    "/docs/tools/yaml/fundamentals"
+  ],
+  "outputs": [
+    "skill-pipeline-debugging.md",
+    "prompt-review-workflow-graph.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

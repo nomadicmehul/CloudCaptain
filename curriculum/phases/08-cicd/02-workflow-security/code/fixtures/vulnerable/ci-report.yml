@@ -1,0 +1,19 @@
+name: CI report
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the tested commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Record the branch
+        run: echo "BRANCH=${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_ENV"
+      - name: Summarise the test report
+        run: ./scripts/summarise-report.sh

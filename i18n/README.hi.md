@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps, बिल्कुल शुरुआत से।<br/>Tool बनाएँ। Tool इस्तेमाल करें। Artifact ship करें।</h3>
   <p>
-    <strong>55 lessons</strong> · <strong>8 phases लाइव</strong> · <strong>80 घंटे</strong> · <strong>1,429 tests</strong> · <strong>107 skills, prompts और MCP servers</strong>
+    <strong>63 lessons</strong> · <strong>9 phases लाइव</strong> · <strong>92 घंटे</strong> · <strong>1,725 tests</strong> · <strong>123 skills, prompts और MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="कोर्स शुरू करें" /></a>
@@ -51,11 +51,12 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **05 · Containers** | एक container runtime, एक image auditor, एक registry client, बिना Dockerfile का image builder, एक veth/bridge network, Compose, rootless user namespaces, एक seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | एक reconciler, एक scheduler, एक kubelet, kube-proxy rules और cluster DNS, एक RBAC authorizer, Helm, एक operator, एक Gateway API router | kind पर Kubernetes, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | एक plan/apply engine, एक dependency graph, modules, एक locking state server, drift detection, एक policy engine, Pulumi और Crossplane front ends, एक idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **08 · CI/CD & GitOps** | एक workflow runner, एक workflow security auditor, एक OIDC issuer और verifier, एक SBOM generator, transparency log वाला एक signer, एक GitOps reconciler, एक canary controller, एक release tool | GitHub Actions और act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (AWS first)** | एक IAM policy evaluator, एक VPC reachability analyser, SigV4 signing और एक S3 server, Lambda runtime API, एक Auto Scaling group, एक FOCUS cost allocator, एक security posture scanner | moto पर AWS CLI, Lambda emulator, Checkov |
 | **13 · AI Infrastructure** | DRA के साथ एक GPU scheduler, एक LLM serving simulator, एक token-counting gateway, एक queue-based autoscaler, एक prefix-cache router, HNSW और IVF indexes, एक model artifact inspector, एक token cost model | CPU पर llama.cpp, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | kubectl के लिए एक MCP server, एक incident-triage agent, AI से log analysis, LLM calls के लिए OpenTelemetry, agent sandboxes, सुरक्षित write tools, agent evals | Claude Code, Claude API, OpenTelemetry, promptfoo |
 
-नौ और phases (networking, Git, scripting, CI/CD, observability, security, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) पर हैं।
+आठ और phases (networking, Git, scripting, observability, security, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) पर हैं।
 
 ## एक lesson कैसे चलता है
 
@@ -74,7 +75,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | किसके लिए | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एक अकेले Linux process से लेकर Kubernetes, IaC, cloud और AIOps तक | 47 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एक अकेले Linux process से लेकर Kubernetes, IaC, cloud और AIOps तक | 55 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | वे engineers जिन्हें models चलाने का काम मिला है: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | infrastructure पर agents से सुरक्षित तरीके से काम करवाना | 9 |
 
@@ -96,7 +97,7 @@ Site का **Captain's Bridge** reading mode हर section की progress tra
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| हर tool शुरुआत से, tests के साथ बनाना | ✅ 55 lessons | ❌ | ❌ | ❌ |
+| हर tool शुरुआत से, tests के साथ बनाना | ✅ 63 lessons | ❌ | ❌ | ❌ |
 | CI में असली tools के सामने verified | ✅ हर lesson | ❌ | ❌ | ❌ |
 | AI infrastructure और AIOps | ✅ 15 lessons | आंशिक | ❌ | links |
 | Install करने लायक agent tutor | ✅ `npx skills add` | ❌ | ❌ | ❌ |

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/ci-oidc",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A workflow keeps an IAM user's access key as a repository secret. A compromised third-party action prints the runner's secrets into the public job log. For how long can an attacker use that key?",
+      "choices": [
+        "Until someone deactivates or deletes the key, which can be years; a token from the same job would have expired in minutes and its session within the hour",
+        "For five minutes, like a GitHub OIDC token",
+        "Until the workflow run ends",
+        "Until GitHub masks it in the log"
+      ],
+      "answer": 0,
+      "explanation": "A stored access key has no expiry of its own. OIDC replaces it with a token that expires 300 seconds after issue and a session that ends at its Expiration, so a leak has a short, known lifetime."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A trust policy has `StringLike` on `token.actions.githubusercontent.com:sub` with the value `repo:octo-org*`. Which job can assume the role although the author did not mean it to?",
+      "choices": [
+        "None: `StringLike` stops matching at the first slash",
+        "A job in `octo-org-evil/anything`, because `*` matches any characters, including the rest of a look-alike organization name",
+        "Only jobs in forks of octo-org's repositories",
+        "Only jobs from GitLab, which uses a different subject format"
+      ],
+      "answer": 1,
+      "explanation": "IAM's `*` matches any sequence of characters, colons and slashes included. Anyone can register an organization whose name starts with `octo-org`. End the owner name with a slash and pin the repository and environment."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A deploy step fails with `InvalidIdentityToken: Incorrect token audience`. What is wrong?",
+      "choices": [
+        "The trust policy's `:sub` condition does not match the job",
+        "The token expired before the call",
+        "The role named in `role-to-assume` does not exist",
+        "The step requested a token whose audience is not in the IAM OIDC provider's ClientIDList, for example GitHub's default `https://github.com/OWNER` instead of `sts.amazonaws.com`"
+      ],
+      "answer": 3,
+      "explanation": "STS checks the audience (or `azp` when present) against the provider's client IDs before it reads the trust policy. A subject mismatch gives `AccessDenied`, an old token `ExpiredTokenException`."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why does a verifier take the signing algorithm from its own configuration instead of from the token's `alg` header?",
+      "choices": [
+        "Because the header is not covered by the signature",
+        "Because it saves one JWKS fetch per token",
+        "Because the token's author chooses the header: `alg` none would skip the signature, and `HS256` with the public key as the HMAC secret would let anyone forge tokens",
+        "Because RS256 is the only algorithm the JWT standard allows"
+      ],
+      "answer": 2,
+      "explanation": "The header is signed, but it is read before the signature is checked, and an attacker writes their own. `minioidc` accepts only RS256 and only keys from the provider's JWKS, so both classic confusions fail before any key is used."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A role trusts GitHub's issuer with `StringEquals` on `:aud` = `sts.amazonaws.com` and `StringEqualsIfExists` on `token.actions.githubusercontent.com:repository_owner` = `octo-org`, and no `:sub` condition. A workflow in `mallory/anything` requests a token for `sts.amazonaws.com` and calls AssumeRoleWithWebIdentity. What happens?",
+      "choices": [
+        "Denied, because the token's `repository_owner` claim is `mallory`",
+        "Denied at call time by IAM's identity-provider controls",
+        "Allowed: AWS does not map `repository_owner` to a condition key for GitHub, so the key is missing and `...IfExists` is true; only the audience is really checked",
+        "Allowed only if mallory is a member of octo-org"
+      ],
+      "answer": 2,
+      "explanation": "A claim that AWS does not map is a missing key at evaluation. Identity-provider controls reject such a policy when it is created or updated, but a role saved earlier keeps working as written. Put the requirement into `sub` and pin it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your smoke test sends moto's STS a token for the wrong branch, and moto returns credentials. What does that tell you?",
+      "choices": [
+        "Nothing about the trust policy: moto's AssumeRoleWithWebIdentity never parses the token or evaluates the trust policy, so trust decisions need documented cases or a real account",
+        "The trust policy allows that branch and must be fixed",
+        "moto has a bug in `StringEquals` that will be fixed in the next release",
+        "The token's signature is invalid and moto ignored the error"
+      ],
+      "answer": 0,
+      "explanation": "moto 5.2.5 emulates the API shape (credentials, assumed-role ARN) without the decision. It also returns credentials for an expired token and for a string that is not a JWT, which the smoke test asserts."
+    }
+  ]
+}

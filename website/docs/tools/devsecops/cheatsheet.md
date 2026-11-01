@@ -242,8 +242,9 @@ grype myapp:latest --output json
 # Scan directory
 grype dir:/path/to/code
 
-# Generate SBOM
-grype myapp:latest --output syft-json
+# Generate an SBOM with syft, then scan the SBOM with grype
+syft myapp:latest -o cyclonedx-json > sbom.cdx.json
+grype sbom:./sbom.cdx.json
 ```
 
 ### Clair
