@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/tcp-states",
+  "title": "Most Network Outages Are Timeouts You Did Not Set",
+  "short": "TCP Timeouts",
+  "motto": "A hung connection is waiting on a kernel default: read its TCP state, then set connect, read and total timeouts yourself.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/ip-routing",
+    "linux/file-descriptors"
+  ],
+  "tools": [
+    "ss",
+    "nstat",
+    "sysctl",
+    "curl",
+    "ip"
+  ],
+  "reference": [
+    "/docs/tools/networking/fundamentals",
+    "/docs/tools/linux/networking",
+    "/docs/tools/networking/interview-questions",
+    "/docs/tools/networking/cheatsheet"
+  ],
+  "outputs": [
+    "skill-connection-timeout-triage.md",
+    "prompt-explain-ss-output.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

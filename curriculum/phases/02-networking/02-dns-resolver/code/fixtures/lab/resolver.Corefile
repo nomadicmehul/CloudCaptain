@@ -1,0 +1,19 @@
+cluster.local.:53 {
+    bind 127.0.10.10
+    file /etc/coredns/cluster.local.db
+    log
+    errors
+}
+cc.internal.:53 {
+    bind 127.0.10.10
+    file /etc/coredns/cc.internal.db
+    log
+    errors
+}
+cc.test.:53 {
+    bind 127.0.10.10
+    forward . 127.0.10.3:53
+    cache 30
+    log
+    errors
+}

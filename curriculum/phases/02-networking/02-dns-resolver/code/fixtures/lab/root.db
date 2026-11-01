@@ -1,0 +1,6 @@
+; The lab's root zone, served by CoreDNS on 127.0.10.1. It delegates test. with glue.
+.              86400   IN  SOA   a.root. hostmaster.root. 2026110101 1800 900 604800 86400
+.              518400  IN  NS    a.root.
+a.root.        518400  IN  A     127.0.10.1
+test.          172800  IN  NS    ns1.test.
+ns1.test.      172800  IN  A     127.0.10.2

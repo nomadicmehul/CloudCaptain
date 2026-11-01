@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/load-balancing",
+  "title": "A Load Balancer Is a Health Check and a Choice",
+  "short": "Load Balancing",
+  "motto": "Every request is two decisions: which backends may take it (health checks) and which of those gets it (the algorithm).",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/http-server"
+  ],
+  "tools": [
+    "haproxy",
+    "nginx",
+    "envoy",
+    "curl",
+    "docker",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/nginx/fundamentals",
+    "/docs/tools/nginx/cheatsheet",
+    "/docs/tools/networking/fundamentals",
+    "/docs/cloud/aws/compute-networking",
+    "/docs/tools/kubernetes/networking-services"
+  ],
+  "outputs": [
+    "skill-load-balancer-review.md",
+    "prompt-choose-lb-algorithm.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

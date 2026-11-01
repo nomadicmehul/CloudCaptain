@@ -1,0 +1,9 @@
+HTTP/2 200
+content-type: application/javascript
+content-length: 48211
+date: Sun, 01 Nov 2026 09:00:00 GMT
+last-modified: Sat, 31 Oct 2026 18:12:09 GMT
+etag: "5f2a-3f9a1c2b"
+cache-control: public, max-age=31536000, immutable
+vary: Accept-Encoding
+

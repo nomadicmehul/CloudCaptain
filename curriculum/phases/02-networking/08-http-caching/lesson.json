@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/http-caching",
+  "title": "A Cache Is a Key, a Lifetime and a Validator",
+  "short": "HTTP Caching",
+  "motto": "Every cache decision is three questions: which stored copy matches, is it still fresh after its Age, and can a 304 renew it cheaply.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/http-server"
+  ],
+  "tools": [
+    "curl",
+    "nginx",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/nginx/fundamentals",
+    "/docs/tools/nginx/cheatsheet",
+    "/docs/tools/networking/fundamentals",
+    "/docs/cloud/aws/compute-networking"
+  ],
+  "outputs": [
+    "skill-cache-header-review.md",
+    "prompt-explain-cache-miss.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

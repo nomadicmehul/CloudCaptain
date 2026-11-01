@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/tls-handshake",
+  "title": "TLS Is a Handshake and a Chain You Can Verify",
+  "short": "TLS Handshake",
+  "motto": "A TLS error is a hello the server refused or a chain the client could not build, and both are bytes you can read and check.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/tcp-states"
+  ],
+  "tools": [
+    "openssl",
+    "curl",
+    "python3"
+  ],
+  "reference": [
+    "/docs/tools/networking/security",
+    "/docs/tools/networking/cheatsheet",
+    "/docs/tools/nginx/fundamentals",
+    "/docs/tools/kubernetes/networking-services"
+  ],
+  "outputs": [
+    "skill-tls-certificate-triage.md",
+    "prompt-explain-openssl-verify.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

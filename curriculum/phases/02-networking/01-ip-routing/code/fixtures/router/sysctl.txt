@@ -1,0 +1,11 @@
+net.ipv4.ip_forward = 1
+net.ipv4.conf.all.forwarding = 1
+net.ipv4.conf.all.rp_filter = 0
+net.ipv4.conf.default.forwarding = 1
+net.ipv4.conf.default.rp_filter = 0
+net.ipv4.conf.r-c.forwarding = 1
+net.ipv4.conf.r-c.rp_filter = 0
+net.ipv4.conf.r-u1.forwarding = 1
+net.ipv4.conf.r-u1.rp_filter = 0
+net.ipv4.conf.r-u2.forwarding = 1
+net.ipv4.conf.r-u2.rp_filter = 0

@@ -1,0 +1,4 @@
+; The search domain a node inherits from its cloud network (ec2.internal, c.PROJECT.internal and so on).
+cc.internal.     30  IN  SOA  ns.cc.internal. hostmaster.cc.internal. 2026110101 7200 1800 86400 5
+cc.internal.     30  IN  NS   ns.cc.internal.
+ns.cc.internal.  30  IN  A    127.0.10.10

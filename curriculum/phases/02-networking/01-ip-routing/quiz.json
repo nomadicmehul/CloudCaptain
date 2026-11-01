@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/ip-routing",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A router's main table lists, in this order, `10.0.0.0/8 via 10.9.0.1`, `10.1.2.0/24 via 10.9.0.2` and `default via 10.9.0.3`. Where does it send a packet for 10.1.2.9?",
+      "choices": [
+        "To 10.9.0.1, because it is the first route that matches",
+        "To 10.9.0.2, because 10.1.2.0/24 is the longest prefix that contains 10.1.2.9; the order of the lines does not matter",
+        "To 10.9.0.3, because the default route catches traffic that is not local",
+        "To both 10.9.0.1 and 10.9.0.2 in turn, because two prefixes match"
+      ],
+      "answer": 1,
+      "explanation": "A table lookup is a longest-prefix match: every route whose prefix contains the destination is a candidate and the longest prefix wins. Order only matters through the metric, and only between routes for the same prefix. Two matching prefixes are not ECMP; ECMP is one route with several next hops."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "On a router, `ip route` shows `10.0.2.0/24 dev eth1 proto kernel scope link`, yet `ip route get 10.0.2.10 from 10.0.1.20 iif eth0` prints `10.0.2.10 from 10.0.1.20 via 10.0.3.10 dev eth2 table 100 iif eth0`. Why?",
+      "choices": [
+        "A policy rule such as `from 10.0.1.20 lookup 100`, with a lower priority number than main's 32766, matched first; table 100's default route contains 10.0.2.10, so the main table with the connected route was never read",
+        "The route via eth2 has a lower metric than the connected route",
+        "Connected routes are ignored for forwarded packets; only routes with a gateway are used",
+        "rp_filter rewrote the next hop because the source belongs to another interface"
+      ],
+      "answer": 0,
+      "explanation": "Rules run in priority order and the first table that yields a route ends the lookup. A table that holds only a default route answers for every destination, including directly connected ones. Fix it with a rule such as `to 10.0.0.0/16 lookup main` before rule 100, or copy the connected routes into table 100. `ip route show` lists only table main, which is why the route looked fine."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "On the lab client, 10.0.1.20 is a local address and rule 100 says `from 10.0.1.20 lookup 100`, yet `ip route get 198.51.100.1` answers from table main. What makes the rule apply?",
+      "choices": [
+        "Nothing: policy rules only apply to forwarded packets",
+        "Lowering the rule's priority to 0, so it runs before the local table",
+        "Giving the lookup that source: `ip route get 198.51.100.1 from 10.0.1.20`, or a socket bound to it such as `curl --interface 10.0.1.20`. Without one the source is 0.0.0.0 during the lookup and no `from` selector can match",
+        "Adding `iif c0` to the rule, because local traffic enters through c0"
+      ],
+      "answer": 2,
+      "explanation": "The kernel picks the source address after the route is chosen, so a lookup for an unbound socket sees source 0.0.0.0 and skips every `from` rule. Locally generated traffic has iif `lo`, not the outgoing interface, so a rule with `iif c0` would never match it. Rules do apply to local traffic: fwmark and `iif lo` rules are common for exactly that."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The client has two routes for 10.0.0.0/16 (via 10.0.1.1 metric 50, and dev c-dum metric 100) and `10.0.3.0/24 via 10.0.1.1 dev c0 src 10.0.1.20`. Its c0 has 10.0.1.10/24 (primary) and 10.0.1.20/24 (secondary). Which `src` does `ip route get 10.0.3.10` print?",
+      "choices": [
+        "10.0.1.10, because the primary address of the outgoing interface is always the source",
+        "0.0.0.0, because no socket is bound yet",
+        "172.16.0.1, because the metric 100 route through c-dum is used for 10.0.0.0/16",
+        "10.0.1.20: the /24 is longer than the /16, so it wins regardless of the metrics, and it carries its own `src`"
+      ],
+      "answer": 3,
+      "explanation": "Prefix length decides first; metrics only compare routes for the same prefix. The winning route's `src` (prefsrc) overrides the usual choice, which would otherwise be the first primary address on c0 in the gateway's subnet (10.0.1.10). The secondary 10.0.1.20 is never chosen unless a route or the application asks for it."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After a hardening change, a Linux router drops packets from a customer network that arrive on eth0 but whose return route leaves through eth2. `ip route get DST from SRC iif eth0` prints `RTNETLINK answers: Invalid cross-device link`. What changed, and what is the fix?",
+      "choices": [
+        "`ip_forward` was set to 0; turn it back on",
+        "A blackhole route for the customer prefix was added; delete it",
+        "Strict reverse-path filtering (`rp_filter=1`) took effect on eth0, through `conf.all` or `conf.eth0` (the larger value wins); the route back to SRC uses eth2, so the packet fails. Use loose mode (2) on that path or make the return route symmetric",
+        "The neighbour entry for the gateway is FAILED; flush the ARP cache"
+      ],
+      "answer": 2,
+      "explanation": "EXDEV, Invalid cross-device link, is the error the kernel returns when the reverse-path check fails. Forwarding off gives EHOSTUNREACH, a blackhole gives EINVAL, and a failed neighbour does not change `ip route get` at all. Setting only `conf.eth0.rp_filter=0` is not enough while `conf.all.rp_filter` is 1."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A VPC's private route table has `10.20.0.0/16 local` and `0.0.0.0/0` to a NAT gateway. The NAT gateway is deleted. What happens, and what is the Linux equivalent?",
+      "choices": [
+        "Traffic falls back to the internet gateway because it has the next-best metric",
+        "The `0.0.0.0/0` route stays and shows the state blackhole; internet-bound traffic is dropped while traffic inside 10.20.0.0/16 still uses the local route. On Linux that is `ip route add blackhole 0.0.0.0/0` next to the connected route",
+        "The local route is removed as well, so instances lose contact with each other",
+        "The route table is detached from the subnet, so the subnet uses no routes at all"
+      ],
+      "answer": 1,
+      "explanation": "A VPC route table is one table with longest-prefix match and no metrics. A route whose target no longer exists is marked blackhole and drops matching traffic; nothing falls back automatically. The more specific local route keeps VPC-internal traffic working, exactly as a connected /24 beats a blackhole default on Linux."
+    }
+  ]
+}

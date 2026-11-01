@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/packet-capture",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`tcpdump -i eth0 'tcp port 5432'` on a database server shows clients' SYN packets arriving, but the database logs no connections. What does the capture prove?",
+      "choices": [
+        "The firewall accepted the packets, because tcpdump saw them",
+        "Only that the frames reached the interface: on Linux the tap copies incoming frames before netfilter, so a firewall drop, a listener bound to another address or a full accept queue are all still possible",
+        "The database process has crashed",
+        "The clients are using the wrong port, otherwise the SYNs would not be visible"
+      ],
+      "answer": 1,
+      "explanation": "The packet socket gets its copy before netfilter, routing and the socket layer. Look at what comes back: no reply at all points at a drop after the tap, an RST means nothing listens on that address and port, a SYN-ACK means the kernel accepted it and the application is the next suspect."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`tcpdump 'tcp[tcpflags] & tcp-syn != 0'` shows no SYNs at all, although clients keep connecting to the service over IPv6. Why?",
+      "choices": [
+        "tcpflags is only defined for Ethernet, not for cooked captures",
+        "IPv6 has no SYN flag; it uses a different handshake",
+        "The capture needs -s 0 to keep the TCP flags",
+        "libpcap computes the TCP header offset from the IPv4 header length, so tcp[...] byte loads only ever match IPv4 first fragments; IPv6 needs ip6[53] or another check"
+      ],
+      "answer": 3,
+      "explanation": "tcpdump -d shows it: the compiled program checks ethertype 0x800 first and rejects everything else. For IPv6 without extension headers, the flags byte sits at ip6[40 + 13], so (ip6[6] = 6 and ip6[53] & tcp-syn != 0) finds the IPv6 SYNs."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Which packets does `tcpdump 'host 10.0.0.3 or host 10.0.0.53 and udp'` capture?",
+      "choices": [
+        "Everything to or from 10.0.0.3, plus UDP to or from 10.0.0.53",
+        "Nothing; the expression needs parentheses to compile",
+        "UDP packets to or from either address, because and and or have equal precedence in pcap-filter and group left to right: (host 10.0.0.3 or host 10.0.0.53) and udp",
+        "Only packets between 10.0.0.3 and 10.0.0.53"
+      ],
+      "answer": 2,
+      "explanation": "Unlike most programming languages, pcap-filter gives and and or the same precedence. Only negation binds tighter. Write the parentheses you mean; pcaplens filter prints the tree so you can check."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A capture on the client shows the server's segments 5001:6449 and then 7897:9345, three ACKs for 6449 from the client with SACK blocks, and later 6449:7897 again from the server. What happened?",
+      "choices": [
+        "The segment 6449:7897 was lost before the capture point; each later segment made the client repeat ack 6449 with a SACK of what it held, and three duplicate ACKs triggered the server's fast retransmit",
+        "The client's application was slow to read, so it repeated its ACKs",
+        "The server sent the same data twice because of a bug",
+        "The capture duplicated packets because it ran on -i any"
+      ],
+      "answer": 0,
+      "explanation": "Sequence numbers count bytes. A segment starting beyond the next expected byte means a hole; duplicate ACKs with SACK say what arrived past it; a later segment behind the sender's highest sequence number is a retransmission. A zero window, not duplicate ACKs, is what a slow reader produces."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You captured with `-s 96` to keep the file small. pcaplens still reports 4,200,000 bytes from server to client for a download. Where do those bytes come from?",
+      "choices": [
+        "From the IPv4 total length and the TCP data offset inside the first 96 bytes; the record also keeps the original length on the wire, so headers-only captures still give exact sizes",
+        "pcaplens guesses them from the MSS",
+        "From the record's captured length, multiplied by the packet count",
+        "They are wrong: with a small snaplen only the first packet is complete"
+      ],
+      "answer": 0,
+      "explanation": "Lengths come from the headers, not from how many bytes were kept. That is why -s 96 or -s 128 is the usual choice for connection analysis on a busy host: every header survives, the payload does not, and nothing about RTT, retransmissions or resets is lost."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "You must capture a pod's traffic, but its image has no tcpdump and you may not change it. Which approach works?",
+      "choices": [
+        "kubectl exec into the pod and install tcpdump with the package manager",
+        "On the node, enter only the pod's network namespace with nsenter -t PID -n and run the node's tcpdump on eth0, or attach an ephemeral container with kubectl debug that brings its own tcpdump, since all containers of a pod share one network namespace",
+        "Capture on the node's eth0, where the pod's traffic appears unchanged",
+        "Restart the pod with hostNetwork: true so the node can see its packets"
+      ],
+      "answer": 1,
+      "explanation": "nsenter -n switches the network namespace only, so the node's binary and file system stay in use. kubectl debug adds a container to the running pod that shares its network namespace. On the node's uplink the pod's packets may be NATed or encapsulated, and hostNetwork changes the very thing you want to observe."
+    }
+  ]
+}

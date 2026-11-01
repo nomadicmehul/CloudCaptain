@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/load-balancing",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "One of three backends answers `/health` with 200, because the endpoint only checks that the process runs, but answers every `/checkout` with 500. The load balancer does round robin with an HTTP health check on `/health`. What takes that backend out of rotation?",
+      "choices": [
+        "A shorter health check interval",
+        "Switching the algorithm to least connections",
+        "Sticky sessions, so each user stays on a backend that works",
+        "Passive outlier detection on real responses, which ejects the backend after a run of consecutive 5xx"
+      ],
+      "answer": 3,
+      "explanation": "An active check only proves what its endpoint tests, so checking faster just confirms the wrong thing sooner. Outlier detection watches the responses users get. Least connections makes it worse: a backend that fails fast has the fewest requests in flight and gets more traffic."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In the simulator, a backend that fails every request in 2 ms gets 56% of the traffic under least_conn but 33% under round robin. Why?",
+      "choices": [
+        "least_conn ignores weights",
+        "The failing backend has more worker capacity than the others",
+        "It finishes every request almost at once, so it nearly always has the fewest requests in flight, and least_conn sends the next request to the fewest",
+        "least_conn picks at random when counts tie, and the failing backend wins most ties"
+      ],
+      "answer": 2,
+      "explanation": "Least connections rewards speed, and failing is fast. That is why an adaptive algorithm needs outlier detection alongside it: with consecutive_5xx ejection the same backend's share drops to 0% and the errors fall from thousands to about ten."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A cache tier uses HAProxy `balance uri` with no `hash-type` line, across ten servers. One server goes down for maintenance and the cache hit rate collapses. Why?",
+      "choices": [
+        "The default `hash-type` is `map-based`, which picks a server by position in the array of alive servers, so when the count changes most URIs move to a different server, not just the tenth that lived on the removed one",
+        "Only that server's tenth of the URIs moved, so the hit rate should have dropped by at most 10%",
+        "HAProxy flushes every cache when a server goes down",
+        "`balance uri` hashes the client address, so users were already spread at random"
+      ],
+      "answer": 0,
+      "explanation": "Modulo-style hashing moves most keys on any membership change; minilb's remap shows about 80% moved for 5 to 4 backends. `hash-type consistent` (a ring) moves only the removed server's keys, which is what a cache or session tier needs."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A proxy is configured to retry on 5xx and on connection failures. Which of these retries can create a duplicate side effect?",
+      "choices": [
+        "A GET that got a refused connection",
+        "A POST /orders that timed out after the request was sent; the backend may already have written the order",
+        "A POST whose TCP connection was refused before any byte was sent",
+        "A PUT that returned 503"
+      ],
+      "answer": 1,
+      "explanation": "A refused connection means nothing reached the backend, so any method is safe to retry. After the request was sent, only idempotent methods (GET, HEAD, OPTIONS, TRACE, PUT, DELETE) are safe. nginx applies this rule by default; HAProxy's retry-on and Envoy's retry_policy leave it to you."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "An Envoy cluster has four hosts, `consecutive_5xx: 5` and the default `max_ejection_percent` of 10. One host returns 500 to everything. What does outlier detection do?",
+      "choices": [
+        "Ejects it for 30 seconds, then for 60 if it is still failing",
+        "Nothing: ejecting one of four would make 25% of the cluster ejected, above 10%, so the ejection is refused unless you raise the percentage or set `always_eject_one_host`",
+        "Ejects it once 10% of its requests have failed",
+        "Ejects it permanently until someone restarts it"
+      ],
+      "answer": 1,
+      "explanation": "The cap counts the ejection about to happen. It exists so that a shared failure cannot eject the whole pool, but with small clusters the default forbids every ejection. minilb warns about this configuration and the simulator reports ejections_refused."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A gRPC client holds one HTTP/2 connection to a Kubernetes ClusterIP Service backed by five pods. After scaling to ten pods, the new pods receive nothing from that client. Why?",
+      "choices": [
+        "kube-proxy uses round robin and needs a full cycle before reaching new pods",
+        "The new pods' readiness probes are still failing",
+        "kube-proxy balances connections, not requests: it picked one ready pod when the connection opened, and every request on that connection keeps going there",
+        "The Service needs `sessionAffinity: ClientIP` to spread requests"
+      ],
+      "answer": 2,
+      "explanation": "A Service is an L4 balancer: the choice happens per TCP connection, and HTTP/2 multiplexes every request onto one long-lived connection. Spreading requests needs an L7 balancer (a mesh, a Gateway implementation, or client-side balancing) or a client that opens several connections."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/dns-resolver",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A deploy job looked up `ledger.example.com` at 09:57 and got NXDOMAIN. The record was created at 10:02. The zone's SOA is `example.com. 3600 IN SOA ns1.example.com. hostmaster.example.com. 2026110101 7200 900 1209600 3600`. Until when can the job's resolver keep answering NXDOMAIN?",
+      "choices": [
+        "Until 10:02, because the authoritative server now has the record",
+        "NXDOMAIN is never cached, so the next query succeeds",
+        "Until 11:57, two hours, because the refresh field is 7200",
+        "Until about 10:57: the NXDOMAIN is cached for the smaller of the SOA record's TTL (3600) and its MINIMUM field (3600), counted from 09:57"
+      ],
+      "answer": 3,
+      "explanation": "RFC 2308 negative caching: a resolver keeps NXDOMAIN (for every type of that name) for min(SOA TTL, SOA MINIMUM) from the moment it received it. Refresh and retry are for secondary servers. Creating the record changes nothing for a resolver that already cached the negative answer."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`dig +norecurse @a.root-servers.net www.example.com` prints `status: NOERROR`, `flags: qr`, `ANSWER: 0, AUTHORITY: 13, ADDITIONAL: 27`, with `com. NS a.gtld-servers.net.` and friends in AUTHORITY and their addresses in ADDITIONAL. What happened?",
+      "choices": [
+        "The root server failed and returned an empty answer",
+        "A referral: the root does not know the name but delegates com., and the ADDITIONAL records are glue, the addresses to ask next",
+        "The root server refused to recurse, so the query must be repeated with RD set",
+        "The name does not exist; the authority section proves it"
+      ],
+      "answer": 1,
+      "explanation": "No aa flag, NOERROR, an empty answer and NS records for a zone closer to the name is a referral. A resolver caches the NS and glue records and repeats the same question to a com. server. NXDOMAIN would say status: NXDOMAIN and carry an SOA, not NS records."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A client sends a query without EDNS and gets a UDP response with the `tc` flag and an empty answer section. What should it do?",
+      "choices": [
+        "Retry over UDP until a complete answer arrives",
+        "Treat the name as having no records of that type",
+        "Ask the same question of the same server over TCP and use that answer",
+        "Send the query to the next nameserver in resolv.conf"
+      ],
+      "answer": 2,
+      "explanation": "TC means the answer did not fit the client's UDP buffer, 512 bytes without EDNS. RFC 7766 makes TCP mandatory for exactly this case; a larger EDNS buffer avoids the round trip. A firewall that blocks TCP port 53 breaks only these large answers, which makes the fault look random."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "In a response to a query for `www.cc.test`, the answer's owner name is the two bytes `C0 0C`. What do they mean?",
+      "choices": [
+        "A compression pointer: the top two bits 11 mark a pointer and the remaining 14 bits are offset 12, where the question name starts right after the header",
+        "The name is the root",
+        "A label of length 192 follows",
+        "The record is compressed with gzip and starts at byte 12"
+      ],
+      "answer": 0,
+      "explanation": "Lengths above 63 are impossible for labels, so a first byte with the top bits 11 marks a pointer. 0xC00C minus 0xC000 is 12, and the header is exactly 12 bytes, so the pointer reuses the question name. A decoder must refuse pointers that do not point backwards and remember where it has been, or a crafted message loops it forever."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A pod's resolv.conf has `search shop.svc.cluster.local svc.cluster.local cluster.local ec2.internal` and `options ndots:5`. The application resolves `api.stripe.com` with getaddrinfo() asking for any address family. How many DNS questions go out before the real answer, at worst?",
+      "choices": [
+        "One, because the name contains dots",
+        "Three: Kubernetes only appends the cluster suffixes",
+        "Five: one per search domain",
+        "Ten: two dots are fewer than five, so the four search suffixes are tried first and the name as written last, five names, each asked as A and AAAA"
+      ],
+      "answer": 3,
+      "explanation": "With fewer dots than ndots, the stub resolver walks the whole search list before the absolute name. Each lookup asks A and AAAA in parallel, so four NXDOMAIN pairs come before the answer. A trailing dot (`api.stripe.com.`), a lower ndots in dnsConfig, NodeLocal DNSCache or CoreDNS autopath cut that cost."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A record had a TTL of 86400. At 09:30 you lowered it to 60 and at 10:00 changed the address. Some clients use the old address until 09:00 the next morning. Why?",
+      "choices": [
+        "The SOA MINIMUM overrides the record's TTL",
+        "The new TTL of 60 is below the minimum resolvers accept",
+        "Their resolvers fetched the record before 09:30 and were told to keep it for 86400 seconds; lowering a TTL only takes effect once the copies made under the old TTL expire, so it must be lowered at least one old TTL before the change",
+        "Changing the address requires bumping the SOA serial before resolvers notice"
+      ],
+      "answer": 2,
+      "explanation": "A cached record carries the TTL it was fetched with and counts down from there; resolvers do not re-check early. The SOA serial matters to secondary servers, not to caches, and the SOA minimum governs negative answers only."
+    }
+  ]
+}
