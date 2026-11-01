@@ -115,7 +115,8 @@ $SUDO bash code/main.sh run "$BASE/sh" -- cat /proc/self/cgroup | tee "$WORK/sh-
 grep -q "$BASE/sh" "$WORK/sh-run.txt" || fail "the process should see itself in $BASE/sh"
 bash code/main.sh stat "$BASE/sh" | tee "$WORK/sh-stat.txt"
 grep -qE "cpu.max +50000 100000" "$WORK/sh-stat.txt" || fail "main.sh stat should print cpu.max"
-bash code/main.sh explain $$ | head -3
+bash code/main.sh explain $$ > "$WORK/sh-explain.txt"
+head -3 "$WORK/sh-explain.txt"
 
 echo "▸ explain, top and --watch read the live tree without root"
 python3 code/main.py explain $$ | tee "$WORK/explain.txt"

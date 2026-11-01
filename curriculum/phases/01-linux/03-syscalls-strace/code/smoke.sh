@@ -80,10 +80,17 @@ grep -q "% time" "$SUMMARY" || SUMMARY="$WORK/both.err"
 python3 code/main.py "$WORK/both.txt" --json > "$WORK/both.json"
 python3 - "$SUMMARY" "$WORK/both.json" <<'PY' || fail "histogram does not match strace -c"
 import json, sys
-counts = {}
+counts, in_table = {}, False
 for line in open(sys.argv[1]):
+    if line.lstrip().startswith("% time"):
+        in_table = True
+        continue
     parts = line.split()
-    if len(parts) >= 5 and parts[-1] not in ("syscall", "total") and parts[0].replace(".", "", 1).isdigit():
+    if not in_table or not parts or parts[0].startswith("-"):
+        continue
+    if parts[-1] == "total":
+        break
+    if len(parts) >= 5 and parts[3].isdigit():
         counts[parts[-1]] = int(parts[3])
 if not counts:
     print("  (no strace -c summary found; skipped)")

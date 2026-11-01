@@ -38,9 +38,9 @@ grep -qE "^  CapEff +[0-9]+ of 41" "$WORK/sh.txt" || fail "main.sh should decode
 
 echo "▸ --perms: a setuid binary, the sticky /tmp, and what CAP_DAC_OVERRIDE changes"
 MODE=$(stat -c '%A' /usr/bin/passwd)
-python3 code/main.py --perms "$MODE" --owner root --group root --user alice --groups alice | tee "$WORK/passwd.txt"
+python3 code/main.py --perms="$MODE" --owner root --group root --user alice --groups alice | tee "$WORK/passwd.txt"
 if [[ "$MODE" == *s* ]]; then grep -q "runs with effective uid root" "$WORK/passwd.txt" || fail "setuid note missing for $MODE"; fi
-python3 code/main.py --perms "$(stat -c '%A' /tmp)" --owner root --group root --user alice --groups alice --json \
+python3 code/main.py --perms="$(stat -c '%A' /tmp)" --owner root --group root --user alice --groups alice --json \
   | python3 -c 'import json, sys; d = json.load(sys.stdin); assert d["write"] and d["traverse"] and any("sticky" in n for n in d["notes"]), d' || fail "sticky /tmp"
 python3 code/main.py --perms 0600 --owner root --group root --user app --groups app --json \
   | python3 -c 'import json, sys; d = json.load(sys.stdin); assert not d["read"] and not d["write"], d' || fail "0600 as other must be unreadable"

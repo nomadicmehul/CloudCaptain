@@ -86,12 +86,12 @@ if command -v docker >/dev/null; then
   LIM=$(docker run --rm --ulimit nofile=4096:4096 alpine:3.22 sh -c 'ulimit -n')
   [[ "$LIM" == "4096" ]] || fail "--ulimit nofile should show as ulimit -n (got $LIM)"
   set +e
-  ERR=$(docker run --rm --ulimit nofile=16:16 python:3.12-alpine python3 -c 'fs=[open(f"/tmp/{i}","w") for i in range(100)]' 2>&1)
+  ERR=$(docker run --rm --ulimit nofile=64:64 python:3.12-alpine python3 -c 'fs=[open(f"/tmp/{i}","w") for i in range(200)]' 2>&1)
   CODE=$?
   set -e
   [[ "$CODE" != "0" ]] || fail "opening 100 files under a 16-descriptor limit should fail"
   grep -q "Too many open files" <<<"$ERR" || fail "expected EMFILE, got: $ERR"
-  echo "  EMFILE reproduced under --ulimit nofile=16:16; default in a container here: $(docker run --rm alpine:3.22 sh -c 'ulimit -n')"
+  echo "  EMFILE reproduced under --ulimit nofile=64:64; default in a container here: $(docker run --rm alpine:3.22 sh -c 'ulimit -n')"
 else
   echo "  (docker not available; Use It skipped)"
 fi

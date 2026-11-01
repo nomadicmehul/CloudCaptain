@@ -172,7 +172,7 @@ Then see where the limit comes from at each layer, because the number you measur
 systemctl show nginx -p LimitNOFILE -p LimitNOFILESoft    # systemd units: LimitNOFILE= in [Service], DefaultLimitNOFILE= in system.conf
 docker run --rm alpine:3.22 sh -c 'ulimit -n'              # containers inherit the daemon's default-ulimits
 docker run --rm --ulimit nofile=4096:4096 alpine:3.22 sh -c 'ulimit -n'
-docker run --rm --ulimit nofile=16:16 python:3.12-alpine python3 -c 'fs=[open(f"/tmp/{i}","w") for i in range(100)]'   # Errno 24 on purpose
+docker run --rm --ulimit nofile=64:64 python:3.12-alpine python3 -c 'fs=[open(f"/tmp/{i}","w") for i in range(200)]'   # Errno 24 on purpose
 kubectl exec deploy/api -- sh -c 'ulimit -n'               # Kubernetes has no field for it; the runtime decides, so look
 ```
 
