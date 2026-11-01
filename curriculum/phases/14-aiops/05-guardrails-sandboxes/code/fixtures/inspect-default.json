@@ -1,0 +1,59 @@
+[
+  {
+    "Id": "a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f9",
+    "Created": "2026-10-31T09:40:02.418203910Z",
+    "Path": "python3",
+    "Args": ["/agent/main.py", "checkout pods in default keep restarting"],
+    "State": {"Status": "running", "Running": true, "Paused": false, "Pid": 48911, "ExitCode": 0},
+    "Name": "/triage-agent",
+    "HostConfig": {
+      "Binds": ["/home/me/.kube:/home/agent/.kube", "/var/run/docker.sock:/var/run/docker.sock", "/home/me/.aws:/root/.aws:ro"],
+      "NetworkMode": "bridge",
+      "PortBindings": {},
+      "AutoRemove": false,
+      "CapAdd": ["NET_ADMIN"],
+      "CapDrop": null,
+      "Privileged": false,
+      "ReadonlyRootfs": false,
+      "SecurityOpt": null,
+      "Tmpfs": null,
+      "PidsLimit": null,
+      "Memory": 0,
+      "MemorySwap": 0,
+      "NanoCpus": 0,
+      "Runtime": "runc"
+    },
+    "Mounts": [
+      {"Type": "bind", "Source": "/home/me/.kube", "Destination": "/home/agent/.kube", "Mode": "", "RW": true, "Propagation": "rprivate"},
+      {"Type": "bind", "Source": "/var/run/docker.sock", "Destination": "/var/run/docker.sock", "Mode": "", "RW": true, "Propagation": "rprivate"},
+      {"Type": "bind", "Source": "/home/me/.aws", "Destination": "/root/.aws", "Mode": "ro", "RW": false, "Propagation": "rprivate"}
+    ],
+    "Config": {
+      "Hostname": "a0b1c2d3e4f5",
+      "User": "",
+      "Env": [
+        "ANTHROPIC_API_KEY=sk-ant-redacted",
+        "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "LANG=C.UTF-8",
+        "PYTHON_VERSION=3.12.12"
+      ],
+      "Cmd": ["python3", "/agent/main.py", "checkout pods in default keep restarting"],
+      "Image": "python:3.12-alpine",
+      "WorkingDir": "/",
+      "Entrypoint": null
+    },
+    "NetworkSettings": {
+      "Bridge": "",
+      "Ports": {},
+      "Networks": {
+        "bridge": {
+          "NetworkID": "0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5",
+          "Gateway": "172.17.0.1",
+          "IPAddress": "172.17.0.4",
+          "IPPrefixLen": 16,
+          "MacAddress": "02:42:ac:11:00:04"
+        }
+      }
+    }
+  }
+]

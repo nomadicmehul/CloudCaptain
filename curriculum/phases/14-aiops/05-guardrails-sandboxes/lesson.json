@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "aiops/guardrails-sandboxes",
+  "title": "Run the Agent Where It Cannot Hurt You: Sandboxes and Egress Policy",
+  "short": "Agent Sandboxes",
+  "motto": "The model decides what to try; the container decides what it can touch, and the proxy decides where it can talk.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "aiops/incident-triage-agent"
+  ],
+  "tools": [
+    "docker",
+    "curl",
+    "kubectl",
+    "kind",
+    "cilium",
+    "gvisor"
+  ],
+  "reference": [
+    "/docs/tools/docker/security-production",
+    "/docs/tools/docker/networking-storage",
+    "/docs/tools/kubernetes/security"
+  ],
+  "outputs": [
+    "skill-agent-sandbox-setup.md",
+    "prompt-egress-policy-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

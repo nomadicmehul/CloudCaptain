@@ -1,0 +1,19 @@
+[
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 1800, "output_tokens": 90},
+   "content": [{"type": "text", "text": "Starting wide: warnings and pod status in default."},
+               {"type": "tool_use", "id": "toolu_01", "name": "list_events", "input": {"namespace": "default", "warnings_only": true}},
+               {"type": "tool_use", "id": "toolu_02", "name": "list_pods", "input": {"namespace": "default"}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 2600, "output_tokens": 70},
+   "content": [{"type": "tool_use", "id": "toolu_03", "name": "describe_pod", "input": {"namespace": "default", "name": "checkout-7d9f6c8b5-x2kqp"}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 3400, "output_tokens": 60},
+   "content": [{"type": "tool_use", "id": "toolu_04", "name": "pod_logs", "input": {"namespace": "default", "name": "checkout-7d9f6c8b5-x2kqp", "previous": true, "tail_lines": 50}}]},
+  {"model": "replay", "stop_reason": "tool_use", "usage": {"input_tokens": 4700, "output_tokens": 210},
+   "content": [{"type": "tool_use", "id": "toolu_05", "name": "write_report", "input": {
+       "summary": "checkout is in CrashLoopBackOff in default: the container exits 1 at startup because DATABASE_URL is not set; frontend and postgres are healthy.",
+       "severity": "sev2",
+       "evidence": ["list_events: Warning BackOff for pod/checkout-7d9f6c8b5-x2kqp, x210 over 46m", "describe_pod: Last State Terminated, Exit Code 1, Restart Count 14, env from ConfigMap checkout-config", "pod_logs --previous: KeyError: 'DATABASE_URL' in config.py load()"],
+       "root_cause_hypothesis": "The 14:10 deploy changed the checkout-config ConfigMap and the DATABASE_URL key is missing or renamed, so the process fails before it listens.",
+       "confidence": "high",
+       "proposed_actions": ["Restore the DATABASE_URL key in ConfigMap checkout-config, then kubectl rollout restart deployment/checkout -n default"],
+       "next_checks": ["kubectl get configmap checkout-config -n default -o yaml", "diff the ConfigMap against the previous revision in git"]}}]}
+]

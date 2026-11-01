@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "kubectl-write": {
+      "command": "python3",
+      "args": ["/absolute/path/to/server.py", "--allow-write", "--allow-namespaces", "default,dev", "--context", "kind-cc-lab", "--audit", "/absolute/path/to/kubectl-write-audit.jsonl"]
+    }
+  }
+}

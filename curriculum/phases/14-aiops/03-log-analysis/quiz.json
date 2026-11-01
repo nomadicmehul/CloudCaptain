@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/log-analysis",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Checkout is returning 500s. You paste the last 500 lines of `kubectl logs` into a chat with a model and ask what is wrong. It confidently names an error. What is the most likely problem with the method?",
+      "choices": [
+        "Models cannot read log formats",
+        "500 lines is too few for any conclusion",
+        "The window is arbitrary: the model sees whatever happened last, cannot know what was already there before the change, and the real new error may be thousands of lines up; it also just received every token and email in those lines",
+        "kubectl logs output is not valid UTF-8"
+      ],
+      "answer": 2,
+      "explanation": "Reading a tail answers \"what is happening now\", not \"what changed\". A steady error that has been there for months looks identical to a new one in a 500-line window, and a model cannot count across lines it never saw. Clustering and counting the whole window first, then sending a digest, fixes both; redaction fixes the third problem."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does logmine turn `duration=120ms` into `duration=<NUM>` before clustering?",
+      "choices": [
+        "So that lines which differ only in their variables collapse into one template that can be counted, compared before and after the marker, and shown once with two examples",
+        "To save tokens in the digest",
+        "Because numbers are secrets",
+        "Because Drain requires it"
+      ],
+      "answer": 0,
+      "explanation": "Masking is what makes two lines comparable. Without it every request line is unique and nothing can be counted; with it a service's output collapses to a few dozen templates, and novelty and rate changes become arithmetic. The token saving is a consequence, redaction is a separate step."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Template A is ERROR level at 8 lines per minute before the marker and 8 after. Template B is WARN level at 0 before and 40 after. Which ranks first in the digest, and why?",
+      "choices": [
+        "A, because ERROR always outranks WARN",
+        "They tie",
+        "A, because 8 per minute is a lot of errors",
+        "B: it is NEW after the marker. A steady ERROR was there before the change and is background by definition; the deploy did not cause it"
+      ],
+      "answer": 3,
+      "explanation": "The ranking adds 5 points for novelty, up to 4 for the rate change, 3 for ERROR, 1 for WARN, plus log10 of the volume. B scores 5 + 1 + 1.6; A scores 3 + 1.9 with no change. Level breaks ties between things that changed; it does not make a pre-existing error the story."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The digest is about 1,000 tokens; the raw logs were about 488,000. Besides cost, what does the budget buy?",
+      "choices": [
+        "Nothing; cost is the only effect",
+        "The request fits in one call, the model reads counts, rates and shapes computed by a program instead of inferring them by eye, and the only raw text it sees is two redacted examples per template",
+        "Faster kubectl logs",
+        "The ability to use a smaller model"
+      ],
+      "answer": 1,
+      "explanation": "Counting is a program's job and explaining is the model's. The digest hands over the numbers, the before/after split and the shape over time, so the model spends its attention on the one question it is good at. Fewer raw lines also means a smaller surface for prompt injection and leaked secrets."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "The model's explanation cites template T09 as evidence, but the digest only contained T01 to T06. What should the tool do with that claim?",
+      "choices": [
+        "Accept it; the model may have inferred it from the examples",
+        "Retry with a larger budget so T09 is included",
+        "Flag T09 as a reference that does not exist in the digest and treat the claim as unverified: every statement has to trace back to a template id you can look up",
+        "Lower the effort setting and retry"
+      ],
+      "answer": 2,
+      "explanation": "Template ids are the contract between the digest and the explanation. An id that is not in the digest is an invented fact, and logmine prints a warning for it. The same check, by hand, is how you read any AI log summary: ask which line it refers to."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Which log line is safe to send to a hosted model as is?",
+      "choices": [
+        "None: every line goes through redaction first, and the digest sends templates plus a couple of redacted examples; raw lines carry session tokens, emails and customer ids whether or not they look sensitive",
+        "INFO lines",
+        "Lines without key=value pairs",
+        "Lines older than a day"
+      ],
+      "answer": 0,
+      "explanation": "An INFO line that issues a session contains the session token. Redaction by key name, bearer pattern, email pattern and long opaque blobs runs on every example and template before the digest is built, and the pipeline tools (Vector, Fluent Bit, the OpenTelemetry Collector) do the same before logs are even stored."
+    }
+  ]
+}

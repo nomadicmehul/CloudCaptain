@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/write-tools-safely",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An agent's `scale` tool call times out at the network layer, so the client retries it. The deployment ends up scaled twice. Which property was missing from the tool?",
+      "choices": [
+        "A longer timeout",
+        "A confirm argument",
+        "Idempotency: the same request a second time must produce the first result, not a second change",
+        "A smaller model"
+      ],
+      "answer": 2,
+      "explanation": "Retries are normal in distributed systems. A write tool that applies the change again on every retry turns one approved action into several. An idempotency key (here, the one-time confirm phrase) lets the server recognise the repeat and return the stored result without running anything."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does `plan_scale` run `kubectl scale ... --dry-run=server` instead of `--dry-run=client`?",
+      "choices": [
+        "The server variant sends the real request through authentication, authorization, admission and validation and only skips persistence, so what it accepts is what the write will do",
+        "The client variant does not exist for scale",
+        "Server dry runs are faster",
+        "Client dry runs need cluster-admin"
+      ],
+      "answer": 0,
+      "explanation": "A client dry run only validates the request locally and prints the object. A server dry run is the real API call with dryRun=All: RBAC, admission webhooks, ValidatingAdmissionPolicy and schema validation all run. A plan that passes it will almost certainly apply; a plan that fails it tells you why before any phrase is issued."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A confirm phrase is issued for `scale default/web from 2 to 3`. The model calls `scale` with `replicas=4` and that phrase. What happens?",
+      "choices": [
+        "The server scales to 4; the phrase proves intent",
+        "The server scales to 3, the planned value",
+        "The server asks the operator",
+        "Refused: the phrase is bound to the exact planned arguments, so a different argument set is a different plan and needs its own dry run"
+      ],
+      "answer": 3,
+      "explanation": "The phrase is a receipt for one specific plan: action plus arguments. Accepting different arguments would let the model approve one thing and do another. The server compares the stored arguments with the call and refuses on any difference, without touching the plan."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Claude Code already shows a permission prompt before every MCP write call. Why does the server still need its own gates?",
+      "choices": [
+        "It does not; the prompt is enough",
+        "The client approves intent once; the server guarantees mechanics: exact arguments, once only, inside a TTL, in scope, audited, whichever client or flag is in front of it",
+        "Because MCP requires a confirm argument",
+        "To make the model faster"
+      ],
+      "answer": 1,
+      "explanation": "Approval UIs can be bypassed with a flag, misconfigured, or absent in a different client or a cron job. The server cannot see any of that. Gates in the server hold for every caller: a stale plan is refused, a retry is a no-op, a protected namespace is never written, and every attempt is on disk."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Why is the execute tool absent from `tools/list` when the server runs without `--allow-write`, instead of present and refusing every call?",
+      "choices": [
+        "To save tokens",
+        "Because MCP forbids tools that can fail",
+        "A tool the model cannot see cannot be called by a prompt injection either; an absent tool is a structural guarantee, a refusing tool is a policy that could be misconfigured",
+        "Because the plan tools already perform the write"
+      ],
+      "answer": 2,
+      "explanation": "Read-only by construction beats read-only by configuration. With the write tools absent, the server's surface equals the surface of lesson one plus harmless plans, and nobody has to audit the refusal code paths to trust it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Which real-tool pair matches plan and execute most closely?",
+      "choices": [
+        "`tofu plan -out=tfplan` then `tofu apply tfplan`, where a saved plan is refused when the state has changed since",
+        "`kubectl get` then `kubectl describe`",
+        "`docker build` then `docker push`",
+        "`git add` then `git commit`"
+      ],
+      "answer": 0,
+      "explanation": "A saved plan is a signed description of exactly what will change, computed against a known state; apply refuses it when reality moved on. That is the confirm phrase with a TTL and argument binding, at the scale of a whole infrastructure."
+    }
+  ]
+}

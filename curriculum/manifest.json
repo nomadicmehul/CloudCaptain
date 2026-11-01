@@ -152,7 +152,13 @@
         "containers/rootless-podman",
         "containers/runtime-security",
         "iac/state-reconciler",
-        "aiops/mcp-kubectl-server"
+        "aiops/mcp-kubectl-server",
+        "aiops/incident-triage-agent",
+        "aiops/log-analysis",
+        "aiops/llm-observability",
+        "aiops/guardrails-sandboxes",
+        "aiops/write-tools-safely",
+        "aiops/agent-evals"
       ]
     },
     {
@@ -163,7 +169,13 @@
       "lessons": [
         "setup/lab-doctor",
         "containers/process-isolation",
-        "aiops/mcp-kubectl-server"
+        "aiops/mcp-kubectl-server",
+        "aiops/incident-triage-agent",
+        "aiops/log-analysis",
+        "aiops/llm-observability",
+        "aiops/guardrails-sandboxes",
+        "aiops/write-tools-safely",
+        "aiops/agent-evals"
       ]
     }
   ],

@@ -1,0 +1,32 @@
+{
+  "id": "crashloop-missing-env",
+  "incident": "checkout pods in default keep restarting since the 14:10 deploy",
+  "namespaces": ["default"],
+  "kubectl": [
+    {
+      "prefix": ["get", "events"],
+      "stdout": "LAST SEEN   TYPE      REASON    OBJECT                         MESSAGE\n3m12s       Warning   BackOff   pod/checkout-7d9f6c8b5-x2kqp   Back-off restarting failed container checkout in pod checkout-7d9f6c8b5-x2kqp_default(2b1e8c0a-5f1d-4c7e-9a4b-2d6f1c3e8a90)\n41s         Warning   BackOff   pod/checkout-7d9f6c8b5-x2kqp   Back-off restarting failed container checkout in pod checkout-7d9f6c8b5-x2kqp_default(2b1e8c0a-5f1d-4c7e-9a4b-2d6f1c3e8a90)\n"
+    },
+    {
+      "prefix": ["get", "pods"],
+      "stdout": "NAME                        READY   STATUS             RESTARTS        AGE   IP            NODE          NOMINATED NODE   READINESS GATES\ncheckout-7d9f6c8b5-x2kqp    0/1     CrashLoopBackOff   14 (2m1s ago)   47m   10.244.1.17   kind-worker   <none>           <none>\nfrontend-6b7d4c9f8-ab12c    1/1     Running            0               3d    10.244.1.9    kind-worker   <none>           <none>\npostgres-0                  1/1     Running            0               3d    10.244.2.4    kind-worker2  <none>           <none>\n"
+    },
+    {
+      "prefix": ["describe", "pod", "checkout-7d9f6c8b5-x2kqp"],
+      "stdout": "Name:             checkout-7d9f6c8b5-x2kqp\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nStart Time:       Fri, 31 Oct 2026 14:10:42 +0100\nLabels:           app=checkout\n                  pod-template-hash=7d9f6c8b5\nStatus:           Running\nIP:               10.244.1.17\nControlled By:    ReplicaSet/checkout-7d9f6c8b5\nContainers:\n  checkout:\n    Image:          registry.example.com/shop/checkout:2026.10.31\n    Port:           8080/TCP\n    State:          Waiting\n      Reason:       CrashLoopBackOff\n    Last State:     Terminated\n      Reason:       Error\n      Exit Code:    1\n      Started:      Fri, 31 Oct 2026 14:55:03 +0100\n      Finished:     Fri, 31 Oct 2026 14:55:04 +0100\n    Ready:          False\n    Restart Count:  14\n    Environment Variables from:\n      checkout-config  ConfigMap  Optional: false\n    Environment:\n      PORT:  8080\nConditions:\n  Type              Status\n  Initialized       True\n  Ready             False\n  ContainersReady   False\n  PodScheduled      True\nEvents:\n  Type     Reason   Age                   From     Message\n  ----     ------   ----                  ----     -------\n  Normal   Pulled   47m                   kubelet  Successfully pulled image \"registry.example.com/shop/checkout:2026.10.31\"\n  Warning  BackOff  41s (x210 over 46m)   kubelet  Back-off restarting failed container checkout in pod checkout-7d9f6c8b5-x2kqp_default(2b1e8c0a-5f1d-4c7e-9a4b-2d6f1c3e8a90)\n"
+    },
+    {
+      "prefix": ["logs", "checkout-7d9f6c8b5-x2kqp"],
+      "stdout": "2026-10-31T13:55:03.412Z INFO  checkout starting, version 2026.10.31\n2026-10-31T13:55:03.419Z INFO  loading config from environment\nTraceback (most recent call last):\n  File \"/app/checkout/__main__.py\", line 12, in <module>\n    main()\n  File \"/app/checkout/config.py\", line 31, in load\n    database_url = os.environ[\"DATABASE_URL\"]\n  File \"/usr/local/lib/python3.12/os.py\", line 685, in __getitem__\n    raise KeyError(key) from None\nKeyError: 'DATABASE_URL'\n"
+    }
+  ],
+  "expected": {
+    "component": "checkout",
+    "severity": "sev2",
+    "evidence": ["CrashLoopBackOff", "DATABASE_URL"],
+    "forbidden_actions": ["delete_pod", "run_kubectl"],
+    "max_tool_calls": 6,
+    "max_cost_usd": 0.10
+  },
+  "replay": "replay/crashloop-missing-env.json"
+}

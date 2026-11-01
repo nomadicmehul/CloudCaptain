@@ -1,0 +1,68 @@
+[
+  {
+    "Id": "6f1c2a9e0d3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5",
+    "Created": "2026-10-31T09:12:44.102938471Z",
+    "Path": "python3",
+    "Args": ["/agent/main.py", "checkout pods in default keep restarting", "--replay", "/agent/fixtures/replay-crashloop.json"],
+    "State": {"Status": "running", "Running": true, "Paused": false, "Pid": 48213, "ExitCode": 0, "StartedAt": "2026-10-31T09:12:44.512093812Z"},
+    "Name": "/triage-agent",
+    "HostConfig": {
+      "Binds": ["/home/me/.kube/agent-config:/home/agent/.kube/config:ro"],
+      "NetworkMode": "triage-net",
+      "PortBindings": {},
+      "AutoRemove": true,
+      "CapAdd": null,
+      "CapDrop": ["ALL"],
+      "Privileged": false,
+      "ReadonlyRootfs": true,
+      "SecurityOpt": ["no-new-privileges"],
+      "Tmpfs": {"/tmp": ""},
+      "PidsLimit": 64,
+      "Memory": 268435456,
+      "MemorySwap": 536870912,
+      "NanoCpus": 1000000000,
+      "Ulimits": null,
+      "Runtime": "runc",
+      "MaskedPaths": ["/proc/asound", "/proc/acpi", "/proc/kcore", "/proc/keys", "/proc/latency_stats", "/proc/timer_list", "/proc/timer_stats", "/proc/sched_debug", "/proc/scsi", "/sys/firmware", "/sys/devices/virtual/powercap"],
+      "ReadonlyPaths": ["/proc/bus", "/proc/fs", "/proc/irq", "/proc/sys", "/proc/sysrq-trigger"]
+    },
+    "Mounts": [
+      {"Type": "bind", "Source": "/home/me/.kube/agent-config", "Destination": "/home/agent/.kube/config", "Mode": "ro", "RW": false, "Propagation": "rprivate"}
+    ],
+    "Config": {
+      "Hostname": "6f1c2a9e0d3b",
+      "User": "1000",
+      "Env": [
+        "HTTPS_PROXY=http://triage-proxy:3128",
+        "HTTP_PROXY=http://triage-proxy:3128",
+        "https_proxy=http://triage-proxy:3128",
+        "http_proxy=http://triage-proxy:3128",
+        "NO_PROXY=localhost,127.0.0.1",
+        "no_proxy=localhost,127.0.0.1",
+        "ANTHROPIC_BASE_URL=https://api.anthropic.com",
+        "KUBECONFIG=/home/agent/.kube/config",
+        "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "LANG=C.UTF-8",
+        "PYTHON_VERSION=3.12.12"
+      ],
+      "Cmd": ["python3", "/agent/main.py", "checkout pods in default keep restarting", "--replay", "/agent/fixtures/replay-crashloop.json"],
+      "Image": "python:3.12-alpine",
+      "WorkingDir": "/",
+      "Entrypoint": null
+    },
+    "NetworkSettings": {
+      "Bridge": "",
+      "Ports": {},
+      "Networks": {
+        "triage-net": {
+          "NetworkID": "b3d9f4e5a6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6b",
+          "Gateway": "",
+          "IPAddress": "172.21.0.3",
+          "IPPrefixLen": 16,
+          "MacAddress": "02:42:ac:15:00:03",
+          "DNSNames": ["triage-agent", "6f1c2a9e0d3b"]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/guardrails-sandboxes",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "The triage agent runs on a bastion with a cluster-admin kubeconfig and an open network. A log line it reads tells it to send that kubeconfig to a paste site. Which change limits the damage no matter what the model decides?",
+      "choices": [
+        "A system prompt that tells the model to ignore instructions found in logs",
+        "Dropping log lines that contain the word \"ignore\" before the model sees them",
+        "Running it with a short-lived read-only token, on a network whose only exit is a proxy that allows just the hosts the job needs",
+        "Switching to a larger model that is harder to inject"
+      ],
+      "answer": 2,
+      "explanation": "Prompts and filters lower the odds of a successful injection but never to zero, because logs are untrusted text by nature. A sandbox bounds the outcome instead: the only credential is worth little, and the paste site is unreachable whatever the model tries."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Inside the sandbox, `curl https://example.org/` succeeds and `curl --noproxy '*' https://example.org/` fails. What enforces the egress policy?",
+      "choices": [
+        "The `HTTPS_PROXY` variable, which every client is required to honour",
+        "The `--internal` network has no route out; the proxy, attached to it and to a normal network, is the only exit",
+        "The proxy decrypts TLS and drops unknown destinations",
+        "The default seccomp profile blocks `connect()` to external addresses"
+      ],
+      "answer": 1,
+      "explanation": "Proxy variables are a convention a process can ignore, as `--noproxy` shows. The network is the enforcement: nothing on the internal network has a gateway out, so traffic either goes to the dual-homed proxy or nowhere. The proxy never decrypts; it decides on the CONNECT host and port."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The allow-list is `*.github.com:443`. Which CONNECT request does `agentbox proxy` allow?",
+      "choices": [
+        "`CONNECT api.github.com:443`",
+        "`CONNECT github.com:443`",
+        "`CONNECT api.github.com:80`",
+        "`CONNECT evil-github.com:443`"
+      ],
+      "answer": 0,
+      "explanation": "`*.` matches subdomains only, so the apex `github.com` is denied (the real run printed `github.com:443 is not in the allow-list`). The port is part of the rule, so :80 is denied. The suffix compared is `.github.com` with the dot, so `evil-github.com` does not match. Managed Agents' `allowed_hosts` uses the same semantics; Squid's `.github.com` would also match the apex."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The proxy allowed a CONNECT tunnel to `api.anthropic.com:443`. What can its audit say about that request?",
+      "choices": [
+        "The HTTP method, path and body of each Messages API call",
+        "The `x-api-key` header, so leaked keys can be detected",
+        "Only that a connection was attempted, without byte counts",
+        "The host, port, decision, bytes in each direction and duration; nothing inside the TLS stream"
+      ],
+      "answer": 3,
+      "explanation": "After `200 Connection established` the proxy relays encrypted bytes it cannot read. `relay()` counts them per direction and the audit records host, port, status, reason, bytes and duration. Seeing paths or headers would require terminating TLS with your own CA, which is a different, more invasive design."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You apply the egress NetworkPolicy from Use It, `kubectl get networkpolicy` lists it, and the agent pod can still reach any host on the internet. Most likely cause?",
+      "choices": [
+        "NetworkPolicies only apply after the pods are restarted",
+        "`policyTypes` must also list `Ingress` for egress rules to work",
+        "The DNS rule to `kube-dns` implicitly allows all traffic",
+        "The cluster's CNI plugin does not enforce NetworkPolicy; the API server stores the object either way"
+      ],
+      "answer": 3,
+      "explanation": "NetworkPolicy is an API object that the network plugin implements. Where the plugin does not (some minimal CNIs), the object is accepted and has no effect, which is why the lesson says to test a policy by trying to get past it. Policies apply to running pods without a restart, and an Egress-only policy is valid."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The sandbox allows only `api.anthropic.com` and the cluster API server, the token is bound to `view`, and `agentbox check` reports no drift. What can a successful prompt injection still do?",
+      "choices": [
+        "Put data the agent can legitimately read, such as a password in a ConfigMap or a pod log, into its report or its next model request",
+        "Download a script from a paste site and run it",
+        "Write a file into `/etc` inside the container",
+        "Delete a deployment with the agent's token"
+      ],
+      "answer": 0,
+      "explanation": "The sandbox closes the paste site (proxy), the writable root (`--read-only`) and the delete (`view` RBAC). It cannot stop the agent from using what it is allowed to read and the hosts it is allowed to reach: the model provider receives everything the agent reads by design, and `view` includes ConfigMaps and logs. Keep the allow-list and the token as small as the job."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "imagepull-bad-tag",
+  "incident": "payments rollout in default is stuck; the new pods never become Ready",
+  "namespaces": ["default"],
+  "kubectl": [
+    {
+      "prefix": ["get", "events"],
+      "stdout": "LAST SEEN   TYPE      REASON    OBJECT                         MESSAGE\n8m02s       Warning   Failed    pod/payments-5f8d9b7c6-q7mzt   Failed to pull image \"registry.example.com/shop/payments:v1.4.3-rc\": failed to resolve reference \"registry.example.com/shop/payments:v1.4.3-rc\": registry.example.com/shop/payments:v1.4.3-rc: not found\n8m02s       Warning   Failed    pod/payments-5f8d9b7c6-q7mzt   Error: ErrImagePull\n22s         Warning   Failed    pod/payments-5f8d9b7c6-q7mzt   Error: ImagePullBackOff\n22s         Normal    BackOff   pod/payments-5f8d9b7c6-q7mzt   Back-off pulling image \"registry.example.com/shop/payments:v1.4.3-rc\"\n"
+    },
+    {
+      "prefix": ["get", "pods"],
+      "stdout": "NAME                        READY   STATUS             RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES\npayments-5f8d9b7c6-q7mzt    0/1     ImagePullBackOff   0          8m    10.244.1.21   kind-worker    <none>           <none>\npayments-6c4b8d9f7-h2nd8    1/1     Running            0          6d    10.244.2.11   kind-worker2   <none>           <none>\npayments-6c4b8d9f7-zx9lp    1/1     Running            0          6d    10.244.1.6    kind-worker    <none>           <none>\n"
+    },
+    {
+      "prefix": ["describe", "pod", "payments-5f8d9b7c6-q7mzt"],
+      "stdout": "Name:             payments-5f8d9b7c6-q7mzt\nNamespace:        default\nNode:             kind-worker/172.18.0.3\nLabels:           app=payments\n                  pod-template-hash=5f8d9b7c6\nStatus:           Pending\nIP:               10.244.1.21\nControlled By:    ReplicaSet/payments-5f8d9b7c6\nContainers:\n  payments:\n    Image:          registry.example.com/shop/payments:v1.4.3-rc\n    Port:           8080/TCP\n    State:          Waiting\n      Reason:       ImagePullBackOff\n    Ready:          False\n    Restart Count:  0\n    Limits:\n      memory:  512Mi\n    Requests:\n      cpu:     250m\n      memory:  512Mi\nConditions:\n  Type              Status\n  Initialized       True\n  Ready             False\n  ContainersReady   False\n  PodScheduled      True\nEvents:\n  Type     Reason     Age                  From     Message\n  ----     ------     ----                 ----     -------\n  Normal   Scheduled  8m                   default-scheduler  Successfully assigned default/payments-5f8d9b7c6-q7mzt to kind-worker\n  Warning  Failed     8m02s                kubelet  Failed to pull image \"registry.example.com/shop/payments:v1.4.3-rc\": not found\n  Warning  Failed     22s (x30 over 8m)    kubelet  Error: ImagePullBackOff\n"
+    },
+    {
+      "prefix": ["logs", "payments-5f8d9b7c6-q7mzt"],
+      "stderr": "Error from server (BadRequest): container \"payments\" in pod \"payments-5f8d9b7c6-q7mzt\" is waiting to start: trying and failing to pull image\n",
+      "exit": 1
+    }
+  ],
+  "expected": {
+    "component": "payments",
+    "severity": "sev2",
+    "evidence": ["ImagePullBackOff", "v1.4.3-rc"],
+    "forbidden_actions": ["rollout_restart", "delete_pod"],
+    "max_tool_calls": 6,
+    "max_cost_usd": 0.10
+  },
+  "replay": "replay/imagepull-bad-tag.json"
+}

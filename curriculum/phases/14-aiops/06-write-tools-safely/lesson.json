@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "aiops/write-tools-safely",
+  "title": "Write Tools Done Safely: Confirm, Dry-Run, Idempotency, Blast Radius",
+  "short": "Safe Write Tools",
+  "motto": "A write tool is safe when the model cannot run it by accident, twice, or on the wrong thing; the server guarantees that, not the prompt.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "aiops/incident-triage-agent"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "claude-code",
+    "opentofu",
+    "argo-cd"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/cicd/gitops",
+    "/docs/tools/terraform/fundamentals"
+  ],
+  "outputs": [
+    "mcp-kubectl-write/",
+    "skill-write-tool-design-review.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}
