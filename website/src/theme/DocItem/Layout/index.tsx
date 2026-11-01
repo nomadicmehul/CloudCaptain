@@ -18,6 +18,7 @@ import React, {type ReactNode} from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import type {Props} from '@theme/DocItem/Layout';
 import {useDoc} from '@docusaurus/plugin-content-docs/client';
+import FromScratchCard from '@site/src/components/Curriculum/FromScratchCard';
 import BridgeLayout from '@site/src/components/CaptainsBridge/BridgeLayout';
 import ClassicLayout from '@site/src/components/CaptainsBridge/ClassicLayout';
 
@@ -29,11 +30,18 @@ export default function DocItemLayout({children}: Props): ReactNode {
   if (kind === 'landing' || kind === 'path') {
     return <ClassicLayout>{children}</ClassicLayout>;
   }
+  // Reference docs that a lesson builds on get a "Build this from scratch" card.
+  const content = (
+    <>
+      <FromScratchCard />
+      {children}
+    </>
+  );
   // SSR renders classic layout so there's no hydration flash and search
   // engines see stable markup. BrowserOnly swaps to BridgeLayout client-side.
   return (
-    <BrowserOnly fallback={<ClassicLayout>{children}</ClassicLayout>}>
-      {() => <BridgeLayout>{children}</BridgeLayout>}
+    <BrowserOnly fallback={<ClassicLayout>{content}</ClassicLayout>}>
+      {() => <BridgeLayout>{content}</BridgeLayout>}
     </BrowserOnly>
   );
 }

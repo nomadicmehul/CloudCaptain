@@ -11,6 +11,7 @@ import React, {useEffect, useState} from 'react';
 import Link from '@docusaurus/Link';
 import {useAllDocsData} from '@docusaurus/plugin-content-docs/client';
 import {getAllReadEntries, type ReadEntry} from './readProgress';
+import {curriculumTitle} from '../Curriculum/curriculumTitles';
 import styles from './resumeWidget.module.css';
 
 type EnrichedEntry = ReadEntry & {
@@ -75,6 +76,7 @@ export default function ResumeReadingWidget(): JSX.Element | null {
         const total = e.totalSections && e.totalSections > 0 ? e.totalSections : e.readCount;
         const percent = Math.min(100, Math.round((e.readCount / total) * 100));
         const title =
+          curriculumTitle(e.pathname) ??
           titleByPath.get(e.pathname) ??
           titleByPath.get(e.pathname.replace(/\/$/, '')) ??
           humanizePath(e.pathname);

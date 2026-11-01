@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "aiops/mcp-kubectl-server",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "What does an MCP server fundamentally give a coding agent?",
+      "choices": ["Faster model inference", "A list of named functions with JSON schemas that the agent may call, plus the results, over a simple RPC protocol", "Access to the internet", "A new model"],
+      "answer": 1,
+      "explanation": "The Model Context Protocol is JSON-RPC 2.0 with a small vocabulary: initialize, tools/list, tools/call (and resources, prompts). Everything the agent can do to your systems is the union of the tools servers expose."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why must a stdio MCP server write nothing but protocol messages to stdout?",
+      "choices": ["Performance", "The client parses every stdout line as JSON-RPC; a stray print breaks the session, so logs go to stderr", "stdout is read-only", "The spec forbids logging"],
+      "answer": 1,
+      "explanation": "stdio transport is newline-delimited JSON on stdout. Debug output on stdout corrupts the stream; stderr is free for logs."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An agent asks for `list_pods` in namespace `prod`, which is not on the allow-list. What should the server return?",
+      "choices": [
+        "Run it anyway; the agent knows best",
+        "A tools/call result with isError: true explaining the refusal, so the model can choose an allowed namespace",
+        "A JSON-RPC error that closes the connection",
+        "Empty output"
+      ],
+      "answer": 1,
+      "explanation": "Tool-level problems (bad arguments, policy refusals, kubectl failures) are results with isError so the model can recover; JSON-RPC errors are for protocol problems like an unknown method or tool."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why does the server build the kubectl argv itself from typed arguments instead of accepting a `command` string?",
+      "choices": [
+        "Strings are slower",
+        "Because a free-form command lets the model (or a prompt injection in a log line it read) run anything; building argv from a schema makes the read-only guarantee structural",
+        "kubectl does not accept strings",
+        "JSON cannot carry strings"
+      ],
+      "answer": 1,
+      "explanation": "Agents read untrusted text (logs, events, tickets). If any of it can steer a shell string, the tool is a remote shell. Typed arguments plus a verb allow-list and forbidden flags keep the surface read-only no matter what the model is told."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You add a `rollout_restart` write tool. Where should the human approval live?",
+      "choices": [
+        "In the server, which prompts on its own stdin",
+        "In the client (Claude Code, Cursor, your CI gate), which can show the user the exact call and get a yes before tools/call is sent; the server still logs and can require a confirm argument",
+        "Nowhere; the model is trusted",
+        "In the model's system prompt"
+      ],
+      "answer": 1,
+      "explanation": "The server's stdin is the protocol stream, so it cannot talk to the human. Clients own approval UX; servers own policy (allow-lists, audit logs, idempotent operations) and should assume the client might be misconfigured."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The output of list_events for a busy cluster is 400 KB. What is the right behaviour?",
+      "choices": [
+        "Return all of it",
+        "Truncate at a limit with a hint to narrow the query (namespace, warnings_only, tail_lines); context windows and token cost are part of the tool's contract",
+        "Crash",
+        "Compress it"
+      ],
+      "answer": 1,
+      "explanation": "Every byte a tool returns is read by the model. Bounded output with a clear hint keeps the agent useful and cheap, and nudges it toward the narrower calls a human SRE would make."
+    }
+  ]
+}

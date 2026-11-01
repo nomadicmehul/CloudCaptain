@@ -299,7 +299,7 @@ You are responsible for:
 | **CodePipeline** | CI/CD orchestration | Automate build, test, and deployment workflows |
 | **CodeBuild** | Build service | Compile source code and run tests |
 | **CodeDeploy** | Deployment | Deploy code to EC2, on-premises, or Lambda |
-| **CodeCommit** | Git repository | AWS-hosted Git version control |
+| **CodeCommit** | Git repository | AWS-hosted Git (closed to new customers since July 2024; CodeConnections links external Git hosts) |
 
 ---
 

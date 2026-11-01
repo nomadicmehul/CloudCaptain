@@ -234,7 +234,7 @@ Docker provides several networking modes:
 - **Bridge (default)**: Containers on the same bridge can communicate; good for single-host scenarios
 - **Host**: Container shares the host's network stack; no network isolation, best performance
 - **None**: Container has no network interface; useful for processing-only containers
-- **Overlay**: Multi-host networking across Docker Swarm or Kubernetes clusters
+- **Overlay**: Multi-host networking across Docker Swarm (maintenance mode) or Kubernetes clusters
 - **Macvlan**: Assigns MAC addresses to containers, making them appear as physical devices
 
 ```bash

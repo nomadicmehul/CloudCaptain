@@ -22,7 +22,10 @@ npm ci                          # install
 npm run curriculum:validate     # validate every lesson against LESSON_TEMPLATE.md (fast, no build)
 npm run curriculum:scaffold -- <phase-dir> <lesson-slug> --type Build|Learn --langs python,bash --title "..."
 npm run curriculum:test -- <phase-slug>/<lesson-slug>   # run that lesson's tests (or --all)
+npm run curriculum:test -- --all --smoke                # real-tool end-to-end checks (Linux + Docker; what lesson-smoke.yml runs)
 npm run curriculum:unit         # unit tests for the generator itself
+node ../scripts/build-curriculum.mjs --deprecations   # scan lessons + Reference docs for retired tech without a note
+node ../scripts/update-versions.mjs --check           # what the weekly version refresh would change
 npm start                       # dev server (runs the generator first)
 npm run build                   # production build; fails on broken links or invalid lessons
 npm run typecheck               # tsc
@@ -33,6 +36,8 @@ npm run typecheck               # tsc
 ```
 curriculum/
   manifest.json        phases (stable numbering 00–16), learning paths, certifications
+  versions.json        tracked tool versions (refreshed weekly by versions-weekly.yml; <ToolVersion name="kubernetes" /> in lessons)
+  deprecations.json    retired/removed/relicensed tech + replacements; validator warns on unannotated mentions
   schema/              JSON Schemas for manifest.json, lesson.json, quiz.json
   phases/NN-slug/      README.md (phase overview) + NN-lesson/ folders
   paths/<id>.md        learning-path pages

@@ -181,6 +181,8 @@ Complete reference for Docker CLI commands. Organized by category for easy looku
 
 ## Docker Swarm
 
+> Swarm mode is in maintenance: still shipped with Docker Engine and supported by Mirantis through at least 2030, but no new orchestration features. The commands work; start new clusters on Kubernetes (k3s is the small-cluster option).
+
 | Command | Description |
 |---|---|
 | `docker swarm init` | Initialize Swarm mode |

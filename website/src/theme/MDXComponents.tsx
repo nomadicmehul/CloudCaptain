@@ -9,6 +9,7 @@ import ShipIt from '@site/src/components/Curriculum/ShipIt';
 import RunTests from '@site/src/components/Curriculum/RunTests';
 import CurriculumHome from '@site/src/components/Curriculum/CurriculumHome';
 import LearningPath from '@site/src/components/Curriculum/LearningPath';
+import ToolVersion from '@site/src/components/Curriculum/ToolVersion';
 
 export default {
   ...MDXComponents,
@@ -18,4 +19,5 @@ export default {
   RunTests,
   CurriculumHome,
   LearningPath,
+  ToolVersion,
 };

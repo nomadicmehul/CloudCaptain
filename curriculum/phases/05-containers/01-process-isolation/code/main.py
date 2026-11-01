@@ -67,6 +67,7 @@ def cgroup_files(spec: ContainerSpec, pid: int) -> Dict[str, str]:
     group = os.path.join(spec.cgroup_base, spec.name)
     return {
         os.path.join(group, "memory.max"): str(parse_memory(spec.memory)),
+        os.path.join(group, "memory.swap.max"): "0",
         os.path.join(group, "cgroup.procs"): str(pid),
     }
 
@@ -87,6 +88,7 @@ def explain(spec: ContainerSpec) -> List[str]:
         lines.append(f"chroot: / inside becomes {spec.rootfs}")
     if spec.memory:
         lines.append(f"cgroup: {spec.name}/memory.max = {parse_memory(spec.memory)} bytes ({spec.memory})")
+        lines.append(f"cgroup: {spec.name}/memory.swap.max = 0 (no swap, so the limit is a ceiling rather than a hint)")
     return lines
 
 
@@ -120,11 +122,27 @@ def parse_args(argv: Sequence[str]) -> ContainerSpec:
     return spec
 
 
+OPTIONAL_CGROUP_FILES = ("memory.swap.max",)
+
+
 def write_cgroup(files: Dict[str, str]) -> None:
     for file_path, value in files.items():
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        if os.path.basename(file_path) in OPTIONAL_CGROUP_FILES and not os.path.exists(file_path):
+            continue
         with open(file_path, "w", encoding="ascii") as handle:
             handle.write(value)
+
+
+def wait_for_parent(ready_read: int) -> bool:
+    go = os.read(ready_read, 1)
+    os.close(ready_read)
+    return go == b"1"
+
+
+def release_child(ready_write: int) -> None:
+    os.write(ready_write, b"1")
+    os.close(ready_write)
 
 
 def child(spec: ContainerSpec, libc: ctypes.CDLL) -> None:
@@ -142,6 +160,11 @@ def child(spec: ContainerSpec, libc: ctypes.CDLL) -> None:
     os.execvp(spec.command[0], spec.command)
 
 
+def shell_exit_code(status: int) -> int:
+    code = os.waitstatus_to_exitcode(status)
+    return 128 - code if code < 0 else code
+
+
 def run(spec: ContainerSpec) -> int:
     if sys.platform != "linux":
         raise SystemExit("run needs Linux; use --explain on other systems")
@@ -151,12 +174,23 @@ def run(spec: ContainerSpec) -> int:
     if libc.unshare(unshare_flags(spec.namespaces)) != 0:
         errno = ctypes.get_errno()
         raise OSError(errno, f"unshare failed: {os.strerror(errno)}")
+    ready_read, ready_write = os.pipe()
     pid = os.fork()
     if pid == 0:
+        os.close(ready_write)
+        if not wait_for_parent(ready_read):
+            os._exit(1)
         child(spec, libc)
-    write_cgroup(cgroup_files(spec, pid))
+    os.close(ready_read)
+    try:
+        write_cgroup(cgroup_files(spec, pid))
+    except OSError:
+        os.close(ready_write)
+        os.waitpid(pid, 0)
+        raise
+    release_child(ready_write)
     _, status = os.waitpid(pid, 0)
-    return os.waitstatus_to_exitcode(status)
+    return shell_exit_code(status)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

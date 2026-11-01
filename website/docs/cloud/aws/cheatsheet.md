@@ -858,7 +858,7 @@ Comprehensive table of 50+ AWS services with categories and descriptions.
 | **Management** | Config | Configuration management service auditing resource compliance |
 | **Management** | Systems Manager | Operations service for patching, automation, and compliance |
 | **Management** | OpsWorks | Automation with Chef and Puppet for infrastructure management |
-| **Developer Tools** | CodeCommit | Managed Git repository service for version control |
+| **Developer Tools** | CodeCommit | Managed Git repository service (closed to new customers since July 2024; use CodeConnections to GitHub/GitLab/Bitbucket) |
 | **Developer Tools** | CodeBuild | Fully managed build service for compiling and testing code |
 | **Developer Tools** | CodeDeploy | Service for automating application deployments to instances |
 | **Developer Tools** | CodePipeline | CI/CD service orchestrating build, test, and deployment stages |

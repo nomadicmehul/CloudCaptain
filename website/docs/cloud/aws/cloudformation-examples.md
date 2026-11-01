@@ -7,9 +7,9 @@ sidebar_position: 9
 
 # AWS CloudFormation & DevTools Examples
 
-This page contains real-world CloudFormation templates, infrastructure automation examples, and AWS Developer Tools (CodeDeploy, CodeCommit, CodePipeline) configurations extracted from hands-on labs and architectural patterns.
+This page contains real-world CloudFormation templates, infrastructure automation examples, and AWS Developer Tools (CodeDeploy, CodeCommit, CodePipeline; CodeCommit has been closed to new customers since July 2024, and the pipelines also accept CodeConnections sources) configurations extracted from hands-on labs and architectural patterns.
 
-**Related:** For AWS interview preparation covering CloudFormation concepts and architecture, see the [AWS Interview Questions](/docs/interview-prep/aws) page which includes Top 100 and Top 250 questions.
+**Related:** For AWS interview preparation covering CloudFormation concepts and architecture, see the [AWS Interview Questions](/docs/cloud/aws/interview-questions) page which includes Top 100 and Top 250 questions.
 
 ## Architecture Overview
 
@@ -1282,4 +1282,4 @@ aws deploy create-deployment \
 - [AWS CodeDeploy Documentation](https://docs.aws.amazon.com/codedeploy/)
 - [Systems Manager Automation Documents](https://docs.aws.amazon.com/systems-manager-automation/)
 - [EventBridge Rules and Automation](https://docs.aws.amazon.com/eventbridge/)
-- [AWS interview preparation resources](/docs/interview-prep/aws)
+- [AWS interview preparation resources](/docs/cloud/aws/interview-questions)

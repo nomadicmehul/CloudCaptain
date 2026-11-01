@@ -1,0 +1,89 @@
+name: 🎓 New Lesson Proposal
+description: Propose a from-scratch lesson for the /learn curriculum (build it → use it → ship it).
+title: "[Lesson]: <phase>/<slug> — <title>"
+labels: ["curriculum", "content"]
+body:
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      description: Phases are fixed; pick the one the lesson belongs to (see ROADMAP.md).
+      options:
+        - 00 · Setup & Lab
+        - 01 · Linux & Systems
+        - 02 · Networking
+        - 03 · Git & Collaboration
+        - 04 · Scripting & Automation
+        - 05 · Containers
+        - 06 · Orchestration
+        - 07 · Infrastructure as Code
+        - 08 · CI/CD & GitOps
+        - 09 · Cloud Providers
+        - 10 · Observability & SRE
+        - 11 · Security & DevSecOps
+        - 12 · Platform Engineering
+        - 13 · AI Infrastructure
+        - 14 · AIOps & Agentic Ops
+        - 15 · MLOps & LLMOps
+        - 16 · Capstone Projects
+    validations:
+      required: true
+
+  - type: input
+    id: slug
+    attributes:
+      label: Lesson slug and title
+      placeholder: "registries — Registries and Content Addressing"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - Build (from-scratch implementation is the core)
+        - Learn (concept-first with a small build)
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The Problem
+      description: The concrete production scenario that goes wrong without this concept (this becomes the lesson's first section).
+    validations:
+      required: true
+
+  - type: textarea
+    id: build
+    attributes:
+      label: Build It
+      description: What the learner implements from the standard library, and what the tests will prove.
+      placeholder: "A mini registry client that pulls a manifest and layers by digest; tests cover digest verification and manifest parsing."
+    validations:
+      required: true
+
+  - type: textarea
+    id: use
+    attributes:
+      label: Use It
+      description: The real tool and commands that do the same job.
+      placeholder: "docker pull / docker manifest inspect / crane / skopeo"
+    validations:
+      required: true
+
+  - type: input
+    id: artifact
+    attributes:
+      label: Ship It
+      description: The artifact the learner keeps (prompt-*.md, skill-*.md, agent-*.md or an mcp-*/ folder).
+      placeholder: "skill-registry-triage.md"
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Writing it
+      options:
+        - label: I will write this lesson following LESSON_TEMPLATE.md (scaffold with `npm run curriculum:scaffold`).
+          required: false

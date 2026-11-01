@@ -798,7 +798,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          name: ingress-nginx
+          name: ingress-nginx   # retired March 2026: point this at your Gateway API controller's namespace
     ports:
     - protocol: TCP
       port: 80

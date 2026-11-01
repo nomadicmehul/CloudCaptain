@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "setup/lab-doctor",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Why do the container lessons need a Linux kernel even if you have Docker Desktop on macOS or Windows?",
+      "choices": ["They do not; Docker is cross-platform", "Namespaces and cgroups are Linux kernel features; Docker Desktop runs them inside a hidden Linux VM", "Because of licensing", "Because bash is Linux-only"],
+      "answer": 1,
+      "explanation": "Containers are Linux processes with a restricted view. On macOS and Windows, Docker Desktop, Lima or WSL 2 provide the Linux kernel in a VM; lessons that call unshare(2) directly run inside that VM."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does the lab doctor take a `runner` argument instead of calling subprocess directly inside `probe()`?",
+      "choices": ["For speed", "So tests can inject fake tool output and run on any machine without the tools installed", "Because subprocess is deprecated", "To support Windows"],
+      "answer": 1,
+      "explanation": "Injecting the side effect (running a command) keeps the logic pure and testable. The same pattern appears in every later lesson: the kernel call, the Docker call or the cloud API is the only thing that is not covered by unit tests."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The doctor reports `docker` as `ok` on a machine that only has Podman. Why is that correct?",
+      "choices": ["It is a bug", "Podman is listed as an alternative binary for the same job; both speak the OCI image and container formats", "Podman is Docker", "Because the version string matched"],
+      "answer": 1,
+      "explanation": "Requirements describe a capability (run OCI containers), not a brand. Podman, like OpenTofu for Terraform, satisfies the same lessons with the same commands."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "What does `kind create cluster` actually create on your machine?",
+      "choices": ["Virtual machines", "One Docker container per node running kubelet and containerd, with the control plane inside", "A cloud account", "A systemd service"],
+      "answer": 1,
+      "explanation": "kind is \"Kubernetes in Docker\": each node is a container. That is why the orchestration lessons can create and destroy clusters in under a minute."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A lesson's test passes but its Use It step fails with `permission denied` on `/var/run/docker.sock`. What is wrong?",
+      "choices": ["The lesson is broken", "Your user is not in the docker group (or the daemon is not running); the test never touched Docker, by design", "Python is too old", "kind is missing"],
+      "answer": 1,
+      "explanation": "Tests exercise the pure logic; Use It exercises the real tool. A permissions or daemon problem shows up only in the second, which is exactly why the lab doctor checks the tool and its version separately."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Why should the lab be disposable (recreatable from one command) rather than carefully hand-configured?",
+      "choices": ["Disk space", "Because every later lesson mutates it (kernel namespaces, clusters, state files) and a known-good reset is faster than debugging accumulated drift", "Because kind requires it", "It should not be"],
+      "answer": 1,
+      "explanation": "The same reason production uses infrastructure as code: a reproducible environment turns \"it worked yesterday\" into a diff you can read."
+    }
+  ]
+}

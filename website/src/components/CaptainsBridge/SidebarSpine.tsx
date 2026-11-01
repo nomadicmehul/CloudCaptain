@@ -34,7 +34,7 @@ function paintSpine(): void {
   // Consider both classic sidebar menu links and mobile drawer links
   const links = Array.from(
     document.querySelectorAll<HTMLAnchorElement>(
-      'nav.menu .menu__link[href^="/docs/"], nav.theme-doc-sidebar-menu .menu__link[href^="/docs/"]'
+      'nav.menu .menu__link[href^="/docs/"], nav.menu .menu__link[href^="/learn/"], nav.theme-doc-sidebar-menu .menu__link[href^="/docs/"], nav.theme-doc-sidebar-menu .menu__link[href^="/learn/"]'
     )
   );
   const seen = new WeakSet<Element>();

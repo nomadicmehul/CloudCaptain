@@ -75,7 +75,7 @@ Three `<Quiz stage="..." />` tags are required, placed as shown.
 
 - **Build it, then use it.** The from-scratch version comes first and uses only the standard library. The real tool comes second, doing the same job, so the learner can map one onto the other.
 - **Ship something.** Every lesson leaves a file in `outputs/` the learner can drop into their own agent setup: `prompt-<slug>.md`, `skill-<slug>.md`, `agent-<slug>.md`, or an `mcp-<slug>/` folder.
-- **Runs today.** Pin versions only when the lesson is about a version. Commands must work on current releases; set `last_verified` in `lesson.json` when you run them.
+- **Runs today.** Pin versions only when the lesson is about a version. Commands must work on current releases. Put the Linux-only Build It steps and the Use It commands in `code/smoke.sh` and list it as `"smoke": "bash code/smoke.sh"` in `lesson.json`; `lesson-smoke.yml` runs it on an Ubuntu runner with Docker and OpenTofu. Set `last_verified` only after that script has passed (locally on Linux or in CI).
 - **Links to the Reference layer are absolute:** `https://cloudcaptain.io/docs/tools/docker/fundamentals`. The site rewrites them to internal links and the build fails if the target does not exist.
 - **Markdown is MDX.** Escape `<` and `{` outside code spans, or put them in backticks.
 - **Diagrams, not ASCII art.** Mermaid in The Concept; keep it under ~15 nodes.

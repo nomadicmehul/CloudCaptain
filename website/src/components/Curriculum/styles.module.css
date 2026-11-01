@@ -267,3 +267,165 @@ a.chip:hover {
   color: var(--ifm-color-primary);
   text-decoration: none;
 }
+
+/* ─── CurriculumProgress (on /progress) ─── */
+.progressSection {
+  margin: 1.5rem 0 2.5rem;
+}
+.progressHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.progressTitle {
+  margin: 0;
+  font-size: 1.4rem;
+}
+.continueCard {
+  display: block;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: var(--ifm-global-radius);
+  background: color-mix(in srgb, var(--ifm-color-primary) 8%, var(--ifm-background-surface-color));
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+.continueCard:hover {
+  color: inherit;
+  text-decoration: none;
+  border-color: var(--ifm-color-primary-dark);
+}
+.phaseList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.phaseRow {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ifm-background-surface-color);
+}
+.phaseHeader {
+  display: grid;
+  grid-template-columns: auto 1fr minmax(80px, 180px) auto;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.phaseIcon {
+  font-size: 1.2rem;
+}
+.phaseMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.phaseLabel {
+  font-weight: 700;
+}
+.phaseBar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-200);
+  overflow: hidden;
+}
+.phaseBarFill {
+  display: block;
+  height: 100%;
+  background: var(--ifm-color-primary);
+  transition: width 0.3s ease;
+}
+.lessonList {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem 0.75rem 2.75rem;
+}
+.lessonRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  font-size: 0.95rem;
+}
+.lessonDot {
+  width: 1rem;
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+}
+.lessonRow[data-status='complete'] .lessonDot {
+  color: #10b981;
+}
+.lessonRow[data-status='in-progress'] .lessonDot {
+  color: var(--ifm-color-primary);
+}
+@media (max-width: 600px) {
+  .phaseHeader {
+    grid-template-columns: auto 1fr auto;
+  }
+  .phaseBar {
+    display: none;
+  }
+}
+
+/* ─── HomeCurriculum (homepage section) ─── */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0 1.5rem;
+}
+.pillar {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ifm-background-surface-color);
+  padding: 1.1rem 1.25rem;
+}
+.pillarIcon {
+  font-size: 1.5rem;
+}
+.pillarTitle {
+  font-weight: 800;
+  margin: 0.35rem 0 0.25rem;
+  color: var(--ifm-color-primary);
+}
+.pillarText {
+  font-size: 0.92rem;
+  color: var(--ifm-color-emphasis-700);
+}
+.homeCta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+.cmd {
+  font-size: 0.95rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+}
+
+/* ─── Deprecation watch table ─── */
+.watchTable {
+  width: 100%;
+  font-size: 0.9rem;
+  display: table;
+}
+.watchTable td,
+.watchTable th {
+  vertical-align: top;
+}

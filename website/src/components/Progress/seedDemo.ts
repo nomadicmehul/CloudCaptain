@@ -11,6 +11,7 @@
  *     wrote in this seed pass (tracked in a dedicated meta key).
  */
 const STORAGE_PREFIX = 'cloudcaptain.bridge.read.';
+const QUIZ_PREFIX = 'cloudcaptain.quiz.';
 const SEED_META_KEY = 'cloudcaptain.bridge.demo-seed';
 
 type SeedEntry = {
@@ -21,6 +22,12 @@ type SeedEntry = {
 };
 
 const DEMO_ENTRIES: SeedEntry[] = [
+  {
+    pathname: '/learn/containers/process-isolation',
+    readSections: ['metadata', 'the-problem', 'the-concept', 'build-it', 'step-1-ask-the-kernel-for-the-lies-with-util-linux'],
+    totalSections: 17,
+    daysAgo: 0,
+  },
   {
     pathname: '/docs/tools/docker/fundamentals',
     readSections: ['what-is-docker', 'containers-vs-virtual-machines', 'docker-architecture'],
@@ -106,6 +113,14 @@ export function seedDemoProgress(): {created: number; skipped: number} {
     }
   }
   try {
+    const quizKey = QUIZ_PREFIX + '/learn/containers/process-isolation';
+    if (!localStorage.getItem(quizKey)) {
+      localStorage.setItem(
+        quizKey,
+        JSON.stringify({answers: {'pre-1': 0, 'check-1': 1, 'check-2': 2, 'check-3': 0}, scores: {pre: [1, 1], check: [2, 3]}, attempts: 1, lastUpdated: now})
+      );
+      seededKeys.push(quizKey);
+    }
     localStorage.setItem(SEED_META_KEY, JSON.stringify({keys: seededKeys, at: now}));
   } catch {}
   window.dispatchEvent(new CustomEvent('cc-bridge-read-change'));

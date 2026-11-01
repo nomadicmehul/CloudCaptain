@@ -6,6 +6,7 @@
  *   node scripts/build-curriculum.mjs --check    validate only (CI)
  *   node scripts/build-curriculum.mjs --json     print stats as JSON
  *   node scripts/build-curriculum.mjs --roadmap  refresh the phase table in ROADMAP.md
+ *   node scripts/build-curriculum.mjs --deprecations  scan curriculum + website/docs for retired tech without a note
  *   node scripts/build-curriculum.mjs --scaffold <phase-dir> <lesson-slug> [--type Build|Learn] [--langs python,bash] [--title "..."] [--minutes 60]
  *
  * Zero dependencies. Node >= 20.
@@ -13,8 +14,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import {discover, loadManifest, exists, LESSON_DIR_RE, ENTRY_FILES} from './lib/discover.mjs';
-import {validateLesson, validateGlobal, formatReport} from './lib/validate.mjs';
+import {discover, loadManifest, exists, readJson, LESSON_DIR_RE, ENTRY_FILES} from './lib/discover.mjs';
+import {validateLesson, validateGlobal, formatReport, scanDeprecations} from './lib/validate.mjs';
 import {buildModel, writeModel, updateRoadmap} from './lib/emit.mjs';
 
 const here = path.dirname(url.fileURLToPath(import.meta.url));
@@ -26,7 +27,9 @@ export const outFile = path.join(websiteRoot, 'src', 'data', 'generated', 'curri
 export function run({curriculum = curriculumRoot, websiteDocsRoot = path.join(websiteRoot, 'docs'), out = outFile, check = false, quiet = false} = {}) {
   const manifest = loadManifest(curriculum);
   const phases = discover(curriculum, manifest);
-  const ctx = {curriculumRoot: curriculum, websiteDocsRoot};
+  const deprecations = exists(path.join(curriculum, 'deprecations.json')) ? readJson(path.join(curriculum, 'deprecations.json')) : [];
+  const versions = exists(path.join(curriculum, 'versions.json')) ? readJson(path.join(curriculum, 'versions.json')) : null;
+  const ctx = {curriculumRoot: curriculum, websiteDocsRoot, deprecations};
   for (const phase of phases) for (const lesson of phase.lessons) validateLesson(lesson, ctx);
   const global = validateGlobal(phases, manifest, ctx);
   const report = formatReport(phases, global);
@@ -36,6 +39,8 @@ export function run({curriculum = curriculumRoot, websiteDocsRoot = path.join(we
     return {ok: false, report, model: null, phases, manifest};
   }
   const model = buildModel(phases, manifest);
+  model.versions = versions;
+  model.deprecations = deprecations;
   if (!check) writeModel(model, out);
   if (!quiet) {
     const s = model.stats;
@@ -241,6 +246,16 @@ if (isMain) {
         minutes: args.options.minutes ? Number(args.options.minutes) : 60,
       });
       console.log(`scaffolded ${path.relative(repoRoot, dir)}\nnext: fill docs/en.md, code/, quiz.json and outputs/, then run: npm run curriculum:validate`);
+      process.exit(0);
+    }
+    if (args.flags.has('deprecations')) {
+      const deprecations = readJson(path.join(curriculumRoot, 'deprecations.json'));
+      const hits = scanDeprecations([path.join(curriculumRoot, 'phases'), path.join(websiteRoot, 'docs')], deprecations, repoRoot);
+      if (hits.length === 0) console.log('deprecations: no unannotated mentions');
+      else {
+        console.log(`deprecations: ${hits.length} mention(s) without a nearby status note`);
+        for (const h of hits) console.log(`  ${h.file}:${h.line}  ${h.term}  → ${h.replacement}`);
+      }
       process.exit(0);
     }
     const result = run({check: args.flags.has('check') || args.flags.has('json') || args.flags.has('roadmap'), quiet: args.flags.has('json')});

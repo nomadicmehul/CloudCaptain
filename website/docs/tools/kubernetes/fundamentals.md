@@ -1169,6 +1169,8 @@ Use annotations for:
 
 ## Kubernetes vs Docker Swarm
 
+Docker Swarm is in maintenance mode (Mirantis support through at least 2030, no new orchestration features). The comparison stays because the interview question still comes up; for a new platform the choice is Kubernetes.
+
 | Aspect | Kubernetes | Docker Swarm |
 |--------|-----------|-------------|
 | **Learning Curve** | Steeper, more complex | Easier to learn |

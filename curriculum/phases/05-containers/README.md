@@ -11,8 +11,10 @@ Each lesson follows the same arc: a concrete production problem, the concept wit
 | Lesson | Type | What you build | What you then use |
 |---|---|---|---|
 | Process Isolation | Build | `unshare` + `fork` + `chroot` + a cgroup, in Python | `docker run --hostname --memory --pids-limit`, `lsns`, `nsenter` |
+| Image Layers | Learn | a `docker save` auditor that finds deleted and overwritten bytes | `docker history`, `docker image inspect`, build-cache ordering, secret mounts |
+| Registry Pull | Build | an OCI registry client: token flow, index → manifest → blobs, digest verification, safe rootfs extraction | `docker pull`, `docker manifest inspect`, `crane`, `skopeo`, `curl` |
 
-More lessons in this phase are listed in [ROADMAP.md](https://github.com/nomadicmehul/CloudCaptain/blob/main/ROADMAP.md): image layers and the OCI format, building images without a Dockerfile, registries and content addressing, networking between containers, Compose, rootless containers with Podman, and runtime security.
+More lessons in this phase are listed in [ROADMAP.md](https://github.com/nomadicmehul/CloudCaptain/blob/main/ROADMAP.md): building images without a Dockerfile, networking between containers, Compose, rootless containers with Podman, and runtime security.
 
 ## Reference layer
 

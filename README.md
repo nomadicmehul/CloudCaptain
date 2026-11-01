@@ -29,6 +29,16 @@ Built and curated over 3+ years. Open source (MIT). No paywall, no email gate, n
 
 **[Visit cloudcaptain.io →](https://cloudcaptain.io)**
 
+## 🧪 Learn from scratch (new)
+
+The **[/learn](https://cloudcaptain.io/learn)** curriculum teaches Cloud, DevOps and AIOps by building the tool before using it. Every lesson: a real production problem → the concept with a diagram → **Build It** from the standard library (a container runtime, a plan/apply engine, a metrics store, an incident-triage agent) → **Use It** with the real tool (Docker, Terraform, Prometheus, an MCP server) → **Ship It**, a prompt or agent skill you keep. Each lesson comes with runnable code, tests, and a six-question quiz.
+
+```bash
+npx skills add nomadicmehul/CloudCaptain    # /captain-start, /captain-learn, /captain-guide, /captain-check
+```
+
+The tutor skills work in Claude Code, Cursor, Codex and any agent that reads `SKILL.md`. Phases and progress are in [ROADMAP.md](./ROADMAP.md); the lesson contract is in [LESSON_TEMPLATE.md](./LESSON_TEMPLATE.md).
+
 ## 🧭 Why CloudCaptain?
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
@@ -39,6 +49,7 @@ Built and curated over 3+ years. Open source (MIT). No paywall, no email gate, n
 | Certification exam prep | ✅ CKA/CKAD/CKS, Terraform, AWS, Azure, GCP | ❌ | ❌ | ❌ |
 | Reading progress tracking | ✅ built-in, per page | ✅ | ❌ | ❌ |
 | Architecture diagrams | ✅ 50+ Mermaid | ✅ | ❌ | ❌ |
+| From-scratch lessons with code, tests, quiz | ✅ `/learn` + agent tutor | ❌ | ❌ | ❌ |
 
 Every major topic follows the same triad: **Fundamentals guide → Cheat sheet → Interview questions** (plus exam prep where a certification exists). Learn it, reference it, get hired with it — in one place.
 
@@ -136,6 +147,9 @@ Docusaurus 3 (TypeScript) · GitHub Pages + custom domain · GitHub Actions CI/C
 
 ```
 CloudCaptain/
+  curriculum/               # From-scratch lessons: phases/NN-phase/NN-lesson/{docs,code,quiz.json,outputs}
+  scripts/                  # build-curriculum.mjs (validate + generate), run-lesson-tests.mjs
+  skills/                   # captain-* tutor skills (npx skills add nomadicmehul/CloudCaptain)
   website/
     docs/
       learning-paths/         # Structured learning roadmaps

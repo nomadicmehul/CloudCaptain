@@ -1,0 +1,62 @@
+[
+  {
+    "from": "/docs/tools/puppet",
+    "to": "/docs/learning-paths/devops-tools-overview"
+  },
+  {
+    "from": "/docs/tools/vagrant",
+    "to": "/docs/learning-paths/devops-tools-overview"
+  },
+  {
+    "from": "/docs/tools/packer",
+    "to": "/docs/learning-paths/devops-tools-overview"
+  },
+  {
+    "from": "/docs/tools/cloudformation",
+    "to": "/docs/cloud/aws/cloudformation-examples"
+  },
+  {
+    "from": "/docs/cloud/digitalocean",
+    "to": "/docs/cloud/cloud-computing"
+  },
+  {
+    "from": "/docs/tools/docker/commands",
+    "to": "/docs/tools/docker/cheatsheet"
+  },
+  {
+    "from": "/docs/tools/docker/notes",
+    "to": "/docs/tools/docker/fundamentals"
+  },
+  {
+    "from": "/docs/tools/docker/exercises",
+    "to": "/docs/tools/docker/dockerfile-guide"
+  },
+  {
+    "from": "/docs/tools/terraform/commands",
+    "to": "/docs/tools/terraform/cheatsheet"
+  },
+  {
+    "from": "/docs/interview-prep/docker",
+    "to": "/docs/tools/docker/interview-questions"
+  },
+  {
+    "from": "/docs/interview-prep/kubernetes",
+    "to": "/docs/tools/kubernetes/interview-questions"
+  },
+  {
+    "from": "/docs/interview-prep/terraform",
+    "to": "/docs/tools/terraform/interview-questions"
+  },
+  {
+    "from": "/docs/interview-prep/aws",
+    "to": "/docs/cloud/aws/interview-questions"
+  },
+  {
+    "from": "/docs/interview-prep/linux",
+    "to": "/docs/tools/linux/interview-questions"
+  },
+  {
+    "from": "/docs/tools/circleci",
+    "to": "/docs/tools/cicd"
+  }
+]

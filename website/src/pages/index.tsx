@@ -4,6 +4,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import ResumeReadingWidget from '@site/src/components/Progress/ResumeReadingWidget';
+import HomeCurriculum from '@site/src/components/Curriculum/HomeCurriculum';
 
 /* ─── Data (loaded from JSON — edit the JSON files to update content) ─── */
 import categories from '../data/categories.json';
@@ -250,7 +251,7 @@ function HeroSection() {
             Curated paths, hands-on exercises, interview prep — <strong style={{color:'#10B981'}}>100% free, forever.</strong>
           </p>
           <div className="hero-buttons">
-            <Link className="btn-primary" to="/docs/learning-paths/devops">
+            <Link className="btn-primary" to="/learn">
               ./start-learning.sh →
             </Link>
             <Link className="btn-secondary" href="https://github.com/nomadicmehul/CloudCaptain">
@@ -570,6 +571,7 @@ export default function Home(): React.ReactElement {
       description="Open-source community learning platform for Cloud, DevOps, AI, and Operations. Free forever.">
       <HeroSection />
       <BrowserOnly>{() => <ResumeReadingWidget />}</BrowserOnly>
+      <HomeCurriculum />
       <StatsSection />
       <CategoriesSection />
       <LearningPathsSection />

@@ -190,7 +190,7 @@ spec:
 
 **Definition**: Ensures a specified number of pod replicas are running at all times.
 
-**Analogy**: Similar to Docker Swarm's service model—if a pod crashes, ReplicaSet respawns it.
+**Analogy**: Similar to the service model of Docker Swarm (now in maintenance mode)—if a pod crashes, ReplicaSet respawns it.
 
 *Note*: You usually don't create ReplicaSets directly; Deployments create them for you.
 

@@ -1,0 +1,135 @@
+{
+  "updatedAt": "2026-10-31T18:18:39.967Z",
+  "track": {
+    "kubernetes": {
+      "repo": "kubernetes/kubernetes",
+      "label": "Kubernetes"
+    },
+    "helm": {
+      "repo": "helm/helm",
+      "label": "Helm"
+    },
+    "docker-compose": {
+      "repo": "docker/compose",
+      "label": "Docker Compose"
+    },
+    "podman": {
+      "repo": "containers/podman",
+      "label": "Podman"
+    },
+    "terraform": {
+      "repo": "hashicorp/terraform",
+      "label": "Terraform"
+    },
+    "opentofu": {
+      "repo": "opentofu/opentofu",
+      "label": "OpenTofu"
+    },
+    "ansible": {
+      "repo": "ansible/ansible",
+      "label": "ansible-core"
+    },
+    "gateway-api": {
+      "repo": "kubernetes-sigs/gateway-api",
+      "label": "Gateway API"
+    },
+    "envoy-gateway": {
+      "repo": "envoyproxy/gateway",
+      "label": "Envoy Gateway"
+    },
+    "cilium": {
+      "repo": "cilium/cilium",
+      "label": "Cilium"
+    },
+    "kind": {
+      "repo": "kubernetes-sigs/kind",
+      "label": "kind"
+    },
+    "argo-cd": {
+      "repo": "argoproj/argo-cd",
+      "label": "Argo CD"
+    },
+    "prometheus": {
+      "repo": "prometheus/prometheus",
+      "label": "Prometheus"
+    },
+    "opentelemetry-collector": {
+      "repo": "open-telemetry/opentelemetry-collector",
+      "label": "OpenTelemetry Collector"
+    },
+    "vllm": {
+      "repo": "vllm-project/vllm",
+      "label": "vLLM"
+    },
+    "kserve": {
+      "repo": "kserve/kserve",
+      "label": "KServe"
+    }
+  },
+  "versions": {
+    "kubernetes": {
+      "version": "v1.37.2",
+      "publishedAt": "2026-10-28"
+    },
+    "helm": {
+      "version": "v4.3.1",
+      "publishedAt": "2026-10-15"
+    },
+    "docker-compose": {
+      "version": "v5.6.1",
+      "publishedAt": "2026-10-21"
+    },
+    "terraform": {
+      "version": "v1.17.1",
+      "publishedAt": "2026-10-28"
+    },
+    "opentofu": {
+      "version": "v1.13.2",
+      "publishedAt": "2026-10-21"
+    },
+    "gateway-api": {
+      "version": "v1.7.0",
+      "publishedAt": "2026-10-29"
+    },
+    "envoy-gateway": {
+      "version": "v1.9.3",
+      "publishedAt": "2026-10-26"
+    },
+    "kind": {
+      "version": "v0.33.0",
+      "publishedAt": "2026-08-26"
+    },
+    "podman": {
+      "version": "v6.1.4",
+      "publishedAt": "2026-10-12"
+    },
+    "ansible": {
+      "version": "v2.21.5",
+      "publishedAt": "2026-10-05"
+    },
+    "cilium": {
+      "version": "v1.20.4",
+      "publishedAt": "2026-10-23"
+    },
+    "argo-cd": {
+      "version": "v3.5.6",
+      "publishedAt": "2026-10-20"
+    },
+    "prometheus": {
+      "version": "v3.15.1",
+      "publishedAt": "2026-10-21"
+    },
+    "opentelemetry-collector": {
+      "version": "v0.164.0",
+      "publishedAt": "2026-10-26"
+    },
+    "vllm": {
+      "version": "v0.32.0",
+      "publishedAt": "2026-10-18"
+    },
+    "kserve": {
+      "version": "v0.21.0",
+      "publishedAt": "2026-09-25"
+    }
+  }
+}

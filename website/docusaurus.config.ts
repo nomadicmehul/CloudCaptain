@@ -246,7 +246,7 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {label: 'Roadmap', to: '/docs/'},
+            {label: 'Roadmap', href: 'https://github.com/nomadicmehul/CloudCaptain/blob/main/ROADMAP.md'},
             {label: '📖 Your Progress', to: '/progress'},
             {label: '☕ Buy Me a Coffee', href: 'https://buymeacoffee.com/nomadicmehul'},
             {label: '❤️ Sponsor on GitHub', href: 'https://github.com/sponsors/nomadicmehul'},
@@ -290,6 +290,8 @@ const config: Config = {
         beforeDefaultRemarkPlugins: [remarkSiteLinks],
       },
     ],
+    // Old stub/pointer URLs keep working (see website/redirects.json)
+    ['@docusaurus/plugin-client-redirects', {redirects: require('./redirects.json')}],
     // Zoom on images in docs/blog for cheatsheets and diagrams
     [
       'plugin-image-zoom',

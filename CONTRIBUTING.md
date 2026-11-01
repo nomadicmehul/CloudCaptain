@@ -53,6 +53,21 @@ npm run build
 - Test all links before submitting
 - Use Mermaid diagrams for architecture visuals
 
+### Lessons (the `/learn` curriculum)
+
+Lessons live in `curriculum/phases/NN-phase/NN-lesson/` and follow [`LESSON_TEMPLATE.md`](./LESSON_TEMPLATE.md): The Problem → The Concept (Mermaid) → Build It (standard library, with tests) → Use It (the real tool) → Ship It (a prompt, skill or agent in `outputs/`) → Exercises → Key Terms → Further Reading, plus a six-question `quiz.json`.
+
+```bash
+cd website
+npm run curriculum:scaffold -- 05-containers registries --type Learn --langs python --title "Registries and Content Addressing"
+# fill docs/en.md, code/, quiz.json, outputs/ … then:
+npm run curriculum:validate
+npm run curriculum:test -- containers/registries
+npm run build
+```
+
+Set `"status": "published"` in `lesson.json` when it is ready (`draft` is excluded from the site). Never edit `sidebars.curriculum.ts`; it is generated. See [`AGENTS.md`](./AGENTS.md) for the full repo map.
+
 ### Homepage Content (JSON Data)
 
 Homepage sections are driven by JSON files in `website/src/data/`. To update content, edit the relevant JSON file — no React code changes needed.

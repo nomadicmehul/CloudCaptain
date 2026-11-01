@@ -1,0 +1,11 @@
+# Targets lychee cannot check reliably from CI (rate limits, login walls, local URLs)
+^https?://localhost
+^https?://127\.0\.0\.1
+^https?://(www\.)?twitter\.com
+^https?://x\.com
+^https?://(www\.)?linkedin\.com
+^https?://api\.github\.com
+^https?://github\.com/.*/(edit|new|pull/new)/
+^https?://buymeacoffee\.com
+^https?://docs\.docker\.com/.*#
+^mailto:
