@@ -7,6 +7,7 @@ type Props = {
   pagesComplete: number;
   sectionsRead: number;
   lastUpdated: number | undefined;
+  showStats?: boolean;
 };
 
 function relativeTime(ts: number | undefined): string {
@@ -24,6 +25,7 @@ export default function ProgressHero({
   pagesComplete,
   sectionsRead,
   lastUpdated,
+  showStats = true,
 }: Props): JSX.Element {
   return (
     <section className={styles.hero} aria-label="Progress summary">
@@ -32,10 +34,11 @@ export default function ProgressHero({
           <span className={styles.heroEmoji}>📖</span> Your Progress
         </h1>
         <span className={styles.heroSubtitle}>
-          Tracked privately in this browser via Captain's Bridge reading mode.
+          Lessons, quiz scores and reading progress, stored privately in this browser.
         </span>
       </div>
 
+      {showStats && (
       <div className={styles.heroStats}>
         <div className={styles.statCard}>
           <span className={styles.statLabel}>Sections read</span>
@@ -60,6 +63,7 @@ export default function ProgressHero({
           </span>
         </div>
       </div>
+      )}
     </section>
   );
 }

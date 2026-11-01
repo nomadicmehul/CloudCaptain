@@ -98,7 +98,7 @@ export function buildModel(phases, manifest) {
       .map((p) => ({
         type: 'category',
         label: `${p.number} · ${p.title}`,
-        collapsed: false,
+        collapsed: true,
         link: {type: 'doc', id: p.docId},
         items: p.lessons.map((l) => ({type: 'doc', id: l.docId, label: l.short || l.title})),
       })),

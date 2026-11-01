@@ -24,7 +24,7 @@ export default function BridgeConsole({
   return (
     <div className={styles.console} role="toolbar" aria-label="Captain's Bridge console">
       <div className={styles.consoleInner}>
-        <div className={styles.consoleGroup}>
+        <div className={`${styles.consoleGroup} ${styles.consoleKeys}`}>
           <Key label="j" desc="down" />
           <Key label="k" desc="up" />
           <Key label="gg" desc="top" />

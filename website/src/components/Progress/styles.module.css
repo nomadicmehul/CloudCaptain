@@ -42,8 +42,8 @@
 }
 .heroEmoji { font-size: 2rem; }
 .heroSubtitle {
-  color: var(--ifm-color-emphasis-600);
-  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 1rem;
 }
 
 .heroStats {

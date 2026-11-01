@@ -757,6 +757,16 @@
   .chapterCode { display: none; }
 }
 
+/* Touch screens and narrow windows have no keyboard shortcuts to advertise,
+   and every pixel of chrome comes out of the reading area. */
+@media (max-width: 996px), (hover: none) {
+  .consoleKeys { display: none; }
+  .consoleKbd { display: none; }
+}
+@media (max-width: 600px) {
+  .telemetryOptional { display: none; }
+}
+
 /* =========================================================================
    COMPLETION TOAST
    ========================================================================= */

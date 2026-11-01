@@ -37,6 +37,8 @@ All notable changes to CloudCaptain. The format follows [Keep a Changelog](https
 - Reference docs: 18 remaining mentions of CodeCommit, Docker Swarm, PodSecurityPolicy and ingress-nginx now carry a status note where they appear.
 
 ### Fixed
+- URLs ending in `/` (for example `/docs/tools/kubernetes/`, `/learn/`) answered HTTP 404: pages are built as `path.html`, and the page only appeared after JavaScript replaced the 404, which crawlers and link previews never saw and which caused React hydration warnings. Every page is now also served at `path/` (a copy whose canonical URL stays `path`), and the site's own links drop the trailing slash.
+- `/learn` scrolled sideways on phones (the Deprecation watch table now scrolls inside its own box).
 - Findings from the first Linux smoke runs (PR #69): the Process Isolation child now waits on a pipe until the parent has written it into the memory cgroup (a fast command started its pipeline in the host cgroup before the move, so nothing was limited), and the group also sets `memory.swap.max=0` so a host with swap cannot page it out instead of OOM-killing it; the Registry Pull rootfs keeps file and directory modes (`/bin/busybox` was extracted without its executable bit); the state-reconciler Use It and smoke now expect `local_file` content changes to plan as a replacement, which is what the local provider does; the lab-doctor smoke restores the previous kubectl context after deleting its cluster, and its check pod is started, waited for and read with `kubectl logs` instead of `kubectl run -i --rm`, which lost the output when the container exited before kubectl attached.
 - Captain's Bridge **Commands** tab and `.sh` download: multi-line code blocks were read as one over-long line (Prism emits no newlines), so most pages showed "Commands 0". Lines are now taken from the rendered `token-line` spans.
 
@@ -44,6 +46,9 @@ All notable changes to CloudCaptain. The format follows [Keep a Changelog](https
 - 15 stub and pointer pages (Puppet, Vagrant, Packer, CloudFormation, DigitalOcean, CircleCI, the Docker/Terraform `commands`/`notes`/`exercises` placeholders and five interview-prep pointer pages). Every old URL redirects to the page that has the content; CircleCI is summarised on the CI/CD landing page; the Interview Prep sidebar now links straight to the question sets.
 
 ### Changed
+- Homepage: the hero leads with the curriculum (live lesson and test counts), the outdated stats strip is gone, and How It Works describes the lesson flow (tutor, Build It, Use It, Ship It).
+- Lesson and phase pages: section chips read "N min in this section" without the guessed difficulty; keyboard-shortcut hints are hidden on touch screens and narrow windows; the Captain's Bridge strip is shorter on phones; the sidebar opens only the current phase; phase pages show their lessons as linked cards (the README keeps the table for GitHub).
+- `/progress` leads with the curriculum and shows reading counters only once there is something to count. The decorative "v3.0-oss" label under the navbar logo is removed.
 - Homepage hero button goes to `/learn`; category cards show real guide counts instead of "N+ resources"; footer Roadmap points at ROADMAP.md.
 - Navbar: the three Reference sidebars (Learning Paths, Tools & Tech, Cloud Providers) plus Career Paths and Interview Prep now live under one **Reference** dropdown next to **Learn**, so the row fits at 1280px and above.
 
