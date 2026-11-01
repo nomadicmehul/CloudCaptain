@@ -134,6 +134,17 @@ def write_cgroup(files: Dict[str, str]) -> None:
             handle.write(value)
 
 
+def wait_for_parent(ready_read: int) -> bool:
+    go = os.read(ready_read, 1)
+    os.close(ready_read)
+    return go == b"1"
+
+
+def release_child(ready_write: int) -> None:
+    os.write(ready_write, b"1")
+    os.close(ready_write)
+
+
 def child(spec: ContainerSpec, libc: ctypes.CDLL) -> None:
     if "uts" in spec.namespaces:
         name = spec.hostname.encode()
@@ -158,10 +169,21 @@ def run(spec: ContainerSpec) -> int:
     if libc.unshare(unshare_flags(spec.namespaces)) != 0:
         errno = ctypes.get_errno()
         raise OSError(errno, f"unshare failed: {os.strerror(errno)}")
+    ready_read, ready_write = os.pipe()
     pid = os.fork()
     if pid == 0:
+        os.close(ready_write)
+        if not wait_for_parent(ready_read):
+            os._exit(1)
         child(spec, libc)
-    write_cgroup(cgroup_files(spec, pid))
+    os.close(ready_read)
+    try:
+        write_cgroup(cgroup_files(spec, pid))
+    except OSError:
+        os.close(ready_write)
+        os.waitpid(pid, 0)
+        raise
+    release_child(ready_write)
     _, status = os.waitpid(pid, 0)
     return os.waitstatus_to_exitcode(status)
 

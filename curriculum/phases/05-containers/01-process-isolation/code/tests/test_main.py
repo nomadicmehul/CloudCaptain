@@ -59,6 +59,16 @@ class CgroupTests(unittest.TestCase):
                 self.assertEqual(handle.read(), "7")
             self.assertFalse(os.path.exists(os.path.join(group, "memory.swap.max")), "optional file is not created when absent")
 
+    def test_child_waits_until_parent_releases_it(self):
+        ready_read, ready_write = os.pipe()
+        main.release_child(ready_write)
+        self.assertTrue(main.wait_for_parent(ready_read))
+
+    def test_child_does_not_start_when_parent_fails_before_release(self):
+        ready_read, ready_write = os.pipe()
+        os.close(ready_write)
+        self.assertFalse(main.wait_for_parent(ready_read))
+
     def test_cgroup_files_empty_without_memory_limit(self):
         spec = main.ContainerSpec(command=["/bin/sh"])
         self.assertEqual(main.cgroup_files(spec, 1), {})

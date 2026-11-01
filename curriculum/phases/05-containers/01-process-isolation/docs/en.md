@@ -140,6 +140,21 @@ def cgroup_files(spec, pid):
 
 `memory.swap.max` is the line most tutorials forget. On a host with swap, a group that reaches `memory.max` is paged out instead of killed, and the limit turns into a suggestion; with swap set to zero the kernel has nowhere to put the pages and the OOM killer acts. Docker's `--memory` without `--memory-swap` allows swap equal to the memory limit; Kubernetes runs pods with swap disabled unless the node opts in.
 
+Order matters as much as the files. A process written into `cgroup.procs` moves alone: children it has already forked stay in the cgroup they started in. If the child `exec`s before the parent has written its PID, a quick `sh -c 'head | tail'` has already started its pipeline in the host's cgroup and the limit catches nothing. So the child blocks on a pipe until the parent says go:
+
+```python
+ready_read, ready_write = os.pipe()
+pid = os.fork()
+if pid == 0:
+    if not wait_for_parent(ready_read):   # one byte "1", or end-of-file if the parent failed
+        os._exit(1)
+    child(spec, libc)
+write_cgroup(cgroup_files(spec, pid))
+release_child(ready_write)               # now the child may exec
+```
+
+runc does the same: `runc init` waits on its init pipe while the parent puts it into the cgroups, and only then runs the container's process.
+
 Prove the limit is real by allocating more than it allows:
 
 ```bash
