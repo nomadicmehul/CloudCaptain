@@ -221,10 +221,11 @@ for wave in sorted({wave_of(r.desired) for r in comparison.resources} | {wave_of
 
 ### Step 9: the loop and its policy
 
-`reconcile()` is one pass: resolve the branch, compare, let `decide()` choose, sync, compare again, write the status.
+`reconcile()` is one pass: resolve the branch, compare, let `decide()` choose, sync, compare again, write the status. A revision that is already Synced counts as synced even when this process did not sync it, so a watcher that restarts on a healthy app calls the next commit a new revision and treats drift at the same commit as self-heal.
 
 ```python
 if comparison.sync_status == "Synced":
+    self.last_attempt = comparison.revision
     return None
 if not self.app.automated:
     self.note = "automated sync is off; run sync"

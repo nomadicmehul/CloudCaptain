@@ -1630,6 +1630,7 @@ class Reconciler:
     def decide(self, comparison: Comparison) -> Optional[str]:
         self.note = ""
         if comparison.sync_status == "Synced":
+            self.last_attempt = comparison.revision
             return None
         if not self.app.automated:
             self.note = "automated sync is off; run sync"

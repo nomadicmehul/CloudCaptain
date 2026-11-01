@@ -412,6 +412,17 @@ class ReconcilerTests(unittest.TestCase):
         self.assertEqual(cluster.get(DEPLOY_REF)["metadata"]["labels"][main.TRACKING_LABEL], "shop")
         self.assertEqual(status["hooks"], ["PreSync Job/prod-migrate"])
 
+    def test_a_watcher_that_starts_on_a_synced_app_calls_the_next_commit_a_new_revision(self):
+        root, origin, work = git_app(self)
+        first, cluster, _ = reconciler_for(self, origin, root)
+        first.reconcile()
+        restarted, _, _ = reconciler_for(self, origin, root, cluster=cluster)
+        restarted.reconcile()
+        self.assertIsNone(restarted.operation)
+        revision = main.bump_image(work)
+        status = restarted.reconcile()
+        self.assertEqual((status["revision"], status["sync"]["status"], restarted.operation["reason"]), (revision, "Synced", "new revision"))
+
     def test_a_new_commit_is_picked_up_and_only_what_changed_is_applied(self):
         root, origin, work = git_app(self)
         reconciler, cluster, events = reconciler_for(self, origin, root)
