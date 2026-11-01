@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/filesystem-mounts",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A container writes to `/data` and gets `OSError: [Errno 30] Read-only file system`. The host directory is mode 777 and the process runs as root. What do you check first?",
+      "choices": [
+        "SELinux or AppArmor labels on the directory",
+        "Whether the disk is full",
+        "The options of the mount that `/data` resolves through: `ro` is a per-mount flag set by `-v ...:ro` or `readOnlyRootFilesystem`, and no permission bit overrides it",
+        "The umask of the process"
+      ],
+      "answer": 2,
+      "explanation": "EROFS comes from the mount, not from the file. The path walk ends on a row of the mount table whose options contain ro; chmod, ownership and umask are never consulted. findmnt -T /data or mountlens which /data shows the row and the flag."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In a `/proc/self/mountinfo` row, what does a `root` field (field 4) other than `/` tell you?",
+      "choices": [
+        "The row is a bind mount: only that subtree of the source filesystem is visible at the mount point, so a path there maps to root plus the relative path on the source",
+        "The filesystem was mounted read-only",
+        "The mount belongs to another mount namespace",
+        "The filesystem is corrupted and was remounted"
+      ],
+      "answer": 0,
+      "explanation": "Field 4 is the subtree of the source filesystem this mount shows. A plain mount shows the whole filesystem, so its root is /. Docker volumes, hostPath, subPath, emptyDir and the masked /proc entries are binds, and their root is the directory or file on the source."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`df -h` shows the data volume 41% used, yet the application keeps failing with `No space left on device`. Which check settles it?",
+      "choices": [
+        "`du -sh /` to find the biggest directory",
+        "`lsblk` to confirm the disk size",
+        "`mount` to see whether the volume is read-only",
+        "`df -i` (or `mountlens usage`): a filesystem with free blocks but no free inodes refuses every new file with ENOSPC, and df -h cannot show it"
+      ],
+      "answer": 3,
+      "explanation": "statvfs reports blocks and inodes separately and creat() needs one of each. Millions of small files exhaust the inode table long before the blocks run out; deleting a few large files frees blocks and changes nothing. df -i or the IUSE% column names the resource that is actually gone."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Inside a container started with `docker run --read-only`, `mountlens overlay` shows an `upperdir` for `/`. Why is the root still read-only?",
+      "choices": [
+        "The upperdir sits on a read-only disk on the host",
+        "`--read-only` sets the `ro` flag on the overlay mount itself: the writable layer exists on the host, but this mount point refuses writes, which is exactly what makes `ro` a per-mount flag rather than a property of the layers",
+        "Docker deletes the upperdir after the container starts",
+        "overlayfs is always read-only unless `--privileged` is given"
+      ],
+      "answer": 1,
+      "explanation": "An overlay without upperdir is read-only by construction. One with upperdir and an ro mount flag is what --read-only produces: the runtime remounts the rootfs with MS_RDONLY after it is assembled. The flag lives in field 6 of the mountinfo row while the superblock options still say rw."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You mount a new disk on the host at `/mnt/disk2` while a container started with `-v /mnt:/mnt` is running. Inside the container `/mnt/disk2` is an empty directory. Why?",
+      "choices": [
+        "The container must be restarted to re-read /etc/fstab",
+        "Docker caches directory listings for the lifetime of the container",
+        "The volume row has the default `rprivate` propagation: it belongs to no peer group, so new mounts under the host's `/mnt` are not propagated. `-v /mnt:/mnt:rslave` or `mountPropagation: HostToContainer` would receive it",
+        "The new disk must be formatted with overlayfs to be visible in containers"
+      ],
+      "answer": 2,
+      "explanation": "Mount propagation is decided per row by the shared:N and master:N tags. A private row receives nothing; a slave row receives mounts from its master peer group. Runtimes default volumes to rprivate, and changing propagation requires a new container."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`mountlens shadowed` lists a tmpfs at `/mnt/scratch` hidden under a later bind mount at the same path. What is true about the tmpfs?",
+      "choices": [
+        "Its memory is still allocated and `df` still counts it, but no path reaches its files until the covering mount is unmounted",
+        "The kernel unmounted it automatically when the second mount was made",
+        "Its files were merged into the bind mount like an overlay layer",
+        "It is visible only to processes running as root"
+      ],
+      "answer": 0,
+      "explanation": "Mounting on a directory that is already a mount point stacks the new mount on top. The old row stays in the table with its data allocated; the path walk only ever reaches the topmost mount. umount of the covering mount brings the tmpfs back, which is why df and du disagree until then."
+    }
+  ]
+}

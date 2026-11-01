@@ -1,0 +1,8 @@
+[Unit]
+Description=Schema migration (runs once, before the web tier)
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'echo "migrating schema"; sleep 1; echo "migration done"'

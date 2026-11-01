@@ -1,0 +1,10 @@
+[Unit]
+Description=A oneshot that always fails (shows Restart= and the start rate limit)
+StartLimitIntervalSec=10
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo "flaky attempt"; exit 1'
+Restart=on-failure
+RestartSec=1

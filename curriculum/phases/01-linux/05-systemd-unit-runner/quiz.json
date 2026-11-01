@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/systemd-unit-runner",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`web.service` has `Requires=postgresql.service` and no `After=`. After every reboot it fails with `connection refused`, and starting it again by hand works. Why?",
+      "choices": [
+        "Requires= is ignored during boot and only honoured for manual starts",
+        "postgresql.service is not enabled, so nothing starts it at boot",
+        "Requires= pulls postgresql in but orders nothing: both start at the same moment and web connects before postgres listens; it needs After=postgresql.service as well",
+        "The unit is missing Restart=always"
+      ],
+      "answer": 2,
+      "explanation": "Requirement and ordering are two different axes. Requires= adds the dependency to the transaction and couples failures and stops; only After= makes this unit wait until the other has finished activating. By hand postgres is already up, so the race never shows."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`db.service` is `Type=simple`. `web.service` has `After=db.service`. When exactly may web start?",
+      "choices": [
+        "As soon as db's main process has been forked, whether or not db is ready to accept connections",
+        "When db has opened its listening port",
+        "When db has written its first line to the journal",
+        "When db's ExecStartPost has finished"
+      ],
+      "answer": 0,
+      "explanation": "For Type=simple the manager considers the unit started right after the fork. Readiness needs Type=notify (READY=1 on $NOTIFY_SOCKET), or a oneshot that does the work before it exits, so After= on it means after the work."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A unit with `Restart=on-failure` is killed with `kill -TERM <main pid>`. What does systemd do?",
+      "choices": [
+        "Restarts it after RestartSec",
+        "Marks it failed (Result: signal) and leaves it down",
+        "Runs ExecStopPost and restarts it exactly once",
+        "Nothing: death by SIGTERM, SIGHUP, SIGINT or SIGPIPE is a clean exit, so the unit ends inactive (dead); only Restart=always would bring it back"
+      ],
+      "answer": 3,
+      "explanation": "The clean-exit definition is exit status 0 (or a SuccessExitStatus=) or one of those four signals. on-failure restarts only on unclean exits, unclean signals, timeouts and watchdog hits; always restarts on every end except a stop requested through the manager."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`systemctl status api` shows `failed (Result: start-limit-hit)` and the journal has five `Scheduled restart job` lines within four seconds. What happened and what is the first step?",
+      "choices": [
+        "The disk is full; free space and start the unit",
+        "More than StartLimitBurst starts happened inside StartLimitIntervalSec, so the manager stopped restarting; read the exit code of the attempts in the journal, fix that cause, then systemctl reset-failed and start",
+        "RestartSec is too long; shorten it so the unit recovers faster",
+        "Raise StartLimitBurst so the unit keeps trying"
+      ],
+      "answer": 1,
+      "explanation": "start-limit-hit is the rate limit, not the bug. The defaults are 5 starts in 10 seconds. The attempts' exit codes (status=1/FAILURE, 203/EXEC, a missing EnvironmentFile) name the real failure; the limit only decided when to stop looping."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "`systemctl stop api` takes 90 seconds on every deploy and the journal says `State 'stop-sigterm' timed out. Killing.` Which two keys describe the contract, and which side broke it?",
+      "choices": [
+        "Restart= and RestartSec=: systemd restarted the service while stopping it",
+        "After= and Requires=: a dependency held the stop job back",
+        "KillSignal= (SIGTERM by default) and TimeoutStopSec= (90 s by default): the application ignored SIGTERM, the PID 1 lesson bug, so the manager escalated to SIGKILL and recorded Result: timeout",
+        "ExecStop= is mandatory and was missing from the unit"
+      ],
+      "answer": 2,
+      "explanation": "Stop is SIGTERM to the whole control group, a bounded wait, then SIGKILL. A process that handles SIGTERM stops in milliseconds and the unit ends inactive (dead); one that ignores it costs the full timeout and ends failed (Result: timeout). Shortening TimeoutStopSec hides the symptom; the fix is the signal handler."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "You run `systemctl stop db.service`. `web.service` (`Requires=db.service`, `After=db.service`) is running, and so is `cache.service` (`Wants=db.service`). What happens?",
+      "choices": [
+        "web.service is stopped first, then db.service; cache.service keeps running because Wants= does not propagate stops",
+        "Only db.service stops; stopping a unit never touches other units",
+        "All three stop, in the order they were started",
+        "web.service is restarted by its Restart=on-failure policy"
+      ],
+      "answer": 0,
+      "explanation": "Requires= means an explicit stop of the dependency stops the dependent too, and ordering runs in reverse on the way down, so web goes before db. Wants= only pulls in on start. A stop requested through the manager also suspends the restart policy, the same rule your PID 1 supervisor had."
+    }
+  ]
+}

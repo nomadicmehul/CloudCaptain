@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/permissions-capabilities",
+  "title": "Root Is a Bundle of 41 Bits: Permissions and Capabilities",
+  "short": "Permissions & Caps",
+  "motto": "uid 0 is just a number: what a process may do is nine permission bits on each file plus 41 capability bits on the process, all readable.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "linux/pid1-supervisor"
+  ],
+  "tools": [
+    "capsh",
+    "getpcaps",
+    "setcap",
+    "docker",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/linux/fundamentals",
+    "/docs/tools/linux/security",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/security"
+  ],
+  "outputs": [
+    "skill-least-privilege-container.md",
+    "prompt-explain-permission-denied.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

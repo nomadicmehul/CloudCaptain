@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/permissions-capabilities",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A container runs as uid 0 with `--cap-drop ALL`. What can it do with a file it does not own that has mode 0600?",
+      "choices": [
+        "Everything: it is root",
+        "Read it but not write it",
+        "Nothing: without CAP_DAC_OVERRIDE the permission bits apply to uid 0 exactly as to any other user, and the other class has no bits",
+        "Only if the file is on a tmpfs"
+      ],
+      "answer": 2,
+      "explanation": "The sentence 'root can read any file' is one capability bit, CAP_DAC_OVERRIDE. Drop it and uid 0 goes through the same class selection and bit check as everyone else: not the owner, not in the group, other bits ---, EACCES."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "alice owns a file with mode 0070 (`----rwx---`) and is also a member of its group. Can she read it?",
+      "choices": [
+        "Yes, the group bits apply because she is in the group",
+        "No: her uid matches the owner, so only the owner triple (---) is consulted; the group bits are never looked at",
+        "Yes, after she runs newgrp",
+        "Only root can read a file with that mode"
+      ],
+      "answer": 1,
+      "explanation": "The kernel picks exactly one class: owner if the uid matches, else group if the gid is among the process's groups, else other. A match stops the search, so an owner can be denied what the group is allowed. chmod 0070 is a classic way to lock the owner out."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`docker run --user 1000 --cap-add NET_BIND_SERVICE` still cannot bind to port 80. Why?",
+      "choices": [
+        "NET_BIND_SERVICE only covers ports above 1024",
+        "Port 80 is already in use on the host",
+        "--cap-add requires --privileged as well",
+        "The bit is only in the bounding set: a non-root process gets effective capabilities only from file capabilities or the ambient set, and Docker sets neither"
+      ],
+      "answer": 3,
+      "explanation": "On execve a non-root process's new permitted set is the binary's file capabilities masked by the bounding set, plus the ambient set. Docker puts --cap-add bits into the bounding set only for non-root users, so CapEff stays 0. Use setcap on the binary, the ip_unprivileged_port_start sysctl, or listen above 1024."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "What does `--security-opt no-new-privileges` (Kubernetes `allowPrivilegeEscalation: false`) change?",
+      "choices": [
+        "It drops every capability from the effective set",
+        "execve can no longer add privileges: setuid bits and file capabilities are ignored, so a process can only lose privilege from here on",
+        "It makes the root filesystem read-only",
+        "It enables the default seccomp profile"
+      ],
+      "answer": 1,
+      "explanation": "no_new_privs is a per-process flag inherited by children and never cleared. With it set, execve of a setuid binary or a file with capabilities runs with the caller's privileges. /proc/PID/status shows it as NoNewPrivs: 1. It does not touch the capability sets or seccomp."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You decode CapEff `000001ffffffffff` for PID 1 inside a container. What are you looking at?",
+      "choices": [
+        "The Docker default set",
+        "A --cap-drop ALL container",
+        "All 41 capabilities: --privileged (or a host root shell), and --privileged also adds every host device and removes the seccomp and AppArmor profiles",
+        "A kernel bug: the mask should be 8 hex digits"
+      ],
+      "answer": 2,
+      "explanation": "2^41 - 1 is 0x1ffffffffff: every bit from CAP_CHOWN (0) to CAP_CHECKPOINT_RESTORE (40). Docker's default is 0xa80425fb (14 bits). --privileged sets all 41, mounts /dev, and disables seccomp and AppArmor, which is why it is never a fix for a missing capability."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A pod under the restricted Pod Security Standard must listen on port 80 as uid 1000. Which is the least-privilege way?",
+      "choices": [
+        "privileged: true",
+        "runAsUser: 0 with capabilities.add: [NET_BIND_SERVICE]",
+        "Listen on 8080 and let the Service map port 80, or set the safe sysctl net.ipv4.ip_unprivileged_port_start=0 (or a file capability on the binary); keep drop: [ALL]",
+        "hostNetwork: true"
+      ],
+      "answer": 2,
+      "explanation": "The restricted profile requires runAsNonRoot, drop ALL (NET_BIND_SERVICE is the only add it tolerates) and allowPrivilegeEscalation: false, which also blocks file capabilities. Adding the capability to a non-root container gives it nothing effective anyway. A high port behind a Service or the unprivileged-port sysctl needs no capability at all."
+    }
+  ]
+}

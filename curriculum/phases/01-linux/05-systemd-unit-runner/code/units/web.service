@@ -1,0 +1,18 @@
+[Unit]
+Description=Demo web API
+Requires=db.service
+Wants=migrate.service
+After=db.service migrate.service network.target
+
+[Service]
+Type=simple
+Environment="GREETING=hello from web" PORT=8080
+EnvironmentFile=-/etc/default/cc-demo-web
+ExecStart=/bin/sh -c 'echo "$GREETING on port $PORT"; exec sleep 300'
+ExecStopPost=/bin/sh -c 'echo "web stopped: $SERVICE_RESULT $EXIT_CODE $EXIT_STATUS"'
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target

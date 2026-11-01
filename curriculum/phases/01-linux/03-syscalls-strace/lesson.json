@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/syscalls-strace",
+  "title": "Every Error Message Is a System Call That Failed",
+  "short": "Syscalls & strace",
+  "motto": "The kernel answers every request with a number; strace shows the request, the answer and the order, so the error message explains itself.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "linux/file-descriptors"
+  ],
+  "tools": [
+    "strace",
+    "ltrace",
+    "perf",
+    "bpftrace",
+    "docker",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/linux/fundamentals",
+    "/docs/tools/linux/administration",
+    "/docs/tools/linux/security",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/security"
+  ],
+  "outputs": [
+    "skill-strace-triage.md",
+    "prompt-explain-strace.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}

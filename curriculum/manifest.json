@@ -136,6 +136,13 @@
       "lessons": [
         "setup/lab-doctor",
         "linux/pid1-supervisor",
+        "linux/file-descriptors",
+        "linux/syscalls-strace",
+        "linux/permissions-capabilities",
+        "linux/systemd-unit-runner",
+        "linux/cgroups-by-hand",
+        "linux/filesystem-mounts",
+        "linux/performance-basics",
         "containers/process-isolation",
         "containers/image-layers",
         "containers/registry-pull",

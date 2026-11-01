@@ -10,7 +10,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 | # | Phase | Lessons live | Status |
 |---|---|---|---|
 | 00 | Setup & Lab | 1 | in progress |
-| 01 | Linux & Systems | 1 | in progress |
+| 01 | Linux & Systems | 8 | in progress |
 | 02 | Networking | 0 | planned |
 | 03 | Git & Collaboration | 0 | planned |
 | 04 | Scripting & Automation | 0 | planned |

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "linux/cgroups-by-hand",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A pod's dashboard shows 40% of its CPU limit in use, yet p99 latency triples at peak. Its cgroup's `cpu.stat` reads `nr_periods 6000` and `nr_throttled 4200`. What is happening?",
+      "choices": [
+        "The node is out of CPU and needs more capacity",
+        "The pod needs more replicas to spread the load",
+        "In 70% of its 100 ms periods the pod spends its cpu.max quota early and waits for the next period; the 40% average hides the bursts that hit the ceiling",
+        "cgroup accounting is lagging and the dashboard is wrong"
+      ],
+      "answer": 2,
+      "explanation": "cpu.max is quota per period, not an average. A group that bursts spends its quota in the first part of each period and is throttled for the rest, which shows up as latency while utilisation looks moderate. nr_throttled over nr_periods is the share of periods that hit the wall."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "You run `mkdir /sys/fs/cgroup/demo` and there is no `cpu.max` inside the new directory. Why?",
+      "choices": [
+        "The parent did not write +cpu into its cgroup.subtree_control, so the cpu controller was never handed down to children",
+        "Only root can see controller files",
+        "cpu.max appears once a process is written into cgroup.procs",
+        "This kernel has no CPU controller at all"
+      ],
+      "answer": 0,
+      "explanation": "Controllers are enabled downwards. cgroup.controllers lists what a group could pass on; cgroup.subtree_control lists what it actually gives its children. A child only gets cpu.max if its parent has +cpu in subtree_control, which is what cgtool's plan writes for you."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`cgtool run` writes the PID into cgroup.procs from inside the child, between fork and exec. Why not from the parent after fork, as the Process Isolation lesson did?",
+      "choices": [
+        "Writing from the child is faster",
+        "The parent is not allowed to write another process's PID",
+        "cgroup.procs only accepts the PID of the writing process",
+        "The real program may start allocating before the parent gets around to moving it, and those pages stay charged to the old group; moving before exec closes that window"
+      ],
+      "answer": 3,
+      "explanation": "Memory charges do not migrate with a process. Anything the program allocates before it is moved is accounted to the group it was in at the time. Doing the move between fork and exec, while the child is still the small interpreter stub, means the whole program is charged where you intended."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A container exits with code 137. Which file tells you whether the kernel's OOM killer did it?",
+      "choices": [
+        "cpu.stat: a large throttled_usec",
+        "memory.events in the container's cgroup: if oom_kill incremented, the kernel killed a process for exceeding memory.max; if it did not, something else sent SIGKILL",
+        "pids.max, because 137 means the process table was full",
+        "/proc/PID/status of the dead process"
+      ],
+      "answer": 1,
+      "explanation": "137 is 128 plus SIGKILL and says nothing about who sent it. The OOM killer leaves a counter behind in memory.events (and Docker copies it into State.OOMKilled). A 137 with oom_kill unchanged is a kill from outside: a grace period expiry, a kill -9, a node eviction."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A Kubernetes container has requests.cpu 250m and limits.cpu 500m. Which cgroup files change, and what does each one do?",
+      "choices": [
+        "Only cpu.max; requests are a scheduler hint and never reach the kernel",
+        "cpu.max gets 25000 100000 for the request and cpu.weight 50 for the limit",
+        "cpu.weight gets a value derived from the request and only matters when CPUs are contended; cpu.max gets 50000 100000 from the limit and throttles whether or not the node is busy",
+        "memory.max and cpu.max both change because requests and limits are stored together"
+      ],
+      "answer": 2,
+      "explanation": "Requests become shares, which runc converts to cpu.weight, a relative priority that does nothing on an idle machine. Limits become cpu.max, a hard quota per period that throttles even when every other CPU is idle. That asymmetry is why removing a CPU limit can fix latency without changing scheduling."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Writing +memory into a non-root group's cgroup.subtree_control fails with EBUSY. What is the kernel objecting to?",
+      "choices": [
+        "The group holds processes; below the root a group cannot both contain processes and hand controllers to children, so the processes must move into a leaf first",
+        "The memory controller is not compiled into this kernel",
+        "Only systemd is allowed to write subtree_control",
+        "The group already has memory.max set and the controller cannot be re-enabled"
+      ],
+      "answer": 0,
+      "explanation": "This is the no-internal-processes rule. It keeps accounting unambiguous: either a group is a leaf with processes, or it is a branch that distributes controllers. Runtimes always run containers in fresh leaf groups for exactly this reason, and cgtool refuses the plan before the kernel has to."
+    }
+  ]
+}

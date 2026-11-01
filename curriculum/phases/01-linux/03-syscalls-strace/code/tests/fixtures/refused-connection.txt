@@ -1,0 +1,20 @@
+14:03:10.498000 execve("/usr/bin/python3", ["python3", "worker.py"], 0x7ffe1c8f0e30 /* 19 vars */) = 0 <0.000388>
+14:03:10.499500 socket(AF_INET, SOCK_DGRAM|SOCK_CLOEXEC|SOCK_NONBLOCK, IPPROTO_IP) = 3<UDP:[398811]> <0.000019>
+14:03:10.499600 connect(3<UDP:[398811]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000024>
+14:03:10.499700 sendto(3<UDP:[398811]>, "\254\23\1\0\0\1\0\0\0\0\0\0\2db\10internal\0\0\1\0\1", 29, MSG_NOSIGNAL, NULL, 0) = 29 <0.000031>
+14:03:10.499900 recvfrom(3<UDP:[398811]>, "\254\23\201\200\0\1\0\1\0\0\0\0\2db\10internal\0\0\1\0\1\300\f\0\1\0\1\0\0\0<\0\4\n\0\0\5", 2048, 0, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, [28->16]) = 45 <0.000142>
+14:03:10.500100 socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, IPPROTO_TCP) = 3<TCP:[412233]> <0.000021>
+14:03:10.500300 setsockopt(3<TCP:[412233]>, SOL_TCP, TCP_NODELAY, [1], 4) = 0 <0.000006>
+14:03:10.500400 connect(3<TCP:[412233]>, {sa_family=AF_INET, sin_port=htons(5432), sin_addr=inet_addr("10.0.0.5")}, 16) = -1 ECONNREFUSED (Connection refused) <0.000231>
+14:03:10.500800 write(2</dev/pts/0>, "connect to db.internal (10.0.0.5:5432) failed, attempt 1/3: Connection refused\n", 80) = 80 <0.000015>
+14:03:10.500900 clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=1, tv_nsec=0}, NULL) = 0 <1.001041>
+14:03:11.502000 socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, IPPROTO_TCP) = 3<TCP:[412240]> <0.000018>
+14:03:11.502200 connect(3<TCP:[412240]>, {sa_family=AF_INET, sin_port=htons(5432), sin_addr=inet_addr("10.0.0.5")}, 16) = -1 ECONNREFUSED (Connection refused) <0.000198>
+14:03:11.502500 write(2</dev/pts/0>, "connect to db.internal (10.0.0.5:5432) failed, attempt 2/3: Connection refused\n", 80) = 80 <0.000012>
+14:03:11.502600 clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=1, tv_nsec=0}, NULL) = 0 <1.001203>
+14:03:12.504000 socket(AF_INET, SOCK_STREAM|SOCK_CLOEXEC, IPPROTO_TCP) = 3<TCP:[412251]> <0.000017>
+14:03:12.504200 connect(3<TCP:[412251]>, {sa_family=AF_INET, sin_port=htons(5432), sin_addr=inet_addr("10.0.0.5")}, 16) = -1 ECONNREFUSED (Connection refused) <0.000205>
+14:03:12.504500 write(2</dev/pts/0>, "connect to db.internal (10.0.0.5:5432) failed, attempt 3/3: Connection refused\n", 80) = 80 <0.000012>
+14:03:12.504700 write(2</dev/pts/0>, "fatal: database unreachable, giving up\n", 39) = 39 <0.000010>
+14:03:12.505000 exit_group(2)           = ?
+14:03:12.505200 +++ exited with 2 +++

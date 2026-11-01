@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "linux/file-descriptors",
+  "title": "File Descriptors: Too Many Open Files Is a Leak, Not a Limit",
+  "short": "File Descriptors",
+  "motto": "Every socket, pipe and log file is a number in one small table; when it fills, the fix is in the process, not in ulimit.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "setup/lab-doctor"
+  ],
+  "tools": [
+    "lsof",
+    "prlimit",
+    "ss",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/linux/fundamentals",
+    "/docs/tools/linux/administration",
+    "/docs/tools/linux/networking",
+    "/docs/tools/docker/security-production"
+  ],
+  "outputs": [
+    "skill-fd-leak-triage.md",
+    "prompt-explain-lsof.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-01"
+}
