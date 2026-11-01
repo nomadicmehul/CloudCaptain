@@ -69,6 +69,14 @@ class CgroupTests(unittest.TestCase):
         os.close(ready_write)
         self.assertFalse(main.wait_for_parent(ready_read))
 
+    def test_a_signal_death_is_reported_like_a_shell_does(self):
+        self.assertEqual(main.shell_exit_code(9), 137)
+        self.assertEqual(main.shell_exit_code(15), 143)
+
+    def test_a_normal_exit_keeps_its_code(self):
+        self.assertEqual(main.shell_exit_code(3 << 8), 3)
+        self.assertEqual(main.shell_exit_code(0), 0)
+
     def test_cgroup_files_empty_without_memory_limit(self):
         spec = main.ContainerSpec(command=["/bin/sh"])
         self.assertEqual(main.cgroup_files(spec, 1), {})

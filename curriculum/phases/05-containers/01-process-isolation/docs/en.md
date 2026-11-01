@@ -164,7 +164,7 @@ echo "exit code: $?"            # 137 = 128 + SIGKILL, the OOM killer
 cat /sys/fs/cgroup/demo/memory.events   # oom_kill 1
 ```
 
-That exit code 137 is the one from The Problem.
+That exit code 137 is the one from The Problem. `main.py` reports a child killed by a signal the way a shell does, 128 plus the signal number, so you get 137 whether the OOM killer picks the `tail` inside the pipeline or the shell that is PID 1 of the namespace.
 
 ### Step 5: dry run anywhere
 

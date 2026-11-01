@@ -160,6 +160,11 @@ def child(spec: ContainerSpec, libc: ctypes.CDLL) -> None:
     os.execvp(spec.command[0], spec.command)
 
 
+def shell_exit_code(status: int) -> int:
+    code = os.waitstatus_to_exitcode(status)
+    return 128 - code if code < 0 else code
+
+
 def run(spec: ContainerSpec) -> int:
     if sys.platform != "linux":
         raise SystemExit("run needs Linux; use --explain on other systems")
@@ -185,7 +190,7 @@ def run(spec: ContainerSpec) -> int:
         raise
     release_child(ready_write)
     _, status = os.waitpid(pid, 0)
-    return os.waitstatus_to_exitcode(status)
+    return shell_exit_code(status)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
