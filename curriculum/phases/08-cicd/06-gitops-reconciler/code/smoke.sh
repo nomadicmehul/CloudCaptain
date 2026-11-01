@@ -391,7 +391,15 @@ PY
 ARGO_APPLIED=1
 k create namespace argocd >/dev/null || fail "create namespace argocd"
 k -n argocd apply --server-side --force-conflicts -f "$WORK/argocd-core.yaml" > "$WORK/argocd-apply.txt" 2>&1 || fail "apply Argo CD: $(tail -20 "$WORK/argocd-apply.txt")"
-k wait --for=condition=Established --timeout=60s crd/applications.argoproj.io crd/appprojects.argoproj.io >/dev/null || fail "Argo CD CRDs not Established"
+for crd in applications.argoproj.io appprojects.argoproj.io; do
+  ESTABLISHED=""
+  for _ in $(seq 1 60); do
+    ESTABLISHED="$(k get crd "$crd" -o jsonpath='{.status.conditions[?(@.type=="Established")].status}' 2>/dev/null || true)"
+    [[ "$ESTABLISHED" == "True" ]] && break
+    sleep 1
+  done
+  [[ "$ESTABLISHED" == "True" ]] || fail "Argo CD CRD $crd not Established after 60s: $(k get crd "$crd" -o yaml 2>&1 | tail -20)"
+done
 for workload in deployment/argocd-redis deployment/argocd-repo-server statefulset/argocd-application-controller; do
   k -n argocd rollout status "$workload" --timeout=300s > "$WORK/rollout.txt" 2>&1 || fail "$workload did not become ready: $(cat "$WORK/rollout.txt") $(k -n argocd get pods -o wide 2>&1)"
 done
