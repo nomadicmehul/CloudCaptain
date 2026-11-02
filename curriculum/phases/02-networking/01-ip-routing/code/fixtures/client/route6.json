@@ -1,0 +1,9 @@
+[
+  {"dst": "2001:db8:1::/64", "dev": "c0", "protocol": "kernel", "metric": 256, "flags": [], "pref": "medium"},
+  {"dst": "fe80::/64", "dev": "c0", "protocol": "kernel", "metric": 256, "flags": [], "pref": "medium"},
+  {"dst": "default", "gateway": "2001:db8:1::1", "dev": "c0", "metric": 1024, "flags": [], "pref": "medium"},
+  {"type": "local", "dst": "::1", "dev": "lo", "table": "local", "protocol": "kernel", "metric": 0, "flags": [], "pref": "medium"},
+  {"type": "local", "dst": "2001:db8:1::10", "dev": "c0", "table": "local", "protocol": "kernel", "metric": 0, "flags": [], "pref": "medium"},
+  {"type": "local", "dst": "fe80::a8c1:abff:fe12:3401", "dev": "c0", "table": "local", "protocol": "kernel", "metric": 0, "flags": [], "pref": "medium"},
+  {"type": "multicast", "dst": "ff00::/8", "dev": "c0", "table": "local", "protocol": "kernel", "metric": 256, "flags": [], "pref": "medium"}
+]

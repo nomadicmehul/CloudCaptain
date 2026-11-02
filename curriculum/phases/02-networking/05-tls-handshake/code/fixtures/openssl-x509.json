@@ -1,0 +1,115 @@
+{
+  "recorded_with": "OpenSSL 4.1.0 23 Oct 2026 (Library: OpenSSL 4.1.0 23 Oct 2026)",
+  "certificates": [
+    {
+      "file": "root.pem",
+      "fields": [
+        "serial=1000",
+        "sha256 Fingerprint=70:F4:B1:C7:F6:8F:1E:E8:46:0D:52:9B:2D:FE:47:28:ED:25:9F:19:D2:C5:3D:12:48:6A:2F:78:40:0A:18:7C",
+        "subject=CN=CloudCaptain Lab Root,O=CloudCaptain Lab,C=DE",
+        "issuer=CN=CloudCaptain Lab Root,O=CloudCaptain Lab,C=DE",
+        "notBefore=Jan  1 00:00:00 2026 GMT",
+        "notAfter=Jan  1 00:00:00 2046 GMT"
+      ],
+      "extensions": [
+        "X509v3 Basic Constraints: critical",
+        "    CA:TRUE",
+        "X509v3 Key Usage: critical",
+        "    Certificate Sign, CRL Sign"
+      ]
+    },
+    {
+      "file": "inter.pem",
+      "fields": [
+        "serial=1001",
+        "sha256 Fingerprint=DF:7F:96:AE:B6:8B:D6:02:2B:23:FD:85:A3:CD:D7:54:1C:C7:AC:D5:A0:64:E0:8F:28:F3:C8:21:6F:A6:A6:B4",
+        "subject=CN=CloudCaptain Lab Intermediate,O=CloudCaptain Lab,C=DE",
+        "issuer=CN=CloudCaptain Lab Root,O=CloudCaptain Lab,C=DE",
+        "notBefore=Jan  1 00:00:00 2026 GMT",
+        "notAfter=Jan  1 00:00:00 2036 GMT"
+      ],
+      "extensions": [
+        "X509v3 Basic Constraints: critical",
+        "    CA:TRUE, pathlen:0",
+        "X509v3 Key Usage: critical",
+        "    Certificate Sign, CRL Sign"
+      ]
+    },
+    {
+      "file": "leaf.pem",
+      "fields": [
+        "serial=1002",
+        "sha256 Fingerprint=21:A6:08:8B:F9:94:A9:42:82:D5:1B:C3:A0:5F:1B:0D:F1:91:6B:4B:5D:5C:9E:8F:3C:A7:73:3F:A1:F0:1B:C3",
+        "subject=CN=app.cc.test",
+        "issuer=CN=CloudCaptain Lab Intermediate,O=CloudCaptain Lab,C=DE",
+        "notBefore=Jan  1 00:00:00 2026 GMT",
+        "notAfter=Jan  1 00:00:00 2027 GMT"
+      ],
+      "extensions": [
+        "X509v3 Basic Constraints: critical",
+        "    CA:FALSE",
+        "X509v3 Key Usage: critical",
+        "    Digital Signature, Key Encipherment",
+        "X509v3 Extended Key Usage: ",
+        "    TLS Web Server Authentication",
+        "X509v3 Subject Alternative Name: ",
+        "    DNS:app.cc.test, DNS:*.api.cc.test, IP Address:127.0.0.1"
+      ]
+    },
+    {
+      "file": "ec-inter.pem",
+      "fields": [
+        "serial=100D",
+        "sha256 Fingerprint=FC:96:04:FF:10:52:9D:FA:4C:E4:DF:98:97:B3:74:42:4B:F4:B4:85:C9:6E:75:16:47:08:63:0A:A8:DC:58:F9",
+        "subject=CN=CloudCaptain Lab ECC Intermediate,O=CloudCaptain Lab,C=DE",
+        "issuer=CN=CloudCaptain Lab Root,O=CloudCaptain Lab,C=DE",
+        "notBefore=Jan  1 00:00:00 2026 GMT",
+        "notAfter=Jan  1 00:00:00 2036 GMT"
+      ],
+      "extensions": [
+        "X509v3 Basic Constraints: critical",
+        "    CA:TRUE, pathlen:0",
+        "X509v3 Key Usage: critical",
+        "    Certificate Sign, CRL Sign"
+      ]
+    },
+    {
+      "file": "ec-leaf.pem",
+      "fields": [
+        "serial=100E",
+        "sha256 Fingerprint=0A:30:38:E2:03:2B:39:A8:A0:87:20:E8:E6:0D:E7:51:85:A0:DB:93:C3:B7:65:BE:79:E8:5F:9F:1E:22:5F:C2",
+        "subject=CN=ec.cc.test",
+        "issuer=CN=CloudCaptain Lab ECC Intermediate,O=CloudCaptain Lab,C=DE",
+        "notBefore=Jan  1 00:00:00 2026 GMT",
+        "notAfter=Jan  1 00:00:00 2027 GMT"
+      ],
+      "extensions": [
+        "X509v3 Basic Constraints: critical",
+        "    CA:FALSE",
+        "X509v3 Key Usage: critical",
+        "    Digital Signature, Key Encipherment",
+        "X509v3 Extended Key Usage: ",
+        "    TLS Web Server Authentication",
+        "X509v3 Subject Alternative Name: ",
+        "    DNS:ec.cc.test"
+      ]
+    },
+    {
+      "file": "evil-root.pem",
+      "fields": [
+        "serial=1006",
+        "sha256 Fingerprint=C6:CF:B6:10:DA:3B:C9:6E:6B:19:D0:19:41:6C:CD:08:A0:D2:29:D2:04:13:61:E4:D4:6A:D6:20:67:C2:81:00",
+        "subject=CN=Untrusted Root,O=Intercepting Proxy",
+        "issuer=CN=Untrusted Root,O=Intercepting Proxy",
+        "notBefore=Jan  1 00:00:00 2026 GMT",
+        "notAfter=Jan  1 00:00:00 2046 GMT"
+      ],
+      "extensions": [
+        "X509v3 Basic Constraints: critical",
+        "    CA:TRUE",
+        "X509v3 Key Usage: critical",
+        "    Certificate Sign, CRL Sign"
+      ]
+    }
+  ]
+}

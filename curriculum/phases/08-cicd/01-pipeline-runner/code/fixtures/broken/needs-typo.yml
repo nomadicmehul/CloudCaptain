@@ -1,0 +1,11 @@
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo build
+  deploy:
+    needs: biuld
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo deploy

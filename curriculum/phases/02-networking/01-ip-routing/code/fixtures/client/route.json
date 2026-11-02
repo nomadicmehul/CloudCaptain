@@ -1,0 +1,21 @@
+[
+  {"dst": "default", "gateway": "10.0.1.1", "dev": "c0", "table": "100", "flags": []},
+  {"dst": "10.0.3.0/24", "dev": "c-dum", "table": "100", "scope": "link", "flags": []},
+  {"dst": "default", "gateway": "10.0.1.1", "dev": "c0", "flags": []},
+  {"dst": "10.0.0.0/16", "gateway": "10.0.1.1", "dev": "c0", "metric": 50, "flags": []},
+  {"dst": "10.0.0.0/16", "dev": "c-dum", "scope": "link", "metric": 100, "flags": []},
+  {"dst": "10.0.1.0/24", "dev": "c0", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.1.10", "flags": []},
+  {"dst": "10.0.3.0/24", "gateway": "10.0.1.1", "dev": "c0", "prefsrc": "10.0.1.20", "flags": []},
+  {"dst": "10.0.5.0/24", "gateway": "10.0.1.250", "dev": "c0", "flags": []},
+  {"type": "unreachable", "dst": "10.66.0.0/16", "flags": []},
+  {"type": "blackhole", "dst": "10.99.0.0/16", "flags": []},
+  {"dst": "172.16.0.0/24", "dev": "c-dum", "protocol": "kernel", "scope": "link", "prefsrc": "172.16.0.1", "flags": []},
+  {"type": "local", "dst": "10.0.1.10", "dev": "c0", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "10.0.1.10", "flags": []},
+  {"type": "local", "dst": "10.0.1.20", "dev": "c0", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "10.0.1.10", "flags": []},
+  {"type": "broadcast", "dst": "10.0.1.255", "dev": "c0", "table": "local", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.1.10", "flags": []},
+  {"type": "local", "dst": "127.0.0.0/8", "dev": "lo", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "127.0.0.1", "flags": []},
+  {"type": "local", "dst": "127.0.0.1", "dev": "lo", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "127.0.0.1", "flags": []},
+  {"type": "broadcast", "dst": "127.255.255.255", "dev": "lo", "table": "local", "protocol": "kernel", "scope": "link", "prefsrc": "127.0.0.1", "flags": []},
+  {"type": "local", "dst": "172.16.0.1", "dev": "c-dum", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "172.16.0.1", "flags": []},
+  {"type": "broadcast", "dst": "172.16.0.255", "dev": "c-dum", "table": "local", "protocol": "kernel", "scope": "link", "prefsrc": "172.16.0.1", "flags": []}
+]

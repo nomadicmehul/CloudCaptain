@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/ip-routing",
+  "title": "A Route Is a Longest-Prefix Match Plus a Rule Table",
+  "short": "IP Routing",
+  "motto": "The kernel routes in two steps: policy rules pick a table, the table picks the longest matching prefix. Read both, guess neither.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "setup/lab-doctor"
+  ],
+  "tools": [
+    "ip",
+    "ping",
+    "tracepath",
+    "traceroute",
+    "sysctl",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/linux/networking",
+    "/docs/tools/networking/fundamentals",
+    "/docs/tools/networking/routing-switching",
+    "/docs/tools/networking/cheatsheet",
+    "/docs/cloud/aws/compute-networking"
+  ],
+  "outputs": [
+    "skill-routing-triage.md",
+    "prompt-explain-ip-route-get.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

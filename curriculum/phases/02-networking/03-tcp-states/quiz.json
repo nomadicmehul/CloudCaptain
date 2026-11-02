@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/tcp-states",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`ss -tanp` on an API host shows 900 sockets in `CLOSE-WAIT`, all owned by the API process, and the count grows by about ten a minute. What is happening?",
+      "choices": [
+        "A firewall between the hosts is dropping FIN segments",
+        "The peers closed their side and the API never called close() on those sockets: a code path leaks them",
+        "The kernel is waiting for `net.ipv4.tcp_fin_timeout` to expire on those sockets",
+        "The clients are retransmitting because the network is lossy"
+      ],
+      "answer": 1,
+      "explanation": "CLOSE_WAIT means the FIN arrived and was acknowledged; the only way out is the local application calling close(). No kernel timer ends the state, so a growing count is a leak in the code, usually an error path or an early return without close(), and a restart only resets it."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Clients report that connect() to a service times out after 2 seconds. On the server the process is running and `ss -lnt` shows its listener with Recv-Q 129 and Send-Q 128. What explains the timeouts?",
+      "choices": [
+        "The server has run out of ephemeral ports",
+        "`net.core.somaxconn` is set too high for the kernel",
+        "The server is answering the SYNs with RST",
+        "The accept queue is full (Recv-Q above the backlog in Send-Q), so the kernel drops new SYNs without answering; the application is not calling accept() fast enough"
+      ],
+      "answer": 3,
+      "explanation": "For a listener, ss prints the accept queue length as Recv-Q and the backlog as Send-Q. The queue holds backlog + 1 finished connections; once it is full Linux drops new SYNs silently and counts them in TcpExtListenOverflows, so clients see connect timeouts. A RST would give ECONNREFUSED immediately, and servers do not use ephemeral ports for accepted connections."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A client sets a 5-second read timeout on its socket and no total timeout. The server sends one byte every 4 seconds for ten minutes. What happens?",
+      "choices": [
+        "The call fails after 5 seconds",
+        "The kernel aborts the connection after `tcp_retries2`, about 15 minutes",
+        "The call takes ten minutes: each byte restarts the read timeout, and only a deadline for the whole exchange would bound it",
+        "TCP keepalive closes the connection after two hours"
+      ],
+      "answer": 2,
+      "explanation": "A read timeout limits each single wait for data, and every arriving byte starts a new wait. The data is acknowledged, so tcp_retries2 never applies, and keepalive only probes idle connections. A total timeout (curl's --max-time, tcpwatch's --max-time) is the only bound."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "New connections from an app host to its database fail with `EADDRNOTAVAIL` (Cannot assign requested address). `ss -s` shows about 28,000 TIME-WAIT sockets, all to 10.0.0.9:5432. What is the cause and the right fix?",
+      "choices": [
+        "Every connection to that destination needs its own local port; opening and closing a connection per query leaves each port in TIME_WAIT for 60 s and uses up `ip_local_port_range`, so reuse connections with a pool",
+        "The database rejects new clients; raise its connection limit",
+        "TIME_WAIT sockets are leaked descriptors; restart the application",
+        "Raise `net.core.somaxconn` on the app host"
+      ],
+      "answer": 0,
+      "explanation": "The 4-tuple must be unique, so one source address has at most the size of ip_local_port_range (28,232 by default) connections to one destination, TIME_WAIT included. The side that closes first holds TIME_WAIT, here the app. Pooling removes the churn; widening the range or adding source addresses only moves the ceiling, and somaxconn is about listeners."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A pooled database connection sits idle for ten minutes behind a firewall that forgets flows idle for five minutes and silently drops packets of flows it does not know. The next query on it hangs for about fifteen minutes before failing. Why, and what prevents it?",
+      "choices": [
+        "The DNS record of the database expired; lower its TTL",
+        "The database closed the connection with a FIN that the client ignored; set SO_REUSEADDR",
+        "The firewall dropped the query's segments, so the kernel retransmitted until `tcp_retries2` gave up; keepalive with an idle time under five minutes, or a pool that retires idle connections sooner, keeps the flow alive or never reuses a dead one",
+        "The accept queue on the database is full; raise its backlog"
+      ],
+      "answer": 2,
+      "explanation": "Both hosts still think the connection is ESTABLISHED. The query's data is never acknowledged, so the retransmission timer runs through tcp_retries2 (at least 924.6 s on defaults). Keepalive probes below the middlebox's idle timeout count as traffic, and TCP_USER_TIMEOUT or a read timeout bounds the failure if it still happens."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`ss -tan` on a client host shows 3,000 sockets in `FIN-WAIT-2` to one backend at 10.0.0.40:8080. Where do you look next?",
+      "choices": [
+        "Raise `net.ipv4.tcp_fin_timeout` on the client",
+        "On the backend: this side closed and the backend acknowledged but never sent its own FIN, so the backend probably has a matching pile of CLOSE_WAIT",
+        "The client's accept queue",
+        "The client is leaking sockets; look for a missing close() in its code"
+      ],
+      "answer": 1,
+      "explanation": "FIN_WAIT2 is the half of a close that waits for the peer's FIN. The peer's kernel acknowledged the FIN at once, but its application has not called close(), which leaves it in CLOSE_WAIT. The client already closed these sockets; tcp_fin_timeout only cleans up the symptom on this side."
+    }
+  ]
+}

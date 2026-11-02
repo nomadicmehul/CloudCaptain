@@ -1,0 +1,6 @@
+test.:53 {
+    bind 127.0.10.2
+    file /etc/coredns/test.db
+    log
+    errors
+}

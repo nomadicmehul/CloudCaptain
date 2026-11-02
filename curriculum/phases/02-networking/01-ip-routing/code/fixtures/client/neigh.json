@@ -1,0 +1,5 @@
+[
+  {"dst": "10.0.1.1", "dev": "c0", "lladdr": "a2:5e:17:0c:9b:01", "state": ["REACHABLE"]},
+  {"dst": "10.0.1.250", "dev": "c0", "state": ["FAILED"]},
+  {"dst": "fe80::1", "dev": "c0", "lladdr": "a2:5e:17:0c:9b:01", "router": null, "state": ["STALE"]}
+]

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/pipeline-runner",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A workflow has a `build` job and a `deploy` job, neither with `needs`. `deploy` uses `dist/app.tar.gz`, which `build` writes. It worked for months on a self-hosted runner and fails on GitHub-hosted runners. Why?",
+      "choices": [
+        "GitHub-hosted runners delete files larger than 10 MB at the end of a step",
+        "Hosted runners run jobs in alphabetical order, so `build` now runs after `deploy`",
+        "Every job on a hosted runner starts on a fresh machine with an empty workspace, and without `needs` the two jobs may run at the same time; the file has to travel as an artifact to a job that needs `build`",
+        "Hosted runners mount the workspace read-only for jobs that do not check out the code"
+      ],
+      "answer": 2,
+      "explanation": "The old runner reused one working directory, so the tarball was left on the floor where deploy happened to find it. A clean room per job removes that accident. Add needs: build to deploy, upload dist/ in build and download it in deploy (or rebuild it there)."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A deploy job has `if: ${{ github.ref }} == 'refs/heads/main'`. What happens on a push to `feature/x`?",
+      "choices": [
+        "The job runs: the braces are interpolated first, the value becomes the non-empty string `refs/heads/feature/x == 'refs/heads/main'`, and a non-empty string is true",
+        "The job is skipped, because the comparison is false",
+        "The workflow fails to load with a syntax error",
+        "The job is skipped, because `github.ref` is not available in a job-level `if`"
+      ],
+      "answer": 0,
+      "explanation": "A condition is an expression only when it is a single ${{ }} or has no braces at all. With text outside the braces it is interpolated into a string, which is truthy. Write if: github.ref == 'refs/heads/main'. actionlint reports this as an if: condition that is always evaluated to true, and minici check warns about it."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A matrix has `os: [linux, macos]`, `py: ['3.12', '3.13']` and two includes: `{py: '3.13', experimental: true}` then `{os: windows, py: '3.13'}`. How many legs run, and which have `experimental: true`?",
+      "choices": [
+        "6 legs; only the windows leg has it",
+        "5 legs; linux/3.13 and macos/3.13 have it",
+        "4 legs; none, because include only adds new combinations",
+        "5 legs; every 3.13 leg has it, windows included"
+      ],
+      "answer": 1,
+      "explanation": "The product has 4 combinations. The first include contradicts no original value of the two py 3.13 combinations, so it is merged into both. The second contradicts the os of every combination, so it becomes a fifth leg, and includes are never merged into a leg that another include created."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A step with `id: probe` and `continue-on-error: true` exits 1. What do the later steps of the job see?",
+      "choices": [
+        "`steps.probe.outcome` is success and `steps.probe.conclusion` is failure",
+        "The step is retried once before the job continues",
+        "Both are failure, the remaining steps are skipped, and the job fails at the end",
+        "`steps.probe.outcome` is failure and `steps.probe.conclusion` is success; later steps run with the default `success()` and the job can still succeed"
+      ],
+      "answer": 3,
+      "explanation": "The outcome records what happened, the conclusion is what counts for the job. A later step can branch on steps.probe.outcome == 'failure' to report the problem while the job stays green. Job-level continue-on-error splits a job the same way, and the run passes."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A cache step with `key: deps-${{ runner.os }}-${{ hashFiles('requirements.txt') }}` runs before `actions/checkout`. What happens over the next runs?",
+      "choices": [
+        "Every run misses, because the cache needs a checkout to authenticate",
+        "`hashFiles()` raises an error and the job fails at that step",
+        "The key changes on every run, so the cache grows until it is evicted",
+        "`hashFiles()` matches no file and returns an empty string, so the key is always `deps-Linux-`; after the first save every run is an exact hit on that stale entry, and the install step that runs on a miss never runs again"
+      ],
+      "answer": 3,
+      "explanation": "hashFiles() is evaluated when the step runs, against the workspace as it is at that moment, and no match is an empty string rather than an error. Check out first, and build keys only from files that exist. A cache-hit of true on a key without a hash in it is the symptom."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`lint` is skipped by its own `if`. `gate` needs `lint` and has `if: always()`, and it succeeds. `release` needs `gate` and has no `if`, and it is skipped. Why, and which condition runs `release` unless something upstream failed or was cancelled?",
+      "choices": [
+        "`always()` on `gate` is inherited by `release`, which then waits for a manual approval; remove `always()`",
+        "The implicit `success()` checks every ancestor, and `lint` was skipped; use `if: ${{ !cancelled() && !failure() }}`",
+        "`needs` only accepts jobs that ran; add `lint` to `release`'s needs",
+        "It is a scheduling bug; re-running the workflow fixes it"
+      ],
+      "answer": 1,
+      "explanation": "A condition without a status function becomes success() && condition, and the job-level success() is false when any ancestor did not succeed, including a skipped one. !cancelled() && !failure() is true when nothing failed or was cancelled, which lets skipped optional jobs through. always() would also run it after a failure."
+    }
+  ]
+}

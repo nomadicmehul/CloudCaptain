@@ -1,0 +1,17 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: shadow
+Source: https://github.com/shadow-maint/shadow
+
+Files: *
+Copyright: the shadow upstream authors
+License: BSD-3-clause
+
+Files: debian/*
+Copyright: Debian shadow maintainers
+License: GPL-2+
+
+License: BSD-3-clause
+ The licence text is omitted in this fixture.
+
+License: GPL-2+
+ The licence text is omitted in this fixture.

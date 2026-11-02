@@ -1,0 +1,22 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Rollout",
+  "metadata": {"name": "shop"},
+  "spec": {
+    "replicas": 3,
+    "selector": {"matchLabels": {"app": "shop"}},
+    "template": {
+      "metadata": {"labels": {"app": "shop"}},
+      "spec": {"containers": [{"name": "app", "image": "python:3.12-alpine", "env": [{"name": "APP_VERSION", "value": "v2"}]}]}
+    },
+    "strategy": {
+      "blueGreen": {
+        "activeService": "shop",
+        "previewService": "shop-preview",
+        "autoPromotionEnabled": false,
+        "prePromotionAnalysis": {"templates": [{"templateName": "success-rate"}], "args": [{"name": "version", "value": "v2"}]},
+        "postPromotionAnalysis": {"templates": [{"templateName": "success-rate"}], "args": [{"name": "version", "value": "v2"}]}
+      }
+    }
+  }
+}

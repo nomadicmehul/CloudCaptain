@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/release-versioning",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A library at 2.3.0 merges `feat: add CSV export` and `refactor: tidy the item model`, whose body mentions that a response field was renamed. What should the next version be?",
+      "choices": [
+        "2.3.1, because a refactor is internal",
+        "2.4.0, because the largest change is a feature",
+        "3.0.0, because renaming a field breaks consumers; the commit should say so with `refactor!:` or a `BREAKING CHANGE:` footer",
+        "2.3.0-rc.1, because the change is risky"
+      ],
+      "answer": 2,
+      "explanation": "The version is the worst impact on a consumer since the last release. A renamed field breaks every caller that reads it, so it is a major, whatever the commit type says. Conventional Commits make that impact machine-readable only if the author marks it with `!` or a `BREAKING CHANGE:` footer."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The latest tag is v0.2.0 and the commits since are `fix: close the pool` and `feat(api)!: rename /items`. With the 0.x rule (git-cliff's `breaking_always_bump_major = false`), what is the next version?",
+      "choices": [
+        "v1.0.0",
+        "v0.3.0",
+        "v0.2.1",
+        "v0.3.0-rc.1"
+      ],
+      "answer": 1,
+      "explanation": "In 0.y.z SemVer promises nothing, so by convention a breaking change bumps the minor and a feature bumps the patch. Leaving 0.x (v1.0.0) is a decision you make with `--breaking-always-bump-major`, not a side effect of one commit. A pre-release appears only when you ask for a channel."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "You run `git tag -a v1.2.0 -m \"$NOTES\"` with release notes that contain `### Added` headings, and `git show v1.2.0` shows the entries without the headings. Why?",
+      "choices": [
+        "Git's default `--cleanup=strip` deletes lines that start with `#` as comments; tag with `--cleanup=whitespace` or `--cleanup=verbatim`",
+        "The tag was created as a lightweight tag",
+        "GitHub strips Markdown from tag messages",
+        "Annotated tags can hold only one paragraph"
+      ],
+      "answer": 0,
+      "explanation": "Tag and commit messages go through the same cleanup as an editor session, and `strip` removes comment lines. `minirelease release` passes `--cleanup=whitespace`, which trims blank lines at the edges and keeps everything else."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`package.json` has `\"tiny-lib\": \"^0.4.1\"` and the registry has 0.4.3 and 0.5.0. Which statement is right?",
+      "choices": [
+        "Both are allowed by the range, so a lockfile refresh installs 0.5.0",
+        "Neither, because caret ranges never allow updates in 0.x",
+        "Only 0.5.0 is in range, because a caret allows minor updates",
+        "0.4.3 is in range and a lockfile refresh installs it; 0.5.0 is outside it because for 0.x the caret stops at the next minor, and it should be reviewed like a major"
+      ],
+      "answer": 3,
+      "explanation": "node-semver desugars `^0.4.1` to `>=0.4.1 <0.5.0-0`: the caret keeps the leftmost non-zero number fixed. That is the 0.x rule seen from the consumer side, and it is why the dependency checker groups 0.4.1 to 0.5.0 with the majors."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "The tags are v1.4.0 and v1.5.0-rc.1 (cut after a `feat:`), and one `fix:` has landed since the candidate. What do `minirelease next --pre rc` and `minirelease next` print?",
+      "choices": [
+        "v1.4.1-rc.1 and v1.4.1",
+        "v1.5.0-rc.1 and v1.5.1",
+        "v1.5.0-rc.2 and v1.5.0",
+        "v1.5.1-rc.1 and v1.5.0"
+      ],
+      "answer": 2,
+      "explanation": "The level comes from every commit since the last stable tag (the feature makes it a minor, so the target is 1.5.0). On the rc channel the counter of existing 1.5.0-rc tags goes up by one; without a channel the candidate is promoted to 1.5.0."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "An update checker moves `python:3.12-slim` to `python:3.13-slim` but never proposes `python:3.13-alpine` or `python:3.13.1-slim`, and it moves `actions/checkout@v4` to `@v5`, not to `@v5.0.0`. Why?",
+      "choices": [
+        "Alpine tags are not published for Python 3.13",
+        "A tag's suffix and its number of components are part of what it means: a candidate must keep the same variant and the same precision, or it is a different line of images or refs",
+        "Three-component tags are always pre-releases",
+        "Checkers only update the first `FROM` line and the first `uses:` line"
+      ],
+      "answer": 1,
+      "explanation": "`-slim` and `-alpine` are different base images, and `3.13` is a floating tag that keeps moving while `3.13.1` is fixed. Renovate's Docker versioning and the GitHub Actions manager both keep the variant and the precision you chose, which is what `compatible()` checks."
+    }
+  ]
+}

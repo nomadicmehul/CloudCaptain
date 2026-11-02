@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/ci-oidc",
+  "title": "Short-Lived Credentials: OIDC From CI to the Cloud",
+  "short": "CI OIDC Federation",
+  "motto": "A CI job proves who it is with a signed five-minute token; the cloud trusts it only as far as the trust policy pins sub and aud.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/pipeline-runner",
+    "orchestration/rbac-authorizer"
+  ],
+  "tools": [
+    "github-actions",
+    "aws",
+    "moto",
+    "openssl"
+  ],
+  "reference": [
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/cloud/aws/security-iam",
+    "/docs/cloud/azure/security-identity",
+    "/docs/cloud/gcp/fundamentals",
+    "/docs/cloud/cloud-security/fundamentals"
+  ],
+  "outputs": [
+    "skill-ci-cloud-federation.md",
+    "prompt-review-oidc-trust-policy.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

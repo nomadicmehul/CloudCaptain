@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/signing-provenance",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A release tarball passes `cosign verify-blob --key release.pub --bundle app.sigstore.json app.tar.gz`. What has that actually proven?",
+      "choices": [
+        "That the release workflow built the tarball from the main branch",
+        "That someone holding the private key for release.pub approved these exact bytes, identified by their SHA-256 digest",
+        "That the tarball contains no known vulnerabilities",
+        "That the signature was recorded in a public transparency log"
+      ],
+      "answer": 1,
+      "explanation": "A signature binds a digest to a key and nothing else. Who built it and from what is provenance, and publication is the transparency log. With a stolen key, an attacker's laptop build verifies just as well."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does RFC 6979 derive the ECDSA nonce k from the private key and the message digest instead of drawing it from a random number generator?",
+      "choices": [
+        "A repeated or predictable k lets anyone solve for the private key from two signatures; deriving k with HMAC from the key and the digest gives every message its own k without trusting the generator",
+        "Deterministic nonces make signatures shorter",
+        "OpenSSL can only verify deterministic signatures",
+        "It hides the message digest from the verifier"
+      ],
+      "answer": 0,
+      "explanation": "s = k^-1 (z + r d) mod n. Two signatures with the same k give two linear equations in k and d, which is how the PlayStation 3 key was recovered. RFC 6979's HMAC-DRBG makes k unique per (key, digest) and reproducible, which is also why the RFC can publish exact test vectors."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A DSSE envelope signs PAE(payloadType, payload) rather than the payload alone. What does that prevent?",
+      "choices": [
+        "Replaying the envelope in a second transparency log",
+        "Brute-forcing the signing key",
+        "Relabelling a signed payload as a different kind of document, or shifting bytes between the type and the body, without breaking the signature",
+        "Compressing the payload in transit"
+      ],
+      "answer": 2,
+      "explanation": "PAE writes DSSEv1, the length and bytes of the type, then the length and bytes of the payload. The type is authenticated, the boundary between the fields is fixed by the lengths, and the verifier checks the exact bytes it received, so no JSON canonicalisation is needed."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "An inclusion proof's 11 hashes lead from an entry's leaf hash to the proof's rootHash. Why must the verifier still check the checkpoint?",
+      "choices": [
+        "The checkpoint holds the entry's timestamp",
+        "Merkle proofs are probabilistic and the checkpoint raises the confidence",
+        "Base64 hashes need the checkpoint to be decoded",
+        "The rootHash in the proof is just a value the sender supplied; only a checkpoint signed by the trusted log key, stating the same tree size and root, ties the proof to the log everyone else sees"
+      ],
+      "answer": 3,
+      "explanation": "Anyone can build a tree with a forged entry and a matching proof. The signed checkpoint binds size and root; minisign's tlog-checkpoint check fails when the signature, the size or the root differ, and the lesson's tests show that size alone does not pin a proof."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Your admission policy accepts an image when its SLSA provenance verifies with the CI signing key and its subject digest matches. A developer who can read that key builds on a laptop and writes provenance claiming the release builder. What stops this?",
+      "choices": [
+        "The subject digest check",
+        "Nothing in that policy; the provenance must be signed by an identity a build step cannot use, such as the release workflow's keyless certificate or a build platform that keeps the key out of user code, and the policy must pin that builder",
+        "The predicate type check",
+        "The transparency log rejects provenance from laptops"
+      ],
+      "answer": 1,
+      "explanation": "Provenance is a claim, and its value is the signer. A key any build step can read gives SLSA Build L1: anyone with the key can write any builder.id. Keyless identity per workflow, or a hardened builder that signs for you (L2, L3), makes builder.id something a policy can rely on."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your monitor remembered yesterday's checkpoint at tree size 1,000,000. Today the log serves size 1,000,500, every new inclusion proof verifies, but the consistency proof from the remembered checkpoint fails. What does that mean?",
+      "choices": [
+        "The monitor's own key expired",
+        "Clock skew between the monitor and the log",
+        "Normal log rotation to a new shard",
+        "The log rewrote or forked its history: today's tree does not extend the one you saw, so entries you relied on may have changed; treat it as an incident and compare checkpoints with other monitors or witnesses"
+      ],
+      "answer": 3,
+      "explanation": "Inclusion proofs only show consistency with the checkpoint they come with. A failed consistency proof between two signed checkpoints is the evidence that the log showed you one history and now shows another, which is exactly what transparency logs exist to expose."
+    }
+  ]
+}

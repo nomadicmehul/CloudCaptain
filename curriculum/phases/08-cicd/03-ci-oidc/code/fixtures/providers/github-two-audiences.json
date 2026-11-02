@@ -1,0 +1,10 @@
+{
+  "Url": "token.actions.githubusercontent.com",
+  "ClientIDList": [
+    "sts.amazonaws.com",
+    "https://github.com/octo-org"
+  ],
+  "ThumbprintList": [],
+  "CreateDate": "2026-11-01T09:00:00Z",
+  "Tags": []
+}

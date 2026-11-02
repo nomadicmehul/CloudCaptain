@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/tls-handshake",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "After a certificate renewal, Chrome shows a padlock but `curl` fails with `unable to get local issuer certificate` and a Java client with `PKIX path building failed`. What is the most likely cause?",
+      "choices": [
+        "curl's CA bundle is out of date",
+        "The new certificate uses a wildcard that curl and Java do not support",
+        "The server now sends only the leaf, without the intermediate; browsers fetch or ship intermediates, OpenSSL-based and Java clients do not",
+        "The server negotiated TLS 1.3, which curl cannot verify"
+      ],
+      "answer": 2,
+      "explanation": "Error 20 at depth 0 means no certificate named like the leaf's issuer was found. Browsers fill the gap from the leaf's authorityInfoAccess URL or a preloaded list of intermediates; OpenSSL, curl, Python, Go and Java build the chain only from what the server sent and the trust store. The fix is serving the full chain, not changing the clients."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`openssl s_client` prints `verify error:num=20:unable to get local issuer certificate`, then `verify error:num=21:unable to verify the first certificate`, and ends with `Verify return code: 21`. Which single change fixes it?",
+      "choices": [
+        "Add the leaf certificate to the client's trust store",
+        "Run s_client with `-verify_return_error`",
+        "Renew the leaf with a longer validity",
+        "Configure the server to send the leaf followed by its intermediate (the full chain)"
+      ],
+      "answer": 3,
+      "explanation": "The first error is the cause: the leaf's issuer is missing. s_client keeps verifying after it, and a lone leaf with no issuer also cannot have its signature checked, hence 21 as the last code. -verify_return_error only stops earlier, and trusting the leaf itself is pinning one certificate, which breaks at the next renewal."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A certificate has a single subjectAltName, `DNS:*.api.example.com`. Which hostname does it match?",
+      "choices": [
+        "orders.api.example.com",
+        "eu.orders.api.example.com",
+        "any name under example.com",
+        "api.example.com"
+      ],
+      "answer": 0,
+      "explanation": "Per RFC 6125 and RFC 9525 the wildcard must be the whole left-most label and matches exactly one label. It covers orders.api.example.com, not the apex api.example.com and not two labels deep. The certificate needs a separate SAN for the apex."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A recording relay sits between `openssl s_client` and a TLS 1.3 server. s_client reports `ALPN protocol: h2`, yet the recorded ServerHello has no ALPN extension and no Certificate message appears in clear. Why?",
+      "choices": [
+        "The relay dropped those messages",
+        "In TLS 1.3 everything after the ServerHello, including EncryptedExtensions (with ALPN) and the Certificate, is encrypted with handshake keys",
+        "The server does not support ALPN and s_client printed the first protocol it offered",
+        "ALPN exists only in TLS 1.2"
+      ],
+      "answer": 1,
+      "explanation": "Both sides derive handshake keys from the key shares in the two hellos, so the server's later messages travel as application_data records. A passive observer of TLS 1.3 sees the client's SNI and ALPN offer, the chosen version, cipher and group, and nothing about the certificate. In TLS 1.2 the ALPN choice and the chain are in clear."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "On a corporate network every HTTPS call from a build agent fails with `self-signed certificate in certificate chain`, for every site. What is going on, and what is the right fix?",
+      "choices": [
+        "A TLS-intercepting proxy re-signs the traffic with its own root; add that root to the agent's trust store (or exempt the agent from interception) instead of disabling verification",
+        "The agent's clock is wrong",
+        "All those sites are misconfigured; turn off verification on the agent",
+        "The sites use TLS 1.3, which the agent's OpenSSL does not understand"
+      ],
+      "answer": 0,
+      "explanation": "Error 19 means the chain ended at a self-signed certificate that the client does not trust, and the same error for every site points at something on the path, not at the sites. The proxy sends its own root with a forged leaf. A wrong clock gives errors 9 or 10, and disabling verification accepts any certificate from anyone."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`openssl verify -CAfile intermediate.pem leaf.pem` prints `error 2 at 1 depth lookup: unable to get issuer certificate`, even though the intermediate is in the CAfile. Why?",
+      "choices": [
+        "The CAfile must also contain the leaf",
+        "The intermediate has expired",
+        "The leaf's signature does not verify",
+        "By default a chain must end at a self-signed trust anchor; the intermediate is trusted but its own issuer, the root, is missing. Add the root or pass -partial_chain"
+      ],
+      "answer": 3,
+      "explanation": "Error 2 (not 20) appears when the chain reached a trusted certificate that is not self-signed and its issuer cannot be found. Partial-chain mode accepts a trusted intermediate as the anchor; Python 3.13 turns it on by default, OpenSSL's command line does not."
+    }
+  ]
+}

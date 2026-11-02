@@ -1,0 +1,52 @@
+; cc.test., served on 127.0.10.3. SOA MINIMUM is 10, so NXDOMAIN is cached for 10 seconds.
+cc.test.             3600  IN  SOA    ns1.cc.test. hostmaster.cc.test. 2026110101 7200 3600 1209600 10
+cc.test.             3600  IN  NS     ns1.cc.test.
+ns1.cc.test.         3600  IN  A      127.0.10.3
+www.cc.test.         300   IN  A      127.0.20.1
+www.cc.test.         300   IN  AAAA   fd00:cc::1
+alias.cc.test.       300   IN  CNAME  web.test.
+cc.test.             300   IN  MX     10 mail.cc.test.
+mail.cc.test.        300   IN  A      127.0.20.25
+cc.test.             300   IN  TXT    "v=spf1 -all"
+_http._tcp.cc.test.  300   IN  SRV    10 50 8080 www.cc.test.
+; 40 A records: about 690 octets, too big for 512 without EDNS, fine with 1232.
+big.cc.test.         300   IN  A      127.0.30.1
+big.cc.test.         300   IN  A      127.0.30.2
+big.cc.test.         300   IN  A      127.0.30.3
+big.cc.test.         300   IN  A      127.0.30.4
+big.cc.test.         300   IN  A      127.0.30.5
+big.cc.test.         300   IN  A      127.0.30.6
+big.cc.test.         300   IN  A      127.0.30.7
+big.cc.test.         300   IN  A      127.0.30.8
+big.cc.test.         300   IN  A      127.0.30.9
+big.cc.test.         300   IN  A      127.0.30.10
+big.cc.test.         300   IN  A      127.0.30.11
+big.cc.test.         300   IN  A      127.0.30.12
+big.cc.test.         300   IN  A      127.0.30.13
+big.cc.test.         300   IN  A      127.0.30.14
+big.cc.test.         300   IN  A      127.0.30.15
+big.cc.test.         300   IN  A      127.0.30.16
+big.cc.test.         300   IN  A      127.0.30.17
+big.cc.test.         300   IN  A      127.0.30.18
+big.cc.test.         300   IN  A      127.0.30.19
+big.cc.test.         300   IN  A      127.0.30.20
+big.cc.test.         300   IN  A      127.0.30.21
+big.cc.test.         300   IN  A      127.0.30.22
+big.cc.test.         300   IN  A      127.0.30.23
+big.cc.test.         300   IN  A      127.0.30.24
+big.cc.test.         300   IN  A      127.0.30.25
+big.cc.test.         300   IN  A      127.0.30.26
+big.cc.test.         300   IN  A      127.0.30.27
+big.cc.test.         300   IN  A      127.0.30.28
+big.cc.test.         300   IN  A      127.0.30.29
+big.cc.test.         300   IN  A      127.0.30.30
+big.cc.test.         300   IN  A      127.0.30.31
+big.cc.test.         300   IN  A      127.0.30.32
+big.cc.test.         300   IN  A      127.0.30.33
+big.cc.test.         300   IN  A      127.0.30.34
+big.cc.test.         300   IN  A      127.0.30.35
+big.cc.test.         300   IN  A      127.0.30.36
+big.cc.test.         300   IN  A      127.0.30.37
+big.cc.test.         300   IN  A      127.0.30.38
+big.cc.test.         300   IN  A      127.0.30.39
+big.cc.test.         300   IN  A      127.0.30.40

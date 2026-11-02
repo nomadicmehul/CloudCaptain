@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/gitops-reconciler",
+  "title": "GitOps Is a Reconciler Whose Desired State Is a Commit",
+  "short": "GitOps Reconciler",
+  "motto": "Nobody deploys: a loop in the cluster renders one commit, diffs it with the live objects, applies the difference and reports health.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/reconciler",
+    "cicd/pipeline-runner"
+  ],
+  "tools": [
+    "git",
+    "kubectl",
+    "kustomize",
+    "argocd",
+    "kind"
+  ],
+  "reference": [
+    "/docs/tools/cicd/gitops",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/kubernetes/cheatsheet"
+  ],
+  "outputs": [
+    "skill-gitops-sync-triage.md",
+    "prompt-explain-outofsync.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

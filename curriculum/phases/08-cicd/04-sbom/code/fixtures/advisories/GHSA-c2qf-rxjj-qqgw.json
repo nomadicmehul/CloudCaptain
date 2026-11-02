@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.9.0",
+  "id": "GHSA-c2qf-rxjj-qqgw",
+  "modified": "2026-09-10T03:50:02.224637541Z",
+  "published": "2023-06-21T06:30:28Z",
+  "aliases": [
+    "CVE-2022-25883"
+  ],
+  "summary": "semver vulnerable to Regular Expression Denial of Service",
+  "details": "Versions of the package semver before 7.5.2 on the 7.x branch, before 6.3.1 on the 6.x branch, and all other versions before 5.7.2 are vulnerable to Regular Expression Denial of Service (ReDoS) via the function new Range, when untrusted user data is provided as a range.",
+  "affected": [
+    {
+      "package": {
+        "name": "semver",
+        "ecosystem": "npm",
+        "purl": "pkg:npm/semver"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "7.0.0"
+            },
+            {
+              "fixed": "7.5.2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "semver",
+        "ecosystem": "npm",
+        "purl": "pkg:npm/semver"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "6.0.0"
+            },
+            {
+              "fixed": "6.3.1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "semver",
+        "ecosystem": "npm",
+        "purl": "pkg:npm/semver"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "2.0.0-alpha"
+            },
+            {
+              "fixed": "5.7.2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "severity": [
+    {
+      "type": "CVSS_V3",
+      "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+    }
+  ],
+  "database_specific": {
+    "severity": "HIGH"
+  },
+  "references": [
+    {
+      "type": "ADVISORY",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-25883"
+    }
+  ]
+}

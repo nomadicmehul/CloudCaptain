@@ -85,7 +85,7 @@
           "per_mtok_output": 11.5925,
           "break_even": {
             "api-small": null,
-            "api-large": 0.0372
+            "api-large": 0.0381
           }
         },
         "4": {
@@ -140,7 +140,7 @@
           "per_mtok_input": 0.0865,
           "per_mtok_output": 0.9726,
           "break_even": {
-            "api-small": 5.7463,
+            "api-small": 5.9284,
             "api-large": 0.0213
           }
         }
@@ -201,7 +201,7 @@
           "per_mtok_input": 0.0942,
           "per_mtok_output": 0.8858,
           "break_even": {
-            "api-small": 1.4366,
+            "api-small": 1.6389,
             "api-large": 0.0213
           }
         },

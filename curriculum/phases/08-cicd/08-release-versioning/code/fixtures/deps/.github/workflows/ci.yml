@@ -1,0 +1,16 @@
+name: ci
+on: [push]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5.1.0
+        with:
+          python-version: "3.12"
+      - uses: docker/build-push-action@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa # v6.9.0
+      - uses: ./.github/actions/lint
+      - uses: example-org/deploy-action@main
+      - uses: docker://alpine:3.21

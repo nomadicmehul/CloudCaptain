@@ -1,0 +1,31 @@
+name: Issue triage
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log the new issue
+        run: |
+          echo "Triage request: ${{ github.event.issue.title }}"
+          echo "Issue number ${{ github.event.issue.number }}"
+      - name: Remember the title for later steps
+        env:
+          TITLE: ${{ github.event.issue.title }}
+        run: echo "ISSUE_TITLE=$TITLE" >> "$GITHUB_ENV"
+      - name: Label from the body
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const body = `${{ github.event.issue.body }}`;
+            if (body.includes('crash')) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['bug'],
+              });
+            }

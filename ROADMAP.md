@@ -11,13 +11,13 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 |---|---|---|---|
 | 00 | Setup & Lab | 1 | in progress |
 | 01 | Linux & Systems | 8 | in progress |
-| 02 | Networking | 0 | planned |
+| 02 | Networking | 8 | in progress |
 | 03 | Git & Collaboration | 0 | planned |
 | 04 | Scripting & Automation | 0 | planned |
 | 05 | Containers | 8 | in progress |
 | 06 | Orchestration | 8 | in progress |
 | 07 | Infrastructure as Code | 8 | in progress |
-| 08 | CI/CD & GitOps | 0 | planned |
+| 08 | CI/CD & GitOps | 8 | in progress |
 | 09 | Cloud Providers | 7 | in progress |
 | 10 | Observability & SRE | 0 | planned |
 | 11 | Security & DevSecOps | 0 | planned |

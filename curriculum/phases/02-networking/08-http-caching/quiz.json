@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/http-caching",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An origin sends `Cache-Control: no-cache` on its HTML pages. What does a cache that follows RFC 9111 do with them?",
+      "choices": [
+        "It never stores them",
+        "It stores them, but sends a conditional request to the origin before every reuse and serves the stored body on a 304",
+        "It stores them and reuses them for a default lifetime",
+        "Only browsers may store them; shared caches must not"
+      ],
+      "answer": 1,
+      "explanation": "no-cache means store but revalidate before each use; with an ETag that costs one 304 per request instead of a full download. Keeping a response out of every cache is no-store. nginx is the exception you will meet: it treats no-cache as do-not-store."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "minicache answers a request with `X-Cache-Status: REVALIDATED` and `Cache-Status: minicache; fwd=stale; fwd-status=304; ttl=60`. What happened?",
+      "choices": [
+        "The origin was down and stale-if-error allowed the old copy",
+        "The origin sent a new 200 that replaced the stored copy",
+        "The copy was fresh and served without contacting the origin",
+        "The stored copy was stale; minicache sent If-None-Match with its ETag, the origin answered 304, the 304's headers were merged into the copy and the stored body was served with a fresh 60-second lifetime"
+      ],
+      "answer": 3,
+      "explanation": "fwd=stale says why the request went to the origin, fwd-status=304 what came back. A new 200 would be EXPIRED with stored, a fresh copy HIT with no fwd, and stale-if-error STALE with detail=\"stale-if-error\"."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Product pages carry `Cache-Control: public, max-age=300` and `Vary: Accept-Encoding, User-Agent`. The CDN's hit ratio for them is 3%. Why?",
+      "choices": [
+        "Every distinct User-Agent string is its own variant, so almost every request is a vary-miss even though the page is the same for all of them",
+        "public is ignored when Vary is present",
+        "Accept-Encoding cannot be used in Vary",
+        "Vary disables caching in CDNs"
+      ],
+      "answer": 0,
+      "explanation": "The secondary key stores the request's User-Agent value with each copy, and there are thousands of distinct values. Drop User-Agent from Vary, or vary on a small normalised header (such as a device class) that the edge computes."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A response with `max-age=60`, `Date: 09:59:30` and no `Age` header reaches a cache at 10:00:00 (the request took no measurable time). At 10:00:40 another request asks for it. What does the cache do?",
+      "choices": [
+        "Serves it as a hit with Age: 40",
+        "Serves it as a hit with Age: 70, because Age matters only to browsers",
+        "Treats it as stale: its current age is 70 seconds because the 30 seconds between Date and arrival count as apparent age, so it revalidates",
+        "Refuses to store such a response, because Date must equal the arrival time"
+      ],
+      "answer": 2,
+      "explanation": "RFC 9111 computes apparent_age = response_time - Date = 30, then adds the 40 seconds of resident time. A skewed origin clock therefore makes responses look older, never younger: the formula prefers revalidating early to serving something too old."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "nginx caches a page sent with `Cache-Control: max-age=60, stale-if-error=600`. It has expired and the single upstream now answers 503. `proxy_cache_use_stale` is not set. What does the client get?",
+      "choices": [
+        "The stale copy, because stale-if-error=600 allows it",
+        "A 504 that nginx generates itself",
+        "The origin's 503: nginx applies the header's stale-if-error to connection errors and timeouts only, and serving stale on a 503 needs proxy_cache_use_stale http_503",
+        "An empty 200"
+      ],
+      "answer": 2,
+      "explanation": "In ngx_http_upstream.c the header's error window is checked in the path for failed connections, while upstream status codes go through a check of proxy_cache_use_stale alone. minicache, following RFC 5861, serves the stale copy in both cases; the smoke test shows the difference on a running nginx."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Thousands of clients request the home page in the second its cached copy expires, and the origin falls over. Which change at the cache keeps the origin at one request?",
+      "choices": [
+        "Vary: Cookie, so each client gets its own copy",
+        "A longer max-age alone",
+        "Cache-Control: no-cache on the home page",
+        "stale-while-revalidate on the response, so one background refresh runs while everyone gets the stale copy, plus request collapsing (proxy_cache_lock) for true misses"
+      ],
+      "answer": 3,
+      "explanation": "A longer max-age only moves the stampede; no-cache and Vary: Cookie send even more traffic to the origin. Serving stale while one refresh runs removes the expiry stampede, and collapsing removes the cold-miss one, as long as the response is storable."
+    }
+  ]
+}

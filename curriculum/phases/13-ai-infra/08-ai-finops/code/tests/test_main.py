@@ -215,8 +215,22 @@ class CostTests(unittest.TestCase):
         scale = result["scale"]
         self.assertAlmostEqual(scale, 0.7082, places=3)
         self.assertLessEqual(main.self_hosted(l4, point, plan, scale, bounded=False)["monthly"], main.api_cost(api, plan, scale)["monthly"])
-        self.assertGreater(main.self_hosted(l4, point, plan, scale * 0.98, bounded=False)["monthly"], main.api_cost(api, plan, scale * 0.98)["monthly"])
+        cheaper = lambda s: main.self_hosted(l4, point, plan, s, bounded=False)["monthly"] <= main.api_cost(api, plan, s)["monthly"]
+        self.assertTrue(all(cheaper(scale * (1 + i / 500)) for i in range(1500)))
+        self.assertFalse(cheaper(scale * 0.98))
         self.assertEqual(result["requests_per_day"], round(scale * sum(plan.hourly_rps) * 3600))
+
+    def test_break_even_is_where_self_hosting_stays_cheaper_not_where_it_first_wins(self):
+        prices = book()
+        l4, api = prices.instances["gpu-l4-1x"], prices.apis["api-large"]
+        point = [p for p in option("l4-llama8b-q8_0.json").points if p.concurrency == 1][0]
+        plan = scenario()
+        cheaper = lambda s: main.self_hosted(l4, point, plan, s, bounded=False)["monthly"] <= main.api_cost(api, plan, s)["monthly"]
+        self.assertTrue(cheaper(0.0372))
+        self.assertFalse(cheaper(0.03806))
+        scale = main.break_even(l4, point, plan, api)["scale"]
+        self.assertAlmostEqual(scale, 0.0381, places=4)
+        self.assertTrue(all(cheaper(scale + i * 1e-6) for i in range(20000)))
 
     def test_break_even_moves_with_prices_and_throughput_and_can_be_never(self):
         prices = book()
