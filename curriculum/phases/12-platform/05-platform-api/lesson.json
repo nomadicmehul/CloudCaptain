@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/platform-api",
+  "title": "A Platform API Is One Resource That Hides Ten Others",
+  "motto": "TODO: one line that states the core idea.",
+  "type": "Build",
+  "status": "draft",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [],
+  "tools": [],
+  "reference": [],
+  "outputs": [
+    "prompt-platform-api.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  }
+}

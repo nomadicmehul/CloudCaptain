@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/preview-environments",
+  "title": "Preview Environments Are Namespaces With a Lifetime",
+  "motto": "TODO: one line that states the core idea.",
+  "type": "Build",
+  "status": "draft",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [],
+  "tools": [],
+  "reference": [],
+  "outputs": [
+    "prompt-preview-environments.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  }
+}

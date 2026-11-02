@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/packaging-tools",
+  "title": "A Tool Is Not Done Until Someone Else Can Install It",
+  "motto": "TODO: one line that states the core idea.",
+  "type": "Build",
+  "status": "draft",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [],
+  "tools": [],
+  "reference": [],
+  "outputs": [
+    "prompt-packaging-tools.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  }
+}

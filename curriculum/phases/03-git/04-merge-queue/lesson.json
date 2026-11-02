@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "git/merge-queue",
+  "title": "Trunk-Based Development Is a Queue of Short Branches",
+  "short": "Merge Queues",
+  "motto": "Main stays green only if each change is tested on top of everything queued ahead of it; short branches keep that cheap.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "git/merge-algorithms"
+  ],
+  "tools": [
+    "git",
+    "gh",
+    "github-rulesets",
+    "github-merge-queue",
+    "gitlab-merge-trains"
+  ],
+  "reference": [
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/cicd/fundamentals"
+  ],
+  "outputs": [
+    "skill-branch-protection-review.md",
+    "prompt-design-merge-strategy.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/service-catalog",
+  "title": "A Service Catalog Is a Graph of Owners and Dependencies",
+  "motto": "TODO: one line that states the core idea.",
+  "type": "Build",
+  "status": "draft",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [],
+  "tools": [],
+  "reference": [],
+  "outputs": [
+    "prompt-service-catalog.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  }
+}

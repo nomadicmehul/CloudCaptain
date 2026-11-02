@@ -1,0 +1,4 @@
+# ~/.config/ccops/config: key = value, one per line
+inventory = inventory.json
+color = never
+lock_timeout = 2

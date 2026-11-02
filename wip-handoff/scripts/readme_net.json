@@ -1,0 +1,28 @@
+{
+ "header": {"lessons": [63, 71], "phases": [9, 10], "hours": [92, 104], "tests": ["1,725", "2,000"], "artifacts": [123, 139]},
+ "devops": [55, 63],
+ "why": [63, 71],
+ "rows": {
+  "after": "| **01 ·",
+  "en": "| **02 · Networking** | a route lookup like `ip route get`, an iterative DNS resolver, a TCP socket-state analyser, a pcap reader with tcpdump filters, a TLS ClientHello parser and certificate-chain verifier, an HTTP/1.1 server and reverse proxy, a load balancer with health checks, an RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |",
+  "de": "| **02 · Netzwerke** | eine Routing-Abfrage wie `ip route get`, einen iterativen DNS-Resolver, einen Analyzer für TCP-Socket-Zustände, einen pcap-Leser mit tcpdump-Filtern, einen Parser für TLS-ClientHello mit Prüfung von Zertifikatsketten, einen HTTP/1.1-Server mit Reverse Proxy, einen Load Balancer mit Health Checks, einen Caching-Proxy nach RFC 9111 | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |",
+  "es": "| **02 · Redes** | una consulta de rutas como `ip route get`, un resolvedor DNS iterativo, un analizador de estados de sockets TCP, un lector de pcap con filtros de tcpdump, un parser de ClientHello de TLS y un verificador de cadenas de certificados, un servidor HTTP/1.1 con proxy inverso, un balanceador de carga con health checks, un proxy de caché según la RFC 9111 | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |",
+  "pt": "| **02 · Redes** | uma consulta de rotas como `ip route get`, um resolvedor DNS iterativo, um analisador de estados de sockets TCP, um leitor de pcap com filtros do tcpdump, um parser de ClientHello TLS e um verificador de cadeias de certificados, um servidor HTTP/1.1 com proxy reverso, um balanceador de carga com health checks, um proxy de cache segundo a RFC 9111 | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |",
+  "zh": "| **02 · 网络** | 类似 `ip route get` 的路由查找、迭代式 DNS 解析器、TCP 套接字状态分析器、支持 tcpdump 过滤语法的 pcap 读取器、TLS ClientHello 解析器与证书链验证器、HTTP/1.1 服务器与反向代理、带健康检查的负载均衡器、遵循 RFC 9111 的缓存代理 | `ip`、`dig`、`ss`、tcpdump、`openssl`、curl、nginx、HAProxy、CoreDNS |",
+  "ja": "| **02 · ネットワーク** | `ip route get` と同じ経路検索、反復型 DNS リゾルバー、TCP ソケット状態のアナライザー、tcpdump フィルター対応の pcap リーダー、TLS ClientHello パーサーと証明書チェーン検証器、HTTP/1.1 サーバーとリバースプロキシ、ヘルスチェック付きロードバランサー、RFC 9111 準拠のキャッシュプロキシ | `ip`、`dig`、`ss`、tcpdump、`openssl`、curl、nginx、HAProxy、CoreDNS |",
+  "hi": "| **02 · Networking** | `ip route get` जैसा एक route lookup, एक iterative DNS resolver, एक TCP socket-state analyser, tcpdump filters वाला एक pcap reader, एक TLS ClientHello parser और certificate-chain verifier, एक HTTP/1.1 server और reverse proxy, health checks वाला एक load balancer, एक RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |",
+  "mr": "| **02 · Networking** | `ip route get` सारखा route lookup, iterative DNS resolver, TCP socket-state analyser, tcpdump filters असलेला pcap reader, TLS ClientHello parser आणि certificate-chain verifier, HTTP/1.1 server आणि reverse proxy, health checks असलेला load balancer, RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |",
+  "gu": "| **02 · Networking** | `ip route get` જેવું એક route lookup, એક iterative DNS resolver, એક TCP socket-state analyser, tcpdump filters વાળો એક pcap reader, એક TLS ClientHello parser અને certificate-chain verifier, એક HTTP/1.1 server અને reverse proxy, health checks વાળો એક load balancer, એક RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |"
+ },
+ "more": {
+  "en": ["Eight more phases (networking, Git,", "Seven more phases (Git,"],
+  "de": ["Acht weitere Phasen (Netzwerke, Git,", "Sieben weitere Phasen (Git,"],
+  "es": ["Otras ocho fases (redes, Git,", "Otras siete fases (Git,"],
+  "pt": ["Mais oito fases (redes, Git,", "Mais sete fases (Git,"],
+  "zh": ["另外 8 个阶段（网络、Git、", "另外 7 个阶段（Git、"],
+  "ja": ["さらに 8 つのフェーズ（ネットワーク、Git、", "さらに 7 つのフェーズ（Git、"],
+  "hi": ["आठ और phases (networking, Git,", "सात और phases (Git,"],
+  "mr": ["आणखी आठ phases (networking, Git,", "आणखी सात phases (Git,"],
+  "gu": ["બીજા આઠ phases (networking, Git,", "બીજા સાત phases (Git,"]
+ }
+}

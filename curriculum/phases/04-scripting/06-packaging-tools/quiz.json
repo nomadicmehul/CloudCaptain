@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/packaging-tools",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "TODO: question text?",
+      "choices": [
+        "TODO A",
+        "TODO B",
+        "TODO C"
+      ],
+      "answer": 0,
+      "explanation": "TODO: why the answer is right."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "TODO: question text?",
+      "choices": [
+        "TODO A",
+        "TODO B",
+        "TODO C"
+      ],
+      "answer": 0,
+      "explanation": "TODO: why the answer is right."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "TODO: question text?",
+      "choices": [
+        "TODO A",
+        "TODO B",
+        "TODO C"
+      ],
+      "answer": 0,
+      "explanation": "TODO: why the answer is right."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "TODO: question text?",
+      "choices": [
+        "TODO A",
+        "TODO B",
+        "TODO C"
+      ],
+      "answer": 0,
+      "explanation": "TODO: why the answer is right."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "TODO: question text?",
+      "choices": [
+        "TODO A",
+        "TODO B",
+        "TODO C"
+      ],
+      "answer": 0,
+      "explanation": "TODO: why the answer is right."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "TODO: question text?",
+      "choices": [
+        "TODO A",
+        "TODO B",
+        "TODO C"
+      ],
+      "answer": 0,
+      "explanation": "TODO: why the answer is right."
+    }
+  ]
+}

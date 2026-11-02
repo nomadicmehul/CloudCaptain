@@ -1,0 +1,10 @@
+{
+  "name": "checkout",
+  "port": 8080,
+  "retries": 3,
+  "timeouts": {
+    "read": 5,
+    "write": 5
+  },
+  "region": "eu-central-1"
+}

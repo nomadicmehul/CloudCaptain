@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "git/merge-queue",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Pull request A renames `prices.total()` to `prices.sum_prices()` and updates every caller. Pull request B adds a new module that calls `prices.total()`. Both are green on their branches, Git merges both without a conflict, and main fails. What went wrong?",
+      "choices": [
+        "Git's merge algorithm is wrong for Python files",
+        "CI was flaky the first time it ran",
+        "Each CI run tested its branch against the old main, never the combination that main became; only checks on main + A + B can catch this",
+        "B should have been rebased with `--update-refs`"
+      ],
+      "answer": 2,
+      "explanation": "This is a semantic conflict: the two changes merge cleanly as text and break together. A three-way merge compares lines and cannot see it; only running the checks on the combined tree can, which is exactly what a merge queue does before it moves main."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "CODEOWNERS has `/app/billing/ @acme/payments` on line 6 and `*.sql @acme/dba` on line 7. With code owner review required, whose approval does a change to `app/billing/migrations/0042_refunds.sql` need?",
+      "choices": [
+        "Both teams, because both lines match",
+        "@acme/payments, because its pattern is more specific",
+        "Nobody, because two lines conflict and GitHub ignores both",
+        "Only @acme/dba, because the last matching line decides; move the `*.sql` line above the billing line or add `/app/billing/**/*.sql @acme/payments @acme/dba` after it"
+      ],
+      "answer": 3,
+      "explanation": "CODEOWNERS is evaluated top to bottom and the last matching line wins, however specific the earlier one is. A later broad pattern silently takes ownership away, which is how the billing migration in The Problem merged without payments."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A queue with concurrency 3 holds A, B and C. Candidates main+A, main+A+B and main+A+B+C are tested at once: the first and third pass, the second fails. What does the queue do?",
+      "choices": [
+        "Lands A, ejects B, and rebuilds C on main + A to test it again, because C's passing result included B",
+        "Lands A and C, ejects B",
+        "Lands all three, because the last candidate passed",
+        "Ejects all three and starts over"
+      ],
+      "answer": 0,
+      "explanation": "Results are read in order. A's candidate passed, so A lands. B's candidate failed while everything ahead passed, so B is the cause and is ejected. C's candidate contained B, so its result says nothing about main + A + C; it is rebuilt and tested again."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Line 16 of CODEOWNERS is `/tools/* @acme/tooling` and line 2 is `* @acme/maintainers`. Who owns `tools/lint.sh` and `tools/ci/run.sh`, and what would the same pattern do in `.gitignore`?",
+      "choices": [
+        "@acme/tooling owns both; `.gitignore` ignores both",
+        "@acme/tooling owns `tools/lint.sh` and @acme/maintainers owns `tools/ci/run.sh`, because `dir/*` covers only direct children in CODEOWNERS; in `.gitignore` it ignores both, because an ignored directory hides everything below it",
+        "@acme/maintainers owns both, because line 2 matches every file",
+        "Neither has an owner, because `*` patterns are not allowed in CODEOWNERS"
+      ],
+      "answer": 1,
+      "explanation": "GitHub documents that `docs/*` matches `docs/getting-started.md` but not `docs/build-app/troubleshooting.md`. In `.gitignore` the same pattern matches the directory `tools/ci`, and Git never looks inside an excluded directory, so every file below it is ignored."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Thirty developers each open a pull request every four working hours, CI takes 20 minutes, and the queue tests one candidate at a time. What happens over a week?",
+      "choices": [
+        "Each pull request waits about 20 minutes",
+        "The queue keeps up, because short branches rarely fail",
+        "Nothing changes compared with long-lived branches",
+        "The queue receives 7.5 entries per hour and can finish 3, so its load is 2.5 and the wait grows every hour; test 3 or more candidates at once or batch entries"
+      ],
+      "answer": 3,
+      "explanation": "Load is arrivals times service time divided by capacity: 30 / 4 entries per hour times one third of an hour, divided by 1 candidate, is 2.5. Above 1 a queue grows without bound. The simulator shows the same team waiting about 20 minutes with four candidates at once."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A repository enables the GitHub merge queue with `test` as a required check. The workflow that defines `test` has only `on: pull_request`. What happens to queued pull requests?",
+      "choices": [
+        "They merge after their pull request checks, which already passed",
+        "GitHub reruns the `pull_request` workflow on the queue branch",
+        "Nothing reports `test` for the `gh-readonly-queue/...` branch, so each entry waits until the check timeout and is removed from the queue; add `merge_group` to the workflow's triggers",
+        "The queue is disabled until the workflow is fixed"
+      ],
+      "answer": 2,
+      "explanation": "The queue tests its own candidate branch and fires the `merge_group` event for it. A workflow without that trigger never runs there, the required check stays expected, and `check_response_timeout_minutes` ejects the entry."
+    }
+  ]
+}

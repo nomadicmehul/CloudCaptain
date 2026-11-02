@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/robust-bash",
+  "title": "A Bash Script Is Only Safe With Strict Mode and Quotes",
+  "motto": "TODO: one line that states the core idea.",
+  "type": "Build",
+  "status": "draft",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [],
+  "tools": [],
+  "reference": [],
+  "outputs": [
+    "prompt-robust-bash.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bats code/tests"
+  }
+}

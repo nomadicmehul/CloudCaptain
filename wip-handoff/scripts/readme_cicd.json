@@ -1,0 +1,28 @@
+{
+ "header": {"lessons": [55, 63], "phases": [8, 9], "hours": [80, 92], "tests": ["1,429", "1,725"], "artifacts": [107, 123]},
+ "devops": [47, 55],
+ "why": [55, 63],
+ "rows": {
+  "after": "| **07 ·",
+  "en": "| **08 · CI/CD & GitOps** | a workflow runner, a workflow security auditor, an OIDC issuer and verifier, an SBOM generator, a signer with a transparency log, a GitOps reconciler, a canary controller, a release tool | GitHub Actions and act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |",
+  "de": "| **08 · CI/CD & GitOps** | einen Workflow-Runner, einen Auditor für Workflow-Sicherheit, einen OIDC-Issuer mit Verifier, einen SBOM-Generator, einen Signierer mit Transparency Log, einen GitOps-Reconciler, einen Canary-Controller, ein Release-Tool | GitHub Actions und act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |",
+  "es": "| **08 · CI/CD y GitOps** | un ejecutor de workflows, un auditor de seguridad de workflows, un emisor y verificador OIDC, un generador de SBOM, un firmador con registro de transparencia, un reconciliador GitOps, un controlador canary, una herramienta de releases | GitHub Actions y act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |",
+  "pt": "| **08 · CI/CD e GitOps** | um executor de workflows, um auditor de segurança de workflows, um emissor e verificador OIDC, um gerador de SBOM, um assinador com log de transparência, um reconciliador GitOps, um controlador canary, uma ferramenta de releases | GitHub Actions e act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |",
+  "zh": "| **08 · CI/CD 与 GitOps** | 工作流运行器、工作流安全审计器、OIDC 签发器与验证器、SBOM 生成器、带透明日志的签名器、GitOps 调谐器、金丝雀发布控制器、发布工具 | GitHub Actions 与 act、zizmor、cosign、syft、Argo CD、Argo Rollouts、git-cliff |",
+  "ja": "| **08 · CI/CD と GitOps** | ワークフローランナー、ワークフローのセキュリティ監査ツール、OIDC の発行者と検証器、SBOM ジェネレーター、透明性ログ付きの署名ツール、GitOps リコンサイラー、カナリアコントローラー、リリースツール | GitHub Actions と act、zizmor、cosign、syft、Argo CD、Argo Rollouts、git-cliff |",
+  "hi": "| **08 · CI/CD & GitOps** | एक workflow runner, एक workflow security auditor, एक OIDC issuer और verifier, एक SBOM generator, transparency log वाला एक signer, एक GitOps reconciler, एक canary controller, एक release tool | GitHub Actions और act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |",
+  "mr": "| **08 · CI/CD & GitOps** | workflow runner, workflow security auditor, OIDC issuer आणि verifier, SBOM generator, transparency log असलेला signer, GitOps reconciler, canary controller, release tool | GitHub Actions आणि act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |",
+  "gu": "| **08 · CI/CD & GitOps** | એક workflow runner, એક workflow security auditor, એક OIDC issuer અને verifier, એક SBOM generator, transparency log વાળો એક signer, એક GitOps reconciler, એક canary controller, એક release tool | GitHub Actions અને act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |"
+ },
+ "more": {
+  "en": ["Nine more phases (networking, Git, scripting, CI/CD, observability,", "Eight more phases (networking, Git, scripting, observability,"],
+  "de": ["Neun weitere Phasen (Netzwerke, Git, Scripting, CI/CD, Observability,", "Acht weitere Phasen (Netzwerke, Git, Scripting, Observability,"],
+  "es": ["Otras nueve fases (redes, Git, scripting, CI/CD, observabilidad,", "Otras ocho fases (redes, Git, scripting, observabilidad,"],
+  "pt": ["Mais nove fases (redes, Git, scripting, CI/CD, observabilidade,", "Mais oito fases (redes, Git, scripting, observabilidade,"],
+  "zh": ["另外 9 个阶段（网络、Git、脚本编程、CI/CD、可观测性、", "另外 8 个阶段（网络、Git、脚本编程、可观测性、"],
+  "ja": ["さらに 9 つのフェーズ（ネットワーク、Git、スクリプティング、CI/CD、オブザーバビリティ、", "さらに 8 つのフェーズ（ネットワーク、Git、スクリプティング、オブザーバビリティ、"],
+  "hi": ["नौ और phases (networking, Git, scripting, CI/CD, observability,", "आठ और phases (networking, Git, scripting, observability,"],
+  "mr": ["आणखी नऊ phases (networking, Git, scripting, CI/CD, observability,", "आणखी आठ phases (networking, Git, scripting, observability,"],
+  "gu": ["બીજા નવ phases (networking, Git, scripting, CI/CD, observability,", "બીજા આઠ phases (networking, Git, scripting, observability,"]
+ }
+}
