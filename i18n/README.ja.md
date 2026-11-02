@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud、DevOps、AIOps をゼロから。<br/>ツールを作る。ツールを使う。成果物をシップする。</h3>
   <p>
-    <strong>63 レッスン</strong> · <strong>9 フェーズ公開中</strong> · <strong>92 時間</strong> · <strong>1,726 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 123 個</strong>
+    <strong>71 レッスン</strong> · <strong>10 フェーズ公開中</strong> · <strong>104 時間</strong> · <strong>2,001 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 139 個</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="コースを始める" /></a>
@@ -48,6 +48,7 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 |:--|:--|:--|
 | **00 · セットアップとラボ** | マシンを調べてインストール計画を表示するラボ診断ツール | kind、Docker、お使いのコーディングエージェント |
 | **01 · Linux とシステム** | PID 1 スーパーバイザー、fd リーク検出器、strace アナライザー、ケーパビリティのデコーダー、systemd ユニット、手作業での cgroups、マウントテーブルリーダー、USE メソッドのダッシュボード | `strace`、`capsh`、`systemctl`、`findmnt`、PSI |
+| **02 · ネットワーク** | `ip route get` と同じ経路検索、反復型 DNS リゾルバー、TCP ソケット状態のアナライザー、tcpdump フィルター対応の pcap リーダー、TLS ClientHello パーサーと証明書チェーン検証器、HTTP/1.1 サーバーとリバースプロキシ、ヘルスチェック付きロードバランサー、RFC 9111 準拠のキャッシュプロキシ | `ip`、`dig`、`ss`、tcpdump、`openssl`、curl、nginx、HAProxy、CoreDNS |
 | **05 · コンテナ** | コンテナランタイム、イメージ監査ツール、レジストリクライアント、Dockerfile を使わないイメージビルダー、veth/bridge ネットワーク、Compose、rootless のユーザー名前空間、seccomp ジェネレーター | Docker、Podman、OCI レジストリ |
 | **06 · オーケストレーション** | リコンサイラー、スケジューラ、kubelet、kube-proxy のルールとクラスタ DNS、RBAC オーソライザー、Helm、オペレーター、Gateway API ルーター | kind 上の Kubernetes、Helm、Envoy Gateway |
 | **07 · Infrastructure as Code** | plan/apply エンジン、依存関係グラフ、モジュール、ロック機能付きのステートサーバー、ドリフト検出、ポリシーエンジン、Pulumi と Crossplane のフロントエンド、冪等な構成管理ツール | OpenTofu、conftest/OPA、Pulumi、Ansible |
@@ -56,7 +57,7 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **13 · AI インフラストラクチャ** | DRA を使った GPU スケジューラ、LLM サービングシミュレーター、トークンを数えるゲートウェイ、キューベースのオートスケーラー、プレフィックスキャッシュルーター、HNSW と IVF のインデックス、モデルアーティファクト検査ツール、トークンコストモデル | CPU 上の llama.cpp、LiteLLM、pgvector、llm-d、ORAS |
 | **14 · AIOps とエージェント型運用** | kubectl 用の MCP サーバー、インシデントトリアージエージェント、AI によるログ分析、LLM 呼び出しの OpenTelemetry 計装、エージェントのサンドボックス、安全な書き込みツール、エージェントの評価（evals） | Claude Code、Claude API、OpenTelemetry、promptfoo |
 
-さらに 8 つのフェーズ（ネットワーク、Git、スクリプティング、オブザーバビリティ、セキュリティ、プラットフォームエンジニアリング、MLOps、キャップストーン）が[ロードマップ](../ROADMAP.md)に載っています。
+さらに 7 つのフェーズ（Git、スクリプティング、オブザーバビリティ、セキュリティ、プラットフォームエンジニアリング、MLOps、キャップストーン）が[ロードマップ](../ROADMAP.md)に載っています。
 
 ## レッスンの進め方
 
@@ -75,7 +76,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | パス | 対象 | レッスン数 |
 |:--|:--|:--|
-| [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 55 |
+| [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 63 |
 | [AI プラットフォームエンジニア](https://cloudcaptain.io/learn/paths/ai-platform) | モデルの運用を任されたエンジニア：GPU、サービング、ゲートウェイ、ルーティング、コスト | 23 |
 | [AIOps エンジニア](https://cloudcaptain.io/learn/paths/aiops) | エージェントにインフラ作業を安全に任せたい人 | 9 |
 
@@ -97,7 +98,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* リスト |
 |:--|:--|:--|:--|:--|
-| 各ツールをテスト付きでゼロから自作 | ✅ 63 レッスン | ❌ | ❌ | ❌ |
+| 各ツールをテスト付きでゼロから自作 | ✅ 71 レッスン | ❌ | ❌ | ❌ |
 | CI で本物のツールに対して検証 | ✅ 全レッスン | ❌ | ❌ | ❌ |
 | AI インフラと AIOps | ✅ 15 レッスン | 一部 | ❌ | リンク |
 | インストールできるエージェントチューター | ✅ `npx skills add` | ❌ | ❌ | ❌ |

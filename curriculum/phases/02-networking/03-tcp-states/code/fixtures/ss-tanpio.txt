@@ -1,0 +1,57 @@
+State      Recv-Q Send-Q                Local Address:Port                  Peer Address:Port Process
+LISTEN     0      128                            0.0.0.0:22                          0.0.0.0:* users:(("sshd",pid=812,fd=3))
+	 cubic cwnd:10
+LISTEN     0      511                           0.0.0.0:443                          0.0.0.0:* users:(("nginx",pid=900,fd=6),("nginx",pid=901,fd=6))
+	 cubic cwnd:10
+LISTEN     0      128                          0.0.0.0:8081                          0.0.0.0:* users:(("python3",pid=4242,fd=3))
+	 cubic cwnd:10
+LISTEN     2      1                           10.0.0.5:8082                          0.0.0.0:* users:(("python3",pid=4243,fd=3))
+	 cubic cwnd:10
+CLOSE-WAIT 1      0                           10.0.0.5:8081                    10.0.0.20:51000 users:(("python3",pid=4242,fd=4))
+	 cubic wscale:7,7 rto:204 rtt:0.254/0.127 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:118 bytes_acked:119 bytes_received:342 segs_out:4 segs_in:6 data_segs_out:1 data_segs_in:1 send 456Mbps lastsnd:612400 lastrcv:612400 lastack:612380 pacing_rate 912Mbps delivery_rate 51.2Mbps delivered:2 app_limited busy:4ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.21 snd_wnd:64256
+CLOSE-WAIT 1      0                           10.0.0.5:8081                    10.0.0.20:51001 users:(("python3",pid=4242,fd=5))
+	 cubic wscale:7,7 rto:204 rtt:0.254/0.127 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:118 bytes_acked:119 bytes_received:342 segs_out:4 segs_in:6 data_segs_out:1 data_segs_in:1 send 456Mbps lastsnd:612400 lastrcv:612400 lastack:612380 pacing_rate 912Mbps delivery_rate 51.2Mbps delivered:2 app_limited busy:4ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.21 snd_wnd:64256
+CLOSE-WAIT 1      0                           10.0.0.5:8081                    10.0.0.20:51002 users:(("python3",pid=4242,fd=6))
+	 cubic wscale:7,7 rto:204 rtt:0.254/0.127 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:118 bytes_acked:119 bytes_received:342 segs_out:4 segs_in:6 data_segs_out:1 data_segs_in:1 send 456Mbps lastsnd:612400 lastrcv:612400 lastack:612380 pacing_rate 912Mbps delivery_rate 51.2Mbps delivered:2 app_limited busy:4ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.21 snd_wnd:64256
+CLOSE-WAIT 1      0                           10.0.0.5:8081                    10.0.0.20:51003 users:(("python3",pid=4242,fd=7))
+	 cubic wscale:7,7 rto:204 rtt:0.254/0.127 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:118 bytes_acked:119 bytes_received:342 segs_out:4 segs_in:6 data_segs_out:1 data_segs_in:1 send 456Mbps lastsnd:612400 lastrcv:612400 lastack:612380 pacing_rate 912Mbps delivery_rate 51.2Mbps delivered:2 app_limited busy:4ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.21 snd_wnd:64256
+CLOSE-WAIT 1      0                           10.0.0.5:8081                    10.0.0.20:51004 users:(("python3",pid=4242,fd=8))
+	 cubic wscale:7,7 rto:204 rtt:0.254/0.127 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:118 bytes_acked:119 bytes_received:342 segs_out:4 segs_in:6 data_segs_out:1 data_segs_in:1 send 456Mbps lastsnd:612400 lastrcv:612400 lastack:612380 pacing_rate 912Mbps delivery_rate 51.2Mbps delivered:2 app_limited busy:4ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.21 snd_wnd:64256
+CLOSE-WAIT 1      0                           10.0.0.5:8081                    10.0.0.20:51005 users:(("python3",pid=4242,fd=9))
+	 cubic wscale:7,7 rto:204 rtt:0.254/0.127 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:118 bytes_acked:119 bytes_received:342 segs_out:4 segs_in:6 data_segs_out:1 data_segs_in:1 send 456Mbps lastsnd:612400 lastrcv:612400 lastack:612380 pacing_rate 912Mbps delivery_rate 51.2Mbps delivered:2 app_limited busy:4ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.21 snd_wnd:64256
+ESTAB      0      0                           10.0.0.5:8082                    10.0.0.21:52000
+	 cubic wscale:7,7 rto:204 rtt:0.312/0.156 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:2412 bytes_acked:2413 bytes_received:1632 segs_out:14 segs_in:16 data_segs_out:6 data_segs_in:8 send 371Mbps lastsnd:3120 lastrcv:3120 lastack:3080 pacing_rate 742Mbps delivery_rate 98.2Mbps delivered:7 app_limited busy:12ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.118 snd_wnd:64256
+ESTAB      0      0                           10.0.0.5:8082                    10.0.0.21:52001
+	 cubic wscale:7,7 rto:204 rtt:0.312/0.156 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:2412 bytes_acked:2413 bytes_received:1632 segs_out:14 segs_in:16 data_segs_out:6 data_segs_in:8 send 371Mbps lastsnd:3120 lastrcv:3120 lastack:3080 pacing_rate 742Mbps delivery_rate 98.2Mbps delivered:7 app_limited busy:12ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.118 snd_wnd:64256
+SYN-RECV   0      0                            10.0.0.5:443                  203.0.113.7:40001 timer:(on,3sec,2)
+SYN-RECV   0      0                            10.0.0.5:443                  203.0.113.8:40002 timer:(on,3sec,3)
+SYN-RECV   0      0                            10.0.0.5:443                 198.51.100.4:40003 timer:(on,3sec,2)
+SYN-RECV   0      0                            10.0.0.5:443                 198.51.100.9:40004 timer:(on,3sec,1)
+SYN-SENT   0      1                          10.0.0.5:46000                     10.0.0.30:5432 timer:(on,6sec,3) users:(("python3",pid=4242,fd=10))
+	 cubic rto:8000 backoff:3 mss:524 pmtu:1500 rcvmss:88 advmss:1460 cwnd:1 ssthresh:7 segs_out:4 lastsnd:2000 lastrcv:59500 lastack:59500 unacked:1 retrans:3/3 lost:1 rcv_ssthresh:64240
+ESTAB      0      1448                       10.0.0.5:46100                      10.0.0.9:6379 timer:(on,3sec,4) users:(("python3",pid=4242,fd=11))
+	 cubic wscale:7,7 rto:3264 backoff:4 rtt:0.41/0.2 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:1 ssthresh:7 bytes_sent:93240 bytes_retrans:5792 bytes_acked:87449 segs_out:72 segs_in:41 data_segs_out:68 send 28.3Mbps lastsnd:3000 lastrcv:41200 lastack:41200 pacing_rate 56.5Mbps delivery_rate 211Mbps delivered:61 busy:41200ms unacked:1 retrans:4/4 lost:1 rcv_space:14480 rcv_ssthresh:64088 minrtt:0.2 snd_wnd:64256
+ESTAB      0      65536                      10.0.0.5:46200                     10.0.0.10:9000 timer:(persist,2sec,0) users:(("python3",pid=4242,fd=12))
+	 cubic wscale:7,7 rto:204 rtt:0.3/0.15 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:1048576 bytes_acked:983041 segs_out:731 segs_in:402 data_segs_out:729 send 386Mbps lastsnd:2000 lastrcv:9200 lastack:2000 pacing_rate 772Mbps delivery_rate 401Mbps delivered:684 busy:9200ms rwnd_limited:9100ms(98.9%) rcv_space:14480 rcv_ssthresh:64088 minrtt:0.2 snd_wnd:0
+TIME-WAIT  0      0                          10.0.0.5:40000                      10.0.0.9:5432 timer:(timewait,41sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40001                      10.0.0.9:5432 timer:(timewait,43sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40002                      10.0.0.9:5432 timer:(timewait,45sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40003                      10.0.0.9:5432 timer:(timewait,47sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40004                      10.0.0.9:5432 timer:(timewait,49sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40005                      10.0.0.9:5432 timer:(timewait,51sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40006                      10.0.0.9:5432 timer:(timewait,53sec,0)
+TIME-WAIT  0      0                          10.0.0.5:40007                      10.0.0.9:5432 timer:(timewait,55sec,0)
+ESTAB      0      0                          10.0.0.5:40008                      10.0.0.9:5432 timer:(keepalive,118min,0) users:(("python3",pid=4242,fd=13))
+	 cubic wscale:7,7 rto:204 rtt:0.312/0.156 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:2412 bytes_acked:2413 bytes_received:1632 segs_out:14 segs_in:16 data_segs_out:6 data_segs_in:8 send 371Mbps lastsnd:3120 lastrcv:3120 lastack:3080 pacing_rate 742Mbps delivery_rate 98.2Mbps delivered:7 app_limited busy:12ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.118 snd_wnd:64256
+ESTAB      0      0                             10.0.0.5:22                     10.0.0.2:50122 timer:(keepalive,118min,0) users:(("sshd",pid=1201,fd=4))
+	 cubic wscale:7,7 rto:204 rtt:0.312/0.156 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:2412 bytes_acked:2413 bytes_received:1632 segs_out:14 segs_in:16 data_segs_out:6 data_segs_in:8 send 371Mbps lastsnd:3120 lastrcv:3120 lastack:3080 pacing_rate 742Mbps delivery_rate 98.2Mbps delivered:7 app_limited busy:12ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.118 snd_wnd:64256
+FIN-WAIT-2 0      0                          10.0.0.5:45001                     10.0.0.40:8080 timer:(timewait,30sec,0)
+FIN-WAIT-2 0      0                          10.0.0.5:45002                     10.0.0.40:8080 timer:(timewait,30sec,0)
+LISTEN     0      128                               [::]:22                             [::]:* users:(("sshd",pid=812,fd=4))
+	 cubic cwnd:10
+LISTEN     0      4096                               *:9100                                *:* users:(("node_exporter",pid=700,fd=3))
+	 cubic cwnd:10
+ESTAB      0      0                        [2001:db8::5]:22               [2001:db8::77]:50200 timer:(keepalive,115min,0) users:(("sshd",pid=1300,fd=4))
+	 cubic wscale:7,7 rto:204 rtt:0.312/0.156 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:2412 bytes_acked:2413 bytes_received:1632 segs_out:14 segs_in:16 data_segs_out:6 data_segs_in:8 send 371Mbps lastsnd:3120 lastrcv:3120 lastack:3080 pacing_rate 742Mbps delivery_rate 98.2Mbps delivered:7 app_limited busy:12ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.118 snd_wnd:64256
+ESTAB      0      0                  [::ffff:10.0.0.5]:9100            [::ffff:10.0.0.3]:39000 users:(("node_exporter",pid=700,fd=8))
+	 cubic wscale:7,7 rto:204 rtt:0.312/0.156 ato:40 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:2412 bytes_acked:2413 bytes_received:1632 segs_out:14 segs_in:16 data_segs_out:6 data_segs_in:8 send 371Mbps lastsnd:3120 lastrcv:3120 lastack:3080 pacing_rate 742Mbps delivery_rate 98.2Mbps delivered:7 app_limited busy:12ms rcv_space:14480 rcv_ssthresh:64088 minrtt:0.118 snd_wnd:64256

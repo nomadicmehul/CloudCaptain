@@ -11,7 +11,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 |---|---|---|---|
 | 00 | Setup & Lab | 1 | in progress |
 | 01 | Linux & Systems | 8 | in progress |
-| 02 | Networking | 0 | planned |
+| 02 | Networking | 8 | in progress |
 | 03 | Git & Collaboration | 0 | planned |
 | 04 | Scripting & Automation | 0 | planned |
 | 05 | Containers | 8 | in progress |

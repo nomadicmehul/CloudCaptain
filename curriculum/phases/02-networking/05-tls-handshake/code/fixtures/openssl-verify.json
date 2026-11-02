@@ -1,0 +1,348 @@
+{
+  "recorded_with": "OpenSSL 4.1.0 23 Oct 2026 (Library: OpenSSL 4.1.0 23 Oct 2026)",
+  "cases": [
+    {
+      "name": "valid",
+      "leaf": "leaf.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname app.cc.test pki/leaf.pem",
+      "openssl_output": [
+        "pki/leaf.pem: OK"
+      ]
+    },
+    {
+      "name": "wildcard",
+      "leaf": "leaf.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "orders.api.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname orders.api.cc.test pki/leaf.pem",
+      "openssl_output": [
+        "pki/leaf.pem: OK"
+      ]
+    },
+    {
+      "name": "wildcard-two-labels",
+      "leaf": "leaf.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "eu.orders.api.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname eu.orders.api.cc.test pki/leaf.pem",
+      "openssl_output": [
+        "CN=app.cc.test",
+        "error 62 at 0 depth lookup: hostname mismatch",
+        "error pki/leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "ip-san",
+      "leaf": "leaf.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "127.0.0.1",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_ip 127.0.0.1 pki/leaf.pem",
+      "openssl_output": [
+        "pki/leaf.pem: OK"
+      ]
+    },
+    {
+      "name": "ip-mismatch",
+      "leaf": "leaf.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "127.0.0.2",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_ip 127.0.0.2 pki/leaf.pem",
+      "openssl_output": [
+        "CN=app.cc.test",
+        "error 64 at 0 depth lookup: IP address mismatch",
+        "error pki/leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "expired",
+      "leaf": "expired.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "expired.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname expired.cc.test pki/expired.pem",
+      "openssl_output": [
+        "CN=expired.cc.test",
+        "error 10 at 0 depth lookup: certificate has expired",
+        "error pki/expired.pem: verification failed"
+      ]
+    },
+    {
+      "name": "not-yet-valid",
+      "leaf": "leaf.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1748736000,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1748736000 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname app.cc.test pki/leaf.pem",
+      "openssl_output": [
+        "C=DE, O=CloudCaptain Lab, CN=CloudCaptain Lab Root",
+        "error 9 at 2 depth lookup: certificate is not yet valid or the system clock is incorrect",
+        "error pki/leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "wrong-san",
+      "leaf": "wrong-san.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname app.cc.test pki/wrong-san.pem",
+      "openssl_output": [
+        "CN=app.cc.test",
+        "error 62 at 0 depth lookup: hostname mismatch",
+        "error pki/wrong-san.pem: verification failed"
+      ]
+    },
+    {
+      "name": "missing-intermediate",
+      "leaf": "leaf.pem",
+      "untrusted": [],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -verify_hostname app.cc.test pki/leaf.pem",
+      "openssl_output": [
+        "CN=app.cc.test",
+        "error 20 at 0 depth lookup: unable to get local issuer certificate",
+        "error pki/leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "untrusted-root-sent",
+      "leaf": "evil-leaf.pem",
+      "untrusted": [
+        "evil-root.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/evil-root.pem -verify_hostname app.cc.test pki/evil-leaf.pem",
+      "openssl_output": [
+        "O=Intercepting Proxy, CN=Untrusted Root",
+        "error 19 at 1 depth lookup: self-signed certificate in certificate chain",
+        "error pki/evil-leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "untrusted-root-not-sent",
+      "leaf": "evil-leaf.pem",
+      "untrusted": [],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -verify_hostname app.cc.test pki/evil-leaf.pem",
+      "openssl_output": [
+        "CN=app.cc.test",
+        "error 20 at 0 depth lookup: unable to get local issuer certificate",
+        "error pki/evil-leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "self-signed",
+      "leaf": "self-signed.pem",
+      "untrusted": [],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "self.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -verify_hostname self.cc.test pki/self-signed.pem",
+      "openssl_output": [
+        "CN=self.cc.test",
+        "error 18 at 0 depth lookup: self-signed certificate",
+        "error pki/self-signed.pem: verification failed"
+      ]
+    },
+    {
+      "name": "self-signed-trusted",
+      "leaf": "self-signed.pem",
+      "untrusted": [],
+      "cafile": [
+        "self-signed.pem"
+      ],
+      "host": "self.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/self-signed.pem -verify_hostname self.cc.test pki/self-signed.pem",
+      "openssl_output": [
+        "pki/self-signed.pem: OK"
+      ]
+    },
+    {
+      "name": "intermediate-as-anchor",
+      "leaf": "leaf.pem",
+      "untrusted": [],
+      "cafile": [
+        "inter.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/inter.pem -verify_hostname app.cc.test pki/leaf.pem",
+      "openssl_output": [
+        "C=DE, O=CloudCaptain Lab, CN=CloudCaptain Lab Intermediate",
+        "error 2 at 1 depth lookup: unable to get issuer certificate",
+        "error pki/leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "partial-chain",
+      "leaf": "leaf.pem",
+      "untrusted": [],
+      "cafile": [
+        "inter.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": true,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/inter.pem -verify_hostname app.cc.test -partial_chain pki/leaf.pem",
+      "openssl_output": [
+        "pki/leaf.pem: OK"
+      ]
+    },
+    {
+      "name": "client-auth-only",
+      "leaf": "client-only.pem",
+      "untrusted": [
+        "inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "app.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -verify_hostname app.cc.test pki/client-only.pem",
+      "openssl_output": [
+        "CN=app.cc.test",
+        "error 26 at 0 depth lookup: unsuitable certificate purpose",
+        "error pki/client-only.pem: verification failed"
+      ]
+    },
+    {
+      "name": "path-length",
+      "leaf": "deep-leaf.pem",
+      "untrusted": [
+        "inter.pem",
+        "sub-inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "deep.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -untrusted pki/sub-inter.pem -verify_hostname deep.cc.test pki/deep-leaf.pem",
+      "openssl_output": [
+        "C=DE, O=CloudCaptain Lab, CN=CloudCaptain Lab Intermediate",
+        "error 25 at 2 depth lookup: path length constraint exceeded",
+        "error pki/deep-leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "issuer-not-a-ca",
+      "leaf": "under-leaf.pem",
+      "untrusted": [
+        "inter.pem",
+        "not-a-ca.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "under.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/inter.pem -untrusted pki/not-a-ca.pem -verify_hostname under.cc.test pki/under-leaf.pem",
+      "openssl_output": [
+        "CN=not-a-ca.cc.test",
+        "error 79 at 1 depth lookup: invalid CA certificate",
+        "CN=not-a-ca.cc.test",
+        "error 26 at 1 depth lookup: unsuitable certificate purpose",
+        "C=DE, O=CloudCaptain Lab, CN=CloudCaptain Lab Intermediate",
+        "error 25 at 2 depth lookup: path length constraint exceeded",
+        "error pki/under-leaf.pem: verification failed"
+      ]
+    },
+    {
+      "name": "ecdsa-p384-signs-p256",
+      "leaf": "ec-leaf.pem",
+      "untrusted": [
+        "ec-inter.pem"
+      ],
+      "cafile": [
+        "root.pem"
+      ],
+      "host": "ec.cc.test",
+      "at": 1793491200,
+      "partial_chain": false,
+      "openssl_args": "verify -purpose sslserver -attime 1793491200 -CAfile pki/root.pem -untrusted pki/ec-inter.pem -verify_hostname ec.cc.test pki/ec-leaf.pem",
+      "openssl_output": [
+        "pki/ec-leaf.pem: OK"
+      ]
+    }
+  ]
+}

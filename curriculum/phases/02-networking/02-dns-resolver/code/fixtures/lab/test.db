@@ -1,0 +1,7 @@
+; test., served on 127.0.10.2. It delegates cc.test. with glue and owns web.test.
+test.          3600    IN  SOA   ns1.test. hostmaster.test. 2026110101 7200 3600 1209600 300
+test.          3600    IN  NS    ns1.test.
+ns1.test.      3600    IN  A     127.0.10.2
+web.test.      300     IN  A     127.0.20.2
+cc.test.       86400   IN  NS    ns1.cc.test.
+ns1.cc.test.   86400   IN  A     127.0.10.3

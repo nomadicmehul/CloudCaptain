@@ -1,0 +1,27 @@
+* Host shop.example.test:443 was resolved.
+*   Trying 192.0.2.10:443...
+* Connected to shop.example.test (192.0.2.10) port 443
+> GET /catalogue HTTP/2
+> Host: shop.example.test
+> User-Agent: curl/8.5.0
+> Accept: */*
+>
+< HTTP/2 301
+< location: /catalogue/
+< cache-control: max-age=3600
+<
+* Issue another request to this URL: 'https://shop.example.test/catalogue/'
+> GET /catalogue/ HTTP/2
+> Host: shop.example.test
+>
+< HTTP/2 200
+< content-type: text/html; charset=utf-8
+< date: Sun, 01 Nov 2026 09:00:00 GMT
+< etag: "cat-v7"
+< cache-control: max-age=60
+< cdn-cache-control: max-age=600, stale-while-revalidate=60, stale-if-error=86400
+< surrogate-key: catalogue product-42
+< age: 45
+<
+{ [5 bytes data]
+* Connection #0 to host shop.example.test left intact

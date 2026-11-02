@@ -1,0 +1,7 @@
+[
+  {"priority": 0, "src": "all", "table": "local"},
+  {"priority": 100, "src": "10.0.1.20", "table": "100"},
+  {"priority": 110, "src": "all", "fwmark": "0x1", "table": "100"},
+  {"priority": 32766, "src": "all", "table": "main"},
+  {"priority": 32767, "src": "all", "table": "default"}
+]

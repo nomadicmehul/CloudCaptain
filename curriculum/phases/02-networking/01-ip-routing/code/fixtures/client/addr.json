@@ -1,0 +1,12 @@
+[
+  {"ifindex": 1, "ifname": "lo", "flags": ["LOOPBACK", "UP", "LOWER_UP"], "mtu": 65536, "qdisc": "noqueue", "operstate": "UNKNOWN", "group": "default", "txqlen": 1000, "link_type": "loopback", "address": "00:00:00:00:00:00", "broadcast": "00:00:00:00:00:00",
+   "addr_info": [{"family": "inet", "local": "127.0.0.1", "prefixlen": 8, "scope": "host", "label": "lo", "valid_life_time": 4294967295, "preferred_life_time": 4294967295},
+                 {"family": "inet6", "local": "::1", "prefixlen": 128, "scope": "host", "noprefixroute": true, "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]},
+  {"ifindex": 2, "ifname": "c-dum", "flags": ["BROADCAST", "NOARP", "UP", "LOWER_UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "UNKNOWN", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "6e:1f:3a:90:22:c4", "broadcast": "ff:ff:ff:ff:ff:ff",
+   "addr_info": [{"family": "inet", "local": "172.16.0.1", "prefixlen": 24, "scope": "global", "label": "c-dum", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]},
+  {"ifindex": 5, "link_index": 4, "ifname": "c0", "flags": ["BROADCAST", "MULTICAST", "UP", "LOWER_UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "UP", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "aa:c1:ab:12:34:01", "broadcast": "ff:ff:ff:ff:ff:ff", "link_netnsid": 0,
+   "addr_info": [{"family": "inet", "local": "10.0.1.10", "prefixlen": 24, "scope": "global", "label": "c0", "valid_life_time": 4294967295, "preferred_life_time": 4294967295},
+                 {"family": "inet", "local": "10.0.1.20", "prefixlen": 24, "scope": "global", "secondary": true, "label": "c0", "valid_life_time": 4294967295, "preferred_life_time": 4294967295},
+                 {"family": "inet6", "local": "2001:db8:1::10", "prefixlen": 64, "scope": "global", "valid_life_time": 4294967295, "preferred_life_time": 4294967295},
+                 {"family": "inet6", "local": "fe80::a8c1:abff:fe12:3401", "prefixlen": 64, "scope": "link", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]}
+]

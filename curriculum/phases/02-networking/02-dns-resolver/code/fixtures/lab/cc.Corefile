@@ -1,0 +1,6 @@
+cc.test.:53 {
+    bind 127.0.10.3
+    file /etc/coredns/cc.test.db
+    log
+    errors
+}

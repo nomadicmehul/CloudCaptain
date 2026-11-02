@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>从零开始掌握 Cloud、DevOps 与 AIOps。<br/>亲手构建工具，上手使用工具，交付一件产物。</h3>
   <p>
-    <strong>63 节课</strong> · <strong>9 个阶段已上线</strong> · <strong>92 小时</strong> · <strong>1,726 个测试</strong> · <strong>123 个技能、提示词与 MCP 服务器</strong>
+    <strong>71 节课</strong> · <strong>10 个阶段已上线</strong> · <strong>104 小时</strong> · <strong>2,001 个测试</strong> · <strong>139 个技能、提示词与 MCP 服务器</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="开始学习课程" /></a>
@@ -48,6 +48,7 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 |:--|:--|:--|
 | **00 · 环境准备与实验环境** | 一个实验环境诊断工具（lab doctor），探测你的机器并输出安装计划 | kind、Docker、你的编程智能体 |
 | **01 · Linux 与系统** | PID 1 进程管理器、fd 泄漏检测器、strace 分析器、capability 解码器、systemd 单元、手动操作 cgroups、挂载表读取器、USE 方法仪表盘 | `strace`、`capsh`、`systemctl`、`findmnt`、PSI |
+| **02 · 网络** | 类似 `ip route get` 的路由查找、迭代式 DNS 解析器、TCP 套接字状态分析器、支持 tcpdump 过滤语法的 pcap 读取器、TLS ClientHello 解析器与证书链验证器、HTTP/1.1 服务器与反向代理、带健康检查的负载均衡器、遵循 RFC 9111 的缓存代理 | `ip`、`dig`、`ss`、tcpdump、`openssl`、curl、nginx、HAProxy、CoreDNS |
 | **05 · 容器** | 容器运行时、镜像审计器、镜像仓库客户端、不用 Dockerfile 的镜像构建器、veth/网桥网络、Compose、rootless 用户命名空间、seccomp 配置生成器 | Docker、Podman、OCI 镜像仓库 |
 | **06 · 编排** | 调谐器（reconciler）、调度器、kubelet、kube-proxy 规则与集群 DNS、RBAC 鉴权器、Helm、Operator、Gateway API 路由器 | 运行在 kind 上的 Kubernetes、Helm、Envoy Gateway |
 | **07 · 基础设施即代码** | plan/apply 引擎、依赖图、模块、带锁的状态服务器、漂移检测、策略引擎、Pulumi 与 Crossplane 前端、幂等的配置管理器 | OpenTofu、conftest/OPA、Pulumi、Ansible |
@@ -56,7 +57,7 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **13 · AI 基础设施** | 支持 DRA 的 GPU 调度器、LLM 推理服务模拟器、按 token 计量的网关、基于队列的自动扩缩器、前缀缓存路由器、HNSW 与 IVF 索引、模型制品检查器、token 成本模型 | 在 CPU 上运行的 llama.cpp、LiteLLM、pgvector、llm-d、ORAS |
 | **14 · AIOps 与智能体运维** | 面向 kubectl 的 MCP 服务器、故障分诊智能体、AI 日志分析、面向 LLM 调用的 OpenTelemetry、智能体沙箱、安全的写操作工具、智能体评测 | Claude Code、Claude API、OpenTelemetry、promptfoo |
 
-另外 8 个阶段（网络、Git、脚本编程、可观测性、安全、平台工程、MLOps、综合实战项目）已列入[路线图](../ROADMAP.md)。
+另外 7 个阶段（Git、脚本编程、可观测性、安全、平台工程、MLOps、综合实战项目）已列入[路线图](../ROADMAP.md)。
 
 ## 一节课如何进行
 
@@ -75,7 +76,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | 路径 | 适合人群 | 课程数 |
 |:--|:--|:--|
-| [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 55 |
+| [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 63 |
 | [AI 平台工程师](https://cloudcaptain.io/learn/paths/ai-platform) | 需要负责运行模型的工程师：GPU、推理服务、网关、路由、成本 | 23 |
 | [AIOps 工程师](https://cloudcaptain.io/learn/paths/aiops) | 让智能体安全地在基础设施上干活 | 9 |
 
@@ -97,7 +98,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* 清单 |
 |:--|:--|:--|:--|:--|
-| 从零构建每个工具，并配有测试 | ✅ 63 节课 | ❌ | ❌ | ❌ |
+| 从零构建每个工具，并配有测试 | ✅ 71 节课 | ❌ | ❌ | ❌ |
 | 在 CI 中用真实工具验证 | ✅ 每节课 | ❌ | ❌ | ❌ |
 | AI 基础设施与 AIOps | ✅ 15 节课 | 部分 | ❌ | 链接 |
 | 可安装的智能体导师 | ✅ `npx skills add` | ❌ | ❌ | ❌ |
