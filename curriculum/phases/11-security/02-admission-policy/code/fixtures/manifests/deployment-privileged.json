@@ -1,0 +1,46 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "deployment-privileged",
+    "labels": {
+      "app": "deployment-privileged"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "web"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "web",
+          "team": "payments"
+        }
+      },
+      "spec": {
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 65532
+        },
+        "containers": [
+          {
+            "name": "web",
+            "image": "registry.k8s.io/pause:3.10@sha256:ee6521f290b2168b6e0935a181d4cff9be1ac3f505666ef0e3c98fae8199917a",
+            "securityContext": {
+              "privileged": true
+            },
+            "resources": {
+              "limits": {
+                "memory": "64Mi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

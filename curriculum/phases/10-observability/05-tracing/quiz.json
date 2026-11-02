@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/tracing",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Three services each export spans to the same tracing backend, yet every request shows up as three unrelated traces. What is the most likely cause?",
+      "choices": [
+        "The backend needs a longer retention period",
+        "The calls between the services do not forward the trace context header (`traceparent`), so each service starts a new trace ID",
+        "The spans use different span kinds",
+        "The services' clocks are a few milliseconds apart"
+      ],
+      "answer": 1,
+      "explanation": "Spans are joined only by the trace ID and the parent span ID that travel in traceparent. A hop that does not forward the header makes the callee start a new trace. Clock skew distorts the waterfall but does not split the tree."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A service with a parent-based sampler receives `traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00` and calls two downstream services. What should it do?",
+      "choices": [
+        "Forward the incoming header unchanged on both calls",
+        "Ignore the header and start a sampled trace, because flags 00 means the header is invalid",
+        "Record its spans anyway and drop the header on outgoing calls",
+        "Record nothing, and still send a traceparent with the same trace ID, its own span ID as the parent and flags 00 on both calls"
+      ],
+      "answer": 3,
+      "explanation": "Flags 00 is valid and means the caller is not recording. A parent-based sampler follows it, so no spans are recorded, but the context is still propagated with a new parent ID so that the decision stays consistent downstream. Forwarding the header unchanged would make both callees claim the caller's span as their parent."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Checkout calls `/api/cart` (finishes after 300 ms) and `/api/recommendations` (finishes after 120 ms) in parallel, then responds. A team cuts recommendations from 120 ms to 40 ms. What happens to checkout latency?",
+      "choices": [
+        "Almost nothing changes: recommendations is not on the critical path, which runs through the cart call that finished last",
+        "It drops by about 40 ms, half the saving, because the calls overlap",
+        "It drops by 80 ms",
+        "It rises, because the cart call now competes for more threads"
+      ],
+      "answer": 0,
+      "explanation": "The critical path follows the child that finished last at each moment. The cart branch decides when checkout can respond, so only making the cart branch faster (or its database call) shortens the request."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "You scale your tail-sampling collectors from one to three instances behind a round-robin load balancer. Kept error traces start missing most of their spans. Why?",
+      "choices": [
+        "The decision wait is too short for three instances",
+        "The probabilistic policy uses a different salt on each instance",
+        "Spans of one trace now land on different instances; the instance that sees the error keeps its part, the others drop theirs. Route spans by trace ID (the `loadbalancing` exporter) in front of the samplers",
+        "Round-robin reorders spans, and tail sampling needs them in order"
+      ],
+      "answer": 2,
+      "explanation": "A tail sampler can only decide on the spans it has. With trace-ID routing every span of a trace reaches the same instance, so the whole trace is kept or dropped together."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A client calls `GET /api/cart/123` and gets a 404. Following the HTTP semantic conventions, what are the statuses of the client span and the server span?",
+      "choices": [
+        "Both ERROR",
+        "Client ERROR, server UNSET",
+        "Client UNSET, server ERROR",
+        "Both UNSET"
+      ],
+      "answer": 1,
+      "explanation": "A 4xx means the request was wrong, so from the server's point of view nothing failed and its span status stays unset. From the client's point of view its call did not succeed, so the client span is an error. 5xx is an error on both sides."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A team wants every span to carry the customer's email, so they put `user.email` in baggage at the edge. What is the problem?",
+      "choices": [
+        "Baggage is only visible to the service that set it",
+        "Baggage values cannot contain the @ character",
+        "Baggage is sent on every outgoing request, including to third-party APIs, and copied into span attributes, so the email leaks across trust boundaries; strip it at the edge or keep an opaque ID instead",
+        "Baggage is limited to one member"
+      ],
+      "answer": 2,
+      "explanation": "Baggage propagates to every downstream hop, readable by anyone who receives the request, and the W3C specification warns against putting confidential data in it. Characters like @ are allowed; others are percent-encoded. The limits are 64 members and 8192 bytes."
+    }
+  ]
+}

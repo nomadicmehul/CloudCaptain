@@ -1,0 +1,68 @@
+{
+  "policies": [
+    {
+      "name": "default-requests",
+      "type": "default-requests",
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      }
+    },
+    {
+      "name": "require-team-label",
+      "type": "required-labels",
+      "labels": [
+        "team"
+      ],
+      "actions": [
+        "Deny"
+      ]
+    },
+    {
+      "name": "disallow-privileged",
+      "type": "no-privileged",
+      "actions": [
+        "Deny"
+      ]
+    },
+    {
+      "name": "allowed-registries",
+      "type": "allowed-registries",
+      "registries": [
+        "registry.k8s.io",
+        "docker.io/library"
+      ],
+      "actions": [
+        "Deny"
+      ]
+    },
+    {
+      "name": "run-as-non-root",
+      "type": "run-as-non-root",
+      "actions": [
+        "Deny"
+      ]
+    },
+    {
+      "name": "require-digest",
+      "type": "image-digest",
+      "actions": [
+        "Warn",
+        "Audit"
+      ]
+    },
+    {
+      "name": "memory-limit",
+      "type": "cel",
+      "actions": [
+        "Warn"
+      ],
+      "validations": [
+        {
+          "expression": "object.spec.containers.all(c, has(c.resources) && has(c.resources.limits) && 'memory' in c.resources.limits)",
+          "message": "set a memory limit on every container"
+        }
+      ]
+    }
+  ]
+}

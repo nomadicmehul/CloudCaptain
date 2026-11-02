@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps शून्यापासून.<br/>Tool स्वतः बनवा. Tool वापरा. Artifact ship करा.</h3>
   <p>
-    <strong>71 lessons</strong> · <strong>10 phases उपलब्ध</strong> · <strong>104 तास</strong> · <strong>2,001 tests</strong> · <strong>139 skills, prompts &amp; MCP servers</strong>
+    <strong>85 lessons</strong> · <strong>13 phases उपलब्ध</strong> · <strong>124 तास</strong> · <strong>2,464 tests</strong> · <strong>167 skills, prompts &amp; MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="कोर्स सुरू करा" /></a>
@@ -49,15 +49,18 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **00 · Setup & Lab** | तुमचा संगणक तपासून install plan print करणारा एक lab doctor | kind, Docker, तुमचा coding agent |
 | **01 · Linux & Systems** | PID 1 supervisor, fd leak detector, strace analyser, capability decoder, systemd units, हाताने cgroups, mount table reader, USE-method dashboard | `strace`, `capsh`, `systemctl`, `findmnt`, PSI |
 | **02 · Networking** | `ip route get` सारखा route lookup, iterative DNS resolver, TCP socket-state analyser, tcpdump filters असलेला pcap reader, TLS ClientHello parser आणि certificate-chain verifier, HTTP/1.1 server आणि reverse proxy, health checks असलेला load balancer, RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |
+| **03 · Git & Collaboration** | `git fsck` स्वीकारतो असा content-addressed object store, CODEOWNERS आणि rulesets असलेली merge queue | `git` plumbing, rulesets, merge queue |
 | **05 · Containers** | container runtime, image auditor, registry client, Dockerfile शिवाय image builder, veth/bridge network, Compose, rootless user namespaces, seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | reconciler, scheduler, kubelet, kube-proxy rules आणि cluster DNS, RBAC authorizer, Helm, operator, Gateway API router | kind वर Kubernetes, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | plan/apply engine, dependency graph, modules, locking state server, drift detection, policy engine, Pulumi आणि Crossplane front ends, idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
 | **08 · CI/CD & GitOps** | workflow runner, workflow security auditor, OIDC issuer आणि verifier, SBOM generator, transparency log असलेला signer, GitOps reconciler, canary controller, release tool | GitHub Actions आणि act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (आधी AWS)** | IAM policy evaluator, VPC reachability analyser, SigV4 signing आणि S3 server, Lambda runtime API, Auto Scaling group, FOCUS cost allocator, security posture scanner | moto वर AWS CLI, Lambda emulator, Checkov |
+| **10 · Observability & SRE** | Gorilla chunks असलेला TSDB, PromQL engine, tail sampling असलेला tracer, SLO burn-rate rules, incident service, chaos experiments | Prometheus, promtool, OpenTelemetry Collector, Jaeger, Sloth, Alertmanager, Chaos Mesh |
+| **11 · Security & DevSecOps** | CEL subset असलेला admission webhook, Falco सारखा rule engine, NetworkPolicy evaluator, secret scanner, mTLS सह SPIFFE identities, CIS benchmark runner | ValidatingAdmissionPolicy, Kyverno, Falco, gitleaks, SPIRE, kube-bench |
 | **13 · AI Infrastructure** | DRA सह GPU scheduler, LLM serving simulator, token-counting gateway, queue-based autoscaler, prefix-cache router, HNSW आणि IVF indexes, model artifact inspector, token cost model | CPU वर llama.cpp, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | kubectl साठी MCP server, incident-triage agent, AI log analysis, LLM calls साठी OpenTelemetry, agent sandboxes, सुरक्षित write tools, agent evals | Claude Code, Claude API, OpenTelemetry, promptfoo |
 
-आणखी सात phases (Git, scripting, observability, security, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) वर आहेत.
+आणखी चार phases (scripting, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) वर आहेत.
 
 ## Lesson कसा चालतो
 
@@ -76,7 +79,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | कोणासाठी | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एका Linux process पासून Kubernetes, IaC, cloud आणि AIOps पर्यंत | 63 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एका Linux process पासून Kubernetes, IaC, cloud आणि AIOps पर्यंत | 77 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | ज्या engineers ना models चालवायचे आहेत: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | infrastructure वर agents सुरक्षितपणे कामाला लावण्यासाठी | 9 |
 
@@ -98,7 +101,7 @@ Site चा **Captain's Bridge** reading mode प्रत्येक section �
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| प्रत्येक tool शून्यापासून, tests सह बनवा | ✅ 71 lessons | ❌ | ❌ | ❌ |
+| प्रत्येक tool शून्यापासून, tests सह बनवा | ✅ 85 lessons | ❌ | ❌ | ❌ |
 | CI मध्ये खऱ्या tools वर verified | ✅ प्रत्येक lesson | ❌ | ❌ | ❌ |
 | AI infrastructure आणि AIOps | ✅ 15 lessons | अंशतः | ❌ | links |
 | Install करता येणारा agent tutor | ✅ `npx skills add` | ❌ | ❌ | ❌ |

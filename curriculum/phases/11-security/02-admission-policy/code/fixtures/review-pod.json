@@ -1,0 +1,88 @@
+{
+  "apiVersion": "admission.k8s.io/v1",
+  "kind": "AdmissionReview",
+  "request": {
+    "uid": "705ab4f5-6393-11e8-b7cc-42010a800002",
+    "kind": {
+      "group": "",
+      "version": "v1",
+      "kind": "Pod"
+    },
+    "resource": {
+      "group": "",
+      "version": "v1",
+      "resource": "pods"
+    },
+    "requestKind": {
+      "group": "",
+      "version": "v1",
+      "kind": "Pod"
+    },
+    "requestResource": {
+      "group": "",
+      "version": "v1",
+      "resource": "pods"
+    },
+    "name": "privileged",
+    "namespace": "shop",
+    "operation": "CREATE",
+    "userInfo": {
+      "username": "kubernetes-admin",
+      "groups": [
+        "kubeadm:cluster-admins",
+        "system:authenticated"
+      ]
+    },
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "privileged",
+        "labels": {
+          "app": "web"
+        },
+        "namespace": "shop",
+        "uid": "4f8d6b4e-2a8e-4c1b-9f0e-6c1d3f0a7b21",
+        "creationTimestamp": null
+      },
+      "spec": {
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 65532
+        },
+        "containers": [
+          {
+            "name": "web",
+            "image": "registry.k8s.io/pause:3.10",
+            "securityContext": {
+              "privileged": true
+            },
+            "resources": {
+              "limits": {
+                "memory": "64Mi"
+              },
+              "requests": {
+                "memory": "64Mi"
+              }
+            },
+            "imagePullPolicy": "IfNotPresent",
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File"
+          }
+        ],
+        "restartPolicy": "Always",
+        "dnsPolicy": "ClusterFirst",
+        "serviceAccountName": "default",
+        "schedulerName": "default-scheduler",
+        "enableServiceLinks": true,
+        "terminationGracePeriodSeconds": 30
+      }
+    },
+    "oldObject": null,
+    "dryRun": true,
+    "options": {
+      "apiVersion": "meta.k8s.io/v1",
+      "kind": "CreateOptions"
+    }
+  }
+}

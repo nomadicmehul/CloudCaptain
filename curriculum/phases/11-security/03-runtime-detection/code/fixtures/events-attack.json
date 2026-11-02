@@ -1,0 +1,8 @@
+[
+  {"evt.type": "execve", "proc.name": "bash", "proc.exe": "/bin/bash", "proc.pname": "runc", "proc.cmdline": "bash -i", "container.id": "a1b2c3d4e5f6", "container.name": "web", "user.name": "root", "user.uid": 0},
+  {"evt.type": "openat", "proc.name": "cat", "proc.exe": "/bin/cat", "fd.name": "/etc/shadow", "fd.directory": "/etc", "evt.is_open_read": true, "evt.is_open_write": false, "container.id": "a1b2c3d4e5f6", "user.name": "root", "user.uid": 0},
+  {"evt.type": "openat", "proc.name": "touch", "proc.exe": "/bin/touch", "fd.name": "/etc/cron.d/backdoor", "fd.directory": "/etc/cron.d", "evt.is_open_write": true, "evt.is_open_read": false, "container.id": "a1b2c3d4e5f6", "user.name": "root", "user.uid": 0},
+  {"evt.type": "execve", "proc.name": "xmrig", "proc.exe": "/tmp/xmrig", "proc.pname": "bash", "proc.cmdline": "/tmp/xmrig --url pool", "container.id": "a1b2c3d4e5f6", "user.name": "root", "user.uid": 0},
+  {"evt.type": "connect", "proc.name": "nc", "proc.exe": "/usr/bin/nc", "fd.sip": "203.0.113.10", "fd.sport": 4444, "container.id": "a1b2c3d4e5f6", "user.name": "root", "user.uid": 0},
+  {"evt.type": "connect", "proc.name": "curl", "proc.exe": "/usr/bin/curl", "fd.name": "/var/run/docker.sock", "container.id": "a1b2c3d4e5f6", "user.name": "root", "user.uid": 0}
+]
