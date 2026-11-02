@@ -327,7 +327,7 @@ On a Linux machine, capture real traffic with tcpdump and read it with both tool
 PCAPLENS="python3 $PWD/code/main.py"          # from the lesson folder
 mkdir -p /tmp/cc && cd /tmp/cc && echo hello > hello.txt
 python3 -m http.server 18080 --bind 127.0.0.1 &
-sudo tcpdump -i lo -nn -s 0 -U -Z root -w lo.pcap 'port 18080 or port 18082'
+sudo tcpdump -i lo -nn -s 0 -U --immediate-mode -Z root -w lo.pcap 'port 18080 or port 18082'
 # listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 curl -s http://127.0.0.1:18080/hello.txt      # in another terminal
 curl -s http://127.0.0.1:18082/ || true      # nothing listens there: SYN, then RST
@@ -336,7 +336,7 @@ tcpdump -r lo.pcap -nn -tttt
 $PCAPLENS flows lo.pcap                        # closed, then refused with "nothing listens on 127.0.0.1:18082"
 ```
 
-What each flag does: `-i lo` picks the interface (`-i any` for all of them); `-nn` prints addresses and ports as numbers instead of resolving them, which also stops tcpdump from sending its own DNS queries into your capture; `-s 0` keeps whole packets (262144 bytes on current builds; `-s 96` keeps just the headers); `-w` writes pcap instead of text; `-U` flushes after every packet so a reader or a crash does not lose the tail; `-c N` stops after N packets. Debian and Ubuntu builds give up root after opening the device and continue as the `tcpdump` user, and Ubuntu's AppArmor profile limits which files tcpdump may write (names ending in `.pcap` are allowed), so a rotated file or an unusual path can fail with `Permission denied`; `-Z root` keeps root, and naming files `*.pcap` keeps AppArmor out of the way. The last line tcpdump prints when it stops matters: `packets dropped by kernel` above zero means the ring buffer overflowed and the capture has holes that look exactly like packet loss. Narrow the filter, cut the snaplen or give it a bigger buffer with `-B 8192` (KiB).
+What each flag does: `-i lo` picks the interface (`-i any` for all of them); `-nn` prints addresses and ports as numbers instead of resolving them, which also stops tcpdump from sending its own DNS queries into your capture; `-s 0` keeps whole packets (262144 bytes on current builds; `-s 96` keeps just the headers); `-w` writes pcap instead of text; `-U` flushes after every packet so a reader or a crash does not lose the tail; `--immediate-mode` asks libpcap for each packet as it arrives, because on Linux the kernel otherwise hands packets over in blocks that are released when full or after a timeout of up to a second, and a capture you stop with Ctrl-C right after the traffic can lose that last block; `-c N` stops after N packets. Debian and Ubuntu builds give up root after opening the device and continue as the `tcpdump` user, and Ubuntu's AppArmor profile limits which files tcpdump may write (names ending in `.pcap` are allowed), so a rotated file or an unusual path can fail with `Permission denied`; `-Z root` keeps root, and naming files `*.pcap` keeps AppArmor out of the way. The last line tcpdump prints when it stops matters: `packets dropped by kernel` above zero means the ring buffer overflowed and the capture has holes that look exactly like packet loss. Narrow the filter, cut the snaplen or give it a bigger buffer with `-B 8192` (KiB).
 
 Reading a file needs no privileges: `-r file` with `-tttt` for full dates, `-S` for absolute sequence numbers (by default tcpdump prints them relative to the first segment it saw), `-e` for the link header, `-v` for IP ID, TTL and checksums (outgoing packets often show `incorrect` checksums because the NIC computes them after the capture point), `-X` or `-A` for payload bytes. A filter after `-r` is a read filter: the same language, applied to the file.
 
@@ -363,7 +363,7 @@ The program is the same arithmetic as `load()`: an ethertype check, a protocol c
 **`-i any` and cooked headers.** Capture on all interfaces and look at the link type:
 
 ```bash
-sudo tcpdump -i any -nn -s 0 -U -Z root -w any.pcap 'port 18080'
+sudo tcpdump -i any -nn -s 0 -U --immediate-mode -Z root -w any.pcap 'port 18080'
 # listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes
 sudo tcpdump -L -i any                         # the link types this device offers
 sudo tcpdump -i any -y LINUX_SLL -w any-v1.pcap 'port 18080'   # ask for the older 16-byte header

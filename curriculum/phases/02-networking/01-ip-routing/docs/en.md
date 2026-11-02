@@ -216,7 +216,7 @@ Secondary addresses are skipped, addresses with a narrower scope than the route 
     back = walk(snap, Flow(4, flow.src or 0, flow.dst, out_dev or "lo"))
 ```
 
-Forwarding off on the input interface gives EHOSTUNREACH. The effective `rp_filter` is the larger of `conf.all` and `conf.IIF`, a detail that surprises everyone who sets the interface value to 0 and wonders why packets still drop. The reverse lookup swaps source and destination; strict mode fails with EXDEV ("Invalid cross-device link") when the way back leaves through another interface, loose mode accepts any way back, and a source that is one of the host's own addresses is a martian (EINVAL).
+Forwarding off on the input interface gives EHOSTUNREACH. The effective `rp_filter` is the larger of `conf.all` and `conf.IIF`, a detail that surprises everyone who sets the interface value to 0 and wonders why packets still drop. The reverse lookup swaps source and destination; strict mode fails with EXDEV ("Invalid cross-device link") when the way back leaves through another interface (newer kernels track the reason for every dropped input route internally and answer `ip route get ... iif` with EINVAL, "Invalid argument", instead; the decision is the same), loose mode accepts any way back, and a source that is one of the host's own addresses is a martian (EINVAL).
 
 ### Step 9: the neighbour, and the lab by hand
 
@@ -336,7 +336,7 @@ $C neigh                                                             # 10.0.1.25
 cat /proc/sys/net/ipv4/ip_forward                                    # the host's own value; each namespace has its own
 sudo ip netns exec cc-rt-r sysctl net.ipv4.ip_forward net.ipv4.conf.all.rp_filter net.ipv4.conf.r-c.rp_filter
 sudo ip netns exec cc-rt-r sysctl -w net.ipv4.conf.r-c.rp_filter=1
-$R route get 198.51.100.1 from 10.0.2.10 iif r-c                     # RTNETLINK answers: Invalid cross-device link
+$R route get 198.51.100.1 from 10.0.2.10 iif r-c                     # Invalid cross-device link (Invalid argument on newer kernels)
 sudo ip netns exec cc-rt-r sysctl -w net.ipv4.conf.all.log_martians=1   # dropped packets are logged as martian source
 sudo ip netns exec cc-rt-r sysctl -w net.ipv4.conf.r-c.rp_filter=0
 sudo bash code/main.sh down

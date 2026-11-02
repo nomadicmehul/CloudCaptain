@@ -31,6 +31,7 @@ On a remote or containerised host, run the same inside the right namespace: `ip 
 | `No route to host` | an `unreachable` route, or forwarding is off on the input interface (EHOSTUNREACH) | step 3, then step 5 |
 | `Permission denied` | a `prohibit` route or rule (EACCES) | step 2 or step 3 |
 | `Invalid cross-device link` | rp_filter rejected the source (EXDEV) | step 5 |
+| `Invalid argument` with `iif` | newer kernels report an rp_filter or other input-route drop as EINVAL; check rp_filter and forwarding as in step 5 | step 5 |
 | `table N` you did not expect | a policy rule won before main | step 2 |
 | right table, wrong `dev` or `via` | a longer prefix or lower metric than you thought | step 3 |
 | right route, wrong `src` | prefsrc or address order | step 4 |

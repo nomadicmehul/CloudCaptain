@@ -520,7 +520,10 @@ def send_response(sock: Any, response: Response, method: str, version: Tuple[int
     return size
 
 
-def linger_close(sock: Any, seconds: float = 1.0) -> None:
+LINGER_SECONDS = 1.0
+
+
+def linger_close(sock: Any, seconds: float = LINGER_SECONDS) -> None:
     try:
         sock.shutdown(socket.SHUT_WR)
         deadline = time.monotonic() + seconds
@@ -1017,6 +1020,7 @@ def nginx_directives(config: Config) -> List[Tuple[str, str, str]]:
         ("max_request_line, max_header_bytes", "large_client_header_buffers", f"{buffers} {config.max_request_line}"),
         ("max_headers", "max_headers", str(config.max_headers)),
         ("max_body", "client_max_body_size", str(config.max_body)),
+        ("linger_close()", "lingering_timeout", nginx_seconds(LINGER_SECONDS)),
     ]
 
 

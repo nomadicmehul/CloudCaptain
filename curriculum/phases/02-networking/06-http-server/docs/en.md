@@ -193,7 +193,7 @@ def persistent(version: Tuple[int, int], connection: Sequence[str]) -> bool:
 After each response `exchange()` combines that with the server's own limits: `keep = head.keep_alive and not response.close and served + 1 < config.keepalive_requests`. The response that ends a connection carries `Connection: close`; an HTTP/1.0 response that keeps it carries `Connection: keep-alive`. Between requests `handle()` waits at most `--keepalive-timeout` for the next byte and then closes without a word. Every close goes through `linger_close()`:
 
 ```python
-def linger_close(sock: Any, seconds: float = 1.0) -> None:
+def linger_close(sock: Any, seconds: float = LINGER_SECONDS) -> None:
     try:
         sock.shutdown(socket.SHUT_WR)
         deadline = time.monotonic() + seconds
@@ -314,6 +314,7 @@ client_body_timeout 2s;
 keepalive_timeout 3s;
 keepalive_requests 3;
 client_max_body_size 65536;
+lingering_timeout 1s;
 
 map $http_via $via_chain {
     ""      "1.1 nginx";
@@ -390,7 +391,7 @@ curl -s --http2-prior-knowledge -r 0-7 http://127.0.0.1:8082/hello.txt; echo    
 | `parse_range()`, `choose_range()` | the range filter, `max_ranges` | nginx answers several ranges with `multipart/byteranges` |
 | `forward_headers()` | `proxy_set_header`, `$proxy_add_x_forwarded_for` | nginx does not remove fields named in `Connection` |
 | `proxy()` 502 and 504 | `proxy_connect_timeout`, `proxy_read_timeout` | nginx also pools upstream connections and retries idempotent requests |
-| `linger_close()` | `lingering_close`, `lingering_timeout` | why a 413 arrives instead of a reset |
+| `linger_close()` | `lingering_close`, `lingering_timeout` (default 5s; the generated config sets minihttp's 1s) | why a 413 arrives instead of a reset, and why the connection stays open a moment after it |
 | `log_line()`, `logstat` | `access_log ... combined` | the same line format, so one parser reads both |
 | `probe` | `curl -v --http1.1`, `curl -r`, `curl -H 'If-None-Match: ...'` | curl shows one exchange; the probe asserts 32 of them |
 

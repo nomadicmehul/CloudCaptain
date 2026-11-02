@@ -37,7 +37,7 @@ start_capture() {
   shift
   local pidfile="$WORK/$name.pid"
   CAPTURES+=("$pidfile")
-  $SUDO sh -c 'echo $$ > "$1"; shift; exec tcpdump "$@"' sh "$pidfile" -nn -U -Z root -B 16384 "$@" 2> "$WORK/$name.err" &
+  $SUDO sh -c 'echo $$ > "$1"; shift; exec tcpdump "$@"' sh "$pidfile" -nn -U --immediate-mode -Z root -B 16384 "$@" 2> "$WORK/$name.err" &
   for _ in $(seq 1 100); do
     if grep -q "listening on" "$WORK/$name.err" 2>/dev/null; then return 0; fi
     sleep 0.1
@@ -54,7 +54,16 @@ wait_live() {
   fail "capture $name never recorded the canary datagram: $(cat "$WORK/$name.err")"
 }
 stop_capture() {
-  local name="$1"
+  local name="$1" file="${2:-}"
+  if [[ -n "$file" ]]; then
+    local before
+    before="$(stat -c %s "$file" 2>/dev/null || echo 0)"
+    for _ in $(seq 1 50); do
+      python3 -c 'import socket; socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(b"end", ("127.0.0.1", 18099))'
+      if [[ "$(stat -c %s "$file" 2>/dev/null || echo 0)" -gt "$before" ]]; then break; fi
+      sleep 0.1
+    done
+  fi
   $SUDO kill -INT "$(cat "$WORK/$name.pid")" 2>/dev/null || true
   for _ in $(seq 1 50); do
     if grep -q "packets captured" "$WORK/$name.err"; then break; fi
@@ -199,7 +208,7 @@ if [[ -n "$HAVE_DNS" ]]; then
     dig @127.0.0.2 "$name.cc.test" A +tries=1 +time=2 > "$WORK/dig-$name.txt" || fail "dig $name.cc.test: $(cat "$WORK/dig-$name.txt")"
   done
 fi
-stop_capture lo
+stop_capture lo "$WORK/lo.pcap"
 [[ "$(info_field "$WORK/lo.pcap" linktypes.0.name)" == "EN10MB" ]] || fail "lo should be EN10MB: $(cat "$WORK/info.json")"
 [[ "$(info_field "$WORK/lo.pcap" damage)" == "None" ]] || fail "lo.pcap damaged: $(cat "$WORK/info.json")"
 LIVE_FILTERS=("" "tcp" "udp" "port 18080" "tcp port 18081" "port 18082" "src host 127.0.0.1 and dst port 18080" "port 18080 or 18081"
@@ -309,7 +318,7 @@ echo "▸ -i any writes a cooked header; pcaplens decodes it and still agrees wi
 start_capture any -i any -s 0 -w "$WORK/any.pcap" 'port 18080 or udp port 18099'
 wait_live "$WORK/any.pcap" any
 curl -s --noproxy '*' -m 5 -o /dev/null http://127.0.0.1:18080/hello.txt || fail "curl during the -i any capture"
-stop_capture any
+stop_capture any "$WORK/any.pcap"
 ANY_LINK="$(info_field "$WORK/any.pcap" linktypes.0.name)"
 [[ "$ANY_LINK" == "LINUX_SLL2" || "$ANY_LINK" == "LINUX_SLL" ]] || fail "-i any should write a cooked link type, got $ANY_LINK"
 grep -o "link-type [A-Z_0-9]*" "$WORK/any.err" | sed 's/^/  tcpdump: /'
@@ -333,7 +342,7 @@ if [[ -n "$OTHER" ]]; then
   start_capture any2 -i any -y "$OTHER" -s 0 -w "$WORK/any2.pcap" 'port 18080 or udp port 18099'
   wait_live "$WORK/any2.pcap" any2
   curl -s --noproxy '*' -m 5 -o /dev/null http://127.0.0.1:18080/hello.txt || fail "curl during the -y $OTHER capture"
-  stop_capture any2
+  stop_capture any2 "$WORK/any2.pcap"
   [[ "$(info_field "$WORK/any2.pcap" linktypes.0.name)" == "$OTHER" ]] || fail "-y $OTHER was not honoured: $(cat "$WORK/info.json")"
   same_counts "$WORK/any2.pcap" "${COOKED_FILTERS[@]}"
 else
@@ -346,7 +355,7 @@ start_capture ring -i lo -s 0 -C 1 -W 3 -w "$WORK/ring.pcap" 'port 18080 or udp 
 wait_live "$WORK/snap.pcap" snap
 wait_live "$WORK/ring.pcap0" ring
 curl -s --noproxy '*' -m 20 --limit-rate 8M -o /dev/null http://127.0.0.1:18080/big.bin || fail "curl big.bin"
-stop_capture snap
+stop_capture snap "$WORK/snap.pcap"
 stop_capture ring
 [[ "$(info_field "$WORK/snap.pcap" snaplen)" == "96" ]] || fail "snaplen should be 96: $(cat "$WORK/info.json")"
 TRUNCATED="$(info_field "$WORK/snap.pcap" truncated_packets)"

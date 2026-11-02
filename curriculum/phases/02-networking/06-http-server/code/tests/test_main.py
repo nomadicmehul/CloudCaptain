@@ -308,7 +308,7 @@ class LogAndConfigTests(unittest.TestCase):
     def test_nginx_conf_maps_every_setting(self):
         config = main.Config(header_timeout=2, body_timeout=1.5, keepalive_timeout=3, keepalive_requests=3, max_body=65536, max_headers=50, upstream_connect_timeout=2, upstream_timeout=2, proxies=[("/api/", "http://127.0.0.1:9000")])
         text = main.nginx_conf(config, "/srv/www", "127.0.0.1:8081")
-        for directive in ("client_header_timeout 2s;", "client_body_timeout 1500ms;", "keepalive_timeout 3s;", "keepalive_requests 3;", "client_max_body_size 65536;",
+        for directive in ("client_header_timeout 2s;", "client_body_timeout 1500ms;", "keepalive_timeout 3s;", "keepalive_requests 3;", "client_max_body_size 65536;", "lingering_timeout 1s;",
                           "max_headers 50;", "large_client_header_buffers 4 8192;", "listen 127.0.0.1:8081;", "root /srv/www;", "location /api/ {",
                           "proxy_pass http://127.0.0.1:9000;", "proxy_read_timeout 2s;", "proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;", 'default "$http_via, 1.1 nginx";'):
             self.assertIn(directive, text)

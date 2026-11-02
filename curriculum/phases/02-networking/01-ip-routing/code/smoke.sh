@@ -34,6 +34,9 @@ if not mine["ok"]:
         print(f"{label}: routelens says {mine['error']} ({mine['errno']}, {mine['reason']}) but the kernel answered {open(out_path).read().strip()}")
         sys.exit(1)
     if mine["error"] not in err:
+        if mine["errno"] == "EXDEV" and "Invalid argument" in err:
+            print(f"  {label}: both refuse; the kernel answers EINVAL where routelens names EXDEV: newer kernels report every input-route drop, rp_filter included, as Invalid argument")
+            sys.exit(0)
         if soft:
             print(f"  {label}: both refuse; kernel {err!r}, routelens {mine['error']!r} (note: wording differs)")
             sys.exit(0)
