@@ -418,7 +418,7 @@ metadata:
 spec:
   containers:
     - name: web
-      image: nginx:1.29-alpine
+      image: nginx:1.30-alpine
 EOF
 kubectl get pods -w                                                   # static-web-cc-lab-control-plane appears without any kubectl apply
 kubectl delete pod static-web-cc-lab-control-plane                    # the mirror comes back with a new UID; the container never stopped
@@ -456,7 +456,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: web
-          image: nginx:1.29-alpine
+          image: nginx:1.30-alpine
           ports:
             - name: http
               containerPort: 80

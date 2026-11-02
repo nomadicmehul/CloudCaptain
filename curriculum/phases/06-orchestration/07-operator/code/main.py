@@ -27,7 +27,7 @@ VERSION = "v1alpha1"
 FINALIZER = f"{GROUP}/external-record"
 CONTENT_ANNOTATION = f"{GROUP}/content-sha256"
 MANAGED_BY = "minioperator"
-IMAGE = "nginx:1.29-alpine"
+IMAGE = "nginx:1.30-alpine"
 DEFAULT_ACCOUNT = "minioperator"
 DEMO_START = datetime(2026, 11, 1, 9, 0, tzinfo=timezone.utc).timestamp()
 

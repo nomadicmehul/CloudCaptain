@@ -287,7 +287,7 @@ class ReconcileTests(unittest.TestCase):
             self.assertEqual(child["metadata"]["labels"]["app.kubernetes.io/managed-by"], "minioperator")
         self.assertEqual(configmap["data"], {"index.html": "<h1>hi</h1>"})
         pod = deployment["spec"]["template"]["spec"]
-        self.assertEqual((deployment["spec"]["replicas"], pod["containers"][0]["image"]), (2, "nginx:1.29-alpine"))
+        self.assertEqual((deployment["spec"]["replicas"], pod["containers"][0]["image"]), (2, "nginx:1.30-alpine"))
         self.assertEqual(pod["volumes"][0]["configMap"]["name"], "hello-content")
         self.assertEqual(service["spec"]["selector"], deployment["spec"]["selector"]["matchLabels"])
         self.assertTrue(records.exists(NS, "hello"))
@@ -355,7 +355,7 @@ class ReconcileTests(unittest.TestCase):
         api.update(main.DEPLOYMENT, NS, deployment)
         operator.pump()
         fixed = api.get(main.DEPLOYMENT, NS, "hello")
-        self.assertEqual((fixed["spec"]["replicas"], fixed["spec"]["template"]["spec"]["containers"][0]["image"]), (2, "nginx:1.29-alpine"))
+        self.assertEqual((fixed["spec"]["replicas"], fixed["spec"]["template"]["spec"]["containers"][0]["image"]), (2, "nginx:1.30-alpine"))
 
     def test_conflicts_are_requeued_with_backoff(self):
         clock, api, _, operator = make_world()

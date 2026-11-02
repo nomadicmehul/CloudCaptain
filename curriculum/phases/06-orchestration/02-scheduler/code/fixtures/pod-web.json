@@ -4,7 +4,7 @@
   "metadata": {"name": "web", "namespace": "default", "labels": {"app": "web"}},
   "spec": {
     "containers": [
-      {"name": "web", "image": "nginx:1.29-alpine", "resources": {"requests": {"cpu": "500m", "memory": "512Mi"}}}
+      {"name": "web", "image": "nginx:1.30-alpine", "resources": {"requests": {"cpu": "500m", "memory": "512Mi"}}}
     ]
   }
 }

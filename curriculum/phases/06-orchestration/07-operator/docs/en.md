@@ -291,7 +291,7 @@ Each child goes through `ensure()` with a **mutate function**: start from the cu
         return self.api.update(kind, namespace, wanted), "updated"
 ```
 
-`mutate_deployment()` sets the replicas, the `nginx:1.29-alpine` container with a readiness probe, the ConfigMap volume at `/usr/share/nginx/html`, and one annotation on the pod template: `learn.cloudcaptain.io/content-sha256`, a hash of `spec.content`. A ConfigMap change alone never restarts pods; a changed template annotation makes the Deployment roll them, which fixes the first complaint in The Problem. The owner reference is `controller: true` with `blockOwnerDeletion: true`, so the garbage collector owns cleanup and a foreground delete of the site waits for its children.
+`mutate_deployment()` sets the replicas, the `nginx:1.30-alpine` container with a readiness probe, the ConfigMap volume at `/usr/share/nginx/html`, and one annotation on the pod template: `learn.cloudcaptain.io/content-sha256`, a hash of `spec.content`. A ConfigMap change alone never restarts pods; a changed template annotation makes the Deployment roll them, which fixes the first complaint in The Problem. The owner reference is `controller: true` with `blockOwnerDeletion: true`, so the garbage collector owns cleanup and a foreground delete of the site waits for its children.
 
 ### Step 7: status that says which spec it describes
 

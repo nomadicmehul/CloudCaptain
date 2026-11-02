@@ -55,6 +55,7 @@ All notable changes to CloudCaptain. The format follows [Keep a Changelog](https
 ### Changed
 - `curriculum/versions.json` also tracks Argo Rollouts, cosign, Syft and CoreDNS, which the new lessons pin.
 - Homepage: the hero leads with the curriculum (live lesson and test counts), the outdated stats strip is gone, and How It Works describes the lesson flow (tutor, Build It, Use It, Ship It).
+- Orchestration lessons use `nginx:1.30-alpine`, the current stable branch: the `1.29-alpine` tag stopped receiving updates at 1.29.8 in April 2026 and misses later fixes. The Operator lesson's smoke pulls it on kind; the Scheduler fixture and the kubelet examples follow.
 - Lesson and phase pages: section chips read "N min in this section" without the guessed difficulty; keyboard-shortcut hints are hidden on touch screens and narrow windows; the Captain's Bridge strip is shorter on phones; the sidebar opens only the current phase; phase pages show their lessons as linked cards (the README keeps the table for GitHub).
 - `/progress` leads with the curriculum and shows reading counters only once there is something to count. The decorative "v3.0-oss" label under the navbar logo is removed.
 - Homepage hero button goes to `/learn`; category cards show real guide counts instead of "N+ resources"; footer Roadmap points at ROADMAP.md.

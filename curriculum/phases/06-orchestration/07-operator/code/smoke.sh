@@ -167,7 +167,7 @@ for item in owned:
     refs = item["metadata"].get("ownerReferences") or []
     assert any(r["uid"] == uid and r["kind"] == "StaticSite" and r.get("controller") for r in refs), (item["kind"], refs)
 deployment = next(item for item in owned if item["kind"] == "Deployment")
-assert deployment["spec"]["template"]["spec"]["containers"][0]["image"] == "nginx:1.29-alpine", deployment["spec"]
+assert deployment["spec"]["template"]["spec"]["containers"][0]["image"] == "nginx:1.30-alpine", deployment["spec"]
 assert deployment["status"]["readyReplicas"] == 2, deployment["status"]
 print("  ConfigMap, Deployment and Service owned by uid", uid, "; Ready:", ready["message"])
 PY
