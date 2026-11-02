@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps von Grund auf.<br/>Bau das Tool. Nutze das Tool. Liefere ein Artefakt aus.</h3>
   <p>
-    <strong>63 Lektionen</strong> · <strong>9 Phasen live</strong> · <strong>92 Stunden</strong> · <strong>1.725 Tests</strong> · <strong>123 Skills, Prompts &amp; MCP-Server</strong>
+    <strong>63 Lektionen</strong> · <strong>9 Phasen live</strong> · <strong>92 Stunden</strong> · <strong>1.726 Tests</strong> · <strong>123 Skills, Prompts &amp; MCP-Server</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Kurs starten" /></a>

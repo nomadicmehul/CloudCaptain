@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps, बिल्कुल शुरुआत से।<br/>Tool बनाएँ। Tool इस्तेमाल करें। Artifact ship करें।</h3>
   <p>
-    <strong>63 lessons</strong> · <strong>9 phases लाइव</strong> · <strong>92 घंटे</strong> · <strong>1,725 tests</strong> · <strong>123 skills, prompts और MCP servers</strong>
+    <strong>63 lessons</strong> · <strong>9 phases लाइव</strong> · <strong>92 घंटे</strong> · <strong>1,726 tests</strong> · <strong>123 skills, prompts और MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="कोर्स शुरू करें" /></a>

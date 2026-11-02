@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>从零开始掌握 Cloud、DevOps 与 AIOps。<br/>亲手构建工具，上手使用工具，交付一件产物。</h3>
   <p>
-    <strong>63 节课</strong> · <strong>9 个阶段已上线</strong> · <strong>92 小时</strong> · <strong>1,725 个测试</strong> · <strong>123 个技能、提示词与 MCP 服务器</strong>
+    <strong>63 节课</strong> · <strong>9 个阶段已上线</strong> · <strong>92 小时</strong> · <strong>1,726 个测试</strong> · <strong>123 个技能、提示词与 MCP 服务器</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="开始学习课程" /></a>
