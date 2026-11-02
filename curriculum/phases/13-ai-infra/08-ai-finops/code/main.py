@@ -20,7 +20,7 @@ SECONDS_PER_HOUR = 3600
 HOURS_PER_DAY = 24
 DEFAULT_MAX_AGE_DAYS = 90
 SWEEP = (0.25, 0.5, 1.0, 2.0, 4.0, 8.0)
-SCAN_LOW, SCAN_HIGH, SCAN_STEP = 1e-3, 1e4, 1.05
+SCAN_LOW, SCAN_HIGH = 1e-3, 1e4
 IDLE = "__idle__"
 UNALLOCATED = "__unallocated__"
 TERMINAL_PHASES = ("Succeeded", "Failed")
@@ -269,13 +269,21 @@ def api_cost(api: ApiPrice, scenario: Scenario, scale: float = 1.0) -> Dict[str,
     }
 
 
-def scan_grid() -> List[float]:
-    grid = []
-    scale = SCAN_LOW
-    while scale <= SCAN_HIGH:
-        grid.append(scale)
-        scale *= SCAN_STEP
-    return grid
+def replica_steps(scenario: Scenario, unit: float, high: float) -> List[Tuple[float, int]]:
+    floor = max(scenario.min_replicas, 1)
+    steps: List[Tuple[float, int]] = []
+    for rps in scenario.hourly_rps:
+        if rps <= 0:
+            continue
+        k = floor
+        while True:
+            scale = (k + 1e-9) * unit / rps
+            if scale >= high:
+                break
+            steps.append((scale, 1))
+            k += 1
+    steps.sort()
+    return steps
 
 
 def break_even(instance: Instance, point: Point, scenario: Scenario, api: ApiPrice) -> Dict[str, Any]:
@@ -286,24 +294,33 @@ def break_even(instance: Instance, point: Point, scenario: Scenario, api: ApiPri
     if marginal >= api_price:
         return {"api": api.name, "scale": None, "reason": f"at {scenario.target_utilization:.0%} utilisation a self-hosted request costs {marginal * 1000:.4f} per 1k, the API {api_price * 1000:.4f}; more traffic never closes the gap"}
 
-    def cheaper(scale: float) -> bool:
-        return self_hosted(instance, point, scenario, scale, bounded=False)["monthly"] <= api_cost(api, scenario, scale)["monthly"]
+    unit = per_replica * scenario.target_utilization
+    rate = instance.hourly_price * scenario.days_per_month
+    api_per_scale = api_cost(api, scenario, 1.0)["monthly"]
+    busy_hours = sum(1 for rps in scenario.hourly_rps if rps > 0)
+    floor = max(scenario.min_replicas, 1)
+    replicas = sum(floor if rps > 0 else scenario.min_replicas for rps in scenario.hourly_rps)
+    slope = sum(scenario.hourly_rps) / unit * rate
+    ceiling = ((replicas + busy_hours) * rate + scenario.overhead_monthly) / (api_per_scale - slope)
+    high = min(SCAN_HIGH, ceiling)
 
-    grid = scan_grid()
-    losing = [index for index, scale in enumerate(grid) if not cheaper(scale)]
-    if not losing:
-        return {"api": api.name, "scale": grid[0], "requests_per_day": round(grid[0] * daily), "tokens_per_day": round(grid[0] * daily * (scenario.input_tokens + scenario.output_tokens)), "reason": "cheaper at every volume scanned"}
-    if losing[-1] == len(grid) - 1:
+    def dearer_below(count: int) -> float:
+        return (count * rate + scenario.overhead_monthly) / api_per_scale
+
+    last_losing = None
+    left = 0.0
+    for right, added in replica_steps(scenario, unit, high) + [(high, 0)]:
+        crossing = dearer_below(replicas)
+        if crossing > left:
+            last_losing = min(right, crossing)
+        replicas += added
+        left = right
+    if last_losing is None or last_losing < SCAN_LOW:
+        return {"api": api.name, "scale": SCAN_LOW, "requests_per_day": round(SCAN_LOW * daily), "tokens_per_day": round(SCAN_LOW * daily * (scenario.input_tokens + scenario.output_tokens)), "reason": "cheaper at every volume scanned"}
+    if last_losing >= SCAN_HIGH:
         return {"api": api.name, "scale": None, "reason": f"still dearer at {SCAN_HIGH:g}x the current traffic"}
-    low, high = grid[losing[-1]], grid[losing[-1] + 1]
-    for _ in range(40):
-        middle = (low + high) / 2
-        if cheaper(middle):
-            high = middle
-        else:
-            low = middle
-    scale = math.ceil(high * 1e4) / 1e4
-    return {"api": api.name, "scale": scale, "requests_per_day": round(scale * daily), "tokens_per_day": round(scale * daily * (scenario.input_tokens + scenario.output_tokens)), "reason": ""}
+    scale = math.floor(last_losing * 1e4) / 1e4 + 1e-4
+    return {"api": api.name, "scale": round(scale, 4), "requests_per_day": round(scale * daily), "tokens_per_day": round(scale * daily * (scenario.input_tokens + scenario.output_tokens)), "reason": ""}
 
 
 def money(value: Optional[float], digits: int = 2) -> Optional[float]:

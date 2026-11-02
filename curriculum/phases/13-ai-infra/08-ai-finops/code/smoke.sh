@@ -205,9 +205,9 @@ for concurrency in points:
 for point in option.points:
     scale = break_even(points[point.concurrency])
     if scale != infinity:
-        hosted = main.self_hosted(instance, point, scenario, scale, bounded=False)["monthly"]
-        assert hosted <= main.api_cost(api, scenario, scale)["monthly"] + 1e-6, (point.concurrency, scale)
-        assert main.self_hosted(instance, point, scenario, scale * 0.98, bounded=False)["monthly"] > main.api_cost(api, scenario, scale * 0.98)["monthly"], (point.concurrency, scale)
+        cheaper = lambda s, p=point: main.self_hosted(instance, p, scenario, s, bounded=False)["monthly"] <= main.api_cost(api, scenario, s)["monthly"] + 1e-6
+        assert all(cheaper(scale * (1 + i / 1000)) for i in range(3000)), ("self-hosting should stay cheaper from the break-even up", point.concurrency, scale)
+        assert any(not cheaper(scale * i / 2000) for i in range(1, 2000)), ("self-hosting should be dearer somewhere below the break-even", point.concurrency, scale)
 def shown(point):
     scale = break_even(point)
     return "never" if scale == infinity else f"{scale:g}x"
