@@ -1,0 +1,65 @@
+# The same availability SLO as slo.yaml in OpenSLO v1, with good/total events over 28 days,
+# followed by a latency SLO on a calendar month (bad = requests slower than 300 ms).
+apiVersion: openslo/v1
+kind: SLO
+metadata:
+  name: requests-availability
+  displayName: Checkout availability
+spec:
+  service: checkout
+  description: Checkout API requests that do not fail with a 5xx.
+  budgetingMethod: Occurrences
+  indicator:
+    metadata:
+      name: checkout-good-requests
+    spec:
+      ratioMetric:
+        counter: true
+        good:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: http_requests_total{job="checkout",code!~"5.."}
+        total:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: http_requests_total{job="checkout"}
+  timeWindow:
+    - duration: 28d
+      isRolling: true
+  objectives:
+    - displayName: 99.9% of requests succeed
+      target: 0.999
+---
+apiVersion: openslo/v1
+kind: SLO
+metadata:
+  name: requests-latency
+spec:
+  service: checkout
+  budgetingMethod: Occurrences
+  indicator:
+    metadata:
+      name: checkout-slow-requests
+    spec:
+      ratioMetric:
+        counter: true
+        bad:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: sum(rate(http_request_duration_seconds_count{job="checkout"}[{{.window}}])) - sum(rate(http_request_duration_seconds_bucket{job="checkout",le="0.3"}[{{.window}}]))
+        total:
+          metricSource:
+            type: Prometheus
+            spec:
+              query: http_request_duration_seconds_count{job="checkout"}
+  timeWindow:
+    - duration: 1M
+      calendar:
+        startTime: 2026-01-01 00:00:00
+        timeZone: UTC
+      isRolling: false
+  objectives:
+    - targetPercent: 99

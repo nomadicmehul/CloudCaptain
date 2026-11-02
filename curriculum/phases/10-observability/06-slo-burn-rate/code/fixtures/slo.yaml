@@ -1,0 +1,28 @@
+# Sloth prometheus/v1 spec, read unchanged by minislo and by `sloth generate`.
+version: "prometheus/v1"
+service: "checkout"
+labels:
+  owner: "payments"
+  tier: "1"
+slos:
+  # 1 request in 1000 may fail (5xx) over 30 days.
+  - name: "requests-availability"
+    objective: 99.9
+    description: "Checkout API requests that do not fail with a 5xx, measured at the service."
+    sli:
+      events:
+        error_query: sum(rate(http_requests_total{job="checkout",code=~"5.."}[{{.window}}]))
+        total_query: sum(rate(http_requests_total{job="checkout"}[{{.window}}]))
+    alerting:
+      name: CheckoutAvailabilityBudgetBurn
+      labels:
+        team: payments
+      annotations:
+        summary: "Checkout is spending its availability error budget too fast"
+        runbook_url: "https://runbooks.example.com/checkout/availability"
+      page_alert:
+        labels:
+          severity: critical
+      ticket_alert:
+        labels:
+          severity: warning

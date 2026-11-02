@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/promql",
+  "title": "PromQL Is Vector Arithmetic Over Time Windows",
+  "short": "PromQL Queries",
+  "motto": "Every PromQL answer is a set of labelled numbers at one instant; lookback, windows, extrapolation and label matching decide which numbers.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "observability/metrics-tsdb"
+  ],
+  "tools": [
+    "prometheus",
+    "promtool",
+    "docker",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre",
+    "/docs/learning-paths/sre-practices"
+  ],
+  "outputs": [
+    "skill-promql-review.md",
+    "prompt-explain-promql.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

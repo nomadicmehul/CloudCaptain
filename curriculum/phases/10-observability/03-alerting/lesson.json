@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/alerting",
+  "title": "An Alert Is a Query With a Clock and a Router",
+  "motto": "TODO: one line that states the core idea.",
+  "type": "Build",
+  "status": "draft",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [],
+  "tools": [],
+  "reference": [],
+  "outputs": [
+    "prompt-alerting.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  }
+}

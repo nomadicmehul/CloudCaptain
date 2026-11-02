@@ -1,0 +1,7 @@
+[pid  3000] 12:10:01.000000 execve("/usr/local/bin/python3", ["python3", "-m", "http.server", "8080"], 0x7ffd1234 /* 12 vars */) = 0
+[pid  3000] 12:10:01.000500 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+[pid  3000] 12:10:01.000700 openat(AT_FDCWD, "/usr/local/lib/python3.12/os.py", O_RDONLY|O_CLOEXEC) = 4</usr/local/lib/python3.12/os.py>
+[pid  3000] 12:10:02.000000 openat(AT_FDCWD, "/app/data.db", O_WRONLY|O_CREAT, 0644) = 5</app/data.db>
+[pid  3000] 12:10:03.000000 socket(AF_INET, SOCK_STREAM, IPPROTO_IP) = 6<TCP:[22222]>
+[pid  3000] 12:10:03.000100 connect(6<TCP:[22222]>, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("203.0.113.20")}, 16) = -1 EINPROGRESS (Operation now in progress)
+[pid  3000] 12:10:04.000000 openat(AT_FDCWD, "/app/index.html", O_RDONLY) = 7</app/index.html>

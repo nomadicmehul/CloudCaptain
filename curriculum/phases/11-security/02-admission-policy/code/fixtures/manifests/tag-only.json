@@ -1,0 +1,28 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "tag-only",
+    "labels": {
+      "app": "web",
+      "team": "payments"
+    }
+  },
+  "spec": {
+    "securityContext": {
+      "runAsNonRoot": true,
+      "runAsUser": 65532
+    },
+    "containers": [
+      {
+        "name": "web",
+        "image": "docker.io/library/nginx:1.30-alpine",
+        "resources": {
+          "limits": {
+            "memory": "64Mi"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,1327 @@
+{
+  "about": "One script, two servers: minivault replay runs these steps against OpenBao and minivault and checks each status and field. Run the scenarios in this order on a fresh dev server; db-setup needs --var db_config=JSON, audit needs --var probe=VALUE.",
+  "scenarios": {
+    "kv": [
+      {
+        "name": "write version 1",
+        "method": "POST",
+        "path": "secret/data/app/config",
+        "body": {
+          "data": {
+            "user": "app",
+            "password": "pw-1"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 1,
+          "data.destroyed": false
+        }
+      },
+      {
+        "name": "write version 2",
+        "method": "POST",
+        "path": "secret/data/app/config",
+        "body": {
+          "data": {
+            "user": "app",
+            "password": "pw-2"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 2
+        }
+      },
+      {
+        "name": "check-and-set against a stale version",
+        "method": "POST",
+        "path": "secret/data/app/config",
+        "body": {
+          "data": {
+            "password": "pw-x"
+          },
+          "options": {
+            "cas": 1
+          }
+        },
+        "expect": {
+          "status": 400,
+          "errors.0|contains:check-and-set": true
+        }
+      },
+      {
+        "name": "check-and-set against the current version",
+        "method": "POST",
+        "path": "secret/data/app/config",
+        "body": {
+          "data": {
+            "user": "app",
+            "password": "pw-3"
+          },
+          "options": {
+            "cas": 2
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 3
+        }
+      },
+      {
+        "name": "read latest",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "expect": {
+          "status": 200,
+          "data.metadata.version": 3,
+          "data.data.password": "pw-3"
+        }
+      },
+      {
+        "name": "read version 1",
+        "method": "GET",
+        "path": "secret/data/app/config?version=1",
+        "expect": {
+          "status": 200,
+          "data.metadata.version": 1,
+          "data.data.password": "pw-1"
+        }
+      },
+      {
+        "name": "soft-delete the latest version",
+        "method": "DELETE",
+        "path": "secret/data/app/config",
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "latest is gone, its metadata is not",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "expect": {
+          "status": 404,
+          "data.data": null,
+          "data.metadata.version": 3,
+          "data.metadata.deletion_time|set": true,
+          "data.metadata.destroyed": false
+        }
+      },
+      {
+        "name": "older versions still read",
+        "method": "GET",
+        "path": "secret/data/app/config?version=2",
+        "expect": {
+          "status": 200,
+          "data.data.password": "pw-2"
+        }
+      },
+      {
+        "name": "undelete version 3",
+        "method": "POST",
+        "path": "secret/undelete/app/config",
+        "body": {
+          "versions": [
+            3
+          ]
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "version 3 is back",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "expect": {
+          "status": 200,
+          "data.metadata.version": 3,
+          "data.data.password": "pw-3"
+        }
+      },
+      {
+        "name": "destroy version 1",
+        "method": "POST",
+        "path": "secret/destroy/app/config",
+        "body": {
+          "versions": [
+            1
+          ]
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "destroyed is permanent",
+        "method": "GET",
+        "path": "secret/data/app/config?version=1",
+        "expect": {
+          "status": 404,
+          "data.metadata.destroyed": true,
+          "data.metadata.deletion_time|set": false
+        }
+      },
+      {
+        "name": "metadata keeps every version's state",
+        "method": "GET",
+        "path": "secret/metadata/app/config",
+        "expect": {
+          "status": 200,
+          "data.current_version": 3,
+          "data.oldest_version": 0,
+          "data.versions|keys": [
+            "1",
+            "2",
+            "3"
+          ],
+          "data.versions.1.destroyed": true,
+          "data.max_versions": 0,
+          "data.cas_required": false
+        }
+      },
+      {
+        "name": "delete without versions is an error",
+        "method": "POST",
+        "path": "secret/delete/app/config",
+        "body": {},
+        "expect": {
+          "status": 400
+        }
+      },
+      {
+        "name": "write needs a data object",
+        "method": "POST",
+        "path": "secret/data/app/empty",
+        "body": {},
+        "expect": {
+          "status": 400
+        }
+      },
+      {
+        "name": "max_versions=2 on a new key",
+        "method": "POST",
+        "path": "secret/metadata/app/rotating",
+        "body": {
+          "max_versions": 2
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "rotating v1",
+        "method": "POST",
+        "path": "secret/data/app/rotating",
+        "body": {
+          "data": {
+            "k": "1"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 1
+        }
+      },
+      {
+        "name": "rotating v2",
+        "method": "POST",
+        "path": "secret/data/app/rotating",
+        "body": {
+          "data": {
+            "k": "2"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 2
+        }
+      },
+      {
+        "name": "rotating v3",
+        "method": "POST",
+        "path": "secret/data/app/rotating",
+        "body": {
+          "data": {
+            "k": "3"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 3
+        }
+      },
+      {
+        "name": "only two versions are kept",
+        "method": "GET",
+        "path": "secret/metadata/app/rotating",
+        "expect": {
+          "status": 200,
+          "data.current_version": 3,
+          "data.oldest_version": 2,
+          "data.versions|keys": [
+            "2",
+            "3"
+          ]
+        }
+      },
+      {
+        "name": "the trimmed version is gone without metadata",
+        "method": "GET",
+        "path": "secret/data/app/rotating?version=1",
+        "expect": {
+          "status": 404,
+          "data|set": false
+        }
+      },
+      {
+        "name": "list a folder",
+        "method": "LIST",
+        "path": "secret/metadata/app",
+        "expect": {
+          "status": 200,
+          "data.keys": [
+            "config",
+            "rotating"
+          ]
+        }
+      },
+      {
+        "name": "list the mount",
+        "method": "LIST",
+        "path": "secret/metadata/",
+        "expect": {
+          "status": 200,
+          "data.keys": [
+            "app/"
+          ]
+        }
+      },
+      {
+        "name": "delete metadata and every version",
+        "method": "DELETE",
+        "path": "secret/metadata/app/rotating",
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "metadata is gone",
+        "method": "GET",
+        "path": "secret/metadata/app/rotating",
+        "expect": {
+          "status": 404
+        }
+      },
+      {
+        "name": "the root token never expires",
+        "method": "GET",
+        "path": "auth/token/lookup-self",
+        "expect": {
+          "status": 200,
+          "data.policies": [
+            "root"
+          ],
+          "data.ttl": 0,
+          "data.expire_time|set": false
+        }
+      }
+    ],
+    "policy": [
+      {
+        "name": "root writes app/admin",
+        "method": "POST",
+        "path": "secret/data/app/admin",
+        "body": {
+          "data": {
+            "k": "admin"
+          }
+        },
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "root writes team/db",
+        "method": "POST",
+        "path": "secret/data/team/db",
+        "body": {
+          "data": {
+            "k": "db"
+          }
+        },
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "root writes team/shared",
+        "method": "POST",
+        "path": "secret/data/team/shared",
+        "body": {
+          "data": {
+            "k": "shared"
+          }
+        },
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "policy app (HCL)",
+        "method": "PUT",
+        "path": "sys/policies/acl/app",
+        "body": {
+          "policy": "# app: create, read and update its own secrets, never the admin one\npath \"secret/data/app/*\" {\n  capabilities = [\"create\", \"read\", \"update\"]\n}\npath \"secret/data/app/admin\" {\n  capabilities = [\"deny\"]\n}\npath \"secret/metadata/app/*\" {\n  capabilities = [\"list\", \"read\"]\n}\npath \"secret/data/+/shared\" {\n  capabilities = [\"read\"]\n}\n"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "policy ops (JSON)",
+        "method": "PUT",
+        "path": "sys/policies/acl/ops",
+        "body": {
+          "policy": "{\"path\": {\"secret/data/app/*\": {\"capabilities\": [\"delete\"]}, \"secret/data/team/*\": {\"capabilities\": [\"read\"]}}}"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "policy drop (create only)",
+        "method": "PUT",
+        "path": "sys/policies/acl/drop",
+        "body": {
+          "policy": "path \"secret/data/drop/*\" {\n  capabilities = [\"create\"]\n}\n"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "a broken policy is refused",
+        "method": "PUT",
+        "path": "sys/policies/acl/broken",
+        "body": {
+          "policy": "path \"secret/*\" { capabilities = [\"fly\"] }"
+        },
+        "expect": {
+          "status": 400
+        }
+      },
+      {
+        "name": "read a policy back",
+        "method": "GET",
+        "path": "sys/policies/acl/app",
+        "expect": {
+          "status": 200,
+          "data.name": "app"
+        }
+      },
+      {
+        "name": "token for app",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "app"
+          ],
+          "ttl": "1h"
+        },
+        "expect": {
+          "status": 200,
+          "auth.policies": [
+            "app",
+            "default"
+          ],
+          "auth.renewable": true,
+          "auth.lease_duration": 3600
+        },
+        "save": {
+          "app_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "token for app and ops",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "app",
+            "ops"
+          ],
+          "ttl": "1h"
+        },
+        "expect": {
+          "status": 200,
+          "auth.policies": [
+            "app",
+            "default",
+            "ops"
+          ]
+        },
+        "save": {
+          "both_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "token for drop",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "drop"
+          ],
+          "ttl": "1h"
+        },
+        "expect": {
+          "status": 200
+        },
+        "save": {
+          "drop_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "capabilities of the app token",
+        "method": "POST",
+        "path": "sys/capabilities-self",
+        "token": "${app_token}",
+        "body": {
+          "paths": [
+            "secret/data/app/config",
+            "secret/data/app/admin",
+            "secret/data/app/shared",
+            "secret/data/team/shared",
+            "secret/data/team/db",
+            "secret/data/app",
+            "secret/metadata/app/",
+            "secret/metadata/app",
+            "auth/token/lookup-self",
+            "sys/leases/lookup",
+            "cubbyhole/notes"
+          ]
+        },
+        "expect": {
+          "status": 200,
+          "data.secret/data/app/config|sorted": [
+            "create",
+            "read",
+            "update"
+          ],
+          "data.secret/data/app/admin|sorted": [
+            "deny"
+          ],
+          "data.secret/data/app/shared|sorted": [
+            "create",
+            "read",
+            "update"
+          ],
+          "data.secret/data/team/shared|sorted": [
+            "read"
+          ],
+          "data.secret/data/team/db|sorted": [
+            "deny"
+          ],
+          "data.secret/data/app|sorted": [
+            "deny"
+          ],
+          "data.secret/metadata/app/|sorted": [
+            "list",
+            "read"
+          ],
+          "data.secret/metadata/app|sorted": [
+            "deny"
+          ],
+          "data.auth/token/lookup-self|sorted": [
+            "read"
+          ],
+          "data.sys/leases/lookup|sorted": [
+            "update"
+          ],
+          "data.cubbyhole/notes|sorted": [
+            "create",
+            "delete",
+            "list",
+            "read",
+            "update"
+          ]
+        }
+      },
+      {
+        "name": "capabilities of the app+ops token",
+        "method": "POST",
+        "path": "sys/capabilities-self",
+        "token": "${both_token}",
+        "body": {
+          "paths": [
+            "secret/data/app/config",
+            "secret/data/team/db",
+            "secret/data/app/admin"
+          ]
+        },
+        "expect": {
+          "status": 200,
+          "data.secret/data/app/config|sorted": [
+            "create",
+            "delete",
+            "read",
+            "update"
+          ],
+          "data.secret/data/team/db|sorted": [
+            "read"
+          ],
+          "data.secret/data/app/admin|sorted": [
+            "deny"
+          ]
+        }
+      },
+      {
+        "name": "capabilities of root",
+        "method": "POST",
+        "path": "sys/capabilities-self",
+        "body": {
+          "paths": [
+            "secret/data/app/config"
+          ]
+        },
+        "expect": {
+          "status": 200,
+          "data.capabilities": [
+            "root"
+          ]
+        }
+      },
+      {
+        "name": "app reads its secret",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "token": "${app_token}",
+        "expect": {
+          "status": 200,
+          "data.data.password": "pw-3"
+        }
+      },
+      {
+        "name": "app updates an existing secret",
+        "method": "POST",
+        "path": "secret/data/app/config",
+        "token": "${app_token}",
+        "body": {
+          "data": {
+            "user": "app",
+            "password": "pw-4"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 4
+        }
+      },
+      {
+        "name": "app creates a new secret",
+        "method": "POST",
+        "path": "secret/data/app/new",
+        "token": "${app_token}",
+        "body": {
+          "data": {
+            "k": "new"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 1
+        }
+      },
+      {
+        "name": "app may not delete",
+        "method": "DELETE",
+        "path": "secret/data/app/config",
+        "token": "${app_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "deny beats the glob",
+        "method": "GET",
+        "path": "secret/data/app/admin",
+        "token": "${app_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "no rule means no access",
+        "method": "GET",
+        "path": "secret/data/team/db",
+        "token": "${app_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "a + segment matches one level",
+        "method": "GET",
+        "path": "secret/data/team/shared",
+        "token": "${app_token}",
+        "expect": {
+          "status": 200,
+          "data.data.k": "shared"
+        }
+      },
+      {
+        "name": "allowed but missing is 404, not 403",
+        "method": "GET",
+        "path": "secret/data/app/missing",
+        "token": "${app_token}",
+        "expect": {
+          "status": 404
+        }
+      },
+      {
+        "name": "app lists its folder",
+        "method": "LIST",
+        "path": "secret/metadata/app",
+        "token": "${app_token}",
+        "expect": {
+          "status": 200,
+          "data.keys": [
+            "admin",
+            "config",
+            "new"
+          ]
+        }
+      },
+      {
+        "name": "app may not list team",
+        "method": "LIST",
+        "path": "secret/metadata/team",
+        "token": "${app_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "app may not read policies",
+        "method": "GET",
+        "path": "sys/policies/acl/app",
+        "token": "${app_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "app+ops deletes: capabilities are a union",
+        "method": "DELETE",
+        "path": "secret/data/app/new",
+        "token": "${both_token}",
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "app+ops reads team/db",
+        "method": "GET",
+        "path": "secret/data/team/db",
+        "token": "${both_token}",
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "create-only token writes once",
+        "method": "POST",
+        "path": "secret/data/drop/x",
+        "token": "${drop_token}",
+        "body": {
+          "data": {
+            "k": "1"
+          }
+        },
+        "expect": {
+          "status": 200,
+          "data.version": 1
+        }
+      },
+      {
+        "name": "the second write is an update and is refused",
+        "method": "POST",
+        "path": "secret/data/drop/x",
+        "token": "${drop_token}",
+        "body": {
+          "data": {
+            "k": "2"
+          }
+        },
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "create does not imply read",
+        "method": "GET",
+        "path": "secret/data/drop/x",
+        "token": "${drop_token}",
+        "expect": {
+          "status": 403
+        }
+      }
+    ],
+    "tokens": [
+      {
+        "name": "token with a 3s TTL",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "app"
+          ],
+          "ttl": "3s"
+        },
+        "expect": {
+          "status": 200,
+          "auth.lease_duration": 3
+        },
+        "save": {
+          "short_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "it works now",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "token": "${short_token}",
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "it looks itself up",
+        "method": "GET",
+        "path": "auth/token/lookup-self",
+        "token": "${short_token}",
+        "expect": {
+          "status": 200,
+          "data.policies": [
+            "app",
+            "default"
+          ],
+          "data.ttl|le:3": true,
+          "data.renewable": true
+        }
+      },
+      {
+        "name": "it stops working at expiry",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "token": "${short_token}",
+        "expect": {
+          "status": 403
+        },
+        "retry": {
+          "until_status": 403,
+          "timeout": 20,
+          "interval": 0.5
+        }
+      },
+      {
+        "name": "an expired token cannot even look itself up",
+        "method": "GET",
+        "path": "auth/token/lookup-self",
+        "token": "${short_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "ttl above explicit_max_ttl is capped",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "app"
+          ],
+          "ttl": "2h",
+          "explicit_max_ttl": "1h"
+        },
+        "expect": {
+          "status": 200,
+          "auth.lease_duration": 3600
+        }
+      },
+      {
+        "name": "renewable token, 10m ttl, 1h max",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "app"
+          ],
+          "ttl": "10m",
+          "explicit_max_ttl": "1h"
+        },
+        "expect": {
+          "status": 200,
+          "auth.lease_duration": 600
+        },
+        "save": {
+          "renew_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "renew by 30m",
+        "method": "POST",
+        "path": "auth/token/renew-self",
+        "token": "${renew_token}",
+        "body": {
+          "increment": "30m"
+        },
+        "expect": {
+          "status": 200,
+          "auth.lease_duration": 1800
+        }
+      },
+      {
+        "name": "renew by 2h stops at the max",
+        "method": "POST",
+        "path": "auth/token/renew-self",
+        "token": "${renew_token}",
+        "body": {
+          "increment": "2h"
+        },
+        "expect": {
+          "status": 200,
+          "auth.lease_duration|le:3600": true,
+          "auth.lease_duration|ge:3500": true
+        }
+      },
+      {
+        "name": "non-renewable token",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "app"
+          ],
+          "ttl": "10m",
+          "renewable": false
+        },
+        "expect": {
+          "status": 200,
+          "auth.renewable": false
+        },
+        "save": {
+          "fixed_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "renewing it is refused",
+        "method": "POST",
+        "path": "auth/token/renew-self",
+        "token": "${fixed_token}",
+        "body": {
+          "increment": "10m"
+        },
+        "expect": {
+          "status": 400
+        }
+      },
+      {
+        "name": "policy parent",
+        "method": "PUT",
+        "path": "sys/policies/acl/parent",
+        "body": {
+          "policy": "path \"auth/token/create\" {\n  capabilities = [\"update\"]\n}\npath \"secret/data/app/*\" {\n  capabilities = [\"read\"]\n}\n"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "parent token",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "parent"
+          ],
+          "ttl": "1h"
+        },
+        "expect": {
+          "status": 200,
+          "auth.policies": [
+            "default",
+            "parent"
+          ]
+        },
+        "save": {
+          "parent_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "parent makes a child",
+        "method": "POST",
+        "path": "auth/token/create",
+        "token": "${parent_token}",
+        "body": {
+          "policies": [
+            "parent"
+          ]
+        },
+        "expect": {
+          "status": 200,
+          "auth.policies": [
+            "default",
+            "parent"
+          ],
+          "auth.orphan": false
+        },
+        "save": {
+          "child_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "a child cannot get more than its parent",
+        "method": "POST",
+        "path": "auth/token/create",
+        "token": "${parent_token}",
+        "body": {
+          "policies": [
+            "app"
+          ]
+        },
+        "expect": {
+          "status": 400
+        }
+      },
+      {
+        "name": "the child reads",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "token": "${child_token}",
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "root revokes the parent",
+        "method": "POST",
+        "path": "auth/token/revoke",
+        "body": {
+          "token": "${parent_token}"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "the child dies with it",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "token": "${child_token}",
+        "expect": {
+          "status": 403
+        },
+        "retry": {
+          "until_status": 403,
+          "timeout": 10,
+          "interval": 0.5
+        }
+      },
+      {
+        "name": "so does the parent",
+        "method": "GET",
+        "path": "auth/token/lookup-self",
+        "token": "${parent_token}",
+        "expect": {
+          "status": 403
+        }
+      },
+      {
+        "name": "second parent",
+        "method": "POST",
+        "path": "auth/token/create",
+        "body": {
+          "policies": [
+            "parent"
+          ],
+          "ttl": "1h"
+        },
+        "expect": {
+          "status": 200
+        },
+        "save": {
+          "parent2_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "second child",
+        "method": "POST",
+        "path": "auth/token/create",
+        "token": "${parent2_token}",
+        "body": {
+          "policies": [
+            "parent"
+          ]
+        },
+        "expect": {
+          "status": 200
+        },
+        "save": {
+          "child2_token": "auth.client_token"
+        }
+      },
+      {
+        "name": "revoke-orphan keeps the children",
+        "method": "POST",
+        "path": "auth/token/revoke-orphan",
+        "body": {
+          "token": "${parent2_token}"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "the orphaned child still works",
+        "method": "GET",
+        "path": "secret/data/app/config",
+        "token": "${child2_token}",
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "and is now an orphan",
+        "method": "GET",
+        "path": "auth/token/lookup-self",
+        "token": "${child2_token}",
+        "expect": {
+          "status": 200,
+          "data.orphan": true
+        }
+      }
+    ],
+    "db-setup": [
+      {
+        "name": "enable the database engine",
+        "method": "POST",
+        "path": "sys/mounts/database",
+        "body": {
+          "type": "database"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "connection",
+        "method": "POST",
+        "path": "database/config/pg",
+        "body": "${db_config}",
+        "expect": {
+          "status": [
+            200,
+            204
+          ]
+        }
+      },
+      {
+        "name": "role readonly, 1h leases",
+        "method": "POST",
+        "path": "database/roles/readonly",
+        "body": {
+          "db_name": "pg",
+          "creation_statements": [
+            "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';",
+            "GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";"
+          ],
+          "revocation_statements": [
+            "REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM \"{{name}}\";",
+            "DROP ROLE IF EXISTS \"{{name}}\";"
+          ],
+          "default_ttl": "1h",
+          "max_ttl": "24h"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "role short, 4s leases",
+        "method": "POST",
+        "path": "database/roles/short",
+        "body": {
+          "db_name": "pg",
+          "creation_statements": [
+            "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';",
+            "GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";"
+          ],
+          "revocation_statements": [
+            "REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM \"{{name}}\";",
+            "DROP ROLE IF EXISTS \"{{name}}\";"
+          ],
+          "default_ttl": "4s",
+          "max_ttl": "1m"
+        },
+        "expect": {
+          "status": 204
+        }
+      }
+    ],
+    "db-issue": [
+      {
+        "name": "issue a credential",
+        "method": "GET",
+        "path": "database/creds/readonly",
+        "expect": {
+          "status": 200,
+          "lease_duration": 3600,
+          "renewable": true,
+          "lease_id|startswith:database/creds/readonly/": true,
+          "data.username|startswith:v-root-readonly-": true,
+          "data.password|set": true
+        },
+        "save": {
+          "db_user": "data.username",
+          "db_pass": "data.password",
+          "db_lease": "lease_id"
+        }
+      },
+      {
+        "name": "look the lease up",
+        "method": "PUT",
+        "path": "sys/leases/lookup",
+        "body": {
+          "lease_id": "${db_lease}"
+        },
+        "expect": {
+          "status": 200,
+          "data.renewable": true,
+          "data.ttl|le:3600": true,
+          "data.ttl|ge:3500": true
+        }
+      },
+      {
+        "name": "renew the lease",
+        "method": "PUT",
+        "path": "sys/leases/renew",
+        "body": {
+          "lease_id": "${db_lease}",
+          "increment": 1800
+        },
+        "expect": {
+          "status": 200,
+          "lease_duration": 1800,
+          "renewable": true
+        }
+      },
+      {
+        "name": "issue a short credential",
+        "method": "GET",
+        "path": "database/creds/short",
+        "expect": {
+          "status": 200,
+          "lease_duration": 4
+        },
+        "save": {
+          "short_user": "data.username",
+          "short_pass": "data.password",
+          "short_lease": "lease_id"
+        }
+      },
+      {
+        "name": "an unknown role",
+        "method": "GET",
+        "path": "database/creds/nope",
+        "expect": {
+          "status": 400
+        }
+      }
+    ],
+    "db-revoke": [
+      {
+        "name": "revoke the lease",
+        "method": "PUT",
+        "path": "sys/leases/revoke",
+        "body": {
+          "lease_id": "${db_lease}"
+        },
+        "expect": {
+          "status": 204
+        }
+      },
+      {
+        "name": "the lease is gone",
+        "method": "PUT",
+        "path": "sys/leases/lookup",
+        "body": {
+          "lease_id": "${db_lease}"
+        },
+        "expect": {
+          "status": 400
+        }
+      }
+    ],
+    "db-expired": [
+      {
+        "name": "the short lease expired and was revoked",
+        "method": "PUT",
+        "path": "sys/leases/lookup",
+        "body": {
+          "lease_id": "${short_lease}"
+        },
+        "expect": {
+          "status": 400
+        },
+        "retry": {
+          "until_status": 400,
+          "timeout": 20,
+          "interval": 0.5
+        }
+      }
+    ],
+    "audit": [
+      {
+        "name": "write a probe value",
+        "method": "POST",
+        "path": "secret/data/audit/probe",
+        "body": {
+          "data": {
+            "token": "${probe}"
+          }
+        },
+        "expect": {
+          "status": 200
+        }
+      },
+      {
+        "name": "read it back",
+        "method": "GET",
+        "path": "secret/data/audit/probe",
+        "expect": {
+          "status": 200,
+          "data.data.token": "${probe}"
+        }
+      },
+      {
+        "name": "hash it with the audit device's key",
+        "method": "POST",
+        "path": "sys/audit-hash/file",
+        "body": {
+          "input": "${probe}"
+        },
+        "expect": {
+          "status": 200,
+          "data.hash|startswith:hmac-sha256:": true
+        },
+        "save": {
+          "probe_hash": "data.hash"
+        }
+      }
+    ]
+  }
+}

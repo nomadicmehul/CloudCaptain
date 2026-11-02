@@ -1,0 +1,403 @@
+{
+  "start": "2026-11-02T09:50:00Z",
+  "steps": [
+    {
+      "at": "+2m",
+      "deploy": {
+        "service": "checkout",
+        "version": "v2.14.0",
+        "actor": "ci",
+        "kind": "deploy"
+      }
+    },
+    {
+      "at": "+10m",
+      "webhook": {
+        "receiver": "miniincident",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-a"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T09:58:00Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "3f1c9a7e52b0d461"
+          }
+        ],
+        "groupLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout"
+        },
+        "commonLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout",
+          "severity": "critical",
+          "instance": "checkout-7d9f-a"
+        },
+        "commonAnnotations": {
+          "summary": "Checkout error rate above 5%"
+        },
+        "externalURL": "http://alertmanager.example:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"CheckoutHighErrorRate\", service=\"checkout\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "at": "+10m",
+      "pagerduty": {
+        "routing_key": "example-routing-key",
+        "event_action": "trigger",
+        "dedup_key": "05e94e9578802de292b3aef8763c31312779b7ce186396f6b2796fa4b6ca4129",
+        "payload": {
+          "summary": "Checkout error rate above 5%",
+          "source": "Alertmanager",
+          "severity": "critical",
+          "component": "checkout"
+        },
+        "client": "Alertmanager",
+        "client_url": "http://alertmanager.example:9093"
+      }
+    },
+    {
+      "at": "+11m",
+      "webhook": {
+        "receiver": "miniincident",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "SearchLatencyHigh",
+              "service": "search",
+              "severity": "warning",
+              "instance": "search-5c2-a"
+            },
+            "annotations": {
+              "summary": "Search p95 latency above 800ms"
+            },
+            "startsAt": "2026-11-02T09:59:00Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "c72e1f08ab93d5e4"
+          }
+        ],
+        "groupLabels": {
+          "alertname": "SearchLatencyHigh",
+          "service": "search"
+        },
+        "commonLabels": {
+          "alertname": "SearchLatencyHigh",
+          "service": "search",
+          "severity": "warning",
+          "instance": "search-5c2-a"
+        },
+        "commonAnnotations": {
+          "summary": "Search p95 latency above 800ms"
+        },
+        "externalURL": "http://alertmanager.example:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"SearchLatencyHigh\", service=\"search\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "at": "+12m",
+      "webhook": {
+        "receiver": "miniincident",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-a"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T09:58:00Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "3f1c9a7e52b0d461"
+          },
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-b"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T10:01:00Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "8e04b2d9c1a7f350"
+          }
+        ],
+        "groupLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout"
+        },
+        "commonLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "summary": "Checkout error rate above 5%"
+        },
+        "externalURL": "http://alertmanager.example:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"CheckoutHighErrorRate\", service=\"checkout\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "at": "+13m",
+      "webhook": {
+        "receiver": "miniincident",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-a"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T09:58:00Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "3f1c9a7e52b0d461"
+          },
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-b"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T10:01:00Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "8e04b2d9c1a7f350"
+          }
+        ],
+        "groupLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout"
+        },
+        "commonLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "summary": "Checkout error rate above 5%"
+        },
+        "externalURL": "http://alertmanager.example:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"CheckoutHighErrorRate\", service=\"checkout\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "at": "+17m",
+      "command": {
+        "user": "frank",
+        "text": "/inc ack INC-1"
+      }
+    },
+    {
+      "at": "+18m",
+      "command": {
+        "user": "frank",
+        "text": "/inc sev INC-1 impact=outage scope=many"
+      }
+    },
+    {
+      "at": "+19m",
+      "command": {
+        "user": "frank",
+        "text": "/inc role INC-1 comms @erin"
+      }
+    },
+    {
+      "at": "+19m",
+      "command": {
+        "user": "frank",
+        "text": "/inc role INC-1 ops @bob"
+      }
+    },
+    {
+      "at": "+20m",
+      "command": {
+        "user": "erin",
+        "text": "/inc status INC-1 investigating \"Some customers cannot complete checkout. We are investigating.\""
+      }
+    },
+    {
+      "at": "+24m",
+      "command": {
+        "user": "bob",
+        "text": "/inc note INC-1 \"Errors started two minutes after v2.14.0 reached all pods; rolling back\""
+      }
+    },
+    {
+      "at": "+26m",
+      "deploy": {
+        "service": "checkout",
+        "version": "v2.13.4",
+        "actor": "bob",
+        "kind": "rollback"
+      }
+    },
+    {
+      "at": "+27m",
+      "command": {
+        "user": "erin",
+        "text": "/inc status INC-1 monitoring \"A fix has been rolled out and error rates are back to normal.\""
+      }
+    },
+    {
+      "at": "+28m",
+      "command": {
+        "user": "frank",
+        "text": "/inc role INC-1 commander @alice"
+      }
+    },
+    {
+      "at": "+30m",
+      "webhook": {
+        "receiver": "miniincident",
+        "status": "resolved",
+        "alerts": [
+          {
+            "status": "resolved",
+            "labels": {
+              "alertname": "SearchLatencyHigh",
+              "service": "search",
+              "severity": "warning",
+              "instance": "search-5c2-a"
+            },
+            "annotations": {
+              "summary": "Search p95 latency above 800ms"
+            },
+            "startsAt": "2026-11-02T09:59:00Z",
+            "endsAt": "2026-11-02T10:19:30Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "c72e1f08ab93d5e4"
+          }
+        ],
+        "groupLabels": {
+          "alertname": "SearchLatencyHigh",
+          "service": "search"
+        },
+        "commonLabels": {
+          "alertname": "SearchLatencyHigh",
+          "service": "search",
+          "severity": "warning",
+          "instance": "search-5c2-a"
+        },
+        "commonAnnotations": {
+          "summary": "Search p95 latency above 800ms"
+        },
+        "externalURL": "http://alertmanager.example:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"SearchLatencyHigh\", service=\"search\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "at": "+33m",
+      "command": {
+        "user": "alice",
+        "text": "/inc note INC-1 \"Rollback confirmed. Looks like human error in the flag config\""
+      }
+    },
+    {
+      "at": "+35m",
+      "webhook": {
+        "receiver": "miniincident",
+        "status": "resolved",
+        "alerts": [
+          {
+            "status": "resolved",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-a"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T09:58:00Z",
+            "endsAt": "2026-11-02T10:24:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "3f1c9a7e52b0d461"
+          },
+          {
+            "status": "resolved",
+            "labels": {
+              "alertname": "CheckoutHighErrorRate",
+              "service": "checkout",
+              "severity": "critical",
+              "instance": "checkout-7d9f-b"
+            },
+            "annotations": {
+              "summary": "Checkout error rate above 5%"
+            },
+            "startsAt": "2026-11-02T10:01:00Z",
+            "endsAt": "2026-11-02T10:24:00Z",
+            "generatorURL": "http://prometheus.example:9090/graph?g0.expr=...",
+            "fingerprint": "8e04b2d9c1a7f350"
+          }
+        ],
+        "groupLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout"
+        },
+        "commonLabels": {
+          "alertname": "CheckoutHighErrorRate",
+          "service": "checkout",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "summary": "Checkout error rate above 5%"
+        },
+        "externalURL": "http://alertmanager.example:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"CheckoutHighErrorRate\", service=\"checkout\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "at": "+60m",
+      "tick": true
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "frontend",
+        "namespace": "cc-network-policy",
+        "labels": {
+          "app": "frontend"
+        }
+      },
+      "spec": {
+        "terminationGracePeriodSeconds": 1,
+        "containers": [
+          {
+            "name": "main",
+            "image": "python:3.12-alpine",
+            "command": [
+              "python3",
+              "/opt/mininetpol/main.py",
+              "serve",
+              "--port",
+              "8080",
+              "--port",
+              "9090",
+              "--port",
+              "5432"
+            ],
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 65534,
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "mininetpol",
+                "mountPath": "/opt/mininetpol",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "mininetpol",
+            "configMap": {
+              "name": "mininetpol"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "api",
+        "namespace": "cc-network-policy",
+        "labels": {
+          "app": "api"
+        }
+      },
+      "spec": {
+        "terminationGracePeriodSeconds": 1,
+        "containers": [
+          {
+            "name": "main",
+            "image": "python:3.12-alpine",
+            "command": [
+              "python3",
+              "/opt/mininetpol/main.py",
+              "serve",
+              "--port",
+              "8080",
+              "--port",
+              "9090",
+              "--port",
+              "5432"
+            ],
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              },
+              {
+                "name": "metrics",
+                "containerPort": 9090,
+                "protocol": "TCP"
+              }
+            ],
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 65534,
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "mininetpol",
+                "mountPath": "/opt/mininetpol",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "mininetpol",
+            "configMap": {
+              "name": "mininetpol"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "db",
+        "namespace": "cc-network-policy",
+        "labels": {
+          "app": "db"
+        }
+      },
+      "spec": {
+        "terminationGracePeriodSeconds": 1,
+        "containers": [
+          {
+            "name": "main",
+            "image": "python:3.12-alpine",
+            "command": [
+              "python3",
+              "/opt/mininetpol/main.py",
+              "serve",
+              "--port",
+              "8080",
+              "--port",
+              "9090",
+              "--port",
+              "5432"
+            ],
+            "ports": [
+              {
+                "name": "postgres",
+                "containerPort": 5432,
+                "protocol": "TCP"
+              }
+            ],
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 65534,
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "mininetpol",
+                "mountPath": "/opt/mininetpol",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "mininetpol",
+            "configMap": {
+              "name": "mininetpol"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "scanner",
+        "namespace": "cc-network-policy-tools",
+        "labels": {
+          "app": "scanner"
+        }
+      },
+      "spec": {
+        "terminationGracePeriodSeconds": 1,
+        "containers": [
+          {
+            "name": "main",
+            "image": "python:3.12-alpine",
+            "command": [
+              "python3",
+              "/opt/mininetpol/main.py",
+              "serve",
+              "--port",
+              "8080",
+              "--port",
+              "9090",
+              "--port",
+              "5432"
+            ],
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 65534,
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "mininetpol",
+                "mountPath": "/opt/mininetpol",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "mininetpol",
+            "configMap": {
+              "name": "mininetpol"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

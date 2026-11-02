@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/cis-benchmark",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "The API server's static pod manifest has no `--profiling` flag at all. What does CIS check 1.2.15 (\"Ensure that the --profiling argument is set to false\") report, and why?",
+      "choices": [
+        "PASS, because nothing enables profiling",
+        "It is skipped, because the flag is not present",
+        "FAIL, because an unset flag takes its default and the API server's default for --profiling is true",
+        "WARN, because the manifest cannot be read"
+      ],
+      "answer": 2,
+      "explanation": "Most benchmark findings are flags nobody set. The default is what runs, so a checker has to treat 'not set' as 'set to the default'. kube-bench reaches the same FAIL because its test requires the flag to be present with the value false."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A node's kubelet runs as `/usr/bin/kubelet --kubeconfig=/etc/kubernetes/kubelet.conf` with no `--config` flag, and `/var/lib/kubelet/config.yaml` on disk says `anonymous: enabled: false`. Is anonymous access to port 10250 enabled?",
+      "choices": [
+        "No, the file on disk disables it",
+        "Only if the API server allows anonymous auth too",
+        "No, anonymous access was removed from the kubelet",
+        "Yes: without --config the kubelet loads no file and uses its flag defaults, where --anonymous-auth is true and authorization is AlwaysAllow"
+      ],
+      "answer": 3,
+      "explanation": "The kubelet reads only the file --config names. Its flag defaults are the permissive legacy ones; the safe defaults (anonymous false, Webhook, readOnlyPort 0) apply only to a loaded config file. A checker that reads whatever config file exists reports PASS here; configz shows the truth."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A check requires a kubeconfig to have permissions of 600 or more restrictive. Which of these modes pass?",
+      "choices": [
+        "600 and 400",
+        "600, 400 and 640, since 640 is close to 600",
+        "Any mode numerically below 644",
+        "Only exactly 600"
+      ],
+      "answer": 0,
+      "explanation": "The test is a bitmask: no permission bit outside rw------- may be set. 400 sets fewer bits and passes; 640 adds group read and fails even though it looks numerically similar."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "kube-bench reports WARN for 4.2.13 (\"Ensure that a limit is set on pod PIDs (Manual)\"). What does WARN mean here?",
+      "choices": [
+        "The check passed with minor issues and can be ignored",
+        "The recommendation is Manual (unscored): its automated test failed, so a person has to decide whether a PID limit is needed and what it should be",
+        "kube-bench could not find the kubelet",
+        "The kubelet will refuse to start until it is fixed"
+      ],
+      "answer": 1,
+      "explanation": "kube-bench turns a failing unscored check into WARN, and a check with no automated test is always WARN. WARN is a work item with a decision attached, not a pass; record the decision and its owner."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A colleague says the cluster \"passes CIS 4.2.6\". Why is that statement incomplete?",
+      "choices": [
+        "4.2.6 is always a manual check",
+        "CIS numbers only apply to managed clusters",
+        "kube-bench does not implement 4.2.6",
+        "Section numbers belong to a benchmark version: 4.2.6 was --protect-kernel-defaults in the V1.24 benchmark and is --make-iptables-util-chains from v1.7.0 on, so the version must be named"
+      ],
+      "answer": 3,
+      "explanation": "Benchmarks renumber as recommendations are added and removed, and the EKS, GKE and AKS benchmarks use their own numbering. A finding without the benchmark version (for example CIS Kubernetes Benchmark v1.12.0, kube-bench cis-1.12) cannot be compared with anything."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "You run kube-bench on an EKS worker node with the CIS Kubernetes Benchmark and every control-plane check in section 1 fails. What is the right next step?",
+      "choices": [
+        "Use the EKS benchmark (an eks-* config) with the node, policies and managed-service targets, and answer the control-plane controls from the provider's settings, such as audit logging and Secrets encryption",
+        "SSH to the control plane and fix the manifests",
+        "Disable the failing checks with --skip and report a pass",
+        "Run the checks as a privileged DaemonSet so they can reach the control plane"
+      ],
+      "answer": 0,
+      "explanation": "On a managed control plane there are no manifests or etcd files you can read; the provider runs them. The EKS benchmark keeps the sections you own and turns the rest into questions about the provider's configuration, which you answer with its API and record as evidence."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "alerts": {
+    "A": {"labels": {"alertname": "HighErrorRate", "service": "checkout", "severity": "page", "team": "payments", "cluster": "eu1", "instance": "checkout-0"}, "annotations": {"summary": "checkout-0 fails 8% of requests"}},
+    "B": {"labels": {"alertname": "HighErrorRate", "service": "checkout", "severity": "page", "team": "payments", "cluster": "eu1", "instance": "checkout-1"}, "annotations": {"summary": "checkout-1 fails 7% of requests"}},
+    "C": {"labels": {"alertname": "DiskFull", "service": "postgres", "severity": "page", "team": "db", "cluster": "eu1", "instance": "pg-0"}, "annotations": {"summary": "pg-0 data volume is 97% full"}},
+    "D": {"labels": {"alertname": "SlowQueries", "service": "postgres", "severity": "ticket", "team": "db", "cluster": "eu1", "instance": "pg-0"}, "annotations": {"summary": "p99 query time is 2.4s"}},
+    "E": {"labels": {"alertname": "Watchdog", "severity": "none"}, "annotations": {"summary": "always firing: proves the pipeline works"}},
+    "F": {"labels": {"alertname": "CertExpiring", "service": "search", "severity": "ticket", "team": "search", "cluster": "us1", "instance": "search-0"}, "annotations": {"summary": "certificate expires in 6 days"}},
+    "F2": {"labels": {"alertname": "CertExpiring", "service": "search", "severity": "ticket", "team": "search", "cluster": "us1", "instance": "search-1"}, "annotations": {"summary": "certificate expires in 6 days"}},
+    "G": {"labels": {"alertname": "ClusterDown", "severity": "page", "team": "platform", "cluster": "eu1"}, "annotations": {"summary": "eu1 API server unreachable"}}
+  },
+  "steps": [
+    {"at": "0s", "post": ["A", "E", "F"]},
+    {"at": "4s", "post": ["B", "C", "D"]},
+    {"at": "5s", "silence": {"id": "search-maintenance", "matchers": ["service=\"search\""], "duration": "1m", "comment": "certificate rotation in progress", "createdBy": "oncall"}},
+    {"at": "9s", "post": ["A", "B"]},
+    {"at": "10s", "post": ["G"]},
+    {"at": "11s", "post": ["F2"]},
+    {"at": "13s", "snapshot": "cluster-down"},
+    {"at": "15s", "expire": "search-maintenance"},
+    {"at": "21s", "resolve": ["G"]},
+    {"at": "27s", "resolve": ["A"]},
+    {"at": "33s", "snapshot": "end"}
+  ],
+  "until": "34s"
+}

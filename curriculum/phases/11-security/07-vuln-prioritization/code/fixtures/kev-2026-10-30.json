@@ -1,0 +1,129 @@
+{
+  "title": "CISA Catalog of Known Exploited Vulnerabilities",
+  "catalogVersion": "2026.10.30",
+  "dateReleased": "2026-10-30T17:02:45.3665Z",
+  "count": 7,
+  "x-cloudcaptain-excerpt": {
+    "source": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+    "retrieved": "2026-11-02",
+    "entries_in_source": 1766,
+    "kept": "entries verbatim; only the vulnerabilities list was shortened"
+  },
+  "vulnerabilities": [
+    {
+      "cveID": "CVE-2025-32463",
+      "vendorProject": "Sudo",
+      "product": "Sudo",
+      "vulnerabilityName": "Sudo Inclusion of Functionality from Untrusted Control Sphere Vulnerability",
+      "dateAdded": "2025-09-29",
+      "shortDescription": "Sudo contains an inclusion of functionality from untrusted control sphere vulnerability. This vulnerability could allow local attacker to leverage sudo’s -R (--chroot) option to run arbitrary commands as root, even if they are not listed in the sudoers file.",
+      "requiredAction": "Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+      "dueDate": "2025-10-20",
+      "knownRansomwareCampaignUse": "Unknown",
+      "forensicTriage": "No",
+      "notes": "This vulnerability could affect an open-source component, third-party library, protocol, or proprietary implementation that could be used by different products. For more information, please see: https://www.sudo.ws/security/advisories/chroot_bug/ ; https://nvd.nist.gov/vuln/detail/CVE-2025-32463",
+      "cwes": [
+        "CWE-829"
+      ]
+    },
+    {
+      "cveID": "CVE-2023-4911",
+      "vendorProject": "GNU",
+      "product": "GNU C Library",
+      "vulnerabilityName": "GNU C Library Buffer Overflow Vulnerability",
+      "dateAdded": "2023-11-21",
+      "shortDescription": "GNU C Library's dynamic loader ld.so contains a buffer overflow vulnerability when processing the GLIBC_TUNABLES environment variable, allowing a local attacker to execute code with elevated privileges.",
+      "requiredAction": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+      "dueDate": "2023-12-12",
+      "knownRansomwareCampaignUse": "Unknown",
+      "forensicTriage": "No",
+      "notes": "This vulnerability affects a common open-source component, third-party library, or a protocol used by different products. Please check with specific vendors for information on patching status. For more information, please see: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=1056e5b4c3f2d90ed2b4a55f96add28da2f4c8fa, https://access.redhat.com/security/cve/cve-2023-4911, https://www.debian.org/security/2023/dsa-5514 ; https://nvd.nist.gov/vuln/detail/CVE-2023-4911  ",
+      "cwes": [
+        "CWE-122"
+      ]
+    },
+    {
+      "cveID": "CVE-2021-4034",
+      "vendorProject": "Red Hat",
+      "product": "Polkit",
+      "vulnerabilityName": "Red Hat Polkit Out-of-Bounds Read and Write Vulnerability",
+      "dateAdded": "2022-06-27",
+      "shortDescription": "The Red Hat polkit pkexec utility contains an out-of-bounds read and write vulnerability that allows for privilege escalation with administrative rights.",
+      "requiredAction": "Apply updates per vendor instructions.",
+      "dueDate": "2022-07-18",
+      "knownRansomwareCampaignUse": "Known",
+      "forensicTriage": "No",
+      "notes": "https://nvd.nist.gov/vuln/detail/CVE-2021-4034",
+      "cwes": [
+        "CWE-787"
+      ]
+    },
+    {
+      "cveID": "CVE-2014-0160",
+      "vendorProject": "OpenSSL",
+      "product": "OpenSSL",
+      "vulnerabilityName": "OpenSSL Information Disclosure Vulnerability",
+      "dateAdded": "2022-05-04",
+      "shortDescription": "The TLS and DTLS implementations in OpenSSL do not properly handle Heartbeat Extension packets, which allows remote attackers to obtain sensitive information.",
+      "requiredAction": "Apply updates per vendor instructions.",
+      "dueDate": "2022-05-25",
+      "knownRansomwareCampaignUse": "Unknown",
+      "forensicTriage": "No",
+      "notes": "https://nvd.nist.gov/vuln/detail/CVE-2014-0160",
+      "cwes": [
+        "CWE-125"
+      ]
+    },
+    {
+      "cveID": "CVE-2021-3156",
+      "vendorProject": "Sudo",
+      "product": "Sudo",
+      "vulnerabilityName": "Sudo Heap-Based Buffer Overflow Vulnerability",
+      "dateAdded": "2022-04-06",
+      "shortDescription": "Sudo contains an off-by-one error that can result in a heap-based buffer overflow, which allows for privilege escalation.",
+      "requiredAction": "Apply updates per vendor instructions.",
+      "dueDate": "2022-04-27",
+      "knownRansomwareCampaignUse": "Unknown",
+      "forensicTriage": "No",
+      "notes": "https://nvd.nist.gov/vuln/detail/CVE-2021-3156",
+      "cwes": [
+        "CWE-122",
+        "CWE-193"
+      ]
+    },
+    {
+      "cveID": "CVE-2014-6271",
+      "vendorProject": "GNU",
+      "product": "Bourne-Again Shell (Bash)",
+      "vulnerabilityName": "GNU Bourne-Again Shell (Bash) Arbitrary Code Execution Vulnerability",
+      "dateAdded": "2022-01-28",
+      "shortDescription": "GNU Bash through 4.3 processes trailing strings after function definitions in the values of environment variables, which allows remote attackers to execute code.",
+      "requiredAction": "Apply updates per vendor instructions.",
+      "dueDate": "2022-07-28",
+      "knownRansomwareCampaignUse": "Unknown",
+      "forensicTriage": "No",
+      "notes": "https://nvd.nist.gov/vuln/detail/CVE-2014-6271",
+      "cwes": [
+        "CWE-78"
+      ]
+    },
+    {
+      "cveID": "CVE-2021-44228",
+      "vendorProject": "Apache",
+      "product": "Log4j2",
+      "vulnerabilityName": "Apache Log4j2 Remote Code Execution Vulnerability",
+      "dateAdded": "2021-12-10",
+      "shortDescription": "Apache Log4j2 contains a vulnerability where JNDI features do not protect against attacker-controlled JNDI-related endpoints, allowing for remote code execution.",
+      "requiredAction": "For all affected software assets for which updates exist, the only acceptable remediation actions are: 1) Apply updates; OR 2) remove affected assets from agency networks. Temporary mitigations using one of the measures provided at https://www.cisa.gov/uscert/ed-22-02-apache-log4j-recommended-mitigation-measures are only acceptable until updates are available.",
+      "dueDate": "2021-12-24",
+      "knownRansomwareCampaignUse": "Known",
+      "forensicTriage": "No",
+      "notes": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+      "cwes": [
+        "CWE-20",
+        "CWE-400",
+        "CWE-502"
+      ]
+    }
+  ]
+}

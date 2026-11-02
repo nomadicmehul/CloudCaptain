@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/chaos-experiments",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A team deletes two of three checkout pods in production, watches the dashboard's error panel (a five-minute rate) go from 0.2% to 2% and back, and concludes that the service handled it. What is missing for this to count as a chaos experiment?",
+      "choices": [
+        "A larger blast radius, so that the effect is easier to see",
+        "A dedicated chaos tool instead of kubectl",
+        "A hypothesis written down before the run, measured in windows short enough to show the fault, with an abort condition and a rollback; without it, 2% can neither pass nor fail anything",
+        "Running it at night, when traffic is lowest"
+      ],
+      "answer": 2,
+      "explanation": "The fault was real, the experiment was not. A five-minute rate averages a 30-second outage into a bump, and with no written threshold there is nothing to compare the bump with. Running at night removes the traffic that the measurement needs."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The blast radius says `max_percent: 34`. The fault asks for Chaos Mesh's `fixed-percent` mode with value 34 on a Deployment with three running pods. What does minichaos do, and why?",
+      "choices": [
+        "It refuses: the selection rounds up to 2 pods (ceil of 1.02) while the limit rounds down to 1 (floor of 1.02)",
+        "It deletes one pod, because 34% of 3 is about 1",
+        "It deletes nothing, because 34% of 3 is not a whole number",
+        "It deletes all three pods, because percentages apply per node"
+      ],
+      "answer": 0,
+      "explanation": "Chaos Mesh rounds a percentage selection up so that at least one target is chosen. A limit has to round down, or it stops being a limit. The worst case of the selection is compared with the limit before anything is touched."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The netem fault adds `delay 200ms` to the server's end of a veth pair inside its network namespace. A new HTTP request from outside now takes about 400 ms. Why twice the delay?",
+      "choices": [
+        "netem delays both directions of a veth pair",
+        "The client's end of the pair received a copy of the qdisc",
+        "The 5% loss doubles the average latency",
+        "netem shapes the device's egress, and a new connection waits for two packets the server sends on the critical path: the SYN-ACK and the response"
+      ],
+      "answer": 3,
+      "explanation": "A qdisc acts on packets leaving its device. The client's SYN and request leave the other end undelayed; the server's SYN-ACK and response each wait 200 ms. Shaping ingress needs an ifb device, and loss shows up mostly as retransmission waits, not as a doubling."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Before injecting anything, minichaos measures p95 at 300 ms against a hypothesis of at most 100 ms. What does it do?",
+      "choices": [
+        "It injects anyway, because the hypothesis is only checked while the fault is active",
+        "It ends with the verdict not-run and injects nothing: a fault on top of a steady state that is already broken teaches nothing and deepens whatever incident is going on",
+        "It raises the threshold to the measured value and continues",
+        "It injects, aborts after the first window and rolls back"
+      ],
+      "answer": 1,
+      "explanation": "The before-window is part of the hypothesis. If the system is not in its steady state, any result during the fault is uninterpretable and the fault adds damage to an existing problem. Fix or wait, then rerun."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A pod-delete experiment holds when each pod keeps its own grace period, and deviates with 11% errors in the first window when the grace period is 0, as in the defaults of Chaos Mesh's pod-kill and Litmus' pod-delete. What is the most useful conclusion?",
+      "choices": [
+        "The chaos tool is broken, so use kubectl delete from now on",
+        "Raise the replica count to ten until the error rate is under the threshold",
+        "Lower the hypothesis until the forced experiment passes",
+        "The service tolerates graceful shutdown but not abrupt pod loss, because connections keep arriving until the endpoints catch up; add retries on the client or the proxy, and keep the forced experiment as the regression test for node crashes"
+      ],
+      "answer": 3,
+      "explanation": "The two runs differ in exactly one variable, and the difference is the finding. preStop only helps when it runs; a node crash or an OOM kill never runs it. Changing the hypothesis to pass hides the weakness, and more replicas only shrink the share of failed requests."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A colleague's bash script runs `tc qdisc add ... netem delay 200ms` at the start and `tc qdisc del` on its last line, with `set -e`. Halfway through, a curl check fails. What happens, and what would you change?",
+      "choices": [
+        "The script exits before the last line and the qdisc stays; move the delete into a trap that runs on every exit, check afterwards that the qdisc is gone, and give the fault an expiry of its own for when the script is killed",
+        "set -e retries the failed curl until it succeeds, so the delete still runs",
+        "tc removes the qdisc by itself when the shell that added it exits",
+        "Nothing: netem removes itself after a default duration of 60 seconds"
+      ],
+      "answer": 0,
+      "explanation": "A qdisc belongs to the device, not to the process that added it, and it has no default duration. The rollback has to run on every path (trap EXIT, finally), be verified, and be backed by something that outlives the controller, such as a watchdog or a namespace that can be deleted."
+    }
+  ]
+}

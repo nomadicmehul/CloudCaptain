@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "security/secret-scanning",
+  "title": "A Leaked Key Is a Pattern, Entropy and History",
+  "short": "Secret Scanning",
+  "motto": "A pushed key lives in every clone: find it by shape, entropy and history, revoke it first, then rewrite history and block the next one.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/workflow-security"
+  ],
+  "tools": [
+    "gitleaks",
+    "git",
+    "git-filter-repo",
+    "pre-commit",
+    "trufflehog"
+  ],
+  "reference": [
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/devsecops/cheatsheet",
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/github-actions/fundamentals"
+  ],
+  "outputs": [
+    "skill-leaked-secret-response.md",
+    "prompt-triage-secret-finding.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

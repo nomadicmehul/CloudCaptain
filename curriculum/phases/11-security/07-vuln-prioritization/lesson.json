@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "security/vuln-prioritization",
+  "title": "A CVE Is a Question: Reachable, Exploited, Exposed?",
+  "short": "Vuln Triage",
+  "motto": "A scanner lists every CVE you ship; priority comes from three facts it cannot see: is it exploited, is it exposed, can your code reach it.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/sbom"
+  ],
+  "tools": [
+    "trivy",
+    "grype",
+    "vexctl",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/devsecops/cheatsheet",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/security",
+    "/docs/cloud/cloud-security/fundamentals"
+  ],
+  "outputs": [
+    "skill-vuln-triage.md",
+    "prompt-explain-cve-priority.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

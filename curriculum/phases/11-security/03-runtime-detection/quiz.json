@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/runtime-detection",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A container runs non-root with `cap-drop ALL`, a read-only root and the default seccomp profile. An attacker still gets a shell in it and reads `/etc/shadow`. Why did the hardening not stop the read, and what would have caught it?",
+      "choices": [
+        "The seccomp profile was misconfigured; a correct one blocks `openat`",
+        "The read-only root should have been applied to `/etc` as well",
+        "Prevention only bounds what the process may do; reading a file it is allowed to read is an ordinary syscall, so a detection rule watching `openat` of sensitive files is what would have flagged it",
+        "Capabilities were dropped too late, after the shell started"
+      ],
+      "answer": 2,
+      "explanation": "Hardening decides what the process can do before it runs; it has no opinion about an allowed call made at attack time and leaves no record. Detection reads the calls as they happen and alerts on the pattern. The two are complementary: a wall and a camera."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In the condition `proc.name in (shell_binaries) and container.id != host`, what are `shell_binaries` and `host`?",
+      "choices": [
+        "`shell_binaries` is a list expanded into a set membership test; `host` is the literal string Falco uses for `container.id` when the call happened outside any container, so `!= host` means inside a container",
+        "Both are macros that expand to conditions",
+        "`shell_binaries` is a macro and `host` is an environment variable",
+        "`host` is the node's hostname looked up at runtime"
+      ],
+      "answer": 0,
+      "explanation": "A list holds data and expands inside `in (...)`; a macro holds logic and is used as a bare word. `container.id` is the literal `host` for a call outside any container, so `container.id != host` is the idiom for 'in a container'."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A rule fires 4,000 times a day, almost all from `apt-get` writing under `/etc` during nightly patching. What is the right fix?",
+      "choices": [
+        "Delete the rule; it is clearly wrong",
+        "Lower its priority to DEBUG so it stops paging",
+        "Pipe the alerts to a different channel and move on",
+        "Add an exception on `proc.name in (package_mgmt_binaries)` so the legitimate writer is carved out while the rule still fires for everything else"
+      ],
+      "answer": 3,
+      "explanation": "An exception suppresses the alert for a named known-good case and leaves the rule active for the rest. Deleting the rule removes the detection; dropping the priority or re-routing hides it. Tuning by exception is how you reach a rule you can actually act on."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`minifalco` builds events from `strace -f -tt -yy` output. Why does it track `clone`/`fork` results and `execve` paths instead of reading `proc.name` from each line?",
+      "choices": [
+        "strace prints `proc.name` only for the first process",
+        "A raw strace line carries the syscall and its arguments but not the process name or parent, so the tool reconstructs identity: a `clone` records the child and its parent, and a successful `execve` sets that pid's program, which later file and network events are labelled with",
+        "`clone` and `execve` are the only calls Falco rules care about",
+        "It needs the timestamps to order the events"
+      ],
+      "answer": 1,
+      "explanation": "Fields like `proc.name` and `proc.pname` are not in a strace line; the engine derives them. Following forks for parentage and execve for the running program lets an `openat` or `connect` be attributed to `cat` or `nc` rather than an anonymous pid."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You wire a detection rule straight to an automated action that kills any pod the rule matches. A week later a legitimate batch job that unpacks into `/tmp` and runs a helper gets killed mid-run. What principle did this violate?",
+      "choices": [
+        "Detection rules must always run as root",
+        "eBPF cannot see batch jobs reliably",
+        "Detection is a camera, not a wall: acting automatically on an untuned rule turns a false positive into an outage, so you tune in audit and usually page a human before enforcing",
+        "The rule should have used `glob` instead of `startswith`"
+      ],
+      "answer": 2,
+      "explanation": "Enforcement driven by a detection rule inherits the rule's false positives. The safe path is audit, count, add exceptions for the legitimate matches, then act, and even then a human in the loop for anything destructive. A camera that shoots on motion is a liability."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "An attacker loads a kernel rootkit that intercepts the syscall table below Falco's probe, and separately runs activity on a worker node where no sensor is deployed. What does this tell you about the limits of runtime detection?",
+      "choices": [
+        "The engine sees only the events the kernel delivers to it, so activity below the probe or on an unmonitored node is invisible; detection covers what you actually watch, which is why sensor coverage and probe integrity are part of the control, not an afterthought",
+        "Nothing; Falco detects rootkits by signature",
+        "It means seccomp was disabled",
+        "Runtime detection is pointless and prevention is enough"
+      ],
+      "answer": 0,
+      "explanation": "Detection is only as complete as its view. A probe that is bypassed or a node with no sensor produces no events, and no events means no alerts. Coverage (every node) and probe integrity are themselves things to monitor; detection complements prevention, it does not replace it."
+    }
+  ]
+}

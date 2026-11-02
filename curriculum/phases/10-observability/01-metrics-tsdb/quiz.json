@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/metrics-tsdb",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`logins_total` has a `code` label with 3 values and runs on 4 instances. A release adds a `user_id` label, and the service has 50,000 users. How many series can this one metric now create?",
+      "choices": [
+        "12, because labels are counted per instance",
+        "50,000, one per user",
+        "600,000: 3 codes x 4 instances x 50,000 users, and every combination is its own series in the head",
+        "1, because labels are metadata attached to the same series"
+      ],
+      "answer": 2,
+      "explanation": "A series is the metric name plus one exact label set, so series multiply by the number of values of each label. Each one costs head memory for its labels, postings entries and open chunk, whether its value changes or not."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Target A keeps running but stops exposing `cc_queue_depth{queue=\"batch\"}`. Thirty seconds later an instant query for that series returns nothing, although the lookback delta is 5 minutes. Why?",
+      "choices": [
+        "The first scrape without the series appended a staleness marker (a NaN with a reserved bit pattern), and an instant query skips a series whose newest sample is that marker",
+        "The TSDB deletes a series as soon as it is missing from one scrape",
+        "The lookback window restarts on every scrape",
+        "The head was compacted into a block, which hides the series"
+      ],
+      "answer": 0,
+      "explanation": "The scrape loop compares each scrape's series with the previous one and writes StaleNaN (0x7ff0000000000002) for every series that vanished, and for all series of a target whose scrape failed. The series still exists in /api/v1/series; it simply has no current value."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A target exposes `cc_build_info{job=\"batch-runner\"} 1` and is scraped by job `demo` with the default `honor_labels`. What does Prometheus store?",
+      "choices": [
+        "`cc_build_info{job=\"batch-runner\", instance=...}`, because the scraped value always wins",
+        "Nothing: the sample is rejected because of the label conflict",
+        "Two series, one for each value of job",
+        "`cc_build_info{job=\"demo\", exported_job=\"batch-runner\", instance=...}`: the target label wins and the scraped value moves to exported_job"
+      ],
+      "answer": 3,
+      "explanation": "With honor_labels: false, a conflicting scraped label is renamed with the exported_ prefix (repeated until the name is free) and the target's label is set. honor_labels: true keeps the scraped value, which is what federation and the Pushgateway need."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A counter is scraped exactly every 15 seconds and its value has not changed. What does each new sample cost inside a Prometheus XOR chunk?",
+      "choices": [
+        "16 bytes: an 8-byte timestamp and an 8-byte float",
+        "2 bits: a delta-of-delta of 0 is a single 0 bit, and an unchanged value XORs to 0, which is another single 0 bit",
+        "About 1 byte, because chunks are gzip-compressed",
+        "Nothing, because unchanged samples are not stored"
+      ],
+      "answer": 1,
+      "explanation": "Gorilla encoding stores the change of the timestamp delta and the XOR with the previous value. Regular scrapes and steady values are the common case, which is why Prometheus averages 1 to 2 bytes per sample. Jitter of one millisecond costs 16 bits for the timestamp."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Prometheus was OOM-killed after a cardinality spike. Someone lowers retention from 15d to 3d. What does that change?",
+      "choices": [
+        "Memory drops sharply because less data is kept",
+        "WAL replay becomes fast again on the next restart",
+        "Disk use falls because older blocks are deleted, but head memory (the recent series) is unchanged; dropping the exploding label is the fix",
+        "Nothing, because retention only applies to remote write"
+      ],
+      "answer": 2,
+      "explanation": "Retention deletes whole blocks on disk. Memory is the head, and the head holds every series seen in the last hours, which is set by cardinality. Remove the label at the source, labeldrop it in metric_relabel_configs meanwhile, and cap targets with sample_limit."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "After an upgrade to Prometheus 3, one exporter shows `up` 0 and the target error `received unsupported Content-Type \"application/json\"`. The body is valid text format. What fixes it without changing the exporter?",
+      "choices": [
+        "Set `fallback_scrape_protocol: PrometheusText0.0.4` on that scrape config, because Prometheus 3 no longer guesses the format when the Content-Type is missing or unknown",
+        "Set `honor_labels: true`",
+        "Raise `scrape_timeout` to the scrape interval",
+        "Start Prometheus with `--web.enable-admin-api`"
+      ],
+      "answer": 0,
+      "explanation": "Prometheus 2 fell back to the text parser for unknown or blank Content-Types. Prometheus 3 fails the scrape instead, unless fallback_scrape_protocol names the protocol. The long-term fix is for the exporter to send text/plain; version=0.0.4."
+    }
+  ]
+}

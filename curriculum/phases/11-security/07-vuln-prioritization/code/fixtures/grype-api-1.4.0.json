@@ -1,0 +1,1171 @@
+{
+  "matches": [
+    {
+      "vulnerability": {
+        "id": "CVE-2023-4911",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2023-4911",
+        "namespace": "debian:distro:debian:12",
+        "severity": "High",
+        "urls": [],
+        "cvss": [],
+        "knownExploited": [
+          {
+            "cve": "CVE-2023-4911",
+            "vendorProject": "GNU",
+            "product": "GNU C Library",
+            "dateAdded": "2023-11-21",
+            "requiredAction": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+            "dueDate": "2023-12-12",
+            "knownRansomwareCampaignUse": "Unknown",
+            "cwes": [
+              "CWE-122"
+            ]
+          }
+        ],
+        "epss": [
+          {
+            "cve": "CVE-2023-4911",
+            "epss": 0.81422,
+            "percentile": 0.99631,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "2.36-9+deb12u3"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 78.75
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2023-4911",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2023-4911",
+          "namespace": "nvd:cpe",
+          "severity": "High",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "metrics": {
+                "baseScore": 7.8
+              },
+              "vendorMetadata": {}
+            },
+            {
+              "source": "secalert@redhat.com",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "metrics": {
+                "baseScore": 7.8
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "glibc",
+              "version": "2.36-9+deb12u1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2023-4911",
+            "versionConstraint": "< 2.36-9+deb12u3 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "b047a0ce26d4743f",
+        "name": "libc-bin",
+        "version": "2.36-9+deb12u1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/libc-bin@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12&upstream=glibc",
+        "upstreams": [
+          {
+            "name": "glibc"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2023-4911",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2023-4911",
+        "namespace": "debian:distro:debian:12",
+        "severity": "High",
+        "urls": [],
+        "cvss": [],
+        "knownExploited": [
+          {
+            "cve": "CVE-2023-4911",
+            "vendorProject": "GNU",
+            "product": "GNU C Library",
+            "dateAdded": "2023-11-21",
+            "requiredAction": "Apply mitigations per vendor instructions or discontinue use of the product if mitigations are unavailable.",
+            "dueDate": "2023-12-12",
+            "knownRansomwareCampaignUse": "Unknown",
+            "cwes": [
+              "CWE-122"
+            ]
+          }
+        ],
+        "epss": [
+          {
+            "cve": "CVE-2023-4911",
+            "epss": 0.81422,
+            "percentile": 0.99631,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "2.36-9+deb12u3"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 78.75
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2023-4911",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2023-4911",
+          "namespace": "nvd:cpe",
+          "severity": "High",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "metrics": {
+                "baseScore": 7.8
+              },
+              "vendorMetadata": {}
+            },
+            {
+              "source": "secalert@redhat.com",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "metrics": {
+                "baseScore": 7.8
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "glibc",
+              "version": "2.36-9+deb12u1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2023-4911",
+            "versionConstraint": "< 2.36-9+deb12u3 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "b9c390b8fb51962c",
+        "name": "libc6",
+        "version": "2.36-9+deb12u1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/libc6@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12&upstream=glibc",
+        "upstreams": [
+          {
+            "name": "glibc"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-2961",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2024-2961",
+        "namespace": "debian:distro:debian:12",
+        "severity": "High",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2024-2961",
+            "epss": 0.8833,
+            "percentile": 0.99767,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "2.36-9+deb12u6"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 66.2475
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2024-2961",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2024-2961",
+          "namespace": "nvd:cpe",
+          "severity": "High",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:H",
+              "metrics": {
+                "baseScore": 7.3
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "glibc",
+              "version": "2.36-9+deb12u1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2024-2961",
+            "versionConstraint": "< 2.36-9+deb12u6 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "b047a0ce26d4743f",
+        "name": "libc-bin",
+        "version": "2.36-9+deb12u1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/libc-bin@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12&upstream=glibc",
+        "upstreams": [
+          {
+            "name": "glibc"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-2961",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2024-2961",
+        "namespace": "debian:distro:debian:12",
+        "severity": "High",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2024-2961",
+            "epss": 0.8833,
+            "percentile": 0.99767,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "2.36-9+deb12u6"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 66.2475
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2024-2961",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2024-2961",
+          "namespace": "nvd:cpe",
+          "severity": "High",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:H",
+              "metrics": {
+                "baseScore": 7.3
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "glibc",
+              "version": "2.36-9+deb12u1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2024-2961",
+            "versionConstraint": "< 2.36-9+deb12u6 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "b9c390b8fb51962c",
+        "name": "libc6",
+        "version": "2.36-9+deb12u1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/libc6@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12&upstream=glibc",
+        "upstreams": [
+          {
+            "name": "glibc"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2023-45853",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2023-45853",
+        "namespace": "debian:distro:debian:12",
+        "severity": "Critical",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2023-45853",
+            "epss": 0.03179,
+            "percentile": 0.8761,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "advisories": [],
+        "risk": 2.8611
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2023-45853",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2023-45853",
+          "namespace": "nvd:cpe",
+          "severity": "Critical",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "metrics": {
+                "baseScore": 9.8
+              },
+              "vendorMetadata": {}
+            },
+            {
+              "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+              "metrics": {
+                "baseScore": 8.8
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "zlib",
+              "version": "1:1.2.13.dfsg-1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2023-45853",
+            "versionConstraint": "none (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "b7caaae5fa84054c",
+        "name": "zlib1g",
+        "version": "1:1.2.13.dfsg-1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/zlib1g@1%3A1.2.13.dfsg-1?arch=amd64&distro=debian-12&upstream=zlib",
+        "upstreams": [
+          {
+            "name": "zlib"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-0553",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2024-0553",
+        "namespace": "debian:distro:debian:12",
+        "severity": "High",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2024-0553",
+            "epss": 0.01614,
+            "percentile": 0.75104,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "3.7.9-2+deb12u2"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 1.2105
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2024-0553",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2024-0553",
+          "namespace": "nvd:cpe",
+          "severity": "High",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "metrics": {
+                "baseScore": 7.5
+              },
+              "vendorMetadata": {}
+            },
+            {
+              "source": "secalert@redhat.com",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "metrics": {
+                "baseScore": 7.5
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "gnutls28",
+              "version": "3.7.9-2"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2024-0553",
+            "versionConstraint": "< 3.7.9-2+deb12u2 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "b9a394f551481032",
+        "name": "libgnutls30",
+        "version": "3.7.9-2",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/libgnutls30@3.7.9-2?arch=amd64&distro=debian-12&upstream=gnutls28",
+        "upstreams": [
+          {
+            "name": "gnutls28"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2023-29383",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2023-29383",
+        "namespace": "debian:distro:debian:12",
+        "severity": "Low",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2023-29383",
+            "epss": 0.00428,
+            "percentile": 0.34735,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "1:4.13+dfsg1-1+deb12u1"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 0.1284
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2023-29383",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2023-29383",
+          "namespace": "nvd:cpe",
+          "severity": "Low",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "metrics": {
+                "baseScore": 3.3
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "shadow",
+              "version": "1:4.13+dfsg1-1+b1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2023-29383",
+            "versionConstraint": "< 1:4.13+dfsg1-1+deb12u1 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "5fc340c3bd99d34c",
+        "name": "login",
+        "version": "1:4.13+dfsg1-1+b1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/login@1%3A4.13%2Bdfsg1-1%2Bb1?arch=amd64&distro=debian-12&upstream=shadow%401%3A4.13%2Bdfsg1-1",
+        "upstreams": [
+          {
+            "name": "shadow"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2023-29383",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2023-29383",
+        "namespace": "debian:distro:debian:12",
+        "severity": "Low",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2023-29383",
+            "epss": 0.00428,
+            "percentile": 0.34735,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "1:4.13+dfsg1-1+deb12u1"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 0.1284
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2023-29383",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2023-29383",
+          "namespace": "nvd:cpe",
+          "severity": "Low",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "metrics": {
+                "baseScore": 3.3
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "shadow",
+              "version": "1:4.13+dfsg1-1+b1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2023-29383",
+            "versionConstraint": "< 1:4.13+dfsg1-1+deb12u1 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "73dae2537ee3140c",
+        "name": "passwd",
+        "version": "1:4.13+dfsg1-1+b1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/passwd@1%3A4.13%2Bdfsg1-1%2Bb1?arch=amd64&distro=debian-12&upstream=shadow%401%3A4.13%2Bdfsg1-1",
+        "upstreams": [
+          {
+            "name": "shadow"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-28085",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2024-28085",
+        "namespace": "debian:distro:debian:12",
+        "severity": "Low",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2024-28085",
+            "epss": 0.02242,
+            "percentile": 0.82231,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "2.38.1-5+deb12u1"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 0.6726
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2024-28085",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2024-28085",
+          "namespace": "nvd:cpe",
+          "severity": "Low",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "metrics": {
+                "baseScore": 3.3
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "util-linux",
+              "version": "2.38.1-5+b1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2024-28085",
+            "versionConstraint": "< 2.38.1-5+deb12u1 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "ef5d8ee56b6b396e",
+        "name": "mount",
+        "version": "2.38.1-5+b1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/mount@2.38.1-5%2Bb1?arch=amd64&distro=debian-12&upstream=util-linux%402.38.1-5",
+        "upstreams": [
+          {
+            "name": "util-linux"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-28085",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2024-28085",
+        "namespace": "debian:distro:debian:12",
+        "severity": "Low",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2024-28085",
+            "epss": 0.02242,
+            "percentile": 0.82231,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "2.38.1-5+deb12u1"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 0.6726
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2024-28085",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2024-28085",
+          "namespace": "nvd:cpe",
+          "severity": "Low",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "metrics": {
+                "baseScore": 3.3
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-indirect-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "util-linux",
+              "version": "2.38.1-5+b1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2024-28085",
+            "versionConstraint": "< 2.38.1-5+deb12u1 (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "c229e8c731fcb435",
+        "name": "util-linux",
+        "version": "2.38.1-5+b1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/util-linux@2.38.1-5%2Bb1?arch=amd64&distro=debian-12&upstream=util-linux%402.38.1-5",
+        "upstreams": [
+          {
+            "name": "util-linux"
+          }
+        ]
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2016-2781",
+        "dataSource": "https://security-tracker.debian.org/tracker/CVE-2016-2781",
+        "namespace": "debian:distro:debian:12",
+        "severity": "Medium",
+        "urls": [],
+        "cvss": [],
+        "epss": [
+          {
+            "cve": "CVE-2016-2781",
+            "epss": 0.00428,
+            "percentile": 0.34737,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [],
+          "state": "wont-fix"
+        },
+        "advisories": [],
+        "risk": 0.214
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2016-2781",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2016-2781",
+          "namespace": "nvd:cpe",
+          "severity": "Medium",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.0",
+              "vector": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:N",
+              "metrics": {
+                "baseScore": 6.5
+              },
+              "vendorMetadata": {}
+            },
+            {
+              "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+              "type": "Secondary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+              "metrics": {
+                "baseScore": 4.6
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-direct-match",
+          "matcher": "dpkg-matcher",
+          "searchedBy": {
+            "distro": {
+              "type": "debian",
+              "version": "12"
+            },
+            "namespace": "debian:distro:debian:12",
+            "package": {
+              "name": "coreutils",
+              "version": "9.1-1"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "CVE-2016-2781",
+            "versionConstraint": "none (deb)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "3503f4f93d885c75",
+        "name": "coreutils",
+        "version": "9.1-1",
+        "type": "deb",
+        "locations": [
+          {
+            "path": "/var/lib/dpkg/status"
+          }
+        ],
+        "language": "",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:deb/debian/coreutils@9.1-1?arch=amd64&distro=debian-12",
+        "upstreams": []
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "GHSA-jjg7-2v4v-x38h",
+        "dataSource": "https://github.com/advisories/GHSA-jjg7-2v4v-x38h",
+        "namespace": "github:language:python",
+        "severity": "Medium",
+        "urls": [],
+        "cvss": [
+          {
+            "source": "security-advisories@github.com",
+            "type": "Secondary",
+            "version": "3.1",
+            "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "metrics": {
+              "baseScore": 6.2
+            },
+            "vendorMetadata": {}
+          },
+          {
+            "source": "security-advisories@github.com",
+            "type": "Secondary",
+            "version": "4.0",
+            "vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "metrics": {
+              "baseScore": 6.9
+            },
+            "vendorMetadata": {}
+          }
+        ],
+        "epss": [
+          {
+            "cve": "CVE-2024-3651",
+            "epss": 0.01386,
+            "percentile": 0.71218,
+            "date": "2026-10-01"
+          }
+        ],
+        "fix": {
+          "versions": [
+            "3.7"
+          ],
+          "state": "fixed"
+        },
+        "advisories": [],
+        "risk": 0.693
+      },
+      "relatedVulnerabilities": [
+        {
+          "id": "CVE-2024-3651",
+          "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2024-3651",
+          "namespace": "nvd:cpe",
+          "severity": "High",
+          "urls": [],
+          "cvss": [
+            {
+              "source": "nvd@nist.gov",
+              "type": "Primary",
+              "version": "3.1",
+              "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "metrics": {
+                "baseScore": 7.5
+              },
+              "vendorMetadata": {}
+            }
+          ]
+        }
+      ],
+      "matchDetails": [
+        {
+          "type": "exact-direct-match",
+          "matcher": "python-matcher",
+          "searchedBy": {
+            "language": "python",
+            "namespace": "github:language:python",
+            "package": {
+              "name": "idna",
+              "version": "3.6"
+            }
+          },
+          "found": {
+            "vulnerabilityID": "GHSA-jjg7-2v4v-x38h",
+            "versionConstraint": "<3.7 (python)"
+          }
+        }
+      ],
+      "artifact": {
+        "id": "55661ee46c239d20",
+        "name": "idna",
+        "version": "3.6",
+        "type": "python",
+        "locations": [
+          {
+            "path": "/app/venv/lib/python3.11/site-packages/idna-3.6.dist-info/METADATA"
+          }
+        ],
+        "language": "python",
+        "licenses": [],
+        "cpes": [],
+        "purl": "pkg:pypi/idna@3.6",
+        "upstreams": []
+      }
+    }
+  ],
+  "source": {
+    "type": "image",
+    "target": {
+      "userInput": "registry.example.com/shop/api:1.4.0",
+      "imageID": "sha256:f0a8c8c81c56c70b54e3a148ae5a620841fb961e090aa13b5cba6e8dcd453f75",
+      "manifestDigest": "sha256:c2ca5cb8b2fdd4b89680229b222e06de684bcedbecb33f212fe42a954a6ba6eb",
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "tags": [
+        "registry.example.com/shop/api:1.4.0"
+      ],
+      "repoDigests": [
+        "registry.example.com/shop/api@sha256:c2ca5cb8b2fdd4b89680229b222e06de684bcedbecb33f212fe42a954a6ba6eb"
+      ],
+      "os": "linux",
+      "architecture": "amd64"
+    }
+  },
+  "distro": {
+    "name": "debian",
+    "version": "12",
+    "idLike": []
+  },
+  "descriptor": {
+    "name": "grype",
+    "version": "0.121.0",
+    "timestamp": "2026-10-01T08:13:05.912Z"
+  }
+}

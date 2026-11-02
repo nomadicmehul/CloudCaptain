@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/secret-scanning",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A developer commits an AWS key in `config/app.env`, deletes the file in the next commit and pushes both commits to a public repository. The pull request diff shows no key. Is the key exposed?",
+      "choices": [
+        "No: only the pull request diff is merged, so the key never reaches the default branch",
+        "Only if the pull request is merged",
+        "Yes: the commit that added it was pushed, so it is in the remote's history and in every clone, readable with `git log -p`; the key must be revoked",
+        "No: Git garbage-collects deleted files when the push arrives"
+      ],
+      "answer": 2,
+      "explanation": "Git stores snapshots. `git rm` adds a commit without the file, and the earlier commit still holds the blob. Anyone who fetched the branch, and any bot watching public pushes, has the key. That is why scanners read the added lines of every commit, not the working tree."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why do gitleaks and minileaks check a rule's keywords before running its regular expression?",
+      "choices": [
+        "It is a cheap prefilter: a rule runs only on fragments whose lowercased text contains one of its keywords, so most rules never run on most files",
+        "Keywords define what a secret is; the regex only formats the report",
+        "A keyword raises the rule's entropy threshold",
+        "Keywords make the regex case-insensitive"
+      ],
+      "answer": 0,
+      "explanation": "Lowercasing a fragment once and checking substrings (gitleaks uses one Aho-Corasick pass for all keywords) is far cheaper than running a few hundred regexes. A keyword hit only selects the rule; the regex, entropy, validators and allowlists still decide whether there is a finding."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The generic rule has an entropy threshold of 3.0. A file contains `DB_PASSWORD = \"hunter2hunter2\"` and `API_PASSWORD = \"${DB_PASSWORD}\"`. What does it report?",
+      "choices": [
+        "Both, because both key names contain password",
+        "Only the `${DB_PASSWORD}` line, because it contains symbols",
+        "Only `hunter2hunter2`, because it is the only literal",
+        "Neither: `hunter2hunter2` scores about 2.8 bits per character, at or below the threshold, and the variable reference is not a literal value the rule captures; the weak real password is a false negative"
+      ],
+      "answer": 3,
+      "explanation": "Entropy is computed on the captured value. Fourteen characters with seven distinct symbols, each appearing twice, give log2(7) = 2.81. Thresholds trade false positives for false negatives, which is why weak passwords need other controls (password policy, a secret store), not a lower threshold that floods the report."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A baseline was made from last week's working-tree report. Today someone adds three lines at the top of `config/app.env`, above a baselined secret, and the scan runs again. What happens?",
+      "choices": [
+        "Both minileaks and gitleaks keep suppressing it",
+        "minileaks keeps suppressing it because its baseline keys on rule, file, commit and the secret's SHA-256; gitleaks reports it again because its baseline compares every field of the finding, including the line",
+        "Both report it again because the file changed",
+        "gitleaks keeps suppressing it and minileaks reports it again"
+      ],
+      "answer": 1,
+      "explanation": "gitleaks' IsNew() compares rule, description, start and end line and column, match, secret, file, commit, author, email, date, message and entropy. A moved line is a different finding to it. Keying on the secret's hash instead keeps the known finding known without storing the secret in the baseline file."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A live GitHub personal access token was pushed to a public repository an hour ago. What is the first thing to do?",
+      "choices": [
+        "Run `git filter-repo --replace-text` and force-push every branch",
+        "Add the finding to the baseline so the CI gate passes again",
+        "Revoke the token where it was issued, then read the audit log of everything it could reach for use since the push; cleaning history comes afterwards, if at all",
+        "Make the repository private"
+      ],
+      "answer": 2,
+      "explanation": "The token is already copied: clones, forks, caches and scanners have it. Only the issuer can make it worthless. Rewriting history or hiding the repository removes the evidence while the token keeps working; GitHub's own guidance calls the rewrite often unnecessary once the credential is revoked."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The team installs a pre-commit hook that runs `gitleaks git --pre-commit --staged`. Why is that not enough as the only control?",
+      "choices": [
+        "`git commit --no-verify` skips local hooks, fresh clones have no hook until someone installs it, and commits made elsewhere never ran it; the same rules must also run in CI on the pushed range and on the server with push protection",
+        "Pre-commit hooks cannot read staged content",
+        "gitleaks cannot run inside a Git hook",
+        "Pre-commit hooks only run on `git push`"
+      ],
+      "answer": 0,
+      "explanation": "A hook is a seatbelt on one machine. The gate has to sit where every change passes: a CI job that scans `base..head` with full history, and push protection that rejects supported formats before they land. The hook just catches most mistakes earliest and cheapest."
+    }
+  ]
+}

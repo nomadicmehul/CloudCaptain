@@ -1,0 +1,11 @@
+{
+  "policies": [
+    {
+      "name": "mutated-by",
+      "type": "default-labels",
+      "labels": {
+        "cloudcaptain.io/mutated-by": "mutatingadmissionpolicy"
+      }
+    }
+  ]
+}

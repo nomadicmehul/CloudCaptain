@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/tracing",
+  "title": "A Trace Is a Tree Stitched Together by Context",
+  "short": "Distributed Tracing",
+  "motto": "One header carries the trace through every hop; parent IDs rebuild the tree, and the sampler decides which trees exist when you need them.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/http-server"
+  ],
+  "tools": [
+    "docker",
+    "opentelemetry-collector",
+    "jaeger",
+    "opentelemetry-instrument"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-trace-triage.md",
+    "prompt-explain-trace.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

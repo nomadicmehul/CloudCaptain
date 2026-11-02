@@ -1,0 +1,69 @@
+{
+  "rule_files": [
+    "rules.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "name": "wrong: expects firing as soon as the expression is true",
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "job:request_errors:ratio_rate5m{job=\"checkout\"}",
+          "values": "0.01x2 0.08x7 0.01 0.09x2 0.01x14"
+        },
+        {
+          "series": "up{job=\"checkout\", instance=\"checkout-0\"}",
+          "values": "1x3 0x5 1x20"
+        },
+        {
+          "series": "up{job=\"checkout\", instance=\"checkout-1\"}",
+          "values": "1x28"
+        },
+        {
+          "series": "queue_depth{job=\"worker\", queue=\"emails\", instance=\"w0\"}",
+          "values": "10 50 150x4 90 160 20x10"
+        },
+        {
+          "series": "queue_depth{job=\"worker\", queue=\"emails\", instance=\"w1\"}",
+          "values": "5x20"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "3m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page",
+                "team": "payments"
+              },
+              "exp_annotations": {
+                "summary": "checkout is failing 8% of requests",
+                "runbook_url": "https://runbooks.example.com/checkout/high-error-rate"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "11m",
+          "alertname": "InstanceDown",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "instance": "checkout-0",
+                "job": "checkout",
+                "severity": "ticket"
+              },
+              "exp_annotations": {
+                "summary": "checkout-0 of checkout has been down for 3 minutes"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/workload-identity",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A server requires client certificates from the company CA and accepts any valid one. A compromised batch job holds a valid certificate from that CA. What stops it from calling the payments API?",
+      "choices": [
+        "The handshake fails because the batch job runs in a different namespace",
+        "Encryption prevents the batch job from reading the responses",
+        "Nothing, until the server checks the identity in the caller's certificate against a list of allowed callers: mutual TLS authenticates, it does not authorise",
+        "The CA revokes the certificate automatically when the job misbehaves"
+      ],
+      "answer": 2,
+      "explanation": "The handshake proves the batch job holds a key for a certificate your CA signed. Whether that workload may call this API is a separate decision on its identity (its SPIFFE ID), which the server has to make after the handshake."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "An impostor certificate says `spiffe://cc.test/web` but was signed by the CA of the federated trust domain `other.test`. The server holds both bundles. Why does `miniid verify` reject it while `openssl verify -CAfile both-cas.pem` accepts it?",
+      "choices": [
+        "SPIFFE validation selects the bundle by the trust domain in the ID, so only cc.test's authorities may sign cc.test IDs; a flat trust store accepts any CA it contains",
+        "OpenSSL does not check signatures on certificates with URI SANs",
+        "The impostor certificate has the wrong key usage",
+        "Federated bundles are only used for JWT-SVIDs"
+      ],
+      "answer": 0,
+      "explanation": "Federation means accepting the partner's workloads, each bundle used only for IDs in its own trust domain. With one merged trust store, the partner's CA could mint identities in your trust domain."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A fetch from the Workload API fails with `PermissionDenied: no identity issued`. The registration entry has the selectors `unix:uid:1001` and `unix:path:/usr/bin/api`; the process runs as uid 1001 from `/usr/local/bin/api`. What is wrong?",
+      "choices": [
+        "The entry's TTL is shorter than the agent's sync interval",
+        "The workload must present its private key before the agent will answer",
+        "The agent needs root to read the caller's UID",
+        "An entry matches only when all of its selectors are among the discovered ones, and the path selector does not match the binary that is running"
+      ],
+      "answer": 3,
+      "explanation": "Selectors are a conjunction: every selector of the entry must appear in what the attestor discovered. The UID matches, the path does not, so no entry applies. Fix the path in the entry or drop that selector."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A client certificate valid for one hour expires at 11:00. A connection opened at 10:59 is still serving requests at 11:30. Why?",
+      "choices": [
+        "The server's clock is behind",
+        "TLS checks certificates only during the handshake; an established connection is not checked again, and the next reconnect with that certificate fails",
+        "TLS 1.3 renegotiates and extends the certificate's lifetime",
+        "The rotation at half-life replaced the certificate inside the open connection"
+      ],
+      "answer": 1,
+      "explanation": "Short lifetimes bound how long a key can open new connections. To bound old ones as well, cap the connection age (for example Envoy's max_connection_duration) or check notAfter per request as serve --enforce-expiry does."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "With TLS 1.3, a server rejects a client's expired certificate. Where does the client see the failure?",
+      "choices": [
+        "In connect(), as a refused TCP connection",
+        "Nowhere; the server silently drops the request",
+        "After its own handshake has completed: as a certificate-expired alert on its first read, which is why a client that writes first may see only a connection reset",
+        "In the ServerHello, before it sends its certificate"
+      ],
+      "answer": 2,
+      "explanation": "In TLS 1.3 the client finishes its handshake when it sends its Finished message; the server verifies the client certificate after that. The alert arrives on the next read, and data the client already sent can make the server's close a reset."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Why does SPIRE's agent replace an X509-SVID at about half of its lifetime, with some jitter, instead of just before it expires?",
+      "choices": [
+        "So the workload always holds a valid SVID with a wide margin for agent or server outages and clock skew, and so a fleet issued together does not renew in the same second",
+        "Because a certificate becomes cryptographically weaker after half its lifetime",
+        "Because TLS libraries reject certificates in the second half of their validity",
+        "To halve the number of certificates the CA signs"
+      ],
+      "answer": 0,
+      "explanation": "Rotating early turns expiry into something that never happens in normal operation: a failed renewal can be retried for the remaining half. The jitter spreads renewals so the server is not hit by every workload at once."
+    }
+  ]
+}
