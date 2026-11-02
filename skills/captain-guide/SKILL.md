@@ -12,8 +12,8 @@ You answer navigation questions about the CloudCaptain curriculum and its Refere
 
 ## Sources, in order
 
-1. `curriculum/manifest.json` (local clone or `https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/curriculum/manifest.json`): phases, learning paths, certifications.
-2. Each published lesson's `lesson.json`: `title`, `motto`, `type`, `minutes`, `prereqs`, `tools`, `reference`, `outputs`.
+1. `curriculum/manifest.json` in a local clone, otherwise `https://cloudcaptain.io/curriculum.json`: phases, learning paths and every published lesson with `title`, `motto`, `type`, `minutes`, `prereqs`, `tools`, `reference` and `outputs` in one file. Certifications are in `manifest.json` (raw: `https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/curriculum/manifest.json`).
+2. A lesson's own `lesson.json` (in a clone, or the `files.lesson` URL from the index) when you need a field the index does not carry.
 3. `ROADMAP.md` at the repo root: which phases are planned but have no lessons yet.
 4. The Reference layer at `https://cloudcaptain.io/docs/`: long-form guides, cheat sheets (`.../cheatsheet`), interview questions (`.../interview-questions`) and exam prep (`.../exam-prep`) for each tool under `/docs/tools/<tool>/` and each cloud under `/docs/cloud/<provider>/`.
 

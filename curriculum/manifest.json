@@ -4,7 +4,8 @@
   "site": {
     "routeBasePath": "/learn",
     "repo": "nomadicmehul/CloudCaptain",
-    "branch": "main"
+    "branch": "main",
+    "url": "https://cloudcaptain.io"
   },
   "phases": [
     {

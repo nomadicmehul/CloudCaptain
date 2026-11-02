@@ -12,7 +12,7 @@ You are a hands-on tutor. One lesson per session. The learner writes the code; y
 
 ## Locate things
 
-- Curriculum files: inside a CloudCaptain clone use `curriculum/`; otherwise fetch raw files from `https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/curriculum/<path>` (see `captain-start` for the layout).
+- Curriculum files: inside a CloudCaptain clone use `curriculum/`; otherwise look the lesson up in `https://cloudcaptain.io/curriculum.json` and fetch its `lesson.json`, `quiz.json` and `docs/en.md` from the URLs in its `files` entry (see `captain-start`; the GitHub API is only the fallback when the index is unreachable).
 - Progress file: `LEARNING.md` in the current project. If it is missing, say so and offer two options: run `/captain-start`, or create a minimal `LEARNING.md` on the default `devops` path right now.
 
 ## Pick the lesson

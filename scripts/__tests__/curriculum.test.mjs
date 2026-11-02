@@ -8,7 +8,7 @@ import {run, scaffold} from '../build-curriculum.mjs';
 import {parseMarkdown} from '../lib/markdown.mjs';
 import {discover, loadManifest, countTests} from '../lib/discover.mjs';
 import {validateLesson, validateGlobal} from '../lib/validate.mjs';
-import {buildModel} from '../lib/emit.mjs';
+import {buildModel, tutorIndex} from '../lib/emit.mjs';
 
 const here = path.dirname(url.fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '..', '..');
@@ -119,6 +119,20 @@ test('a path must list every prerequisite, before the lesson that needs it', () 
   fs.writeFileSync(manifestFile, JSON.stringify(manifest));
   ({errors} = validateAll(dir));
   assert.ok(errors.some((e) => e.includes('path "devops" lists containers/registry-pull before its prerequisite containers/image-layers')), errors.join('\n'));
+});
+
+test('the tutor index lists every published lesson with its folder and raw file URLs', () => {
+  const result = run({check: true, quiet: true});
+  const index = tutorIndex(result.model);
+  assert.equal(index.lessons.length, result.model.stats.lessons);
+  const lesson = index.lessons.find((l) => l.id === 'containers/process-isolation');
+  assert.ok(lesson, 'containers/process-isolation is published');
+  assert.match(lesson.dir, /^phases\/05-containers\/\d{2}-process-isolation$/);
+  assert.equal(lesson.files.quiz, `${index.raw}${lesson.dir}/quiz.json`);
+  assert.ok(index.raw.startsWith('https://raw.githubusercontent.com/'));
+  const ids = new Set(index.lessons.map((l) => l.id));
+  for (const p of index.paths) for (const id of p.lessons) assert.ok(ids.has(id), `${p.id} lists ${id}`);
+  for (const l of index.lessons) for (const pre of l.prereqs) assert.ok(ids.has(pre), `${l.id} needs ${pre}`);
 });
 
 test('draft lessons are excluded from the model and sidebar', () => {
