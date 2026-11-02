@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/sbom",
+  "title": "An SBOM Is an Inventory You Can Diff",
+  "short": "SBOM Inventory",
+  "motto": "An SBOM writes down the package databases already in an image; diff two to review a change, match one against advisories to triage it.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "containers/image-layers"
+  ],
+  "tools": [
+    "syft",
+    "docker",
+    "docker buildx",
+    "grype",
+    "osv-scanner"
+  ],
+  "reference": [
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/devsecops/cheatsheet",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/cicd/fundamentals"
+  ],
+  "outputs": [
+    "skill-sbom-review.md",
+    "prompt-explain-vulnerability-match.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

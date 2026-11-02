@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps शून्यापासून.<br/>Tool स्वतः बनवा. Tool वापरा. Artifact ship करा.</h3>
   <p>
-    <strong>55 lessons</strong> · <strong>8 phases उपलब्ध</strong> · <strong>80 तास</strong> · <strong>1,429 tests</strong> · <strong>107 skills, prompts &amp; MCP servers</strong>
+    <strong>63 lessons</strong> · <strong>9 phases उपलब्ध</strong> · <strong>92 तास</strong> · <strong>1,726 tests</strong> · <strong>123 skills, prompts &amp; MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="कोर्स सुरू करा" /></a>
@@ -51,11 +51,12 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **05 · Containers** | container runtime, image auditor, registry client, Dockerfile शिवाय image builder, veth/bridge network, Compose, rootless user namespaces, seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | reconciler, scheduler, kubelet, kube-proxy rules आणि cluster DNS, RBAC authorizer, Helm, operator, Gateway API router | kind वर Kubernetes, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | plan/apply engine, dependency graph, modules, locking state server, drift detection, policy engine, Pulumi आणि Crossplane front ends, idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **08 · CI/CD & GitOps** | workflow runner, workflow security auditor, OIDC issuer आणि verifier, SBOM generator, transparency log असलेला signer, GitOps reconciler, canary controller, release tool | GitHub Actions आणि act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (आधी AWS)** | IAM policy evaluator, VPC reachability analyser, SigV4 signing आणि S3 server, Lambda runtime API, Auto Scaling group, FOCUS cost allocator, security posture scanner | moto वर AWS CLI, Lambda emulator, Checkov |
 | **13 · AI Infrastructure** | DRA सह GPU scheduler, LLM serving simulator, token-counting gateway, queue-based autoscaler, prefix-cache router, HNSW आणि IVF indexes, model artifact inspector, token cost model | CPU वर llama.cpp, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | kubectl साठी MCP server, incident-triage agent, AI log analysis, LLM calls साठी OpenTelemetry, agent sandboxes, सुरक्षित write tools, agent evals | Claude Code, Claude API, OpenTelemetry, promptfoo |
 
-आणखी नऊ phases (networking, Git, scripting, CI/CD, observability, security, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) वर आहेत.
+आणखी आठ phases (networking, Git, scripting, observability, security, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) वर आहेत.
 
 ## Lesson कसा चालतो
 
@@ -74,7 +75,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | कोणासाठी | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एका Linux process पासून Kubernetes, IaC, cloud आणि AIOps पर्यंत | 47 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एका Linux process पासून Kubernetes, IaC, cloud आणि AIOps पर्यंत | 55 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | ज्या engineers ना models चालवायचे आहेत: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | infrastructure वर agents सुरक्षितपणे कामाला लावण्यासाठी | 9 |
 
@@ -96,7 +97,7 @@ Site चा **Captain's Bridge** reading mode प्रत्येक section �
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| प्रत्येक tool शून्यापासून, tests सह बनवा | ✅ 55 lessons | ❌ | ❌ | ❌ |
+| प्रत्येक tool शून्यापासून, tests सह बनवा | ✅ 63 lessons | ❌ | ❌ | ❌ |
 | CI मध्ये खऱ्या tools वर verified | ✅ प्रत्येक lesson | ❌ | ❌ | ❌ |
 | AI infrastructure आणि AIOps | ✅ 15 lessons | अंशतः | ❌ | links |
 | Install करता येणारा agent tutor | ✅ `npx skills add` | ❌ | ❌ | ❌ |

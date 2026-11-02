@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/sbom",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A scanner reports that an image ships `idna` 3.6, although no requirements file in the repository mentions `idna`. Where did the scanner most likely get that fact?",
+      "choices": [
+        "It downloaded every package from PyPI and compared file hashes with the image",
+        "It read `idna-3.6.dist-info/METADATA` from the image's filesystem, the record pip wrote when a dependency pulled `idna` in",
+        "It started a container from the image and ran `pip list` inside it",
+        "It parsed the Dockerfile and resolved `pip install` lines against the index"
+      ],
+      "answer": 1,
+      "explanation": "Scanners read the package managers' own databases: dpkg's status file, apk's installed database, Python's dist-info directories and npm lock files. Nothing is executed and nothing is downloaded. That is also the limit: a file installed without metadata is invisible to a metadata reader."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A Debian advisory names the package `openssl` with `fixed: 3.0.15-1~deb12u1` for `Debian:12`. Your SBOM lists `libssl3 3.0.11-1~deb12u2` and no package called `openssl`, and your matcher reports nothing. What is wrong?",
+      "choices": [
+        "`libssl3` is a fork of OpenSSL and is not affected by OpenSSL advisories",
+        "The advisory only applies to Ubuntu, which also uses dpkg",
+        "Debian files advisories against the source package; `libssl3` is built from source `openssl`, so the matcher must use the dpkg `Source` field (the purl's `upstream` qualifier) and then compare versions with dpkg's order",
+        "The SBOM is invalid without a CPE identifier for each package"
+      ],
+      "answer": 2,
+      "explanation": "One source package builds several binary packages (`openssl` builds `libssl3`, `openssl` and `libssl-dev`; `shadow` builds `login` and `passwd`). Distribution trackers and their OSV feeds name the source, so a match has to join on it. Alpine's equivalent is the origin field `o:`."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The installed version is `3.0.11-1~deb12u2` and the advisory says `fixed: 3.0.11-1`. A string comparison says the installed version is newer, because it is longer. What does dpkg say, and so what is the finding?",
+      "choices": [
+        "Older: `~` sorts before everything, even the end of the string, so `3.0.11-1~deb12u2` is below `3.0.11-1` and the package is affected",
+        "Equal: everything after `~` is build metadata and is ignored",
+        "Not comparable: backport versions cannot be compared with unstable versions",
+        "Newer: the installed revision has more components, so it is not affected"
+      ],
+      "answer": 0,
+      "explanation": "Debian uses `~` precisely so that backports and release candidates sort below the version they lead up to. Any comparison that is not dpkg's (strings, tuples, SemVer) gets this case wrong in the dangerous direction: it calls a vulnerable package fixed."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A pull request changes `FROM python:3.12-slim-bookworm` to `FROM python:3.12-slim-trixie` and nothing else. What gives the reviewer an honest view of what changed?",
+      "choices": [
+        "The Dockerfile diff: one line changed, so one thing changed",
+        "Scan the new image only and approve if it has no critical findings",
+        "Compare the two image sizes; if they are within 10% nothing important changed",
+        "Build both, generate an SBOM for each digest, diff them keyed by type and name, and review the added, removed, upgraded and downgraded packages"
+      ],
+      "answer": 3,
+      "explanation": "A base image change replaces dozens of packages that no line of the pull request mentions. An SBOM diff turns that into a reviewable list with directions, and the matcher then says what the change fixed and what it introduced. Scanning only the new image misses removals and downgrades."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "syft lists 112 packages for an image and `minisbom` lists 104. The 8 extra rows have type `binary` and purls such as `pkg:generic/python@3.12.12`. Which explanation is right?",
+      "choices": [
+        "minisbom drops packages whose versions contain an epoch",
+        "syft counts packages twice when two layers touch the same file",
+        "syft's binary classifiers recognise executables from their contents; no package database records them, so a reader of package metadata cannot see them",
+        "The extra rows are development dependencies from a lock file"
+      ],
+      "answer": 2,
+      "explanation": "The official Python images build the interpreter from source into /usr/local, so dpkg knows nothing about it. syft matches known byte patterns in executables to name and version them. Anything copied in without metadata (a static Go binary, a curl-and-untar install) is either found this way or not at all."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "grype flags `idna` 3.6 in a service that only ever passes hostnames from its own configuration to `idna.encode`. The team concludes the finding does not apply today. What should they ship?",
+      "choices": [
+        "A global ignore entry for the CVE in the CI scanner configuration",
+        "A Dockerfile step that deletes idna's dist-info directory so scanners stop reporting it",
+        "A VEX statement with status `not_affected`, a justification such as `vulnerable_code_not_in_execute_path`, the image and package purls, an owner and a review date, and a ticket to upgrade to 3.7 anyway",
+        "Nothing; findings that do not apply can be ignored in the dashboard"
+      ],
+      "answer": 2,
+      "explanation": "VEX records an analysis in a machine-readable, auditable form that scanners such as grype apply (`--vex`). Deleting metadata hides the package from every future inventory, and a global ignore suppresses the finding for services where it does apply."
+    }
+  ]
+}

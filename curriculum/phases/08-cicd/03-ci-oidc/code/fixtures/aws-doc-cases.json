@@ -1,0 +1,268 @@
+{
+  "_about": "Trust decisions taken from AWS, GitHub and GitLab documentation. minioidc mints each token with a key generated at run time, verifies it and evaluates the policy; expect is what the documentation says STS answers.",
+  "account": "123456789012",
+  "jobs": "jobs.json",
+  "providers": [
+    "providers/github.json"
+  ],
+  "cases": [
+    {
+      "name": "branch policy, push to main",
+      "policy": "trust-policies/github-branch.json",
+      "job": "main-push",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub",
+      "why": "sub repo:octo-org/octo-repo:ref:refs/heads/main and aud sts.amazonaws.com are exactly the documented pair"
+    },
+    {
+      "name": "branch policy, push to a feature branch",
+      "policy": "trust-policies/github-branch.json",
+      "job": "feature-push",
+      "expect": "AccessDenied",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub",
+      "why": "StringEquals on sub: refs/heads/feature/login is a different subject"
+    },
+    {
+      "name": "branch policy, pull_request run",
+      "policy": "trust-policies/github-branch.json",
+      "job": "pull-request",
+      "expect": "AccessDenied",
+      "source": "https://docs.github.com/en/actions/reference/security/oidc#example-subject-claims",
+      "why": "a pull_request run without an environment has sub repo:ORG/REPO:pull_request"
+    },
+    {
+      "name": "branch policy, job that names an environment",
+      "policy": "trust-policies/github-branch.json",
+      "job": "deploy-prod",
+      "expect": "AccessDenied",
+      "source": "https://docs.github.com/en/actions/reference/security/oidc#example-subject-claims",
+      "why": "when the job references an environment the sub is repo:ORG/REPO:environment:NAME, even on main"
+    },
+    {
+      "name": "branch policy, another repository of the organization",
+      "policy": "trust-policies/github-branch.json",
+      "job": "sibling-repo",
+      "expect": "AccessDenied",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub",
+      "why": "the sub names octo-org/sandbox"
+    },
+    {
+      "name": "branch policy, token with GitHub's default audience",
+      "policy": "trust-policies/github-branch.json",
+      "job": "main-push",
+      "audience": "",
+      "expect": "InvalidIdentityToken",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html",
+      "why": "without an audience the token's aud is https://github.com/octo-org, which is not in the provider's ClientIDList"
+    },
+    {
+      "name": "environment policy, deploy job in prod",
+      "policy": "trust-policies/github-environment.json",
+      "job": "deploy-prod",
+      "expect": "allowed",
+      "source": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws",
+      "why": "the documented environment subject repo:octo-org/octo-repo:environment:prod"
+    },
+    {
+      "name": "environment policy, push to main without an environment",
+      "policy": "trust-policies/github-environment.json",
+      "job": "main-push",
+      "expect": "AccessDenied",
+      "source": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws",
+      "why": "a role pinned to an environment refuses jobs that do not run in it"
+    },
+    {
+      "name": "any-ref policy, pull_request run",
+      "policy": "trust-policies/github-any-ref.json",
+      "job": "pull-request",
+      "expect": "allowed",
+      "source": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws",
+      "why": "repo:octo-org/octo-repo:* allows any branch, pull request merge branch or environment"
+    },
+    {
+      "name": "any-ref policy, tag push",
+      "policy": "trust-policies/github-any-ref.json",
+      "job": "release-tag",
+      "expect": "allowed",
+      "source": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws",
+      "why": "the wildcard covers ref:refs/tags/... as well"
+    },
+    {
+      "name": "any-ref policy, another repository",
+      "policy": "trust-policies/github-any-ref.json",
+      "job": "sibling-repo",
+      "expect": "AccessDenied",
+      "source": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws",
+      "why": "the repository part is still fixed"
+    },
+    {
+      "name": "any-repo policy, another repository of the organization",
+      "policy": "trust-policies/github-any-repo.json",
+      "job": "sibling-repo",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub",
+      "why": "repo:octo-org/* is any repository or branch within the organization"
+    },
+    {
+      "name": "any-repo policy, look-alike organization",
+      "policy": "trust-policies/github-any-repo.json",
+      "job": "lookalike-org",
+      "expect": "AccessDenied",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub",
+      "why": "the slash after the owner name stops octo-org-evil"
+    },
+    {
+      "name": "owner-prefix policy, look-alike organization",
+      "policy": "trust-policies/github-owner-prefix.json",
+      "job": "lookalike-org",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html",
+      "why": "StringLike * matches any characters, so repo:octo-org* also matches repo:octo-org-evil/..."
+    },
+    {
+      "name": "aud-only policy, a stranger's repository",
+      "policy": "trust-policies/github-no-sub.json",
+      "job": "stranger",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub",
+      "why": "without a sub condition GitHub Actions from organizations outside your control can assume the role"
+    },
+    {
+      "name": "negated sub policy, a stranger's repository",
+      "policy": "trust-policies/github-not-pr.json",
+      "job": "stranger",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html",
+      "why": "StringNotEquals passes for every value it does not list"
+    },
+    {
+      "name": "unmapped claim with IfExists, a stranger's repository",
+      "policy": "trust-policies/github-unmapped-owner.json",
+      "job": "stranger",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_iam-condition-keys.html#condition-keys-wif",
+      "why": "repository_owner is not a condition key for GitHub, so the key is missing and ...IfExists is true"
+    },
+    {
+      "name": "allow any ref, deny pull_request: pull_request run",
+      "policy": "trust-policies/github-deny-pr.json",
+      "job": "pull-request",
+      "expect": "AccessDenied",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
+      "why": "an explicit Deny overrides the Allow"
+    },
+    {
+      "name": "allow any ref, deny pull_request: feature push",
+      "policy": "trust-policies/github-deny-pr.json",
+      "job": "feature-push",
+      "expect": "allowed",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
+      "why": "the Deny does not apply, the Allow does"
+    },
+    {
+      "name": "immutable subject policy, repository with immutable subjects",
+      "policy": "trust-policies/github-immutable.json",
+      "job": "immutable-main",
+      "expect": "allowed",
+      "source": "https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims",
+      "why": "repo:OWNER@OWNER-ID/REPO@REPO-ID:ref:refs/heads/main"
+    },
+    {
+      "name": "immutable subject policy, repository with the previous format",
+      "policy": "trust-policies/github-immutable.json",
+      "job": "main-push",
+      "expect": "AccessDenied",
+      "source": "https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims",
+      "why": "the trust policy must match the subject format the repository uses"
+    },
+    {
+      "name": "customized subject with job_workflow_ref",
+      "policy": "trust-policies/github-reusable.json",
+      "job": "reusable-deploy",
+      "expect": "allowed",
+      "source": "https://docs.github.com/en/actions/reference/security/oidc#customizing-the-subject-claims-for-an-organization-or-repository",
+      "why": "include_claim_keys repo, context, job_workflow_ref produce the documented subject"
+    },
+    {
+      "name": "environment policy, token minted twenty minutes ago",
+      "policy": "trust-policies/github-environment.json",
+      "job": "deploy-prod",
+      "minted_offset": -1200,
+      "expect": "ExpiredTokenException",
+      "source": "https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html",
+      "why": "GitHub's tokens expire 300 seconds after iat"
+    },
+    {
+      "name": "environment policy, provider with two audiences, token for the second",
+      "policy": "trust-policies/github-environment.json",
+      "job": "deploy-prod",
+      "audience": "https://github.com/octo-org",
+      "providers": [
+        "providers/github-two-audiences.json"
+      ],
+      "expect": "AccessDenied",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_iam-condition-keys.html#condition-keys-wif",
+      "why": "the ClientIDList check passes, the :aud condition in the trust policy does not"
+    },
+    {
+      "name": "GitLab token, account without a GitLab provider",
+      "policy": "trust-policies/gitlab-branch.json",
+      "issuer": "https://gitlab.com",
+      "claims": {
+        "sub": "project_path:mygroup/myproject:ref_type:branch:ref:main",
+        "aud": "sts.amazonaws.com",
+        "namespace_id": "12345",
+        "project_id": "67890",
+        "project_path": "mygroup/myproject",
+        "ref": "main",
+        "ref_type": "branch",
+        "pipeline_source": "push"
+      },
+      "expect": "InvalidIdentityToken",
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html",
+      "why": "STS looks up the IAM OIDC provider by the token's iss"
+    },
+    {
+      "name": "GitLab branch policy, main of the project",
+      "policy": "trust-policies/gitlab-branch.json",
+      "issuer": "https://gitlab.com",
+      "claims": {
+        "sub": "project_path:mygroup/myproject:ref_type:branch:ref:main",
+        "aud": "sts.amazonaws.com",
+        "namespace_id": "12345",
+        "project_id": "67890",
+        "project_path": "mygroup/myproject",
+        "ref": "main",
+        "ref_type": "branch",
+        "pipeline_source": "push"
+      },
+      "providers": [
+        "providers/gitlab.json"
+      ],
+      "expect": "allowed",
+      "source": "https://docs.gitlab.com/ci/cloud_services/aws/",
+      "why": "sub, namespace_id and project_id are condition keys for gitlab.com"
+    },
+    {
+      "name": "GitLab branch policy, another project",
+      "policy": "trust-policies/gitlab-branch.json",
+      "issuer": "https://gitlab.com",
+      "claims": {
+        "sub": "project_path:mygroup/otherproject:ref_type:branch:ref:main",
+        "aud": "sts.amazonaws.com",
+        "namespace_id": "12345",
+        "project_id": "67891",
+        "project_path": "mygroup/otherproject",
+        "ref": "main",
+        "ref_type": "branch",
+        "pipeline_source": "push"
+      },
+      "providers": [
+        "providers/gitlab.json"
+      ],
+      "expect": "AccessDenied",
+      "source": "https://docs.gitlab.com/ci/cloud_services/aws/",
+      "why": "project_id and sub differ"
+    }
+  ]
+}

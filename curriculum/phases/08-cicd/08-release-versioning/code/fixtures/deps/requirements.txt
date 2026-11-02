@@ -1,0 +1,9 @@
+# runtime dependencies of the inventory service
+requests==2.31.0
+flask[async]==3.0.3 ; python_version >= "3.9"
+urllib3~=1.26.18
+gunicorn>=21.2,!=22.0.0,<23
+pyyaml==6.0.1 \
+    --hash=sha256:0000000000000000000000000000000000000000000000000000000000000000
+structlog
+-r requirements-dev.txt

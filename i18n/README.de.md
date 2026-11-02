@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps von Grund auf.<br/>Bau das Tool. Nutze das Tool. Liefere ein Artefakt aus.</h3>
   <p>
-    <strong>55 Lektionen</strong> · <strong>8 Phasen live</strong> · <strong>80 Stunden</strong> · <strong>1.429 Tests</strong> · <strong>107 Skills, Prompts &amp; MCP-Server</strong>
+    <strong>63 Lektionen</strong> · <strong>9 Phasen live</strong> · <strong>92 Stunden</strong> · <strong>1.726 Tests</strong> · <strong>123 Skills, Prompts &amp; MCP-Server</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Kurs starten" /></a>
@@ -51,11 +51,12 @@ Jede Lektion beginnt mit einem Problem aus der Produktion. Du baust den Mechanis
 | **05 · Container** | eine Container-Runtime, einen Image-Auditor, einen Registry-Client, einen Image-Builder ohne Dockerfile, ein veth/Bridge-Netzwerk, Compose, rootless User-Namespaces, einen seccomp-Generator | Docker, Podman, OCI-Registries |
 | **06 · Orchestrierung** | einen Reconciler, einen Scheduler, ein Kubelet, kube-proxy-Regeln und Cluster-DNS, einen RBAC-Authorizer, Helm, einen Operator, einen Gateway-API-Router | Kubernetes auf kind, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | eine Plan/Apply-Engine, einen Abhängigkeitsgraphen, Module, einen State-Server mit Locking, Drift-Erkennung, eine Policy-Engine, Frontends für Pulumi und Crossplane, einen idempotenten Konfigurationsmanager | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **08 · CI/CD & GitOps** | einen Workflow-Runner, einen Auditor für Workflow-Sicherheit, einen OIDC-Issuer mit Verifier, einen SBOM-Generator, einen Signierer mit Transparency Log, einen GitOps-Reconciler, einen Canary-Controller, ein Release-Tool | GitHub Actions und act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (AWS zuerst)** | einen Evaluator für IAM-Policies, einen Analyzer für VPC-Erreichbarkeit, SigV4-Signierung und einen S3-Server, die Lambda Runtime API, eine Auto Scaling Group, einen Kostenallokator nach FOCUS, einen Security-Posture-Scanner | die AWS CLI gegen moto, den Lambda-Emulator, Checkov |
 | **13 · KI-Infrastruktur** | einen GPU-Scheduler mit DRA, einen Simulator für LLM-Serving, ein Gateway, das Tokens zählt, einen queue-basierten Autoscaler, einen Prefix-Cache-Router, HNSW- und IVF-Indizes, einen Inspektor für Modellartefakte, ein Token-Kostenmodell | llama.cpp auf der CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | einen MCP-Server für kubectl, einen Agenten für Incident-Triage, KI-gestützte Loganalyse, OpenTelemetry für LLM-Aufrufe, Agent-Sandboxes, sichere Write-Tools, Agent-Evals | Claude Code, die Claude API, OpenTelemetry, promptfoo |
 
-Neun weitere Phasen (Netzwerke, Git, Scripting, CI/CD, Observability, Sicherheit, Platform Engineering, MLOps, Abschlussprojekte) stehen auf der [Roadmap](../ROADMAP.md).
+Acht weitere Phasen (Netzwerke, Git, Scripting, Observability, Sicherheit, Platform Engineering, MLOps, Abschlussprojekte) stehen auf der [Roadmap](../ROADMAP.md).
 
 ## So funktioniert eine Lektion
 
@@ -74,7 +75,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Pfad | Für | Lektionen |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | vom einzelnen Linux-Prozess bis zu Kubernetes, IaC, Cloud und AIOps | 47 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | vom einzelnen Linux-Prozess bis zu Kubernetes, IaC, Cloud und AIOps | 55 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | Engineers, die Modelle betreiben sollen: GPUs, Serving, Gateways, Routing, Kosten | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | Agenten sicher für Infrastrukturaufgaben einsetzen | 9 |
 
@@ -96,7 +97,7 @@ Der Lesemodus **Captain's Bridge** auf der Website verfolgt deinen Fortschritt p
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-*-Listen |
 |:--|:--|:--|:--|:--|
-| Jedes Tool von Grund auf selbst bauen, mit Tests | ✅ 55 Lektionen | ❌ | ❌ | ❌ |
+| Jedes Tool von Grund auf selbst bauen, mit Tests | ✅ 63 Lektionen | ❌ | ❌ | ❌ |
 | In CI gegen die echten Tools verifiziert | ✅ jede Lektion | ❌ | ❌ | ❌ |
 | KI-Infrastruktur und AIOps | ✅ 15 Lektionen | teilweise | ❌ | Links |
 | Ein Agent-Tutor zum Installieren | ✅ `npx skills add` | ❌ | ❌ | ❌ |

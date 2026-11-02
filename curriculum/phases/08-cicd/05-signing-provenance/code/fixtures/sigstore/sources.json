@@ -1,0 +1,12 @@
+{
+  "note": "Public test data from the Sigstore projects (Apache License 2.0), re-indented only. Rekor log entries are public by design. No private keys are included.",
+  "files": {
+    "bundle_v3.txt": "https://github.com/sigstore/sigstore-python/blob/main/test/assets/bundle_v3.txt",
+    "bundle_v3.txt.sigstore.json": "https://github.com/sigstore/sigstore-python/blob/main/test/assets/bundle_v3.txt.sigstore",
+    "rekor-staging.pub": "tlogs[0].publicKey of https://github.com/sigstore/sigstore-python/blob/main/sigstore/_store/https%253A%252F%252Ftuf-repo-cdn.sigstage.dev/trusted_root.json (rekor.sigstage.dev), written as PEM",
+    "npm-publish.sigstore.json": "https://github.com/sigstore/sigstore-go/blob/v1.3.0/examples/bundle-publish.json",
+    "npm-publish-key.pub": "https://github.com/sigstore/sigstore-go/blob/v1.3.0/examples/publish_key.pub",
+    "npm-provenance.sigstore.json": "https://github.com/sigstore/sigstore-go/blob/v1.3.0/examples/bundle-provenance.json",
+    "rekor-public-good.pub": "tlogs[0].publicKey of https://github.com/sigstore/sigstore-go/blob/v1.3.0/examples/trusted-root-public-good.json (rekor.sigstore.dev), written as PEM"
+  }
+}

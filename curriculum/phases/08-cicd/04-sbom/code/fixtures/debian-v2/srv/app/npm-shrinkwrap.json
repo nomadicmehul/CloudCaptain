@@ -1,0 +1,50 @@
+{
+  "name": "cc-demo-app",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "cc-demo-app",
+      "version": "1.0.0",
+      "license": "MIT",
+      "dependencies": {
+        "@babel/traverse": "^7.23.0",
+        "debug": "^4.3.4",
+        "ms": "^2.1.3",
+        "semver": "^7.5.0"
+      },
+      "devDependencies": {
+        "left-pad": "1.3.0"
+      }
+    },
+    "node_modules/@babel/traverse": {
+      "version": "7.23.2",
+      "license": "MIT"
+    },
+    "node_modules/debug": {
+      "version": "4.3.4",
+      "license": "MIT",
+      "dependencies": {
+        "ms": "2.1.2"
+      }
+    },
+    "node_modules/debug/node_modules/ms": {
+      "version": "2.1.2",
+      "license": "MIT"
+    },
+    "node_modules/left-pad": {
+      "version": "1.3.0",
+      "dev": true,
+      "license": "WTFPL"
+    },
+    "node_modules/ms": {
+      "version": "2.1.3",
+      "license": "MIT"
+    },
+    "node_modules/semver": {
+      "version": "7.5.4",
+      "license": "ISC"
+    }
+  }
+}

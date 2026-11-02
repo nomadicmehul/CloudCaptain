@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps y AIOps desde cero.<br/>Construye la herramienta. Usa la herramienta. Entrega un artefacto.</h3>
   <p>
-    <strong>55 lecciones</strong> · <strong>8 fases publicadas</strong> · <strong>80 horas</strong> · <strong>1,429 pruebas</strong> · <strong>107 skills, prompts y servidores MCP</strong>
+    <strong>63 lecciones</strong> · <strong>9 fases publicadas</strong> · <strong>92 horas</strong> · <strong>1,726 pruebas</strong> · <strong>123 skills, prompts y servidores MCP</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Empieza el curso" /></a>
@@ -51,11 +51,12 @@ Cada lección parte de un problema de producción, te hace construir el mecanism
 | **05 · Contenedores** | un runtime de contenedores, un auditor de imágenes, un cliente de registry, un constructor de imágenes sin Dockerfile, una red veth/bridge, Compose, user namespaces rootless, un generador de seccomp | Docker, Podman, registries OCI |
 | **06 · Orquestación** | un reconciliador, un scheduler, un kubelet, reglas de kube-proxy y DNS del cluster, un autorizador RBAC, Helm, un operador, un router de Gateway API | Kubernetes sobre kind, Helm, Envoy Gateway |
 | **07 · Infraestructura como código** | un motor de plan/apply, un grafo de dependencias, módulos, un servidor de estado con bloqueo, detección de drift, un motor de políticas, front ends de Pulumi y Crossplane, un gestor de configuración idempotente | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **08 · CI/CD y GitOps** | un ejecutor de workflows, un auditor de seguridad de workflows, un emisor y verificador OIDC, un generador de SBOM, un firmador con registro de transparencia, un reconciliador GitOps, un controlador canary, una herramienta de releases | GitHub Actions y act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (AWS primero)** | un evaluador de políticas IAM, un analizador de alcanzabilidad de VPC, firma SigV4 y un servidor S3, la runtime API de Lambda, un grupo de Auto Scaling, un asignador de costos FOCUS, un escáner de postura de seguridad | la AWS CLI contra moto, el emulador de Lambda, Checkov |
 | **13 · Infraestructura de IA** | un scheduler de GPU con DRA, un simulador de serving de LLM, un gateway que cuenta tokens, un autoscaler basado en colas, un router con caché de prefijos, índices HNSW e IVF, un inspector de artefactos de modelos, un modelo de costos por token | llama.cpp en CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps y operaciones agénticas** | un servidor MCP para kubectl, un agente de triaje de incidentes, análisis de logs con IA, OpenTelemetry para llamadas a LLM, sandboxes para agentes, herramientas de escritura seguras, evals de agentes | Claude Code, la API de Claude, OpenTelemetry, promptfoo |
 
-Otras nueve fases (redes, Git, scripting, CI/CD, observabilidad, seguridad, ingeniería de plataformas, MLOps, proyectos finales) están en la [hoja de ruta](../ROADMAP.md).
+Otras ocho fases (redes, Git, scripting, observabilidad, seguridad, ingeniería de plataformas, MLOps, proyectos finales) están en la [hoja de ruta](../ROADMAP.md).
 
 ## Cómo funciona una lección
 
@@ -74,7 +75,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Ruta | Para | Lecciones |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de un solo proceso de Linux a Kubernetes, IaC, cloud y AIOps | 47 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de un solo proceso de Linux a Kubernetes, IaC, cloud y AIOps | 55 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | ingenieros a quienes les piden operar modelos: GPUs, serving, gateways, enrutamiento, costos | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | poner agentes a trabajar en la infraestructura de forma segura | 9 |
 
@@ -96,7 +97,7 @@ El modo de lectura **Captain's Bridge** del sitio registra tu avance por secció
 
 | | CloudCaptain | roadmap.sh | devops-exercises | listas awesome-* |
 |:--|:--|:--|:--|:--|
-| Construir cada herramienta desde cero, con pruebas | ✅ 55 lecciones | ❌ | ❌ | ❌ |
+| Construir cada herramienta desde cero, con pruebas | ✅ 63 lecciones | ❌ | ❌ | ❌ |
 | Verificado contra las herramientas reales en CI | ✅ todas las lecciones | ❌ | ❌ | ❌ |
 | Infraestructura de IA y AIOps | ✅ 15 lecciones | parcial | ❌ | enlaces |
 | Un tutor que instalas en tu agente | ✅ `npx skills add` | ❌ | ❌ | ❌ |

@@ -1,0 +1,12 @@
+{
+  "note": "Generated with OpenSSL; the private keys were discarded and are not in this repository. Regenerate with the commands below.",
+  "commands": [
+    "openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out signer.key",
+    "openssl pkey -in signer.key -pubout -out p256.pub.pem",
+    "openssl ec -in signer.key -pubout -conv_form compressed -out p256-compressed.pub.pem",
+    "printf 'release artifact app-1.4.2.tar.gz built by ci\\n' > message.txt",
+    "openssl dgst -sha256 -sign signer.key -out message.sig.der message.txt",
+    "openssl genpkey -algorithm ED25519 -out ed.key && openssl pkey -in ed.key -pubout -out ed25519.pub.pem",
+    "openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-384 -out p384.key && openssl pkey -in p384.key -pubout -out p384.pub.pem"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "AnalysisTemplate",
+  "metadata": {"name": "success-rate"},
+  "spec": {
+    "args": [{"name": "version"}],
+    "metrics": [
+      {
+        "name": "success-rate",
+        "interval": "3s",
+        "count": 2,
+        "initialDelay": "5s",
+        "failureLimit": 0,
+        "successCondition": "result[0] >= 0.95",
+        "provider": {
+          "prometheus": {
+            "address": "http://loadgen.cc-progressive-delivery.svc.cluster.local:9090",
+            "query": "sum(rate(http_requests_total{version=\"{{args.version}}\",code=~\"2..\"}[20s])) / sum(rate(http_requests_total{version=\"{{args.version}}\"}[20s]))"
+          }
+        }
+      },
+      {
+        "name": "p95-latency",
+        "interval": "3s",
+        "count": 2,
+        "initialDelay": "5s",
+        "failureLimit": 0,
+        "successCondition": "result[0] < 0.25",
+        "provider": {
+          "prometheus": {
+            "address": "http://loadgen.cc-progressive-delivery.svc.cluster.local:9090",
+            "query": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{version=\"{{args.version}}\"}[20s])))"
+          }
+        }
+      }
+    ]
+  }
+}

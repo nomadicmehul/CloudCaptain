@@ -64,6 +64,22 @@
     "kserve": {
       "repo": "kserve/kserve",
       "label": "KServe"
+    },
+    "argo-rollouts": {
+      "repo": "argoproj/argo-rollouts",
+      "label": "Argo Rollouts"
+    },
+    "cosign": {
+      "repo": "sigstore/cosign",
+      "label": "cosign"
+    },
+    "syft": {
+      "repo": "anchore/syft",
+      "label": "Syft"
+    },
+    "coredns": {
+      "repo": "coredns/coredns",
+      "label": "CoreDNS"
     }
   },
   "versions": {
@@ -130,6 +146,22 @@
     "kserve": {
       "version": "v0.21.0",
       "publishedAt": "2026-09-25"
+    },
+    "argo-rollouts": {
+      "version": "v1.10.1",
+      "publishedAt": "2026-10-12"
+    },
+    "cosign": {
+      "version": "v3.1.4",
+      "publishedAt": "2026-10-20"
+    },
+    "syft": {
+      "version": "v1.55.0",
+      "publishedAt": "2026-10-19"
+    },
+    "coredns": {
+      "version": "v1.15.0",
+      "publishedAt": "2026-10-21"
     }
   }
 }
