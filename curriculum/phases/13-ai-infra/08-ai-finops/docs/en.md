@@ -228,7 +228,18 @@ Scale the whole curve by a factor and compare the two monthly bills. First the q
         return {"api": api.name, "scale": None, "reason": f"at {scenario.target_utilization:.0%} utilisation a self-hosted request costs {marginal * 1000:.4f} per 1k, the API {api_price * 1000:.4f}; more traffic never closes the gap"}
 ```
 
-If it is, a geometric scan from 0.001 to 10000 times today's traffic finds the last volume where self-hosting is still dearer, and bisection narrows the crossing. Taking the last losing point rather than the first winning one matters: the staircase of whole replicas can make self-hosting briefly cheaper and then dearer again just above a step, and a budget needs the volume from which it stays cheaper. Break-even ignores `max_replicas`, because the question is how much traffic it takes, not whether today's ceiling allows it.
+If it is, the answer is a walk along the staircase rather than a search. Whole replicas make the self-hosted bill a step function: it is flat until one hour of the day needs one more replica, then jumps by that replica's monthly price, while the API bill rises in a straight line. Between two steps self-hosting is dearer only below the volume where the straight line reaches the flat bill, so `replica_steps()` lists every volume at which some hour adds a replica and `break_even()` keeps the highest volume that is still dearer:
+
+```python
+    for right, added in replica_steps(scenario, unit, high) + [(high, 0)]:
+        crossing = dearer_below(replicas)
+        if crossing > left:
+            last_losing = min(right, crossing)
+        replicas += added
+        left = right
+```
+
+The walk stops at `high`, the volume above which even a fresh replica in every hour could not make self-hosting dearer, so it never runs to the 10,000x scan limit. Taking the last dearer volume rather than the first cheaper one matters: the staircase can make self-hosting cheaper, then dearer again for a sliver just above a step. With the fixture prices, Q8_0 at batch 1 is cheaper than `api-large` from 0.0372x, dearer again between 0.03806x and 0.03807x, and cheaper for good from 0.0381x; a bisection between two scan points can land on the first crossing and report a volume that is not safe to budget on. Break-even ignores `max_replicas`, because the question is how much traffic it takes, not whether today's ceiling allows it.
 
 ### Step 8: the cheapest batch that meets the SLO
 
@@ -292,7 +303,7 @@ x gpu-l4-1x llama-8b F16               1   11.1     0.056     192    95%   4,608
   api-large                                                               27,112.32    3.0000   15.0000   4.8000
 
   break-even at the chosen batch (self-hosting is cheaper from this volume up)
-    gpu-l4-1x llama-8b Q8_0 vs api-small: 5.75x current traffic, 1,081,913 requests/day
+    gpu-l4-1x llama-8b Q8_0 vs api-small: 5.93x current traffic, 1,116,199 requests/day
     gpu-l4-1x llama-8b Q4_K vs api-small: 0.708x current traffic, 133,340 requests/day
     gpu-h100-1x llama-8b F16 vs api-small: 2.43x current traffic, 457,144 requests/day
   utilisation sweep gpu-h100-1x llama-8b F16 (traffic, util, USD/Mtok blended): x0.25 3% 2.5494, x0.5 5% 1.2747, x1 11% 0.6373, x2 22% 0.3187, x4 33% 0.2124, x8 47% 0.1494
