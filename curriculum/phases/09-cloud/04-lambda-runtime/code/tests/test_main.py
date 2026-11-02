@@ -411,6 +411,7 @@ class FreezeTests(PlatformCase):
             self.assertEqual(self.ticks(path), frozen_at)
             platform.invoke(event(action="sleep", seconds=0.4))
             self.assertGreater(self.ticks(path), frozen_at)
+            platform.close()
 
     def test_without_freezing_background_threads_keep_running_between_invokes(self):
         platform = self.make(freeze=False)
@@ -422,6 +423,7 @@ class FreezeTests(PlatformCase):
             time.sleep(0.4)
             self.assertGreater(self.ticks(path), before)
             self.assertFalse(platform.envs[0].frozen)
+            platform.close()
 
 
 class LogFormatTests(PlatformCase):
