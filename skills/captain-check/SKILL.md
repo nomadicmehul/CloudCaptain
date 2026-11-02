@@ -8,7 +8,7 @@ metadata:
 
 # captain-check
 
-Argument: a phase slug from `curriculum/manifest.json` (`containers`, `orchestration`, `iac`, ...). If none is given, ask which phase, listing the ones with published lessons.
+Argument: a phase slug from `curriculum/manifest.json`, or from `phases` in `https://cloudcaptain.io/curriculum.json` outside a clone (`containers`, `orchestration`, `iac`, ...). Lesson files come from the index's `files` URLs, as in `captain-start`. If none is given, ask which phase, listing the ones with published lessons.
 
 ## Build the question set
 

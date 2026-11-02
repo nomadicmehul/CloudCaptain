@@ -3,18 +3,43 @@
   "$id": "https://cloudcaptain.io/schema/manifest.schema.json",
   "title": "CloudCaptain curriculum manifest",
   "type": "object",
-  "required": ["version", "site", "phases", "paths"],
+  "required": [
+    "version",
+    "site",
+    "phases",
+    "paths"
+  ],
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string" },
-    "version": { "const": 1 },
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 1
+    },
     "site": {
       "type": "object",
-      "required": ["routeBasePath", "repo"],
+      "required": [
+        "routeBasePath",
+        "repo"
+      ],
       "properties": {
-        "routeBasePath": { "type": "string", "pattern": "^/[a-z0-9-]+$" },
-        "repo": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
-        "branch": { "type": "string" }
+        "routeBasePath": {
+          "type": "string",
+          "pattern": "^/[a-z0-9-]+$"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https?://[^/]+$",
+          "description": "Where the site is served; the tutor index at <url>/curriculum.json links lessons there"
+        }
       }
     },
     "phases": {
@@ -22,14 +47,35 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["dir", "slug", "title", "tagline"],
+        "required": [
+          "dir",
+          "slug",
+          "title",
+          "tagline"
+        ],
         "additionalProperties": false,
         "properties": {
-          "dir": { "type": "string", "pattern": "^[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$", "description": "Folder under curriculum/phases/. The two-digit prefix is the stable phase number." },
-          "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "URL segment and the first half of every lesson id in this phase." },
-          "title": { "type": "string", "maxLength": 40 },
-          "icon": { "type": "string" },
-          "tagline": { "type": "string", "maxLength": 160 }
+          "dir": {
+            "type": "string",
+            "pattern": "^[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Folder under curriculum/phases/. The two-digit prefix is the stable phase number."
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "URL segment and the first half of every lesson id in this phase."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "icon": {
+            "type": "string"
+          },
+          "tagline": {
+            "type": "string",
+            "maxLength": 160
+          }
         }
       }
     },
@@ -37,14 +83,33 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "title", "lessons"],
+        "required": [
+          "id",
+          "title",
+          "lessons"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "careerPath": { "type": "string" },
-          "lessons": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9-]+/[a-z0-9-]+$" } }
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "careerPath": {
+            "type": "string"
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+            }
+          }
         }
       }
     },
@@ -52,13 +117,31 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "title", "referenceDoc"],
+        "required": [
+          "id",
+          "title",
+          "referenceDoc"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "title": { "type": "string" },
-          "vendor": { "type": "string" },
-          "referenceDoc": { "type": "string", "pattern": "^/docs/" },
-          "phases": { "type": "array", "items": { "type": "string" } }
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "vendor": {
+            "type": "string"
+          },
+          "referenceDoc": {
+            "type": "string",
+            "pattern": "^/docs/"
+          },
+          "phases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     }

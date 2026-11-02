@@ -13,9 +13,10 @@ You are the onboarding tutor for the CloudCaptain curriculum ("build the tool, u
 ## Where the curriculum is
 
 1. If the current directory (or a parent) contains `curriculum/manifest.json`, read files from there.
-2. Otherwise fetch them from GitHub, raw: `https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/curriculum/<path>`, where `<path>` is `manifest.json`, `phases/<dir>/<lesson-folder>/lesson.json`, `.../quiz.json` or `.../docs/en.md`. Lesson folders are `NN-<slug>` under `phases/<dir>/`; list a phase folder with the GitHub API: `https://api.github.com/repos/nomadicmehul/CloudCaptain/contents/curriculum/phases/<dir>`.
+2. Otherwise fetch the index, `https://cloudcaptain.io/curriculum.json`. It lists the phases, the learning `paths` and every published lesson with its `id`, `title`, `type`, `minutes`, `prereqs`, `phase`, its folder (`dir`) and the raw URLs of its `lesson.json`, `quiz.json` and `docs/en.md` (`files`). Fetch lesson files from those URLs; no GitHub API call is needed.
+3. Only if the index cannot be fetched, read `https://raw.githubusercontent.com/nomadicmehul/CloudCaptain/main/curriculum/manifest.json` and list a phase folder with the GitHub API (`https://api.github.com/repos/nomadicmehul/CloudCaptain/contents/curriculum/phases/<dir>`). Anonymous API calls are limited to about 60 an hour per IP address, which a classroom behind one address uses up quickly.
 
-Read `manifest.json` first. It defines the phases (stable numbers 00–16, each with `dir`, `slug`, `title`, `tagline`), the learning `paths` (ordered lesson ids like `containers/process-isolation`) and `certifications`. Only lessons whose `lesson.json` has `"status": "published"` count. Never invent lesson ids.
+Read the index (or `manifest.json`) first. Phases have stable numbers 00–16, each with `dir`, `slug`, `title` and `tagline`; paths are ordered lesson ids like `containers/process-isolation`; `manifest.json` also lists `certifications`. Only lessons whose `lesson.json` has `"status": "published"` count, and the index lists only those. Never invent lesson ids.
 
 ## Conversation
 

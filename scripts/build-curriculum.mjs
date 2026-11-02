@@ -16,15 +16,16 @@ import path from 'node:path';
 import url from 'node:url';
 import {discover, loadManifest, exists, readJson, LESSON_DIR_RE, ENTRY_FILES} from './lib/discover.mjs';
 import {validateLesson, validateGlobal, formatReport, scanDeprecations} from './lib/validate.mjs';
-import {buildModel, writeModel, updateRoadmap} from './lib/emit.mjs';
+import {buildModel, writeModel, updateRoadmap, tutorIndex} from './lib/emit.mjs';
 
 const here = path.dirname(url.fileURLToPath(import.meta.url));
 export const repoRoot = path.resolve(here, '..');
 export const curriculumRoot = path.join(repoRoot, 'curriculum');
 export const websiteRoot = path.join(repoRoot, 'website');
 export const outFile = path.join(websiteRoot, 'src', 'data', 'generated', 'curriculum.json');
+export const tutorIndexFile = path.join(websiteRoot, 'static', 'curriculum.json');
 
-export function run({curriculum = curriculumRoot, websiteDocsRoot = path.join(websiteRoot, 'docs'), out = outFile, check = false, quiet = false} = {}) {
+export function run({curriculum = curriculumRoot, websiteDocsRoot = path.join(websiteRoot, 'docs'), out = outFile, indexOut = tutorIndexFile, check = false, quiet = false} = {}) {
   const manifest = loadManifest(curriculum);
   const phases = discover(curriculum, manifest);
   const deprecations = exists(path.join(curriculum, 'deprecations.json')) ? readJson(path.join(curriculum, 'deprecations.json')) : [];
@@ -41,7 +42,10 @@ export function run({curriculum = curriculumRoot, websiteDocsRoot = path.join(we
   const model = buildModel(phases, manifest);
   model.versions = versions;
   model.deprecations = deprecations;
-  if (!check) writeModel(model, out);
+  if (!check) {
+    writeModel(model, out);
+    writeModel(tutorIndex(model), indexOut);
+  }
   if (!quiet) {
     const s = model.stats;
     console.log(`curriculum: ${s.lessons} lesson(s) in ${s.phasesLive}/${s.phasesTotal} phases, ${s.hours} h, ${s.tests} tests, ${report.warningCount} warning(s)${check ? '' : ` → ${path.relative(repoRoot, out)}`}`);
