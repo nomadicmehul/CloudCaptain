@@ -1,0 +1,67 @@
+{
+  "rule_files": [
+    "rules.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "name": "recording rules over two instances, one of which restarts at 10m",
+      "interval": "1m",
+      "input_series": [
+        {"series": "cc_requests_total{job=\"api\",instance=\"a\",code=\"200\"}", "values": "0+60x20"},
+        {"series": "cc_requests_total{job=\"api\",instance=\"a\",code=\"500\"}", "values": "0+6x20"},
+        {"series": "cc_requests_total{job=\"api\",instance=\"b\",code=\"200\"}", "values": "0+120x9 0+120x10"}
+      ],
+      "promql_expr_test": [
+        {
+          "expr": "instance:cc_requests:rate5m",
+          "eval_time": "8m",
+          "exp_samples": [
+            {"labels": "instance:cc_requests:rate5m{instance=\"a\"}", "value": 1.1},
+            {"labels": "instance:cc_requests:rate5m{instance=\"b\"}", "value": 2}
+          ]
+        },
+        {
+          "expr": "job:cc_requests_errors:ratio_rate5m",
+          "eval_time": "8m",
+          "exp_samples": [
+            {"labels": "job:cc_requests_errors:ratio_rate5m{job=\"api\"}", "value": 0.03225806451612903}
+          ]
+        },
+        {
+          "expr": "rate(cc_requests_total{instance=\"b\"}[5m])",
+          "eval_time": "12m",
+          "exp_samples": [
+            {"labels": "{job=\"api\",instance=\"b\",code=\"200\"}", "value": 1.5}
+          ]
+        },
+        {
+          "expr": "sum(rate(cc_requests_total[5m]))",
+          "eval_time": "12m",
+          "exp_samples": [
+            {"labels": "{}", "value": 2.6}
+          ]
+        },
+        {
+          "expr": "rate(job:cc_requests:sum[5m])",
+          "eval_time": "12m",
+          "exp_samples": [
+            {"labels": "{job=\"api\",team=\"checkout\"}", "value": 5.075}
+          ]
+        },
+        {
+          "expr": "rate(cc_requests_total{instance=\"a\",code=\"200\"}[1m])",
+          "eval_time": "8m",
+          "exp_samples": []
+        },
+        {
+          "expr": "cc_requests_total{instance=\"b\"}",
+          "eval_time": "9m30s",
+          "exp_samples": [
+            {"labels": "cc_requests_total{job=\"api\",instance=\"b\",code=\"200\"}", "value": 1080}
+          ]
+        }
+      ]
+    }
+  ]
+}

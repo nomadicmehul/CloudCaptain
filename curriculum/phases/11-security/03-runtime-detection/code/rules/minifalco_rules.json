@@ -1,0 +1,66 @@
+{
+  "lists": {
+    "shell_binaries": ["ash", "bash", "csh", "ksh", "sh", "tcsh", "zsh", "dash", "busybox"],
+    "sensitive_file_names": ["/etc/shadow", "/etc/gshadow", "/etc/sudoers", "/etc/pam.conf"],
+    "read_sensitive_file_trusted": ["sshd", "login", "su", "sudo", "systemd", "passwd", "chage", "unix_chkpwd", "vipw"],
+    "allowed_outbound_procs": ["curl", "wget", "apt", "apt-get", "apk", "pip", "pip3", "python3", "node", "yum", "dnf"],
+    "package_mgmt_binaries": ["apt", "apt-get", "apk", "dpkg", "rpm", "yum", "dnf", "systemd", "update-ca-certif", "update-ca-cert"],
+    "container_runtime_sockets": ["/var/run/docker.sock", "/run/docker.sock", "/var/run/containerd/containerd.sock", "/run/containerd/containerd.sock", "/var/run/crio/crio.sock"]
+  },
+  "macros": {
+    "spawned_process": "evt.type in (execve, execveat)",
+    "open_write": "evt.type in (open, openat, openat2, creat) and evt.is_open_write = true",
+    "open_read": "evt.type in (open, openat, openat2) and evt.is_open_read = true",
+    "in_container": "container.id != host",
+    "shell_procs": "proc.name in (shell_binaries)",
+    "etc_dir": "fd.name startswith /etc/",
+    "outbound": "evt.type = connect and fd.sip exists and fd.sip != \"127.0.0.1\" and not fd.sip startswith ::1"
+  },
+  "rules": [
+    {
+      "rule": "Shell spawned in a container",
+      "condition": "spawned_process and in_container and shell_procs",
+      "output": "Shell spawned in container (user=%user.name container=%container.id proc=%proc.name parent=%proc.pname cmdline=%proc.cmdline)",
+      "priority": "NOTICE",
+      "tags": ["container", "shell", "mitre_execution"]
+    },
+    {
+      "rule": "Read sensitive file untrusted",
+      "condition": "open_read and fd.name in (sensitive_file_names) and not proc.name in (read_sensitive_file_trusted, shell_binaries)",
+      "output": "Sensitive file opened for reading (file=%fd.name proc=%proc.name user=%user.name container=%container.id)",
+      "priority": "WARNING",
+      "tags": ["filesystem", "mitre_credential_access"]
+    },
+    {
+      "rule": "Write below etc",
+      "condition": "open_write and etc_dir",
+      "output": "File below /etc opened for writing (file=%fd.name proc=%proc.name user=%user.name container=%container.id)",
+      "priority": "ERROR",
+      "tags": ["filesystem", "mitre_persistence"],
+      "exceptions": [
+        {"field": "proc.name", "op": "in", "values": ["package_mgmt_binaries"]}
+      ]
+    },
+    {
+      "rule": "Execution from world-writable directory",
+      "condition": "spawned_process and (proc.exe startswith /tmp/ or proc.exe startswith /dev/shm/ or proc.exe startswith /var/tmp/)",
+      "output": "Binary executed from a world-writable directory (exe=%proc.exe proc=%proc.name parent=%proc.pname container=%container.id)",
+      "priority": "WARNING",
+      "tags": ["process", "mitre_execution"]
+    },
+    {
+      "rule": "Unexpected outbound connection",
+      "condition": "outbound and not proc.name in (allowed_outbound_procs)",
+      "output": "Outbound connection from an unexpected process (proc=%proc.name dest=%fd.sip port=%fd.sport container=%container.id)",
+      "priority": "NOTICE",
+      "tags": ["network", "mitre_command_and_control"]
+    },
+    {
+      "rule": "Container runtime socket accessed",
+      "condition": "fd.name in (container_runtime_sockets)",
+      "output": "Container runtime socket accessed (file=%fd.name proc=%proc.name user=%user.name container=%container.id)",
+      "priority": "CRITICAL",
+      "tags": ["container", "mitre_privilege_escalation"]
+    }
+  ]
+}

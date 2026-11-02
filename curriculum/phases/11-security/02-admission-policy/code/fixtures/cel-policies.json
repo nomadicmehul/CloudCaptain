@@ -1,0 +1,68 @@
+{
+  "policies": [
+    {
+      "name": "cc-admission-team-label",
+      "type": "cel",
+      "actions": [
+        "Deny"
+      ],
+      "validations": [
+        {
+          "expression": "has(object.metadata.labels) && 'team' in object.metadata.labels && object.metadata.labels['team'] != ''",
+          "message": "label team is required"
+        }
+      ]
+    },
+    {
+      "name": "cc-admission-no-privileged",
+      "type": "cel",
+      "actions": [
+        "Deny"
+      ],
+      "variables": [
+        {
+          "name": "privileged",
+          "expression": "object.spec.containers.filter(c, has(c.securityContext) && has(c.securityContext.privileged) && c.securityContext.privileged)"
+        }
+      ],
+      "validations": [
+        {
+          "expression": "size(variables.privileged) == 0",
+          "messageExpression": "'privileged containers are not allowed: ' + variables.privileged.map(c, c.name).join(', ')"
+        }
+      ]
+    },
+    {
+      "name": "cc-admission-digest",
+      "type": "cel",
+      "actions": [
+        "Deny"
+      ],
+      "matchConditions": [
+        {
+          "name": "not-exempt",
+          "expression": "!has(object.metadata.labels) || !('cloudcaptain.io/digest-exempt' in object.metadata.labels)"
+        }
+      ],
+      "validations": [
+        {
+          "expression": "object.spec.containers.all(c, c.image.matches('@sha256:[0-9a-f]{64}$'))",
+          "message": "images must be pinned by digest"
+        }
+      ]
+    },
+    {
+      "name": "cc-admission-memory-limit",
+      "type": "cel",
+      "actions": [
+        "Warn"
+      ],
+      "validations": [
+        {
+          "expression": "object.spec.containers.all(c, has(c.resources) && has(c.resources.limits) && 'memory' in c.resources.limits)",
+          "message": "set a memory limit on every container"
+        }
+      ]
+    }
+  ]
+}

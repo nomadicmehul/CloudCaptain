@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "cc-requests",
+      "interval": "1m",
+      "rules": [
+        {
+          "record": "instance:cc_requests:rate5m",
+          "expr": "sum by (instance) (rate(cc_requests_total[5m]))"
+        },
+        {
+          "record": "job:cc_requests_errors:ratio_rate5m",
+          "expr": "sum by (job) (rate(cc_requests_total{code=\"500\"}[5m])) / sum by (job) (rate(cc_requests_total[5m]))"
+        },
+        {
+          "record": "job:cc_requests:sum",
+          "expr": "sum by (job) (cc_requests_total)",
+          "labels": {
+            "team": "checkout"
+          }
+        }
+      ]
+    }
+  ]
+}

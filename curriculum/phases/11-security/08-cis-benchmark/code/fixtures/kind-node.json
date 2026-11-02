@@ -1,0 +1,408 @@
+{
+  "minibench_snapshot": 1,
+  "node": "docker:cc-lab-control-plane",
+  "collected_at": "2026-11-01T09:00:00Z",
+  "processes": {
+    "kube-apiserver": [
+      "kube-apiserver",
+      "--advertise-address=172.18.0.2",
+      "--allow-privileged=true",
+      "--authorization-mode=Node,RBAC",
+      "--client-ca-file=/etc/kubernetes/pki/ca.crt",
+      "--enable-admission-plugins=NodeRestriction",
+      "--enable-bootstrap-token-auth=true",
+      "--etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt",
+      "--etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt",
+      "--etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key",
+      "--etcd-servers=https://127.0.0.1:2379",
+      "--kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt",
+      "--kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key",
+      "--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname",
+      "--proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt",
+      "--proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key",
+      "--requestheader-allowed-names=front-proxy-client",
+      "--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt",
+      "--requestheader-extra-headers-prefix=X-Remote-Extra-",
+      "--requestheader-group-headers=X-Remote-Group",
+      "--requestheader-username-headers=X-Remote-User",
+      "--runtime-config=",
+      "--secure-port=6443",
+      "--service-account-issuer=https://kubernetes.default.svc.cluster.local",
+      "--service-account-key-file=/etc/kubernetes/pki/sa.pub",
+      "--service-account-signing-key-file=/etc/kubernetes/pki/sa.key",
+      "--service-cluster-ip-range=10.96.0.0/16",
+      "--tls-cert-file=/etc/kubernetes/pki/apiserver.crt",
+      "--tls-private-key-file=/etc/kubernetes/pki/apiserver.key"
+    ],
+    "kube-controller-manager": [
+      "kube-controller-manager",
+      "--allocate-node-cidrs=true",
+      "--authentication-kubeconfig=/etc/kubernetes/controller-manager.conf",
+      "--authorization-kubeconfig=/etc/kubernetes/controller-manager.conf",
+      "--bind-address=127.0.0.1",
+      "--client-ca-file=/etc/kubernetes/pki/ca.crt",
+      "--cluster-cidr=10.244.0.0/16",
+      "--cluster-name=cc-lab",
+      "--cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt",
+      "--cluster-signing-key-file=/etc/kubernetes/pki/ca.key",
+      "--controllers=*,bootstrapsigner,tokencleaner",
+      "--enable-hostpath-provisioner=true",
+      "--kubeconfig=/etc/kubernetes/controller-manager.conf",
+      "--leader-elect=true",
+      "--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt",
+      "--root-ca-file=/etc/kubernetes/pki/ca.crt",
+      "--service-account-private-key-file=/etc/kubernetes/pki/sa.key",
+      "--service-cluster-ip-range=10.96.0.0/16",
+      "--use-service-account-credentials=true"
+    ],
+    "kube-scheduler": [
+      "kube-scheduler",
+      "--authentication-kubeconfig=/etc/kubernetes/scheduler.conf",
+      "--authorization-kubeconfig=/etc/kubernetes/scheduler.conf",
+      "--bind-address=127.0.0.1",
+      "--kubeconfig=/etc/kubernetes/scheduler.conf",
+      "--leader-elect=true"
+    ],
+    "etcd": [
+      "etcd",
+      "--advertise-client-urls=https://172.18.0.2:2379",
+      "--cert-file=/etc/kubernetes/pki/etcd/server.crt",
+      "--client-cert-auth=true",
+      "--data-dir=/var/lib/etcd",
+      "--experimental-initial-corrupt-check=true",
+      "--experimental-watch-progress-notify-interval=5s",
+      "--initial-advertise-peer-urls=https://172.18.0.2:2380",
+      "--initial-cluster=cc-lab-control-plane=https://172.18.0.2:2380",
+      "--key-file=/etc/kubernetes/pki/etcd/server.key",
+      "--listen-client-urls=https://127.0.0.1:2379,https://172.18.0.2:2379",
+      "--listen-metrics-urls=http://127.0.0.1:2381",
+      "--listen-peer-urls=https://172.18.0.2:2380",
+      "--name=cc-lab-control-plane",
+      "--peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt",
+      "--peer-client-cert-auth=true",
+      "--peer-key-file=/etc/kubernetes/pki/etcd/peer.key",
+      "--peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt",
+      "--snapshot-count=10000",
+      "--trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt"
+    ],
+    "kubelet": [
+      "/usr/bin/kubelet",
+      "--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf",
+      "--kubeconfig=/etc/kubernetes/kubelet.conf",
+      "--config=/var/lib/kubelet/config.yaml",
+      "--node-ip=172.18.0.2",
+      "--node-labels=",
+      "--provider-id=kind://docker/cc-lab/cc-lab-control-plane",
+      "--runtime-cgroups=/system.slice/containerd.service"
+    ],
+    "kube-proxy": [
+      "/usr/local/bin/kube-proxy",
+      "--config=/var/lib/kube-proxy/config.conf",
+      "--hostname-override=cc-lab-control-plane"
+    ]
+  },
+  "files": {
+    "/etc/kubernetes/manifests/kube-apiserver.yaml": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file",
+      "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  annotations:\n    kubeadm.kubernetes.io/kube-apiserver.advertise-address.endpoint: 172.18.0.2:6443\n  labels:\n    component: kube-apiserver\n    tier: control-plane\n  name: kube-apiserver\n  namespace: kube-system\nspec:\n  containers:\n  - command:\n    - kube-apiserver\n    - --advertise-address=172.18.0.2\n    - --allow-privileged=true\n    - --authorization-mode=Node,RBAC\n    - --client-ca-file=/etc/kubernetes/pki/ca.crt\n    - --enable-admission-plugins=NodeRestriction\n    - --enable-bootstrap-token-auth=true\n    - --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt\n    - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt\n    - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key\n    - --etcd-servers=https://127.0.0.1:2379\n    - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt\n    - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key\n    - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname\n    - --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt\n    - --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key\n    - --requestheader-allowed-names=front-proxy-client\n    - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt\n    - --requestheader-extra-headers-prefix=X-Remote-Extra-\n    - --requestheader-group-headers=X-Remote-Group\n    - --requestheader-username-headers=X-Remote-User\n    - --runtime-config=\n    - --secure-port=6443\n    - --service-account-issuer=https://kubernetes.default.svc.cluster.local\n    - --service-account-key-file=/etc/kubernetes/pki/sa.pub\n    - --service-account-signing-key-file=/etc/kubernetes/pki/sa.key\n    - --service-cluster-ip-range=10.96.0.0/16\n    - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt\n    - --tls-private-key-file=/etc/kubernetes/pki/apiserver.key\n    image: registry.k8s.io/kube-apiserver:v1.37.0\n    imagePullPolicy: IfNotPresent\n    name: kube-apiserver\n    resources:\n      requests:\n        cpu: 100m\n    volumeMounts:\n    - mountPath: /etc/ssl/certs\n      name: ca-certs\n      readOnly: true\n    - mountPath: /etc/kubernetes/pki\n      name: k8s-certs\n      readOnly: true\n  hostNetwork: true\n  priority: 2000001000\n  priorityClassName: system-node-critical\n  securityContext:\n    seccompProfile:\n      type: RuntimeDefault\n  volumes:\n  - hostPath:\n      path: /etc/ssl/certs\n      type: DirectoryOrCreate\n    name: ca-certs\n  - hostPath:\n      path: /etc/kubernetes/pki\n      type: DirectoryOrCreate\n    name: k8s-certs\nstatus: {}\n"
+    },
+    "/etc/kubernetes/manifests/kube-controller-manager.yaml": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file",
+      "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  annotations: {}\n  labels:\n    component: kube-controller-manager\n    tier: control-plane\n  name: kube-controller-manager\n  namespace: kube-system\nspec:\n  containers:\n  - command:\n    - kube-controller-manager\n    - --allocate-node-cidrs=true\n    - --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf\n    - --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf\n    - --bind-address=127.0.0.1\n    - --client-ca-file=/etc/kubernetes/pki/ca.crt\n    - --cluster-cidr=10.244.0.0/16\n    - --cluster-name=cc-lab\n    - --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt\n    - --cluster-signing-key-file=/etc/kubernetes/pki/ca.key\n    - --controllers=*,bootstrapsigner,tokencleaner\n    - --enable-hostpath-provisioner=true\n    - --kubeconfig=/etc/kubernetes/controller-manager.conf\n    - --leader-elect=true\n    - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt\n    - --root-ca-file=/etc/kubernetes/pki/ca.crt\n    - --service-account-private-key-file=/etc/kubernetes/pki/sa.key\n    - --service-cluster-ip-range=10.96.0.0/16\n    - --use-service-account-credentials=true\n    image: registry.k8s.io/kube-controller-manager:v1.37.0\n    imagePullPolicy: IfNotPresent\n    name: kube-controller-manager\n    resources:\n      requests:\n        cpu: 100m\n    volumeMounts:\n    - mountPath: /etc/ssl/certs\n      name: ca-certs\n      readOnly: true\n    - mountPath: /etc/kubernetes/pki\n      name: k8s-certs\n      readOnly: true\n    - mountPath: /etc/kubernetes/controller-manager.conf\n      name: kubeconfig\n      readOnly: true\n  hostNetwork: true\n  priority: 2000001000\n  priorityClassName: system-node-critical\n  securityContext:\n    seccompProfile:\n      type: RuntimeDefault\n  volumes:\n  - hostPath:\n      path: /etc/ssl/certs\n      type: DirectoryOrCreate\n    name: ca-certs\n  - hostPath:\n      path: /etc/kubernetes/pki\n      type: DirectoryOrCreate\n    name: k8s-certs\n  - hostPath:\n      path: /etc/kubernetes/controller-manager.conf\n      type: DirectoryOrCreate\n    name: kubeconfig\nstatus: {}\n"
+    },
+    "/etc/kubernetes/manifests/kube-scheduler.yaml": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file",
+      "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  annotations: {}\n  labels:\n    component: kube-scheduler\n    tier: control-plane\n  name: kube-scheduler\n  namespace: kube-system\nspec:\n  containers:\n  - command:\n    - kube-scheduler\n    - --authentication-kubeconfig=/etc/kubernetes/scheduler.conf\n    - --authorization-kubeconfig=/etc/kubernetes/scheduler.conf\n    - --bind-address=127.0.0.1\n    - --kubeconfig=/etc/kubernetes/scheduler.conf\n    - --leader-elect=true\n    image: registry.k8s.io/kube-scheduler:v1.37.0\n    imagePullPolicy: IfNotPresent\n    name: kube-scheduler\n    resources:\n      requests:\n        cpu: 100m\n    volumeMounts:\n    - mountPath: /etc/kubernetes/scheduler.conf\n      name: kubeconfig\n      readOnly: true\n  hostNetwork: true\n  priority: 2000001000\n  priorityClassName: system-node-critical\n  securityContext:\n    seccompProfile:\n      type: RuntimeDefault\n  volumes:\n  - hostPath:\n      path: /etc/kubernetes/scheduler.conf\n      type: DirectoryOrCreate\n    name: kubeconfig\nstatus: {}\n"
+    },
+    "/etc/kubernetes/manifests/etcd.yaml": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file",
+      "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  annotations:\n    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://172.18.0.2:2379\n  labels:\n    component: etcd\n    tier: control-plane\n  name: etcd\n  namespace: kube-system\nspec:\n  containers:\n  - command:\n    - etcd\n    - --advertise-client-urls=https://172.18.0.2:2379\n    - --cert-file=/etc/kubernetes/pki/etcd/server.crt\n    - --client-cert-auth=true\n    - --data-dir=/var/lib/etcd\n    - --experimental-initial-corrupt-check=true\n    - --experimental-watch-progress-notify-interval=5s\n    - --initial-advertise-peer-urls=https://172.18.0.2:2380\n    - --initial-cluster=cc-lab-control-plane=https://172.18.0.2:2380\n    - --key-file=/etc/kubernetes/pki/etcd/server.key\n    - --listen-client-urls=https://127.0.0.1:2379,https://172.18.0.2:2379\n    - --listen-metrics-urls=http://127.0.0.1:2381\n    - --listen-peer-urls=https://172.18.0.2:2380\n    - --name=cc-lab-control-plane\n    - --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt\n    - --peer-client-cert-auth=true\n    - --peer-key-file=/etc/kubernetes/pki/etcd/peer.key\n    - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt\n    - --snapshot-count=10000\n    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt\n    image: registry.k8s.io/etcd:3.6.5-0\n    imagePullPolicy: IfNotPresent\n    name: etcd\n    resources:\n      requests:\n        cpu: 100m\n    volumeMounts:\n    - mountPath: /etc/kubernetes/pki/etcd\n      name: etcd-certs\n    - mountPath: /var/lib/etcd\n      name: etcd-data\n  hostNetwork: true\n  priority: 2000001000\n  priorityClassName: system-node-critical\n  securityContext:\n    seccompProfile:\n      type: RuntimeDefault\n  volumes:\n  - hostPath:\n      path: /etc/kubernetes/pki/etcd\n      type: DirectoryOrCreate\n    name: etcd-certs\n  - hostPath:\n      path: /var/lib/etcd\n      type: DirectoryOrCreate\n    name: etcd-data\nstatus: {}\n"
+    },
+    "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf": {
+      "exists": true,
+      "mode": "644",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/etc/systemd/system/kubelet.service": {
+      "exists": true,
+      "mode": "644",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/lib/systemd/system/kubelet.service": {
+      "exists": false
+    },
+    "/var/lib/kubelet/config.yaml": {
+      "exists": true,
+      "mode": "644",
+      "owner": "root",
+      "group": "root",
+      "type": "file",
+      "content": "apiVersion: kubelet.config.k8s.io/v1beta1\nauthentication:\n  anonymous:\n    enabled: false\n  webhook:\n    cacheTTL: 0s\n    enabled: true\n  x509:\n    clientCAFile: /etc/kubernetes/pki/ca.crt\nauthorization:\n  mode: Webhook\n  webhook:\n    cacheAuthorizedTTL: 0s\n    cacheUnauthorizedTTL: 0s\ncgroupDriver: systemd\ncgroupRoot: /kubelet\nclusterDNS:\n- 10.96.0.10\nclusterDomain: cluster.local\ncontainerRuntimeEndpoint: unix:///run/containerd/containerd.sock\ncpuManagerReconcilePeriod: 0s\ncrashLoopBackOff: {}\nevictionHard:\n  imagefs.available: 0%\n  nodefs.available: 0%\n  nodefs.inodesFree: 0%\nevictionPressureTransitionPeriod: 0s\nfailSwapOn: false\nfileCheckFrequency: 0s\nhealthzBindAddress: 127.0.0.1\nhealthzPort: 10248\nhttpCheckFrequency: 0s\nimageGCHighThresholdPercent: 100\nimageMaximumGCAge: 0s\nimageMinimumGCAge: 0s\nkind: KubeletConfiguration\nlogging:\n  flushFrequency: 0\n  options:\n    json:\n      infoBufferSize: \"0\"\n    text:\n      infoBufferSize: \"0\"\n  verbosity: 0\nmemorySwap: {}\nnodeStatusReportFrequency: 0s\nnodeStatusUpdateFrequency: 0s\nrotateCertificates: true\nruntimeRequestTimeout: 0s\nshutdownGracePeriod: 0s\nshutdownGracePeriodCriticalPods: 0s\nstaticPodPath: /etc/kubernetes/manifests\nstreamingConnectionIdleTimeout: 0s\nsyncFrequency: 0s\nvolumeStatsAggPeriod: 0s\n"
+    },
+    "/etc/kubernetes/kubelet.conf": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/etc/kubernetes/pki/ca.crt": {
+      "exists": true,
+      "mode": "644",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/var/lib/etcd": {
+      "exists": true,
+      "mode": "700",
+      "owner": "root",
+      "group": "root",
+      "type": "dir"
+    },
+    "/etc/kubernetes/scheduler.conf": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/etc/kubernetes/controller-manager.conf": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/etc/kubernetes/admin.conf": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    },
+    "/etc/kubernetes/super-admin.conf": {
+      "exists": true,
+      "mode": "600",
+      "owner": "root",
+      "group": "root",
+      "type": "file"
+    }
+  },
+  "trees": {
+    "/etc/kubernetes/pki": [
+      {
+        "path": "/etc/kubernetes/pki",
+        "exists": true,
+        "mode": "755",
+        "owner": "root",
+        "group": "root",
+        "type": "dir"
+      },
+      {
+        "path": "/etc/kubernetes/pki/apiserver-etcd-client.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/apiserver-etcd-client.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/apiserver-kubelet-client.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/apiserver-kubelet-client.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/apiserver.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/apiserver.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/ca.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/ca.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd",
+        "exists": true,
+        "mode": "755",
+        "owner": "root",
+        "group": "root",
+        "type": "dir"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/ca.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/ca.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/healthcheck-client.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/healthcheck-client.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/peer.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/peer.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/server.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/etcd/server.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/front-proxy-ca.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/front-proxy-ca.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/front-proxy-client.crt",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/front-proxy-client.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/sa.key",
+        "exists": true,
+        "mode": "600",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      },
+      {
+        "path": "/etc/kubernetes/pki/sa.pub",
+        "exists": true,
+        "mode": "644",
+        "owner": "root",
+        "group": "root",
+        "type": "file"
+      }
+    ]
+  }
+}

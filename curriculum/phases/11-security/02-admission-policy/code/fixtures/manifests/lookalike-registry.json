@@ -1,0 +1,28 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "lookalike-registry",
+    "labels": {
+      "app": "web",
+      "team": "payments"
+    }
+  },
+  "spec": {
+    "securityContext": {
+      "runAsNonRoot": true,
+      "runAsUser": 65532
+    },
+    "containers": [
+      {
+        "name": "web",
+        "image": "registry.k8s.io.evil.example/pause:3.10@sha256:ee6521f290b2168b6e0935a181d4cff9be1ac3f505666ef0e3c98fae8199917a",
+        "resources": {
+          "limits": {
+            "memory": "64Mi"
+          }
+        }
+      }
+    ]
+  }
+}

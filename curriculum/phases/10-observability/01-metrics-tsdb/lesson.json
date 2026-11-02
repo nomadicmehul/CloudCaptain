@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/metrics-tsdb",
+  "title": "A Metric Is a Name, Labels and a Number Over Time",
+  "short": "Metrics and TSDB",
+  "motto": "A series is one name plus one exact label set; every new label value is another series in memory, so your labels decide the cost.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/performance-basics",
+    "networking/http-server"
+  ],
+  "tools": [
+    "prometheus",
+    "promtool",
+    "node_exporter",
+    "docker",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "skill-cardinality-review.md",
+    "prompt-explain-metric-type.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

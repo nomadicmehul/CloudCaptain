@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "security/network-policy",
+  "title": "A NetworkPolicy Is a Default Deny You Have to Write",
+  "short": "Network Policy",
+  "motto": "A pod accepts every connection until a policy selects it; then only the union of the rules gets through, and both ends must agree.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/services-dns"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "kindnet",
+    "docker",
+    "cilium",
+    "calico"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/kubernetes/exam-prep",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-network-policy-review.md",
+    "prompt-explain-network-policy.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

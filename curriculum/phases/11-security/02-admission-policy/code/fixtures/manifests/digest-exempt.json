@@ -1,0 +1,29 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "digest-exempt",
+    "labels": {
+      "app": "web",
+      "team": "payments",
+      "cloudcaptain.io/digest-exempt": "true"
+    }
+  },
+  "spec": {
+    "securityContext": {
+      "runAsNonRoot": true,
+      "runAsUser": 65532
+    },
+    "containers": [
+      {
+        "name": "web",
+        "image": "docker.io/library/nginx:1.30-alpine",
+        "resources": {
+          "limits": {
+            "memory": "64Mi"
+          }
+        }
+      }
+    ]
+  }
+}

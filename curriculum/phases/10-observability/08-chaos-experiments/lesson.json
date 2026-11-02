@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/chaos-experiments",
+  "title": "Chaos Engineering Is an Experiment With a Hypothesis",
+  "short": "Chaos Experiments",
+  "motto": "A chaos experiment is a hypothesis about an SLI, one fault inside a blast radius, an abort condition and a rollback that always runs.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "observability/slo-burn-rate",
+    "orchestration/reconciler"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "tc",
+    "ip",
+    "chaos-mesh",
+    "helm",
+    "litmuschaos",
+    "chaos-toolkit"
+  ],
+  "reference": [
+    "/docs/learning-paths/sre",
+    "/docs/learning-paths/sre-practices",
+    "/docs/tools/observability",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/linux/networking"
+  ],
+  "outputs": [
+    "skill-chaos-experiment-review.md",
+    "prompt-design-chaos-experiment.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

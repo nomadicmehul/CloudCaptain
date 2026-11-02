@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/slo-burn-rate",
+  "title": "An SLO Is an Error Budget You Spend on Purpose",
+  "short": "SLO Burn Rates",
+  "motto": "99.9% over 30 days is 43 minutes of failure. A burn rate says how fast you are spending it; two windows per alert decide who gets woken up.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "observability/promql"
+  ],
+  "tools": [
+    "sloth",
+    "prometheus",
+    "promtool",
+    "docker",
+    "openslo"
+  ],
+  "reference": [
+    "/docs/learning-paths/sre-practices",
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre"
+  ],
+  "outputs": [
+    "skill-slo-design.md",
+    "prompt-explain-burn-rate.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

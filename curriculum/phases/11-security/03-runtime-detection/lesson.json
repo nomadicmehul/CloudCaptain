@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "security/runtime-detection",
+  "title": "Runtime Detection Is a Rule Engine Over System Calls",
+  "short": "Runtime Detection",
+  "motto": "Prevention bounds what a process can do; detection is a rule engine over the system calls it does make, and names the match as it happens.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/syscalls-strace",
+    "containers/runtime-security"
+  ],
+  "tools": [
+    "falco",
+    "strace",
+    "docker",
+    "kubectl",
+    "kind"
+  ],
+  "reference": [
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/linux/security",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/kubernetes/security"
+  ],
+  "outputs": [
+    "skill-runtime-alert-triage.md",
+    "prompt-write-falco-rule.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

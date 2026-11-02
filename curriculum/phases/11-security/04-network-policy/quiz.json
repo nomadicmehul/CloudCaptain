@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/network-policy",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A namespace contains pods but no NetworkPolicy objects, and the cluster's network plugin enforces NetworkPolicy. Which connections can reach those pods?",
+      "choices": [
+        "Only connections from pods in the same namespace",
+        "Every connection, from any pod and from outside the cluster, on every port: a pod is isolated only once a policy selects it",
+        "Only connections from pods that share a Service with them",
+        "None until an allow policy exists, because Kubernetes denies by default"
+      ],
+      "answer": 1,
+      "explanation": "Pods start non-isolated in both directions. Isolation begins for a direction when some policy in the namespace selects the pod and lists that direction in policyTypes. That is why the default deny is a policy you have to write."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A policy has `podSelector: {}` and `egress: []` and no `policyTypes`. What does it do once the API server stores it?",
+      "choices": [
+        "Nothing, because an empty egress list is ignored and so is the policy",
+        "It denies all egress from every pod in the namespace",
+        "It denies all ingress to every pod in the namespace and leaves egress open, because policyTypes defaults to [Ingress] when spec.egress has no rule",
+        "It denies both ingress and egress for every pod in the namespace"
+      ],
+      "answer": 2,
+      "explanation": "Without policyTypes, Ingress is always set and Egress is added only if the egress list has at least one rule. An empty list adds nothing, so the policy isolates ingress with no rules (deny all ingress) and never touches egress. Write policyTypes: [Ingress, Egress] to deny both."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An ingress rule on `db` reads `from: [{namespaceSelector: {matchLabels: {team: ops}}}, {podSelector: {matchLabels: {app: api}}}]`. Which sources does it allow?",
+      "choices": [
+        "Only pods labelled app=api inside namespaces labelled team=ops",
+        "Only pods labelled app=api in db's namespace; the namespaceSelector is ignored",
+        "Pods labelled app=api in any namespace",
+        "Every pod in namespaces labelled team=ops, or pods labelled app=api in db's own namespace: two list elements are two peers combined with OR"
+      ],
+      "answer": 3,
+      "explanation": "Each element of from is a peer, and peers are ORed. A podSelector without a namespaceSelector means the policy's own namespace. For api pods in ops namespaces only, put both selectors into one element."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The namespace has a default-deny policy for Ingress and Egress. `api` has a policy allowing ingress from `app=frontend` on port http, yet `frontend` still cannot connect. Why?",
+      "choices": [
+        "frontend is also isolated for egress by the default deny, and a connection needs the source's egress side to allow it too; frontend needs an egress rule to api",
+        "Named ports only work with Services",
+        "Ingress rules take a minute to propagate; wait and retry",
+        "The default-deny policy overrides allow policies because it was created first"
+      ],
+      "answer": 0,
+      "explanation": "Policies are a union with no order, so default-deny does not override anything; it only isolates. But isolation applies to both ends: frontend's egress must be allowed by some egress rule and api's ingress by some ingress rule."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After a default deny for egress, every pod logs `Temporary failure in name resolution` after several seconds, while connections by IP to allowed pods work. What is the smallest correct fix?",
+      "choices": [
+        "Add `hostNetwork: true` to the pods so they use the node's resolver",
+        "Allow egress to 0.0.0.0/0 on every port",
+        "Allow ingress from kube-system to the pods",
+        "Allow egress on 53/UDP and 53/TCP to pods labelled k8s-app=kube-dns in namespace kube-system, in one peer element with both selectors"
+      ],
+      "answer": 3,
+      "explanation": "DNS is egress from the pod to CoreDNS. The Service IP is rewritten to a CoreDNS pod before the policy is evaluated, so the rule selects the CoreDNS pods, not the ClusterIP. TCP 53 is needed for answers too large for UDP. The reply is allowed automatically, so no ingress rule is needed."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`kubectl apply -f default-deny.yaml` succeeded on a new cluster, and `kubectl get networkpolicy` lists it. How do you know it is enforced?",
+      "choices": [
+        "The pods restart when a policy that selects them is created",
+        "The API server rejects NetworkPolicy objects when the network plugin does not support them",
+        "kubectl describe networkpolicy shows an Enforced condition",
+        "Measure: open real connections from inside the pods with a short timeout before and after the change, and compare with the prediction; the API server stores policies whether or not the network plugin enforces them"
+      ],
+      "answer": 3,
+      "explanation": "NetworkPolicy is enforced by the network plugin's agent on each node, asynchronously. A plugin without support (flannel alone, or kindnet before kind v0.24.0) accepts the objects and does nothing, and there is no status field that says otherwise. Only a probe tells you."
+    }
+  ]
+}

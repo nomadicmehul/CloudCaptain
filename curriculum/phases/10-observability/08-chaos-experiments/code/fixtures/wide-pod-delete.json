@@ -1,0 +1,68 @@
+{
+  "title": "Deleting 34% of the web pods (rounded up, as Chaos Mesh does) keeps errors under 5%",
+  "hypothesis": {
+    "source": {
+      "kubectl_raw": "/api/v1/namespaces/cc-chaos-experiments/pods/cc-load:9100/proxy/metrics"
+    },
+    "interval_s": 3,
+    "min_requests": 20,
+    "slis": [
+      {
+        "name": "error_rate",
+        "type": "error_ratio",
+        "errors": "minichaos_load_requests_total{outcome=\"error\"}",
+        "total": "minichaos_load_requests_total",
+        "max": 0.05
+      },
+      {
+        "name": "p95_latency_s",
+        "type": "latency_quantile",
+        "histogram": "minichaos_load_request_duration_seconds{outcome=\"ok\"}",
+        "quantile": 0.95,
+        "max": 0.25
+      }
+    ],
+    "checks": [
+      {
+        "type": "deployment-ready",
+        "namespace": "cc-chaos-experiments",
+        "name": "web"
+      }
+    ],
+    "recovery_s": 60
+  },
+  "method": {
+    "duration_s": 15,
+    "faults": [
+      {
+        "type": "pod-delete",
+        "namespace": "cc-chaos-experiments",
+        "selector": "app=web",
+        "mode": "fixed-percent",
+        "value": 34
+      }
+    ]
+  },
+  "abort": {
+    "rules": [
+      {
+        "sli": "error_rate",
+        "above": 0.25,
+        "for": 1
+      },
+      {
+        "sli": "p95_latency_s",
+        "above": 1.0,
+        "for": 2
+      }
+    ],
+    "probe_errors": 3
+  },
+  "blast_radius": {
+    "namespaces": [
+      "cc-chaos-experiments"
+    ],
+    "max_percent": 34,
+    "max_duration_s": 120
+  }
+}
