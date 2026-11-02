@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps do zero.<br/>Construa a ferramenta. Use a ferramenta. Entregue um artefato.</h3>
   <p>
-    <strong>55 lições</strong> · <strong>8 fases disponíveis</strong> · <strong>80 horas</strong> · <strong>1.429 testes</strong> · <strong>107 skills, prompts &amp; servidores MCP</strong>
+    <strong>71 lições</strong> · <strong>10 fases disponíveis</strong> · <strong>104 horas</strong> · <strong>2.001 testes</strong> · <strong>139 skills, prompts &amp; servidores MCP</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Comece o curso" /></a>
@@ -48,14 +48,16 @@ Toda lição começa com um problema de produção, faz você construir o mecani
 |:--|:--|:--|
 | **00 · Setup e Laboratório** | um lab doctor que examina sua máquina e mostra o plano de instalação | kind, Docker, seu agente de código |
 | **01 · Linux e Sistemas** | um supervisor de PID 1, um detector de vazamento de fd, um analisador de strace, um decodificador de capabilities, units do systemd, cgroups configurados à mão, um leitor da tabela de montagem, um dashboard com o método USE | `strace`, `capsh`, `systemctl`, `findmnt`, PSI |
+| **02 · Redes** | uma consulta de rotas como `ip route get`, um resolvedor DNS iterativo, um analisador de estados de sockets TCP, um leitor de pcap com filtros do tcpdump, um parser de ClientHello TLS e um verificador de cadeias de certificados, um servidor HTTP/1.1 com proxy reverso, um balanceador de carga com health checks, um proxy de cache segundo a RFC 9111 | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |
 | **05 · Containers** | um runtime de containers, um auditor de imagens, um cliente de registry, um builder de imagens sem Dockerfile, uma rede veth/bridge, Compose, user namespaces rootless, um gerador de perfis seccomp | Docker, Podman, registries OCI |
 | **06 · Orquestração** | um reconciliador, um scheduler, um kubelet, regras do kube-proxy e DNS do cluster, um autorizador RBAC, Helm, um operator, um roteador de Gateway API | Kubernetes no kind, Helm, Envoy Gateway |
 | **07 · Infraestrutura como Código** | um motor de plan/apply, um grafo de dependências, módulos, um servidor de state com locking, detecção de drift, um motor de políticas, front-ends em Pulumi e Crossplane, um gerenciador de configuração idempotente | OpenTofu, conftest/OPA, Pulumi, Ansible |
+| **08 · CI/CD e GitOps** | um executor de workflows, um auditor de segurança de workflows, um emissor e verificador OIDC, um gerador de SBOM, um assinador com log de transparência, um reconciliador GitOps, um controlador canary, uma ferramenta de releases | GitHub Actions e act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (AWS primeiro)** | um avaliador de políticas IAM, um analisador de alcançabilidade de VPC, assinatura SigV4 e um servidor S3, a Runtime API do Lambda, um Auto Scaling group, um alocador de custos FOCUS, um scanner de postura de segurança | a AWS CLI contra o moto, o emulador do Lambda, Checkov |
 | **13 · Infraestrutura de IA** | um scheduler de GPU com DRA, um simulador de serving de LLM, um gateway que conta tokens, um autoscaler baseado em fila, um roteador com prefix cache, índices HNSW e IVF, um inspetor de artefatos de modelo, um modelo de custo por token | llama.cpp em CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps e Agentic Ops** | um servidor MCP para kubectl, um agente de triagem de incidentes, análise de logs com IA, OpenTelemetry para chamadas de LLM, sandboxes para agentes, ferramentas de escrita seguras, evals de agentes | Claude Code, a Claude API, OpenTelemetry, promptfoo |
 
-Mais nove fases (redes, Git, scripting, CI/CD, observabilidade, segurança, platform engineering, MLOps, projetos finais) estão no [roadmap](../ROADMAP.md).
+Mais sete fases (Git, scripting, observabilidade, segurança, platform engineering, MLOps, projetos finais) estão no [roadmap](../ROADMAP.md).
 
 ## Como funciona uma lição
 
@@ -74,7 +76,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Trilha | Para | Lições |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de um único processo Linux a Kubernetes, IaC, cloud e AIOps | 47 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de um único processo Linux a Kubernetes, IaC, cloud e AIOps | 63 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engenheiros que precisam rodar modelos: GPUs, serving, gateways, roteamento, custo | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | colocar agentes para trabalhar na infraestrutura com segurança | 9 |
 
@@ -96,7 +98,7 @@ O modo de leitura **Captain's Bridge** do site acompanha o progresso por seção
 
 | | CloudCaptain | roadmap.sh | devops-exercises | listas awesome-* |
 |:--|:--|:--|:--|:--|
-| Construa cada ferramenta do zero, com testes | ✅ 55 lições | ❌ | ❌ | ❌ |
+| Construa cada ferramenta do zero, com testes | ✅ 71 lições | ❌ | ❌ | ❌ |
 | Verificado contra as ferramentas reais em CI | ✅ todas as lições | ❌ | ❌ | ❌ |
 | Infraestrutura de IA e AIOps | ✅ 15 lições | parcial | ❌ | links |
 | Um tutor em forma de agente que você instala | ✅ `npx skills add` | ❌ | ❌ | ❌ |

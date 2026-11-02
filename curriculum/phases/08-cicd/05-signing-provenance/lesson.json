@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "cicd/signing-provenance",
+  "title": "Signing Is a Hash, a Key and a Public Log",
+  "short": "Signing & Provenance",
+  "motto": "A signature binds a digest to a key, provenance binds it to a build, and a public log makes both impossible to hide or rewrite.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/sbom",
+    "containers/registry-pull"
+  ],
+  "tools": [
+    "cosign",
+    "openssl",
+    "gh"
+  ],
+  "reference": [
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/docker/security-production",
+    "/docs/tools/cicd/fundamentals"
+  ],
+  "outputs": [
+    "skill-artifact-verification.md",
+    "prompt-explain-provenance.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

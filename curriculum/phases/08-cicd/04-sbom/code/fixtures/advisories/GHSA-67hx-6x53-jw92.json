@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.9.0",
+  "id": "GHSA-67hx-6x53-jw92",
+  "modified": "2026-09-10T03:50:03.372029556Z",
+  "published": "2023-10-16T13:55:36Z",
+  "aliases": [
+    "CVE-2023-45133"
+  ],
+  "summary": "Babel vulnerable to arbitrary code execution when compiling specifically crafted malicious code",
+  "details": "Using Babel to compile code that was specifically crafted by an attacker can lead to arbitrary code execution during compilation, when using plugins that rely on the `path.evaluate()`or `path.evaluateTruthy()` internal Babel methods.",
+  "affected": [
+    {
+      "package": {
+        "name": "@babel/traverse",
+        "ecosystem": "npm",
+        "purl": "pkg:npm/%40babel/traverse"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "7.23.2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "@babel/traverse",
+        "ecosystem": "npm",
+        "purl": "pkg:npm/%40babel/traverse"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "8.0.0-alpha.0"
+            },
+            {
+              "fixed": "8.0.0-alpha.4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "babel-traverse",
+        "ecosystem": "npm",
+        "purl": "pkg:npm/babel-traverse"
+      },
+      "ranges": [
+        {
+          "type": "SEMVER",
+          "events": [
+            {
+              "introduced": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "severity": [
+    {
+      "type": "CVSS_V3",
+      "score": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+    }
+  ],
+  "database_specific": {
+    "severity": "CRITICAL"
+  },
+  "references": [
+    {
+      "type": "WEB",
+      "url": "https://github.com/babel/babel/security/advisories/GHSA-67hx-6x53-jw92"
+    }
+  ]
+}

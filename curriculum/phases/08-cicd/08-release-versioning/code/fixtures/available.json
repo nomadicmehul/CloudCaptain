@@ -1,0 +1,56 @@
+{
+  "pypi": {
+    "requests": ["2.30.0", "2.31.0", "2.32.0", "2.32.3", "3.0.0b1"],
+    "Flask": ["3.0.0", "3.0.3", "3.1.0", "3.1.1"],
+    "urllib3": ["1.26.18", "1.26.20", "2.0.0", "2.2.3"],
+    "gunicorn": ["21.2.0", "22.0.0", "22.0.1", "23.0.0rc1", "23.0.0"],
+    "PyYAML": ["6.0", "6.0.1", "6.0.2"],
+    "structlog": ["24.4.0", "25.1.0", "25.2.0.dev1"]
+  },
+  "npm": {
+    "express": ["4.18.2", "4.19.2", "4.21.2", "5.0.0-beta.3", "5.0.0", "5.1.0"],
+    "lodash": ["4.17.20", "4.17.21"],
+    "zod": ["3.22.4", "3.23.8", "3.24.1", "4.0.0-beta.1"],
+    "tiny-lib": ["0.4.1", "0.4.3", "0.5.0"],
+    "chalk": ["4.1.2", "5.0.0", "5.4.1"],
+    "typescript": ["5.4.5", "5.5.4", "5.6.3"],
+    "eslint": ["8.57.0", "9.0.0", "9.17.0"],
+    "prettier": ["2.8.8", "3.0.0", "3.4.2"]
+  },
+  "docker": {
+    "python": {
+      "3.12-slim": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "3.12.8-slim": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "3.13-slim": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "3.13-alpine": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "3.14.0rc1-slim": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    "nginx": {
+      "1.27.4-alpine": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "1.27.5-alpine": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "1.29.3-alpine": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "1.29.3": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    "busybox": ["1.36.1", "1.37.0", "1.37.0-musl", "latest"],
+    "alpine": ["3.21", "3.21.3", "3.22", "3.22.2"]
+  },
+  "github-tags": {
+    "actions/checkout": {
+      "v4": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "v4.2.2": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "v5": "cccccccccccccccccccccccccccccccccccccccc",
+      "v5.0.0": "cccccccccccccccccccccccccccccccccccccccc"
+    },
+    "actions/setup-python": {
+      "v5": "dddddddddddddddddddddddddddddddddddddddd",
+      "v5.1.0": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "v5.6.0": "dddddddddddddddddddddddddddddddddddddddd",
+      "v6.0.0-beta.1": "ffffffffffffffffffffffffffffffffffffffff"
+    },
+    "docker/build-push-action": {
+      "v6.9.0": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "v6.18.0": "1234567890abcdef1234567890abcdef12345678",
+      "v7.0.0": "abcdef1234567890abcdef1234567890abcdef12"
+    }
+  }
+}

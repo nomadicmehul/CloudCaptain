@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+data:
+  GREETING: hello

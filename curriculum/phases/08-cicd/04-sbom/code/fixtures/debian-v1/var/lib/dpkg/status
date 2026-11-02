@@ -1,0 +1,70 @@
+Package: base-files
+Status: install ok installed
+Priority: optional
+Architecture: amd64
+Version: 12.4+deb12u5
+Essential: yes
+Conffiles:
+ /etc/debian_version 1f28f0bf8d3bc0c9ab2ee37baf6ecd6d
+ /etc/host.conf 4eb63731c9f5e30903ac4fc07a7fe3d6
+Description: base-files (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.
+
+Package: libc6
+Status: install ok installed
+Priority: optional
+Architecture: amd64
+Source: glibc
+Version: 2.36-9+deb12u4
+Multi-Arch: same
+Description: libc6 (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.
+
+Package: libssl3
+Status: install ok installed
+Priority: optional
+Architecture: amd64
+Source: openssl
+Version: 3.0.11-1~deb12u2
+Multi-Arch: same
+Description: libssl3 (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.
+
+Package: login
+Status: install ok installed
+Priority: optional
+Architecture: amd64
+Source: shadow
+Version: 1:4.13+dfsg1-1
+Essential: yes
+Description: login (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.
+
+Package: passwd
+Status: install ok installed
+Priority: optional
+Architecture: amd64
+Source: shadow
+Version: 1:4.13+dfsg1-1
+Description: passwd (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.
+
+Package: tzdata
+Status: install ok installed
+Priority: optional
+Architecture: all
+Version: 2024a-0+deb12u1
+Multi-Arch: foreign
+Description: tzdata (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.
+
+Package: vim-tiny
+Status: deinstall ok config-files
+Priority: optional
+Architecture: amd64
+Source: vim
+Version: 2:9.0.1378-2
+Conffiles:
+ /etc/vim/vimrc.tiny 4d9a0ed1d1f9ab1b0d3a5d0b0a2a6aa5
+Description: vim-tiny (fixture entry)
+ A trimmed stanza; real status files carry Depends, Conffiles and a long description.

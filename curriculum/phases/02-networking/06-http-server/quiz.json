@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "networking/http-server",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A request arrives as `POST /upload HTTP/1.1` with both `Content-Length: 10` and `Transfer-Encoding: chunked`. What does RFC 9112 allow an HTTP/1.1 server to do?",
+      "choices": [
+        "Reject it with 400, or process it by `Transfer-Encoding` alone, and in both cases close the connection after answering",
+        "Use `Transfer-Encoding`, ignore `Content-Length`, and keep the connection open as usual",
+        "Use `Content-Length`, because it is the simpler framing",
+        "Read until the client closes the connection"
+      ],
+      "answer": 0,
+      "explanation": "Two framing headers mean two possible readings of the same bytes, the shape of request smuggling. The RFC lets a server reject the request or trust Transfer-Encoding only, and requires it to close the connection afterwards so nothing after the ambiguous body is ever parsed as a request. minihttp and current nginx both answer 400 and close."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A service sets a 30-second socket timeout before every `recv`. An attacker opens 500 connections and sends one header byte every 10 seconds on each. Which change stops the attack?",
+      "choices": [
+        "Lower the per-read timeout to 15 seconds",
+        "Enable TCP keepalive probes every 10 seconds",
+        "A deadline for the whole header section counted from the connection's start or the request's first byte (nginx `client_header_timeout`), plus a limit on connections",
+        "Answer 408 as soon as the request line has arrived"
+      ],
+      "answer": 2,
+      "explanation": "Every byte resets a per-read timeout, so any interval shorter than the timeout keeps the connection alive forever; 15 seconds still loses to one byte every 10. A total deadline does not reset. TCP keepalive only checks that the peer exists, which it does. minihttp's `read_head()` gets `deadline - now` for each read, and the slow-header test shows the cut at the deadline while drips keep arriving."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "nginx logs `upstream timed out (110: Connection timed out) while reading response header from upstream`. Which status did the client get, and which directive set the limit?",
+      "choices": [
+        "502, set by `proxy_connect_timeout`",
+        "504, set by `proxy_read_timeout`: the upstream sent nothing for that long between two reads",
+        "408, set by `client_body_timeout`",
+        "503, set by `keepalive_timeout`"
+      ],
+      "answer": 1,
+      "explanation": "A timeout while waiting for the upstream is 504 Gateway Timeout. `proxy_read_timeout` applies between two successive reads, not to the whole response, so a slow upstream that trickles bytes can take longer in total. 502 is for refused, reset or malformed upstream responses, such as `connect() failed (111: Connection refused)`."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A client sends `Connection: keep-alive, X-Trace` and `X-Trace: 1` through a reverse proxy. Following RFC 9110, which of these fields reach the upstream?",
+      "choices": [
+        "Only `Connection`, because `X-Trace` is not a standard field",
+        "Both, unchanged",
+        "Only `X-Trace`; `Connection` is replaced",
+        "Neither: the proxy removes `Connection` and every field it names, then writes its own connection management"
+      ],
+      "answer": 3,
+      "explanation": "Fields named in `Connection` are hop-by-hop by declaration, just like `Keep-Alive`, `TE` and `Transfer-Encoding`. minihttp's `forward_headers()` drops them. nginx removes its fixed list (`Connection`, `Keep-Alive`, `TE`, `Upgrade`, `Expect`, framing headers) but forwards `X-Trace`, which the probe's forwarding case shows."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After an nginx upgrade, about 0.3% of POSTs fail with 502 and `upstream prematurely closed connection`, and GETs never fail. The app server closes idle connections after 5 seconds; nginx keeps idle upstream connections for 60. What is the right fix?",
+      "choices": [
+        "Make the app's idle timeout longer than nginx's upstream `keepalive_timeout`, or lower nginx's below the app's, so nginx never reuses a connection the app is closing",
+        "Raise `proxy_read_timeout` to 120 seconds",
+        "Turn off chunked transfer coding on the app server",
+        "Add `proxy_next_upstream non_idempotent` so failed POSTs are retried"
+      ],
+      "answer": 0,
+      "explanation": "Current nginx releases pool upstream connections by default. When nginx writes onto a connection the app has just closed, it retries the request on a new connection only for idempotent methods, so GETs hide the race and POSTs surface it. The idle timeouts must be ordered: the side that reuses a connection must give up on it before the side that closes it. Retrying POSTs can apply a payment twice."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A download client resumes with `Range: bytes=1000-` and `If-Range: \"6957-3f\"`, but the file has changed since and now has a different ETag. What does the server send?",
+      "choices": [
+        "416 Range Not Satisfiable",
+        "304 Not Modified",
+        "206 with bytes 1000 onward of the new file",
+        "200 with the whole current file, because the If-Range validator no longer matches"
+      ],
+      "answer": 3,
+      "explanation": "If-Range means \"send me the range only if the representation is still the one I have; otherwise send all of it\". Without it, the client would glue bytes of the new file onto the start of the old one. minihttp's `choose_range()` compares the strong ETag (or the exact Last-Modified date) and drops the Range header when it differs."
+    }
+  ]
+}

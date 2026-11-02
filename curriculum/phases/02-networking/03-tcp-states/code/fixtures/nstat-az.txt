@@ -1,0 +1,11 @@
+#kernel
+TcpActiveOpens                  88213              0.0
+TcpAttemptFails                 2301               0.0
+TcpEstabResets                  977                0.0
+TcpCurrEstab                    9                  0.0
+TcpRetransSegs                  20391              0.0
+TcpExtListenOverflows           1873               0.0
+TcpExtListenDrops               1873               0.0
+TcpExtTCPTimeouts               912                0.0
+TcpExtTCPAbortOnTimeout         3                  0.0
+TcpExtTCPSynRetrans             455                0.0

@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Date: Sun, 01 Nov 2026 09:00:00 GMT
+Last-Modified: Sun, 01 Nov 2026 08:55:00 GMT
+ETag: W/"index-8812"
+Cache-Control: no-cache
+

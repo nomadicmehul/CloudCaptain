@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/gitops-reconciler",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "During an incident someone runs `kubectl scale deploy/prod-web --replicas=5` on a cluster where Argo CD manages the app with `selfHeal: true`. Twenty seconds later the Deployment is back to 2 replicas. What happened?",
+      "choices": [
+        "The controller compared the live Deployment with the rendered commit, found `spec.replicas` 5 where Git says 2, and synced the Git value back",
+        "Kubernetes rate-limits manual scaling of Deployments",
+        "A HorizontalPodAutoscaler reverted the change",
+        "`kubectl scale` only lasts until the ReplicaSet's next resync"
+      ],
+      "answer": 0,
+      "explanation": "Self-heal means: sync again at the same commit when the live state drifts. The diff found a field that Git sets with a different live value. The durable fix during an incident is a commit (or pausing automation), not a hand edit."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The live Deployment has `spec.strategy`, `revisionHistoryLimit`, `imagePullPolicy` and a `status` block. None of them is in Git, yet minigitops reports the Deployment as Synced. Why is that correct?",
+      "choices": [
+        "minigitops ignores the `spec` of Deployments and compares only metadata",
+        "The diff compares only the fields Git sets; fields that exist only live are defaults, status or other managers' fields, and a field removed from Git is found through the controller's own entry in `managedFields`",
+        "The API server strips defaulted fields from `kubectl get -o json`",
+        "Synced only means the object exists"
+      ],
+      "answer": 1,
+      "explanation": "A whole-object diff would be OutOfSync forever, because the API server fills in dozens of defaults. Comparing the desired leaves catches every changed or missing field Git declares, and server-side apply ownership catches fields the controller applied before and Git no longer has."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A commit deletes `legacy-flags.yaml` from the overlay. The app has automated sync with `prune: false`. What do you see after the next reconcile?",
+      "choices": [
+        "The ConfigMap is deleted, because sync makes the cluster equal to Git",
+        "The sync fails with a conflict",
+        "The ConfigMap stays, the app is OutOfSync and the ConfigMap is listed as requiring pruning",
+        "Nothing changes and the app stays Synced"
+      ],
+      "answer": 2,
+      "explanation": "Pruning is a separate switch because deleting is the dangerous half. The object still carries the app's tracking label and is no longer rendered, so the comparison flags it; without prune the controller reports it and leaves it alone."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "After someone ran `kubectl scale`, a server-side apply without force fails with `Apply failed with 1 conflict: conflict with \"kubectl...\": .spec.replicas`. What does that mean, and what does a GitOps controller do about it?",
+      "choices": [
+        "The Deployment is being deleted; the controller waits",
+        "The manifest is invalid; the controller marks the app Degraded",
+        "Two replicas of the controller are running; one of them must be stopped",
+        "Another field manager now owns `spec.replicas` with a different value; the controller, as the declared owner of what Git renders, applies with `--force-conflicts` and takes the field back"
+      ],
+      "answer": 3,
+      "explanation": "An Update that changes a field moves ownership of that field to the updater. Applying a different value for a field someone else owns is a conflict. GitOps controllers force, which is also why a field that another controller should own, such as replicas under an HPA, must be left out of Git or ignored."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "An app shows Synced and Degraded: `Deployment 'prod-web' exceeded its progress deadline`. What is the right next step?",
+      "choices": [
+        "Run another sync; Degraded apps need a second sync",
+        "Delete the Deployment so the controller recreates it",
+        "Turn off self-heal so the controller stops interfering",
+        "Fix it in Git: the commit was applied faithfully and is broken, so revert the commit or commit the fix, and read the pod events for the cause"
+      ],
+      "answer": 3,
+      "explanation": "Sync status and health are independent. Synced means the cluster matches the commit, Degraded means the commit does not work. Re-syncing applies the same broken spec; the next commit is the change."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Why do GitOps setups have a controller in the cluster pull from Git instead of letting CI push with `kubectl apply`?",
+      "choices": [
+        "Kubernetes refuses writes from outside the cluster",
+        "Pulling is faster than pushing",
+        "`kubectl apply` cannot apply Kustomize overlays",
+        "CI no longer needs credentials for the cluster, the comparison runs continuously instead of once per pipeline, and the Git log becomes the deployment history and rollback mechanism"
+      ],
+      "answer": 3,
+      "explanation": "Push leaves cluster-admin credentials in CI, checks agreement only at the moment of a run, and never deletes what left the repository. Pull keeps credentials inside the cluster, catches drift between runs, prunes what was removed, and makes `git revert` the rollback."
+    }
+  ]
+}

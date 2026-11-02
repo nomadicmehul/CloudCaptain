@@ -1,0 +1,17 @@
+{
+  "name": "inventory-web",
+  "private": true,
+  "dependencies": {
+    "express": "^4.18.2",
+    "lodash": "4.17.20",
+    "zod": "~3.22.4",
+    "tiny-lib": "^0.4.1",
+    "chalk": "4.x",
+    "left-pad": "git+https://example.com/left-pad.git"
+  },
+  "devDependencies": {
+    "typescript": "~5.4.5",
+    "eslint": ">=8.0.0 <9.0.0",
+    "prettier": "^2.8.8 || ^3.0.0"
+  }
+}

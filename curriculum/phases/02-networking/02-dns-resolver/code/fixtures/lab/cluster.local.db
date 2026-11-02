@@ -1,0 +1,4 @@
+; The resolver's own zone, like the one CoreDNS answers for in a cluster. Search names under it get NXDOMAIN.
+cluster.local.         30  IN  SOA  ns.dns.cluster.local. hostmaster.cluster.local. 2026110101 7200 1800 86400 5
+cluster.local.         30  IN  NS   ns.dns.cluster.local.
+ns.dns.cluster.local.  30  IN  A    127.0.10.10

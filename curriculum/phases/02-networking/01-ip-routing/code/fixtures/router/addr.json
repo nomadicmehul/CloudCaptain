@@ -1,0 +1,10 @@
+[
+  {"ifindex": 1, "ifname": "lo", "flags": ["LOOPBACK", "UP", "LOWER_UP"], "mtu": 65536, "qdisc": "noqueue", "operstate": "UNKNOWN", "group": "default", "txqlen": 1000, "link_type": "loopback", "address": "00:00:00:00:00:00", "broadcast": "00:00:00:00:00:00",
+   "addr_info": [{"family": "inet", "local": "127.0.0.1", "prefixlen": 8, "scope": "host", "label": "lo", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]},
+  {"ifindex": 4, "link_index": 5, "ifname": "r-c", "flags": ["BROADCAST", "MULTICAST", "UP", "LOWER_UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "UP", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "a2:5e:17:0c:9b:01", "broadcast": "ff:ff:ff:ff:ff:ff", "link_netnsid": 0,
+   "addr_info": [{"family": "inet", "local": "10.0.1.1", "prefixlen": 24, "scope": "global", "label": "r-c", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]},
+  {"ifindex": 6, "link_index": 7, "ifname": "r-u1", "flags": ["BROADCAST", "MULTICAST", "UP", "LOWER_UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "UP", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "3e:91:5d:aa:10:06", "broadcast": "ff:ff:ff:ff:ff:ff", "link_netnsid": 1,
+   "addr_info": [{"family": "inet", "local": "10.0.2.1", "prefixlen": 24, "scope": "global", "label": "r-u1", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]},
+  {"ifindex": 8, "link_index": 9, "ifname": "r-u2", "flags": ["BROADCAST", "MULTICAST", "UP", "LOWER_UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "UP", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "f6:02:8b:41:7e:08", "broadcast": "ff:ff:ff:ff:ff:ff", "link_netnsid": 2,
+   "addr_info": [{"family": "inet", "local": "10.0.3.1", "prefixlen": 24, "scope": "global", "label": "r-u2", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]}
+]

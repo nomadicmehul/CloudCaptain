@@ -1,0 +1,42 @@
+name: PR preview
+
+on: pull_request_target
+
+permissions: write-all
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - name: Check out the pull request
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Cache node modules
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+      - name: Changed files
+        id: changed
+        uses: tj-actions/changed-files@v47
+      - name: Build the preview
+        run: |
+          echo "Building ${{ github.head_ref }}"
+          npm ci
+          npm run build
+      - name: Deploy the preview
+        uses: example-org/deploy-preview@v2
+        with:
+          api-key: ${{ secrets.PREVIEW_API_KEY }}
+          directory: dist
+  comment:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Preview is ready"

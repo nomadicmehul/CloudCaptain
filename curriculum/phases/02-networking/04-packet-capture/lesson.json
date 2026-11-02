@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/packet-capture",
+  "title": "tcpdump Is a Filter Over Bytes You Can Parse",
+  "short": "Packet Capture",
+  "motto": "A capture file is a header and timestamped byte strings; a filter is a predicate over their offsets. Compute both and packets stop lying.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/tcp-states"
+  ],
+  "tools": [
+    "tcpdump",
+    "nsenter",
+    "kubectl",
+    "dig",
+    "curl",
+    "coredns",
+    "wireshark"
+  ],
+  "reference": [
+    "/docs/tools/networking/cheatsheet",
+    "/docs/tools/networking/fundamentals",
+    "/docs/tools/linux/networking",
+    "/docs/tools/kubernetes/networking-services"
+  ],
+  "outputs": [
+    "skill-packet-capture-triage.md",
+    "prompt-explain-tcpdump-line.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

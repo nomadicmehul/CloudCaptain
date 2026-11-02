@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/progressive-delivery",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A Deployment rolling update finishes in 90 seconds, every new pod passed its readiness probe, and the new version fails 8% of payment requests. Why did Kubernetes not stop the rollout?",
+      "choices": [
+        "Readiness only says a pod may receive traffic; the Deployment controller never reads an error rate, so nothing compares the new version's behaviour with a threshold",
+        "The readiness probe timed out silently and Kubernetes treated that as success",
+        "maxUnavailable was too high, so Kubernetes skipped the checks",
+        "Rolling updates only stop for errors when progressDeadlineSeconds is set"
+      ],
+      "answer": 0,
+      "explanation": "The Deployment controller moves pods once they are ready and marks ProgressDeadlineExceeded only when pods stop becoming ready. Error rates and latency are outside its inputs. A progressive delivery controller adds that input: a query against the new version's metrics, with thresholds and an automatic abort."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A Rollout has replicas: 3, the default maxSurge of 25% and no trafficRouting. The first step is setWeight: 10. What share of connections reaches the new version?",
+      "choices": [
+        "Exactly 10%, because Argo Rollouts sets kube-proxy weights",
+        "0%, because 10% of 3 rounds down to zero pods",
+        "About 25%: one new pod next to three stable ones, because whole pods cannot make 10% and one surge pod brings the share closer",
+        "33%, because one pod out of three is the closest Argo Rollouts can get"
+      ],
+      "answer": 2,
+      "explanation": "Basic canary only controls pod counts behind one Service. Argo Rollouts tries the floor and ceiling of 3 x 10%, with and without a surge pod, never leaves the canary empty for a weight between 1 and 99, and picks 1 + 3 (25%) over 1 + 2 (33%). An exact 10% needs a traffic router: a mesh, an ingress or a weighted HTTPRoute."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An analysis uses sum(rate(http_requests_total{version=\"v2\",code=~\"5..\"}[1m])) / sum(rate(http_requests_total{version=\"v2\"}[1m])) with successCondition result[0] < 0.01. The new version is healthy and has served no 5xx at all. What happens?",
+      "choices": [
+        "The query fails to parse because code=~ needs a full regular expression",
+        "Prometheus returns 0 for the missing numerator, so the metric passes",
+        "Argo Rollouts treats an empty result as Successful",
+        "The numerator has no series, so the division returns an empty vector, result[0] cannot be evaluated, every measurement is an Error, and after consecutiveErrorLimit the healthy version is aborted"
+      ],
+      "answer": 3,
+      "explanation": "A selector that matches no series gives an empty vector, and dividing an empty vector by anything is empty. The condition then has no result[0], which Argo Rollouts reports as 'metric result is nil or empty' and counts as an Error. Use the success-rate form (code=~\"2..\" in the numerator) or wrap the numerator in (... or vector(0))."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A service takes 100 requests per second. The canary starts at setWeight: 20 followed by an analysis with initialDelay: 2m, interval: 1m and failureLimit: 0. The new version is broken. Roughly how many requests reach it before the abort, ignoring pod start time?",
+      "choices": [
+        "600",
+        "2,400",
+        "6,000",
+        "12,000"
+      ],
+      "answer": 1,
+      "explanation": "The first measurement is taken at the initial delay, 120 seconds after the analysis starts, and with failureLimit 0 one failed measurement aborts. 20% of 100 requests per second for 120 seconds is 2,400 requests. A failureLimit of 2 would add two one-minute intervals, another 2,400 requests. Smaller first weights and shorter delays shrink the number; the window inside rate() decides how short the delay can be."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "The team's dashboard shows a 0.8% error rate during a canary at 10% weight, and the alert fires at 1%. The canary itself fails 8% of its requests. What should the analysis query do differently?",
+      "choices": [
+        "Select only the new version's series (a version or pod-template-hash label) so the stable version's traffic cannot dilute the signal, and compare it with its own threshold",
+        "Measure for longer so the average stabilises",
+        "Lower the alert threshold to 0.5% for the duration of the canary",
+        "Divide the error rate by the canary weight"
+      ],
+      "answer": 0,
+      "explanation": "Errors from 10% of the traffic at 8% look like 0.8% overall. Any analysis that averages both versions hides the canary's behaviour in proportion to its weight, which is worst at the first, smallest step. The label that tells versions apart has to be in the metrics, which is why the demo app and the proxy label every request with the version."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "When is a feature flag a better tool than a canary rollout?",
+      "choices": [
+        "When the change is a new base image or a dependency upgrade",
+        "When the risky change is a code path that can be switched per user or per request: it ships dark, a percentage rollout keeps each user on one behaviour, and turning it off needs no deploy",
+        "When the service has only one replica",
+        "Never: flags and canaries do the same job"
+      ],
+      "answer": 1,
+      "explanation": "A flag gates a code path inside a build that is already running, so it cannot protect changes to the runtime, the image, dependencies or configuration read at start. A canary gates the whole build. Teams usually canary every build and put risky features behind flags, so the two failure modes are covered by different switches."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+[
+  {"dst": "default", "gateway": "10.0.3.10", "dev": "r-u2", "table": "100", "flags": []},
+  {"dst": "default", "gateway": "10.0.2.10", "dev": "r-u1", "flags": []},
+  {"dst": "10.0.1.0/24", "dev": "r-c", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.1.1", "flags": []},
+  {"dst": "10.0.2.0/24", "dev": "r-u1", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.2.1", "flags": []},
+  {"dst": "10.0.3.0/24", "dev": "r-u2", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.3.1", "flags": []},
+  {"type": "blackhole", "dst": "10.99.0.0/16", "flags": []},
+  {"dst": "192.0.2.0/24", "flags": [], "nexthops": [{"gateway": "10.0.2.10", "dev": "r-u1", "weight": 1, "flags": []}, {"gateway": "10.0.3.10", "dev": "r-u2", "weight": 1, "flags": []}]},
+  {"dst": "203.0.113.0/24", "gateway": "10.0.3.10", "dev": "r-u2", "flags": []},
+  {"type": "local", "dst": "10.0.1.1", "dev": "r-c", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "10.0.1.1", "flags": []},
+  {"type": "broadcast", "dst": "10.0.1.255", "dev": "r-c", "table": "local", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.1.1", "flags": []},
+  {"type": "local", "dst": "10.0.2.1", "dev": "r-u1", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "10.0.2.1", "flags": []},
+  {"type": "broadcast", "dst": "10.0.2.255", "dev": "r-u1", "table": "local", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.2.1", "flags": []},
+  {"type": "local", "dst": "10.0.3.1", "dev": "r-u2", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "10.0.3.1", "flags": []},
+  {"type": "broadcast", "dst": "10.0.3.255", "dev": "r-u2", "table": "local", "protocol": "kernel", "scope": "link", "prefsrc": "10.0.3.1", "flags": []},
+  {"type": "local", "dst": "127.0.0.0/8", "dev": "lo", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "127.0.0.1", "flags": []},
+  {"type": "local", "dst": "127.0.0.1", "dev": "lo", "table": "local", "protocol": "kernel", "scope": "host", "prefsrc": "127.0.0.1", "flags": []}
+]

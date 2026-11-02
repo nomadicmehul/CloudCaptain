@@ -1,0 +1,17 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: GNU C Library
+Source: https://www.gnu.org/software/libc/
+
+Files: *
+Copyright: Free Software Foundation, Inc.
+License: LGPL-2.1+
+
+Files: debian/*
+Copyright: GNU Libc Maintainers
+License: GPL-2+
+
+License: LGPL-2.1+
+ The licence text is omitted in this fixture.
+
+License: GPL-2+
+ The licence text is omitted in this fixture.

@@ -1,0 +1,61 @@
+P:musl
+V:1.2.4_git20230717-r4
+A:x86_64
+T:the musl c library (libc) implementation
+L:MIT
+o:musl
+F:lib
+R:ld-musl-x86_64.so.1
+a:0:0:755
+R:libc.musl-x86_64.so.1
+a:0:0:755
+
+P:busybox
+V:1.36.1-r15
+A:x86_64
+T:Size optimized toolbox of many common UNIX utilities
+L:GPL-2.0-only
+o:busybox
+F:bin
+R:busybox
+a:0:0:755
+
+P:busybox-binsh
+V:1.36.1-r15
+A:x86_64
+T:busybox ash /bin/sh
+L:GPL-2.0-only
+o:busybox
+F:bin
+R:sh
+a:0:0:755
+
+P:ssl_client
+V:1.36.1-r15
+A:x86_64
+T:EXternal ssl_client for busybox wget
+L:GPL-2.0-only
+o:busybox
+F:usr/bin
+R:ssl_client
+a:0:0:755
+
+P:libcrypto3
+V:3.1.4-r5
+A:x86_64
+T:Crypto library from openssl
+L:Apache-2.0
+o:openssl
+F:lib
+R:libcrypto.so.3
+a:0:0:755
+
+P:alpine-baselayout
+V:3.4.3-r2
+A:x86_64
+T:Alpine base dir structure and init scripts
+L:GPL-2.0-only
+o:alpine-baselayout
+F:etc
+R:motd
+a:0:0:755

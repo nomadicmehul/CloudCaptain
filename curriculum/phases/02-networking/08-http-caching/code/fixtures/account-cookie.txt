@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Date: Sun, 01 Nov 2026 09:00:00 GMT
+Cache-Control: public, max-age=300
+Set-Cookie: session=7f3e9c; Path=/; Secure; HttpOnly
+Vary: Accept-Encoding
+

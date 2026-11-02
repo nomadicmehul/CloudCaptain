@@ -1,0 +1,5 @@
+[
+  {"dst": "10.0.1.10", "dev": "r-c", "lladdr": "aa:c1:ab:12:34:01", "state": ["REACHABLE"]},
+  {"dst": "10.0.2.10", "dev": "r-u1", "lladdr": "5a:20:c4:07:61:07", "state": ["REACHABLE"]},
+  {"dst": "10.0.3.10", "dev": "r-u2", "lladdr": "b6:4e:19:d2:03:09", "state": ["STALE"]}
+]

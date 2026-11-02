@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "networking/http-server",
+  "title": "HTTP/1.1 Is Text Over a Socket Until It Is Not",
+  "short": "HTTP Server",
+  "motto": "HTTP/1.1 is bytes cut into messages by framing rules and guarded by deadlines; when two hops disagree on either, requests leak or stall.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/tcp-states"
+  ],
+  "tools": [
+    "curl",
+    "nginx",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/nginx/fundamentals",
+    "/docs/tools/nginx/cheatsheet",
+    "/docs/tools/networking/fundamentals",
+    "/docs/tools/networking/cheatsheet"
+  ],
+  "outputs": [
+    "skill-http-error-triage.md",
+    "prompt-explain-curl-verbose.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-02"
+}

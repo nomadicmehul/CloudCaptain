@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::123456789012:oidc-provider/gitlab.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "gitlab.com:sub": "project_path:mygroup/myproject:ref_type:branch:ref:main",
+          "gitlab.com:namespace_id": "12345",
+          "gitlab.com:project_id": "67890"
+        }
+      }
+    }
+  ]
+}
