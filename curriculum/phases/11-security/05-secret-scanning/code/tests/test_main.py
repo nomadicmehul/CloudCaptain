@@ -133,7 +133,9 @@ class EntropyTests(unittest.TestCase):
         self.assertAlmostEqual(main.shannon_entropy("abcd"), 2.0)
         self.assertAlmostEqual(main.shannon_entropy("abcdefgh"), 3.0)
         self.assertLess(main.shannon_entropy("hunter2hunter2"), 3.0)
-        self.assertGreater(main.shannon_entropy(aws_secret()), 4.5)
+        # A random 40-char key averages ~4.85 bits but dips below 4.5 about 2% of the
+        # time; assert the aws-secret-access-key rule's own floor (4.0) instead.
+        self.assertGreater(main.shannon_entropy(aws_secret()), 4.0)
 
 
 class RuleTests(unittest.TestCase):
