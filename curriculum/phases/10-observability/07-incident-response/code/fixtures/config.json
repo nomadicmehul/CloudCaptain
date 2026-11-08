@@ -1,0 +1,93 @@
+{
+  "severities": {
+    "SEV1": {
+      "description": "Critical: a core user journey is down for many users, or data loss, or a security breach",
+      "page": true,
+      "roles": ["commander", "comms", "ops"],
+      "status_update": "30m",
+      "component_status": "major_outage",
+      "postmortem": true
+    },
+    "SEV2": {
+      "description": "Major: a core journey is degraded for many users or down for some",
+      "page": true,
+      "roles": ["commander", "ops"],
+      "status_update": "60m",
+      "component_status": "partial_outage",
+      "postmortem": true
+    },
+    "SEV3": {
+      "description": "Minor: degraded for a few users, a workaround exists",
+      "page": false,
+      "roles": ["ops"],
+      "status_update": "0s",
+      "component_status": "degraded_performance",
+      "postmortem": false
+    },
+    "SEV4": {
+      "description": "Low: no user impact yet (capacity, a failing redundant component)",
+      "page": false,
+      "roles": [],
+      "status_update": "0s",
+      "component_status": "operational",
+      "postmortem": false
+    }
+  },
+  "severity_matrix": {
+    "impact": ["outage", "degraded", "minor"],
+    "scope": ["all", "many", "few"],
+    "cells": {
+      "outage": {"all": "SEV1", "many": "SEV1", "few": "SEV2"},
+      "degraded": {"all": "SEV2", "many": "SEV2", "few": "SEV3"},
+      "minor": {"all": "SEV3", "many": "SEV3", "few": "SEV4"}
+    }
+  },
+  "alert_severity": {"critical": "SEV2", "error": "SEV3", "warning": "SEV3", "info": "SEV4"},
+  "default_severity": "SEV3",
+  "deploy_lookback": "60m",
+  "reopen_window": "30m",
+  "services": {
+    "checkout": {"escalation_policy": "checkout", "component": "Checkout"},
+    "search": {"escalation_policy": "search", "component": "Search"}
+  },
+  "schedules": {
+    "checkout-primary": {
+      "timezone": "UTC",
+      "layers": [
+        {"name": "apac", "users": ["hana", "ravi"], "start": "2026-10-26T00:00:00Z", "rotation": "7d", "restrictions": [{"from": "00:00", "to": "08:00"}]},
+        {"name": "emea", "users": ["alice", "bob"], "start": "2026-10-26T00:00:00Z", "rotation": "7d", "restrictions": [{"from": "08:00", "to": "16:00"}]},
+        {"name": "amer", "users": ["carlos", "dana"], "start": "2026-10-26T00:00:00Z", "rotation": "7d", "restrictions": [{"from": "16:00", "to": "24:00"}]}
+      ],
+      "overrides": [
+        {"user": "alice", "start": "2026-11-02T08:00:00Z", "end": "2026-11-02T12:00:00Z"}
+      ]
+    },
+    "checkout-secondary": {
+      "layers": [
+        {"name": "weekly", "users": ["erin", "frank"], "start": "2026-10-26T09:00:00Z", "rotation": "7d"}
+      ]
+    },
+    "search-primary": {
+      "layers": [
+        {"name": "daily", "users": ["grace", "ivan"], "start": "2026-11-01T09:00:00Z", "rotation": "24h"}
+      ]
+    }
+  },
+  "escalation_policies": {
+    "checkout": {
+      "levels": [
+        {"targets": ["schedule:checkout-primary"], "escalate_after": "5m"},
+        {"targets": ["schedule:checkout-secondary"], "escalate_after": "10m"},
+        {"targets": ["user:maria"], "escalate_after": "15m"}
+      ],
+      "repeat": 1
+    },
+    "search": {
+      "levels": [
+        {"targets": ["schedule:search-primary"], "escalate_after": "10m"},
+        {"targets": ["user:maria"], "escalate_after": "15m"}
+      ],
+      "repeat": 0
+    }
+  }
+}

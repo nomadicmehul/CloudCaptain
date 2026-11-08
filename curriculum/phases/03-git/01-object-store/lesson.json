@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "git/object-store",
+  "title": "Git Is a Content-Addressed Object Store",
+  "short": "Git Objects",
+  "motto": "Every object is named by the hash of its content, so a commit ID seals its whole history; a branch is a file that holds one.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/filesystem-mounts"
+  ],
+  "tools": [
+    "git",
+    "sha1sum",
+    "zlib"
+  ],
+  "reference": [
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/cheatsheet",
+    "/docs/tools/git/interview-questions"
+  ],
+  "outputs": [
+    "skill-git-plumbing-recovery.md",
+    "prompt-explain-git-object.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

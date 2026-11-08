@@ -1,0 +1,26 @@
+# TYPE acme_router_request_seconds summary
+# UNIT acme_router_request_seconds seconds
+# HELP acme_router_request_seconds Latency through the request router.
+acme_router_request_seconds_sum{path="/api/v1",method="GET"} 9036.32
+acme_router_request_seconds_count{path="/api/v1",method="GET"} 807283.0
+acme_router_request_seconds_created{path="/api/v1",method="GET"} 1605281325.0
+# TYPE go_goroutines gauge
+# HELP go_goroutines Number of goroutines that currently exist.
+go_goroutines 69
+# TYPE process_cpu_seconds counter
+# UNIT process_cpu_seconds seconds
+# HELP process_cpu_seconds Total user and system CPU time spent, with a \"quoted\" word.
+process_cpu_seconds_total 4.20072246e+06
+process_cpu_seconds_created 1605281325.0
+# TYPE request_duration_seconds histogram
+# HELP request_duration_seconds Request latency with exemplars on two buckets.
+request_duration_seconds_bucket{le="0.01"} 0
+request_duration_seconds_bucket{le="0.1"} 8 # {trace_id="KOO5S4vxi0o"} 0.067
+request_duration_seconds_bucket{le="1"} 11 # {trace_id="0d482-ac43e"} 0.52 1520879607.789
+request_duration_seconds_bucket{le="+Inf"} 17
+request_duration_seconds_count 17
+request_duration_seconds_sum 324789.3
+request_duration_seconds_created 1520430000.123
+# TYPE build info
+build_info{version="1.4.2",revision="5e1a2b"} 1
+# EOF

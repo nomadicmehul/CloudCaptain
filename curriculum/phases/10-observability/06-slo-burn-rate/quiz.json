@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/slo-burn-rate",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A service has a 99.9% availability SLO over 30 days. A bad release makes 1% of requests fail and nobody notices. How long does the month's error budget last?",
+      "choices": [
+        "43 minutes, because the budget is 43 minutes of downtime",
+        "About 30 days, because 1% is still close to 99.9%",
+        "It never runs out, because only a full outage spends the budget",
+        "About 3 days: the budget is 0.1% of requests, 1% errors is a burn rate of 10, and 30 days / 10 = 3 days"
+      ],
+      "answer": 3,
+      "explanation": "The error budget is a share of events, not a number of minutes. 43 minutes is what it lasts at 100% errors. Burn rate = error ratio / budget = 0.01 / 0.001 = 10, so the budget is gone after a tenth of the period."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does the page alert require both the 1-hour and the 5-minute error ratio to be above 14.4x, instead of only the 1-hour one?",
+      "choices": [
+        "The 5-minute window makes the alert fire faster than the 1-hour window could",
+        "The long window proves 2% of the budget is gone; the short window proves the burn is still happening, so the alert stops minutes after a rollback instead of staying on for most of an hour",
+        "Prometheus cannot evaluate a 1-hour range without a shorter one next to it",
+        "The 5-minute window filters out counter resets"
+      ],
+      "answer": 1,
+      "explanation": "Alone, the 1-hour window keeps showing a burst for up to an hour after it ended, so the alert would keep firing after the fix. The short window is about a twelfth of the long one and resets quickly; it never makes the alert faster, because both must be true."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Sloth's rules say `(14.4 * 0.0009999999999999432)` and minislo's say `0.0144`. When can the two rule sets fire at different evaluations?",
+      "choices": [
+        "Whenever the error ratio is above 1.44%, because Sloth's threshold is lower",
+        "Never, PromQL rounds both to six digits",
+        "Only when a window's error ratio lands exactly on the threshold, within float rounding; the thresholds differ in the 16th digit, which is why minislo's test generator skips such checkpoints",
+        "Only on 28-day windows, where the factors differ"
+      ],
+      "answer": 2,
+      "explanation": "100 - 99.9 in binary floating point is 0.09999999999999432, so Sloth's threshold is a hair below 0.0144. A ratio between the two values (for example exactly 0.0144) fires Sloth's alert and not minislo's. With whole-number counters such exact ties do happen, as the 4x slow burn shows at 3d10h17m."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A new service has three days of data in Prometheus, all at half the allowed error rate. `slo:period_error_budget_remaining:ratio` shows 0.5. How much of the 30-day budget has really been spent?",
+      "choices": [
+        "About 5%: the recording is 1 minus the burn rate over the data Prometheus has, so it projects 0.5x over a full window; three days at 0.5x spend 0.5 x 3 / 30 of the budget",
+        "50%, the recording is exact",
+        "0%, because the burn rate is below 1",
+        "It cannot be known without a calendar window"
+      ],
+      "answer": 0,
+      "explanation": "The period SLI averages the ratios that exist, so with three days of data it is the three-day ratio. 1 - 0.5 is the budget left if that rate held for the whole window. Budget actually spent counts bad events against the budget for the whole period, which is what minislo's event-based number shows."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A low-traffic admin API gets about 20 requests an hour and has a 99.9% SLO with the standard burn-rate alerts. One request fails. What happens, and what is a reasonable fix?",
+      "choices": [
+        "The 1-hour error ratio jumps to 5% (50x) and the 5-minute ratio is higher still, so it pages; use longer windows, add synthetic traffic at a known rate, or group low-traffic endpoints under one SLO",
+        "A ticket after three days",
+        "The alert is suppressed because the total query returns less than one request per second",
+        "Nothing, one failure is far below the budget"
+      ],
+      "answer": 0,
+      "explanation": "Burn-rate alerts assume enough events for a ratio to mean something. With 20 requests an hour, one failure is a 5% ratio. Synthetic requests raise the denominator to a known level, and grouping endpoints or longer windows trade detection speed for statistical sense."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your `promtool test rules` file for SLO alerts passes on one run and fails on the next with the page alert one minute late. Nothing changed. What is the likely cause?",
+      "choices": [
+        "The input series use the `a+bxn` notation, which is randomised",
+        "The alert has no `for:` field",
+        "promtool evaluates rule groups in Go map order unless `group_eval_order` lists them, so the alert group sometimes runs before the recording group and reads the previous minute's ratios",
+        "promtool samples the input series at random offsets inside each interval"
+      ],
+      "answer": 2,
+      "explanation": "Recording groups must run before the alert group that reads them at each step. In promtool's unit tests the groups come from a map, and only `group_eval_order` fixes the order. Prometheus itself also evaluates groups independently, which is one more reason the long window, not a precise minute, should carry the alert's meaning."
+    }
+  ]
+}

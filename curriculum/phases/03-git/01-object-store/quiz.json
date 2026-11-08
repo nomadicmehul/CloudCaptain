@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "git/object-store",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "You rename `report.txt` to `summary.txt` without changing a byte of it and commit. How many new blob objects does that commit add to the repository?",
+      "choices": [
+        "One: Git stores the file again under its new name",
+        "Two: one blob for the deletion and one for the addition",
+        "None: a blob holds only content, so the new tree entry points at the existing blob ID; only new trees and the commit are written",
+        "None, because Git stores a rename as a diff against the previous commit"
+      ],
+      "answer": 2,
+      "explanation": "Names and modes live in trees, not blobs. Equal content has an equal ID, so the blob already exists. The commit writes a new root tree (its entry name changed) and the commit object itself. Renames are detected later by comparing trees, never stored."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Two people run `git commit-tree` with the same tree, the same parent and the same message, one minute apart, and get different commit IDs. Why, and how does the smoke script make minigit and Git produce the same ID?",
+      "choices": [
+        "Commit IDs are assigned by the server on push, so local IDs are temporary",
+        "Each machine mixes a random salt into SHA-1; disabling it with core.salt=false gives equal IDs",
+        "Commit IDs include the hostname; running both on the same runner fixes it",
+        "The author and committer lines carry a Unix time and a zone and are part of the hashed bytes; setting the identities plus GIT_AUTHOR_DATE and GIT_COMMITTER_DATE makes the bytes, and so the IDs, identical"
+      ],
+      "answer": 3,
+      "explanation": "A commit is text: tree, parents, author, committer, blank line, message. Its ID is the hash of that text with the `commit SIZE` header. Anything that changes a byte, including a timestamp or a time zone, changes the ID. There is no salt and no server-side numbering."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A tool writes a tree with a directory `foo` and files `foo.c` and `foo0` in the order `foo`, `foo.c`, `foo0` (a plain byte sort of the names). What happens?",
+      "choices": [
+        "Nothing: Git sorts entries when it reads a tree, so the order on disk does not matter",
+        "`git fsck` reports `treeNotSorted`: Git compares a directory name as if it ended in `/`, so the correct order is `foo.c`, `foo`, `foo0`, and the misordered tree also has a different ID from the one Git would write",
+        "`git fsck` reports `zeroPaddedFilemode`",
+        "Git rejects the push because `foo.c` and `foo` are the same name"
+      ],
+      "answer": 1,
+      "explanation": "`.` (0x2e) sorts before `/` (0x2f) and `0` (0x30) after it. Because the order is part of the hashed bytes, two tools that sort differently produce different tree IDs for the same directory, which is why fsck enforces one order."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Someone ran `git reset --hard HEAD~3` on the wrong branch and the last three commits seem gone. What is the fastest safe recovery?",
+      "choices": [
+        "Read `git reflog`, which lists the branch's previous value, then point a branch back at it, for example `git branch rescue 'HEAD@{1}'` or `git reset --hard 'HEAD@{1}'`",
+        "Restore the folder from yesterday's backup",
+        "Run `git gc` so Git rebuilds the missing commits",
+        "Clone the repository again from the server"
+      ],
+      "answer": 0,
+      "explanation": "A reset moves one ref file; the commits stay in the object store, and the reflog recorded the old ID. `git gc` is the one command that could make this worse later, once the reflog entries expire. A fresh clone only has what was pushed."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After a kernel panic, every command fails with `error: object file .git/objects/8b/1c... is empty`. A local branch has two weeks of unpushed commits. What do you do?",
+      "choices": [
+        "Back up `.git`, run `git fsck --full` to list the broken IDs, remove the empty file, and restore that object from any clone with `git cat-file` and `git hash-object -w`, checking that the printed ID matches; only objects that exist nowhere else are lost",
+        "Run `git gc --aggressive`, which repairs corrupt objects while repacking",
+        "Delete `.git` and clone again: corruption spreads, so the whole store is untrustworthy",
+        "Run `git fsck --lost-found`, which rewrites the empty object from the reflog"
+      ],
+      "answer": 0,
+      "explanation": "Every object is checked independently by its hash, so one empty file says nothing about the others. Because the ID is the hash of the content, any copy of that object anywhere is the right one, and hash-object proves it. Re-cloning would lose the unpushed branch; gc and --lost-found cannot invent missing bytes."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`git fsck` prints `dangling commit 3a1f9c...` and exits 0. What is that commit and what can you do with it?",
+      "choices": [
+        "A commit that exists on the server but not locally",
+        "A corrupt commit that must be deleted before the next push",
+        "A commit whose parent is missing, so history is broken",
+        "An unreachable commit that no other unreachable object points to, typically the tip of lost work such as a dropped stash or a deleted branch; inspect it with `git log 3a1f9c` and keep it with `git branch rescue 3a1f9c`"
+      ],
+      "answer": 3,
+      "explanation": "Dangling means unreachable from every ref and reflog and not referenced by another unreachable object. It is information, not damage, which is why fsck exits 0. It will be pruned by gc after the grace period unless a ref names it again."
+    }
+  ]
+}

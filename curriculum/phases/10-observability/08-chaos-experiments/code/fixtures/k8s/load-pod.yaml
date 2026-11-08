@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cc-load
+  labels:
+    app: cc-load
+spec:
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 5
+  containers:
+    - name: load
+      image: python:3.12-alpine
+      command:
+        - python3
+        - /app/main.py
+        - load
+        - --url
+        - http://web/
+        - --concurrency
+        - "4"
+        - --rate
+        - "40"
+        - --timeout
+        - "2"
+        - --metrics-host
+        - 0.0.0.0
+        - --metrics-port
+        - "9100"
+      ports:
+        - name: metrics
+          containerPort: 9100
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: 9100
+        periodSeconds: 2
+      resources:
+        requests:
+          cpu: 50m
+          memory: 32Mi
+      volumeMounts:
+        - name: code
+          mountPath: /app
+  volumes:
+    - name: code
+      configMap:
+        name: minichaos

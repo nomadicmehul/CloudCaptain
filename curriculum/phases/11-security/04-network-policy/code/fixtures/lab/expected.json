@@ -1,0 +1,106 @@
+{
+  "namespaces": [
+    "cc-network-policy",
+    "cc-network-policy-tools"
+  ],
+  "probe_ports": [
+    "8080/TCP",
+    "9090/TCP",
+    "5432/TCP"
+  ],
+  "externals": [
+    "ext-a=172.18.0.11:8080",
+    "ext-b=172.18.0.12:8080"
+  ],
+  "steps": [
+    {
+      "name": "no policies: every pod reaches every pod, address and DNS",
+      "apply": null,
+      "allowed": "*"
+    },
+    {
+      "name": "default deny for ingress and egress in cc-network-policy",
+      "apply": "01-default-deny.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP"
+      ]
+    },
+    {
+      "name": "api accepts frontend on http, but frontend may not send",
+      "apply": "02-api-allow-frontend.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP"
+      ]
+    },
+    {
+      "name": "frontend may send to api on http",
+      "apply": "03-frontend-egress-api.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP",
+        "cc-network-policy/frontend -> cc-network-policy/api 8080/TCP"
+      ]
+    },
+    {
+      "name": "DNS egress to kube-dns for every pod",
+      "apply": "04-allow-dns.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP",
+        "cc-network-policy/frontend -> cc-network-policy/api 8080/TCP",
+        "cc-network-policy/frontend -> dns 53/UDP",
+        "cc-network-policy/api -> dns 53/UDP",
+        "cc-network-policy/db -> dns 53/UDP"
+      ]
+    },
+    {
+      "name": "api to an ipBlock with an except, ports 8000-8099",
+      "apply": "05-api-egress-external.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP",
+        "cc-network-policy/frontend -> cc-network-policy/api 8080/TCP",
+        "cc-network-policy/frontend -> dns 53/UDP",
+        "cc-network-policy/api -> dns 53/UDP",
+        "cc-network-policy/db -> dns 53/UDP",
+        "cc-network-policy/api -> ext-a 8080/TCP"
+      ]
+    },
+    {
+      "name": "db from api pods in the tools namespace: one element, AND",
+      "apply": "06-db-allow-and.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP",
+        "cc-network-policy/frontend -> cc-network-policy/api 8080/TCP",
+        "cc-network-policy/frontend -> dns 53/UDP",
+        "cc-network-policy/api -> dns 53/UDP",
+        "cc-network-policy/db -> dns 53/UDP",
+        "cc-network-policy/api -> ext-a 8080/TCP"
+      ]
+    },
+    {
+      "name": "db from the tools namespace or api pods: two elements, OR",
+      "apply": "07-db-allow-or.json",
+      "allowed": [
+        "cc-network-policy-tools/scanner -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> ext-b 8080/TCP",
+        "cc-network-policy-tools/scanner -> dns 53/UDP",
+        "cc-network-policy/frontend -> cc-network-policy/api 8080/TCP",
+        "cc-network-policy/frontend -> dns 53/UDP",
+        "cc-network-policy/api -> dns 53/UDP",
+        "cc-network-policy/db -> dns 53/UDP",
+        "cc-network-policy/api -> ext-a 8080/TCP",
+        "cc-network-policy-tools/scanner -> cc-network-policy/db 5432/TCP"
+      ]
+    }
+  ]
+}

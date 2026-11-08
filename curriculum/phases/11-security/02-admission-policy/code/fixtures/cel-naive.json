@@ -1,0 +1,18 @@
+{
+  "policies": [
+    {
+      "name": "cc-admission-naive-privileged",
+      "type": "cel",
+      "actions": [
+        "Deny"
+      ],
+      "failurePolicy": "Fail",
+      "validations": [
+        {
+          "expression": "object.spec.containers.all(c, c.securityContext.privileged == false)",
+          "message": "privileged containers are not allowed"
+        }
+      ]
+    }
+  ]
+}

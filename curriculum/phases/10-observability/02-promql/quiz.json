@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/promql",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A pod restarts and its counter `http_requests_total` goes from 9,000 back to 12 between two scrapes. What does `rate(http_requests_total[5m])` do with that drop?",
+      "choices": [
+        "It returns a negative rate until the drop leaves the window",
+        "It drops the series until the window no longer contains the restart",
+        "It treats the drop as a counter reset: the value before the drop (9,000) is added back, so the increase continues as if the counter had started again from zero",
+        "It returns NaN for that window"
+      ],
+      "answer": 2,
+      "explanation": "Counters only go up, so any decrease between neighbouring samples is read as a restart. rate() and increase() add the value before the drop to the increase. That is correct for one counter and wrong for anything that can go down for other reasons: a gauge, or a sum of counters where one of them restarted."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`rate(x_total[5m])` evaluated at 10:05:00 sees ten samples 30 s apart, from 10:00:30 (value 1,030) to 10:05:00 (value 1,300), with no resets. What does it return?",
+      "choices": [
+        "No result: the first sample is not exactly at the window start",
+        "0.9: the increase of 270 divided by the 300 s window",
+        "1.0333: the window starts at 10:00:00, so the first sample is counted from there",
+        "1: the increase of 270 over the 270 s the samples cover is extrapolated to the whole 300 s window because the 30 s gap at the start is under 1.1 times the spacing, giving 300 / 300 s"
+      ],
+      "answer": 3,
+      "explanation": "Prometheus extrapolates the observed increase to a window edge when the first or last sample is within 1.1 times the average spacing of it, by half a spacing when it is further away, and never back past the counter's zero point. Here both gaps are small, so increase() is 300 and rate() is 1. That extrapolation is why increase() of an integer counter is often not an integer."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Since the upgrade to Prometheus 3, `rate(http_requests_total[1m])` returns nothing for a job that is scraped every 60 seconds. What changed?",
+      "choices": [
+        "Prometheus 3 removed support for ranges shorter than 5m",
+        "Range windows are now left-open, so (t - 1m, t] holds one sample of a 60 s scrape and a rate needs two; use a window of several scrape intervals",
+        "rate() now needs at least ten samples",
+        "The job's counters became native histograms"
+      ],
+      "answer": 1,
+      "explanation": "Prometheus 3 made range selectors and the lookback delta exclude a sample that sits exactly on the old end of the interval. With a 60 s scrape, a 1m window used to catch two samples and now catches one, and a series with one sample has no rate. A window of at least four scrape intervals, or Grafana's $__rate_interval, avoids it."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`sum by (instance) (rate(errors_total[5m])) * on (instance) group_left (team) owner_info` fails with `found duplicate series for the match group {instance=\"a\"} on the right hand-side of the operation`. What is wrong?",
+      "choices": [
+        "`owner_info` has two series with instance=\"a\" at that instant (for example two team values during a handover); the side without group_left must be unique per matching key, so deduplicate it or match on more labels",
+        "group_left must be group_right when the info metric is on the right",
+        "The left side has two series for instance=\"a\"",
+        "on (instance) must also list team"
+      ],
+      "answer": 0,
+      "explanation": "Vector matching indexes the 'one' side by its matching key first, and a key that appears twice there is an execution error. The query is fine; the data at that instant is not. It can work for months and fail during a rollout or a relabelling change, which is why joins against info metrics need a deduplicated one side."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A recording rule `job:requests:sum = sum by (job) (requests_total)` feeds a panel `rate(job:requests:sum[5m])`. The panel roughly doubles for five minutes after every pod restart while real traffic is flat. Which change fixes it?",
+      "choices": [
+        "Raise the rule's evaluation interval to 5m",
+        "Record `sum by (job) (rate(requests_total[5m]))` and graph that, so each counter's reset is handled before the sum",
+        "Use irate() instead of rate()",
+        "Add `offset 5m` to the panel"
+      ],
+      "answer": 1,
+      "explanation": "When one pod restarts, the sum drops by that pod's total; rate() over the sum reads the drop as a reset of the whole sum and adds the entire previous sum back. rate() must see every counter on its own; aggregate afterwards. The lesson's rule test shows 5.075 per second from the summed series against 2.6 from sum(rate())."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`histogram_quantile(0.99, sum by (le) (rate(latency_seconds_bucket[5m])))` returns exactly 1 during an incident in which users report 4-second requests. The buckets are 0.1, 0.25, 0.5, 1 and +Inf. Why?",
+      "choices": [
+        "rate() of a bucket counter is capped at 1",
+        "sum by (le) averaged the slow requests away",
+        "When the rank falls into the +Inf bucket, histogram_quantile() returns the highest finite bound; the histogram cannot tell 1.2 s from 40 s, so it needs buckets above 1 s",
+        "A 0.99 quantile needs a summary instead of a histogram"
+      ],
+      "answer": 2,
+      "explanation": "histogram_quantile() finds the bucket where q times the total count falls and interpolates inside it. The +Inf bucket has no upper bound to interpolate to, so the answer is the largest finite bound. The estimate is only as precise as the bucket edges, which is why the edges belong around your SLO threshold and above it."
+    }
+  ]
+}

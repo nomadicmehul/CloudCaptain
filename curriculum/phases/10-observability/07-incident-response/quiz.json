@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/incident-response",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Alertmanager notifies an incident tool three times for one outage: the first notification, an update when a second instance starts failing, and a repeat after `repeat_interval`. What should the tool use to keep these as one incident?",
+      "choices": [
+        "The `alertname` label, because the alert is the same",
+        "The `groupKey` of the notification, or its SHA-256, which is the `dedup_key` Alertmanager's PagerDuty integration sends",
+        "The fingerprint of the first alert in the notification",
+        "Arrival time: anything within five minutes of an open incident belongs to it"
+      ],
+      "answer": 1,
+      "explanation": "Every notification for an aggregation group carries the same group key: the route path plus the group_by labels. Alert names collide across services, the first fingerprint changes when another alert joins, and time windows merge unrelated outages."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "An escalation policy pages the primary, escalates to the secondary after 5 minutes and to the manager after another 10. An incident opens at 10:00 and nobody acknowledges. A simulation moves its virtual clock straight from 10:00 to 10:20. When does `miniincident` record the pages?",
+      "choices": [
+        "All three at 10:20, when the clock was moved",
+        "10:00 and 10:20, because only one tick happened",
+        "10:00, 10:05 and 10:20",
+        "10:00, 10:05 and 10:15, because each page is stamped with the time it became due"
+      ],
+      "answer": 3,
+      "explanation": "tick() processes every escalation that is due and stamps each page with its due time. That makes a jump of the clock produce the same timeline a real clock would have, which is what makes MTTA and escalation behaviour testable."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A follow-the-sun schedule has an APAC layer for 00:00 to 08:00 UTC, an AMER layer for 16:00 to 24:00 UTC and an EMEA layer restricted to 09:00 to 17:00 Europe/Berlin time. It is gap-free in winter. What happens when summer time starts?",
+      "choices": [
+        "EMEA's rotation hands off an hour early, but coverage is unchanged",
+        "Nothing, because rotations are counted in UTC",
+        "EMEA moves to 07:00 to 15:00 UTC: it overlaps APAC for an hour, where EMEA wins, and nobody is on call from 15:00 to 16:00 UTC",
+        "The schedule tool shifts the UTC layers automatically"
+      ],
+      "answer": 2,
+      "explanation": "Restrictions are evaluated in the layer's time zone, so a local-time layer moves against UTC layers twice a year. render_schedule() shows the gap as a NOBODY segment, which is why coverage checks belong in CI."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why does `miniincident` take the resolve time of an Alertmanager-driven incident from the alerts' `endsAt` rather than from the time the resolved notification arrived?",
+      "choices": [
+        "Because the resolved notification arrives at the group's next flush, up to `group_interval` after recovery, while `endsAt` is when the alert stopped firing",
+        "Because the webhook payload has no timestamp of its own",
+        "Because Alertmanager sends resolved notifications only after `repeat_interval`",
+        "Because PagerDuty requires it"
+      ],
+      "answer": 0,
+      "explanation": "Alertmanager batches changes per group and flushes every group_interval, so arrival time adds a delay that has nothing to do with the outage. The alert's endsAt is the recovery time; the code clamps it between the open time and now."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Mean MTTR fell from 40 to 25 minutes from one quarter to the next. What is the safest conclusion?",
+      "choices": [
+        "None yet: compare medians per severity and the number of incidents, because one long incident or a change in what gets declared can move the mean that much",
+        "Alerts became more accurate",
+        "The team responds faster now",
+        "The escalation policy should be relaxed"
+      ],
+      "answer": 0,
+      "explanation": "Means over a few dozen incidents are dominated by outliers, and MTTR also moves when severity definitions or declaration habits change. metrics() reports median and count per severity next to the mean for this reason."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A postmortem draft contains the note \"Root cause: human error, the engineer forgot to update the flag\". What should the review do with it?",
+      "choices": [
+        "Rewrite it as a question about the system, such as why a flag change could reach production without a check, and turn the answer into an owned, dated action that changes the system",
+        "Keep it, since it is accurate, and add an action item to be more careful",
+        "Remove the engineer's name and keep the root cause",
+        "Escalate it to the engineer's manager"
+      ],
+      "answer": 0,
+      "explanation": "Blameless reviews explain decisions by what people knew and what the system allowed. \"Human error\" ends the inquiry where it should start, and \"be careful\" changes nothing. The language check in the draft flags the phrase for exactly this rewrite."
+    }
+  ]
+}

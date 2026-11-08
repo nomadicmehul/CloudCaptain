@@ -1,0 +1,23 @@
+# Error patterns for minislo simulate and minislo test-file. Counters start at 0 at t=0,
+# sampled every interval; burn_rate is a multiple of the SLO's error budget (0.1% for 99.9%).
+interval: 1m
+events_per_interval: 10000
+series:
+  good: http_requests_total{job="checkout",code="200"}
+  bad: http_requests_total{job="checkout",code="500"}
+scenarios:
+  - name: fast-burn
+    description: a bad deploy fails 2% of requests for an hour, then is rolled back
+    phases:
+      - {duration: 3d, burn_rate: 0.5}
+      - {duration: 1h, burn_rate: 20}
+      - {duration: 2h, burn_rate: 0.5}
+  - name: slow-burn
+    description: a leak makes 0.5% of requests fail until someone notices
+    phases:
+      - {duration: 3d, burn_rate: 0.5}
+      - {duration: 18h, burn_rate: 5}
+  - name: no-burn
+    description: normal background errors at half the allowed rate
+    phases:
+      - {duration: 1d, burn_rate: 0.5}

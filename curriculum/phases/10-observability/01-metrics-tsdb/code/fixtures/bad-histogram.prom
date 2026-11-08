@@ -1,0 +1,12 @@
+# HELP job_duration_seconds Job runtime.
+# TYPE job_duration_seconds histogram
+job_duration_seconds_bucket{queue="a",le="1"} 5
+job_duration_seconds_bucket{queue="a",le="5"} 3
+job_duration_seconds_sum{queue="a"} 12
+job_duration_seconds_count{queue="a"} 5
+job_duration_seconds_bucket{queue="b",le="1"} 1
+job_duration_seconds_bucket{queue="b",le="+Inf"} 2
+job_duration_seconds_count{queue="b"} 3
+# HELP jobs_failed_total Failed jobs.
+# TYPE jobs_failed_total counter
+jobs_failed_total -1

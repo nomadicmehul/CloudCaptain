@@ -1,0 +1,30 @@
+{
+  "webhook": {
+    "good": {"allowed": true, "deny": [], "warn": [], "requests": {"cpu": "100m", "memory": "64Mi"}},
+    "privileged": {"allowed": false, "deny": ["disallow-privileged"], "warn": []},
+    "no-team": {"allowed": false, "deny": ["require-team-label"], "warn": []},
+    "untrusted-registry": {"allowed": false, "deny": ["allowed-registries"], "warn": ["require-digest"]},
+    "lookalike-registry": {"allowed": false, "deny": ["allowed-registries"], "warn": []},
+    "root": {"allowed": false, "deny": ["run-as-non-root"], "warn": []},
+    "tag-only": {"allowed": true, "deny": [], "warn": ["require-digest"], "requests": {"cpu": "100m", "memory": "64Mi"}},
+    "no-limit": {"allowed": true, "deny": [], "warn": ["memory-limit"], "requests": {"cpu": "100m", "memory": "128Mi"}},
+    "digest-exempt": {"allowed": true, "deny": [], "warn": ["require-digest"], "requests": {"cpu": "100m", "memory": "64Mi"}},
+    "deployment-good": {"allowed": true, "deny": [], "warn": [], "requests": {"cpu": "100m", "memory": "64Mi"}},
+    "deployment-privileged": {"allowed": false, "deny": ["disallow-privileged"], "warn": []}
+  },
+  "vap": {
+    "good": {"allowed": true, "deny": [], "warn": []},
+    "privileged": {"allowed": false, "deny": ["cc-admission-no-privileged"], "warn": []},
+    "no-team": {"allowed": false, "deny": ["cc-admission-team-label"], "warn": []},
+    "untrusted-registry": {"allowed": false, "deny": ["cc-admission-digest"], "warn": []},
+    "lookalike-registry": {"allowed": true, "deny": [], "warn": []},
+    "root": {"allowed": true, "deny": [], "warn": []},
+    "tag-only": {"allowed": false, "deny": ["cc-admission-digest"], "warn": []},
+    "no-limit": {"allowed": true, "deny": [], "warn": ["cc-admission-memory-limit"]},
+    "digest-exempt": {"allowed": true, "deny": [], "warn": []}
+  },
+  "kyverno": {
+    "policies": ["require-team-label", "disallow-privileged", "allowed-registries", "run-as-non-root", "require-digest"],
+    "manifests": ["good", "privileged", "no-team", "untrusted-registry", "lookalike-registry", "root", "tag-only", "no-limit", "digest-exempt"]
+  }
+}

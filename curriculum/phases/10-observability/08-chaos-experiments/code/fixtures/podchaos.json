@@ -1,0 +1,11 @@
+{
+  "apiVersion": "chaos-mesh.org/v1alpha1",
+  "kind": "PodChaos",
+  "metadata": {"name": "cc-web-pod-kill", "namespace": "cc-chaos-experiments"},
+  "spec": {
+    "action": "pod-kill",
+    "mode": "one",
+    "gracePeriod": 15,
+    "selector": {"namespaces": ["cc-chaos-experiments"], "labelSelectors": {"app": "web"}}
+  }
+}

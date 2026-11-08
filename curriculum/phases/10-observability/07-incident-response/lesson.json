@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/incident-response",
+  "title": "An Incident Is a Timeline, a Severity and Roles",
+  "short": "Incident Response",
+  "motto": "An alert wakes a person; an incident gives the response a key, a severity, named roles and a timeline that MTTA, MTTR and the review read.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "observability/promql"
+  ],
+  "tools": [
+    "alertmanager",
+    "amtool",
+    "docker",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre",
+    "/docs/learning-paths/sre-practices"
+  ],
+  "outputs": [
+    "skill-incident-commander.md",
+    "prompt-draft-postmortem.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

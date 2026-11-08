@@ -1,0 +1,20 @@
+# Default owners for everything not matched below
+*                       @acme/maintainers
+
+# Services
+/app/                   @acme/backend
+/app/billing/           @acme/payments
+*.sql                   @acme/dba
+/config/                @acme/sre    # production settings
+
+# Documentation in any directory called docs, except the internal notes
+docs/                   @acme/docs
+/docs/internal/
+README.md               @acme/docs docs-team@example.com
+
+# Only files directly inside tools/
+/tools/*                @acme/tooling
+
+# Lines GitHub does not support
+!/app/legacy/
+/app/[ab]*.py           @acme/backend

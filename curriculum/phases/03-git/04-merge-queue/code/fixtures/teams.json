@@ -1,0 +1,10 @@
+{
+  "@acme/maintainers": ["ana", "bo", "cy", "dee", "eve", "pia", "raj", "dan", "sam", "tom"],
+  "@acme/backend": ["ana", "bo"],
+  "@acme/payments": ["pia", "raj"],
+  "@acme/dba": ["dan"],
+  "@acme/sre": ["sam", "eve"],
+  "@acme/docs": ["dee", "cy"],
+  "@acme/tooling": ["tom"],
+  "docs-team@example.com": ["dee"]
+}

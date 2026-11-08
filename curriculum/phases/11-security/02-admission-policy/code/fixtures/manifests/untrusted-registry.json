@@ -1,0 +1,28 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "untrusted-registry",
+    "labels": {
+      "app": "web",
+      "team": "payments"
+    }
+  },
+  "spec": {
+    "securityContext": {
+      "runAsNonRoot": true,
+      "runAsUser": 65532
+    },
+    "containers": [
+      {
+        "name": "web",
+        "image": "quay.io/cloudcaptain/miner:latest",
+        "resources": {
+          "limits": {
+            "memory": "64Mi"
+          }
+        }
+      }
+    ]
+  }
+}

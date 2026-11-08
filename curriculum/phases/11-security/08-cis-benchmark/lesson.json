@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "security/cis-benchmark",
+  "title": "A Benchmark Is a List of Checks You Can Automate",
+  "short": "CIS Benchmark",
+  "motto": "Each benchmark line is a test of a node's files, flags and defaults: automate it, keep the evidence, and name the version you ran.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/kubelet-lite"
+  ],
+  "tools": [
+    "kube-bench",
+    "kubectl",
+    "kind",
+    "docker",
+    "kubescape"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/exam-prep",
+    "/docs/cloud/cloud-security/fundamentals"
+  ],
+  "outputs": [
+    "skill-cluster-hardening-review.md",
+    "prompt-explain-benchmark-finding.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

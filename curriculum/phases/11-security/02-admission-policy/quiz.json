@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/admission-policy",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A validating webhook with `failurePolicy: Fail`, rules on every resource and no `namespaceSelector` runs as a single replica. Its node is drained. What happens to new pods in the cluster, the webhook's own replacement included?",
+      "choices": [
+        "They are created normally, because webhooks only judge pods created by users, not by controllers",
+        "The API server queues them until the webhook answers again",
+        "After `timeoutSeconds` the API server switches the webhook to Ignore on its own",
+        "Every matched create is rejected with `failed calling webhook`, the webhook's replacement pod too, until someone deletes or rescopes the configuration"
+      ],
+      "answer": 3,
+      "explanation": "Admission runs on every matching request, whoever sends it. With Fail, a call that cannot be made rejects the request, and nothing can admit the webhook's own pod. The escape hatch is deleting the configuration, which works because webhooks are never called on webhook configuration objects."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A ValidatingAdmissionPolicy with `failurePolicy: Fail` has the expression `object.spec.containers.all(c, c.securityContext.privileged == false)`. A pod whose only container sets no `securityContext` is created. What happens?",
+      "choices": [
+        "It is admitted: a missing field evaluates to null, and the comparison is skipped",
+        "It is denied: selecting the absent `securityContext` is an evaluation error (`no such key`), and under Fail an error denies; guard the field with `has()`",
+        "It is admitted: evaluation errors only matter when the binding includes Audit",
+        "The policy could never have been created, because the API server rejects expressions that can error"
+      ],
+      "answer": 1,
+      "explanation": "In CEL a field selection on a missing key is an error, not null. The validator turns an error into a deny under Fail and into nothing under Ignore. The robust form is `!has(c.securityContext) || !has(c.securityContext.privileged) || !c.securityContext.privileged`, which relies on `||` absorbing the right-hand side once the left is true."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A mutating webhook adds the label `cloudcaptain.io/team: payments` to pods that already have labels. Which JSON Patch operation is correct?",
+      "choices": [
+        "`{\"op\": \"add\", \"path\": \"/metadata/labels/cloudcaptain.io~1team\", \"value\": \"payments\"}`",
+        "`{\"op\": \"add\", \"path\": \"/metadata/labels/cloudcaptain.io%2Fteam\", \"value\": \"payments\"}`",
+        "`{\"op\": \"replace\", \"path\": \"/metadata/labels\", \"value\": {\"cloudcaptain.io/team\": \"payments\"}}`",
+        "`{\"op\": \"add\", \"path\": \"/metadata/labels/cloudcaptain.io/team\", \"value\": \"payments\"}`"
+      ],
+      "answer": 0,
+      "explanation": "JSON Pointer (RFC 6901) escapes `~` as `~0` and `/` as `~1` inside a key. The unescaped path addresses a key `team` under a non-existent `cloudcaptain.io` object and fails; percent-encoding is for URLs, not pointers; replacing the whole map deletes every other label."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "You want a new ValidatingAdmissionPolicy to tell people applying manifests what would fail, and to record each failure in the audit log, for a week before it blocks anything. Which binding does that?",
+      "choices": [
+        "`validationActions: [Deny, Warn]`",
+        "`validationActions: [Deny]` with the policy's `failurePolicy: Ignore`",
+        "`validationActions: [Warn, Audit]`",
+        "`validationActions: [Audit]`"
+      ],
+      "answer": 2,
+      "explanation": "Warn returns an HTTP warning that kubectl prints, Audit adds a validation_failure annotation to the audit event, and neither rejects. Deny with Warn is refused by the API server. failurePolicy only covers evaluation errors, so Deny would still block every violation. Audit alone records but tells the person applying nothing."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "An allow-list policy checks `c.image.startsWith('registry.internal')`. Which image gets through that should not, and what is the fix?",
+      "choices": [
+        "`registry.internal.evil.example/miner:1`; compare whole path components, so the normalised name must equal the entry or start with the entry followed by `/`",
+        "`registry.internal/team/app@sha256:...`, because digests skip the prefix check; strip the digest first",
+        "`nginx:1.30`, because an image without a registry is never checked; add a default registry",
+        "None; `startsWith` on the registry name is exact enough"
+      ],
+      "answer": 0,
+      "explanation": "A string prefix is not a path prefix. Normalise the reference the way the runtime does (`nginx` is `docker.io/library/nginx`), then compare components; `registry.internal/` with the slash, or the registry parsed out of the reference, closes the gap. Kyverno patterns such as `registry.internal/*` include the slash for the same reason."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A webhook with `rules: [{resources: [pods], operations: [CREATE, UPDATE]}]` denies privileged containers in all three container lists. `kubectl debug --profile=sysadmin` still adds a privileged ephemeral container to a running pod. Why?",
+      "choices": [
+        "kubectl debug writes the `pods/ephemeralcontainers` subresource, which a rule for `pods` does not match; list the subresource in the rules and judge the containers that `oldObject` did not have",
+        "Ephemeral containers bypass admission by design so that debugging always works",
+        "The webhook must have had `failurePolicy: Ignore`",
+        "Pod Security Admission allows privileged ephemeral containers and its decision overrides webhooks"
+      ],
+      "answer": 0,
+      "explanation": "Admission rules match resources and subresources separately: `pods` does not include `pods/ephemeralcontainers`, `pods/exec` or `pods/status`. The request is an UPDATE on the subresource whose object is the whole Pod. Every admission step runs; a validating rejection from any of them, PodSecurity included, denies the request."
+    }
+  ]
+}

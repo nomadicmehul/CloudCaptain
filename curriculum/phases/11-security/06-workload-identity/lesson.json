@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "security/workload-identity",
+  "title": "Zero Trust Is Mutual TLS With Short-Lived Identities",
+  "short": "Workload Identity",
+  "motto": "A workload proves who it is with a certificate issued minutes ago, and the peer checks its SPIFFE ID, not the network it came from.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/tls-handshake"
+  ],
+  "tools": [
+    "spire-server",
+    "spire-agent",
+    "openssl",
+    "python3"
+  ],
+  "reference": [
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/networking/security",
+    "/docs/tools/linux/security"
+  ],
+  "outputs": [
+    "skill-workload-identity-rollout.md",
+    "prompt-explain-mtls-failure.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

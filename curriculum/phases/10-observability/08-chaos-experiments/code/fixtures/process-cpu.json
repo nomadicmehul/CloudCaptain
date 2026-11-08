@@ -1,0 +1,27 @@
+{
+  "title": "Killing a stray worker and burning two cores keeps p95 under 250 ms",
+  "hypothesis": {
+    "source": {"url": "http://127.0.0.1:9100/metrics"},
+    "interval_s": 2,
+    "min_requests": 10,
+    "slis": [
+      {"name": "error_rate", "type": "error_ratio", "errors": "minichaos_load_requests_total{outcome=\"error\"}", "total": "minichaos_load_requests_total", "max": 0.05},
+      {"name": "p95_latency_s", "type": "latency_quantile", "histogram": "minichaos_load_request_duration_seconds{outcome=\"ok\"}", "quantile": 0.95, "max": 0.25}
+    ],
+    "recovery_s": 20
+  },
+  "method": {
+    "duration_s": 6,
+    "faults": [
+      {"type": "process-kill", "match": "cc-chaos-decoy", "signal": "TERM"},
+      {"type": "cpu-burn", "workers": 2}
+    ]
+  },
+  "abort": {
+    "rules": [
+      {"sli": "p95_latency_s", "above": 1.0, "for": 2}
+    ],
+    "probe_errors": 3
+  },
+  "blast_radius": {"max_processes": 1, "max_workers": 2, "max_duration_s": 60}
+}
