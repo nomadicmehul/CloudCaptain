@@ -1034,6 +1034,7 @@ class Server:
         self.host = host
         self.banner = banner
         self.sockets: List[socket.socket] = []
+        self.threads: List[threading.Thread] = []
         self.stopped = threading.Event()
 
     def start(self) -> List[int]:
@@ -1046,7 +1047,9 @@ class Server:
             listener.listen(128)
             listener.settimeout(0.2)
             bound.append(listener.getsockname()[1])
-            threading.Thread(target=self.accept_loop, args=(listener, bound[-1]), daemon=True).start()
+            thread = threading.Thread(target=self.accept_loop, args=(listener, bound[-1]), daemon=True)
+            self.threads.append(thread)
+            thread.start()
         return bound
 
     def accept_loop(self, listener: socket.socket, port: int) -> None:
@@ -1064,7 +1067,18 @@ class Server:
                     pass
 
     def stop(self) -> None:
+        # close() alone is not enough on Linux: while accept_loop is blocked on the
+        # listener, the kernel keeps the socket listening, so a connect right after
+        # stop() still succeeds. shutdown() stops listening at once and wakes accept;
+        # joining the threads before close() leaves no one holding the socket.
         self.stopped.set()
+        for listener in self.sockets:
+            try:
+                listener.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass  # macOS: ENOTCONN on a listening socket; close() below suffices there
+        for thread in self.threads:
+            thread.join(1.0)
         for listener in self.sockets:
             listener.close()
 

@@ -227,12 +227,14 @@ Falco's default ruleset ships the detections you built, written in YAML instead 
 Run Falco in one terminal and trigger the actions in another, to see the events arrive live:
 
 ```bash
-docker run -d --name cc-target alpine:3.22 sleep 3600
+docker run -d --name cc-target --tmpfs /dev/shm:rw,exec,nosuid,nodev,size=64m alpine:3.22 sleep 3600
 docker exec -it cc-target sh                          # Falco: "Terminal shell in container" (NOTICE)
 # inside the shell:
 cat /etc/shadow                                       # Falco: "Read sensitive file untrusted" (WARNING)
-cp /bin/busybox /dev/shm/x && /dev/shm/x id           # Falco: "Execution from /dev/shm" (WARNING)
+cp /bin/busybox /dev/shm/busybox && /dev/shm/busybox id   # Falco: "Execution from /dev/shm" (WARNING)
 ```
+
+The `--tmpfs /dev/shm:...,exec` flag matters. Docker (and containerd under Kubernetes) mounts `/dev/shm` with `noexec`, so on a default container the copy runs but the exec fails with `Permission denied`, and Falco stays quiet: its exec rules see the process only after a successful `execve`. That `noexec` default is itself a control worth keeping; the flag here turns it off so you can watch the detection fire. The binary is named `busybox` because busybox picks the applet from its own file name.
 
 Three of `minifalco`'s rules map onto stable Falco default rules; the other three are covered by Falco only through its sandbox/incubating rules or by a rule you tune on, so a stock Falco stays quiet on them. State that honestly rather than claiming parity:
 

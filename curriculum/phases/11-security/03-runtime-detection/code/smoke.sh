@@ -114,10 +114,13 @@ fi
 echo "  Falco is watching syscalls"
 sleep 3
 
-docker run -d --name cc-rd-target "$TARGET_IMAGE" sleep 600 >/dev/null || fail "could not start the target container"
+# Docker mounts /dev/shm noexec, so the exec below would fail with EACCES and Falco
+# (which only sees successful execs) would stay quiet. Mount it exec, as on a host
+# or a runtime that does not harden /dev/shm.
+docker run -d --name cc-rd-target --tmpfs /dev/shm:rw,exec,nosuid,nodev,size=64m "$TARGET_IMAGE" sleep 600 >/dev/null || fail "could not start the target container"
 sleep 2
 docker exec cc-rd-target cat /etc/shadow >/dev/null 2>&1 || true
-docker exec cc-rd-target sh -c 'cp /bin/busybox /dev/shm/x 2>/dev/null && /dev/shm/x true 2>/dev/null' || true
+docker exec cc-rd-target sh -c 'cp /bin/busybox /dev/shm/busybox 2>/dev/null && /dev/shm/busybox true 2>/dev/null' || true
 docker exec -t cc-rd-target sh -c 'id' >/dev/null 2>&1 || true
 docker exec cc-rd-target cat /etc/hostname >/dev/null 2>&1 || true
 sleep 4
