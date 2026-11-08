@@ -379,7 +379,7 @@ Hairpin NAT. From inside `web`, `curl http://<host address>:18080` to its own pu
 - [Kubernetes Networking & Services](https://cloudcaptain.io/docs/tools/kubernetes/networking-services): pods, Services, CNI plugins and NetworkPolicy, the cluster-scale version of this lesson.
 - [ip-netns(8)](https://man7.org/linux/man-pages/man8/ip-netns.8.html): `ip netns exec`, the `/etc/netns/NAME/` bind mounts and `ip -n`.
 - [veth(4)](https://man7.org/linux/man-pages/man4/veth.4.html): the whole man page fits on one screen; read it once.
-- [nft(8)](https://man7.org/linux/man-pages/man8/nft.8.html): base chain types, hooks and priorities, `fib`, `dnat` and `masquerade`, and the JSON output that `explain` parses.
+- [nft(8)](https://www.netfilter.org/projects/nftables/manpage.html): base chain types, hooks and priorities, `fib`, `dnat` and `masquerade`, and the JSON output that `explain` parses.
 - [Docker: packet filtering and firewalls](https://docs.docker.com/engine/network/packet-filtering-firewalls/): the `DOCKER-USER` chain, why Docker sets `FORWARD` to `DROP`, and the userland proxy setting.
 - [CNI specification](https://github.com/containernetworking/cni/blob/main/SPEC.md) and the [bridge plugin](https://www.cni.dev/plugins/current/main/bridge/): the contract between a runtime and a network plugin, and the plugin that does exactly what you built.
 - [Kubernetes cluster networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/): the pod-to-pod-without-NAT model that every CNI plugin implements.

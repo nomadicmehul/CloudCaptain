@@ -82,7 +82,7 @@ terraform validate  # Validate configuration
 |:---------|:------------|
 | [Terraform Documentation](https://developer.hashicorp.com/terraform/docs) | Official HashiCorp docs |
 | [Terraform Registry](https://registry.terraform.io/) | Providers, modules, and policies |
-| [How To Manage Secrets In Terraform](https://dev.to/kelvinskell/how-to-manage-secrets-in-terraform-like-a-pro-14nn) | Professional secrets management |
+| [Protect Sensitive Input Variables (HashiCorp)](https://developer.hashicorp.com/terraform/tutorials/configuration-language/sensitive-variables) | Professional secrets management |
 | [Reusable EC2 Instances Using Modules](https://betterprogramming.pub/reusable-ec2-instances-using-terraform-modules-59aac51f1fb) | Terraform modules best practices |
 
 ## Tools & Utilities

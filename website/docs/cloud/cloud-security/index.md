@@ -38,7 +38,7 @@ Secure your cloud infrastructure with industry best practices and proven framewo
 | Resource | Topic |
 |:---------|:------|
 | [OWASP Top 10](https://owasp.org/www-project-top-ten/) | Web application security risks |
-| [AWS Security Best Practices](https://aws.amazon.com/security/best-practices/) | AWS-specific security guidance |
+| [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html) | AWS-specific security guidance |
 | [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework/) | Industry-standard security framework |
 | [Cloud Security Alliance](https://cloudsecurityalliance.org/) | Cloud-specific security guidance |
 | [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) | Configuration standards and best practices |

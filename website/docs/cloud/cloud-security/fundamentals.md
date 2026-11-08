@@ -979,7 +979,7 @@ aws ec2 authorize-security-group-ingress \
 
 ## Further Resources
 
-- [AWS Security Best Practices](https://aws.amazon.com/security/best-practices/)
+- [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
 - [Azure Security Benchmarks](https://learn.microsoft.com/en-us/security/benchmark/azure/)
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework/)
 - [Cloud Security Alliance](https://cloudsecurityalliance.org/)

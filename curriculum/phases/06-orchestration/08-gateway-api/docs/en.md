@@ -437,9 +437,9 @@ Make minigateway a real controller for a second GatewayClass. Through `kubectl p
 - [Kubernetes Networking & Services](https://cloudcaptain.io/docs/tools/kubernetes/networking-services): Services, Ingress, the ingress-nginx retirement note and where the Gateway API fits in the networking stack.
 - [Kubernetes Fundamentals](https://cloudcaptain.io/docs/tools/kubernetes/fundamentals): the objects and controllers vocabulary, plus a Gateway API install snippet.
 - [Nginx Fundamentals](https://cloudcaptain.io/docs/tools/nginx/fundamentals): reverse proxying and location matching, the mental model most Ingress controllers grew out of.
-- [Gateway API: HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/): matches, filters, backendRefs and the precedence rules in the specification's own words.
-- [Gateway API reference](https://gateway-api.sigs.k8s.io/reference/spec/): every field, its defaults and validation, and the condition reasons your `status` command writes.
-- [ReferenceGrant](https://gateway-api.sigs.k8s.io/api-types/referencegrant/): why consent sits in the target namespace and what `from` and `to` allow.
+- [Gateway API: HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/): matches, filters, backendRefs and the precedence rules in the specification's own words.
+- [Gateway API reference](https://gateway-api.sigs.k8s.io/reference/api-spec/): every field, its defaults and validation, and the condition reasons your `status` command writes.
+- [ReferenceGrant](https://gateway-api.sigs.k8s.io/reference/api-types/referencegrant/): why consent sits in the target namespace and what `from` and `to` allow.
 - [Envoy Gateway quickstart](https://gateway.envoyproxy.io/docs/tasks/quickstart/): the install, the GatewayClass and the port-forward used in Use It, from the project.
 - [ingress2gateway](https://github.com/kubernetes-sigs/ingress2gateway): the migration tool, its providers and what each provider translates.
 - [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/): `pathType` semantics and the note that the API is frozen.

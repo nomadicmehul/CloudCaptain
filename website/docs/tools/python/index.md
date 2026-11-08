@@ -221,7 +221,6 @@ pip install pytest black flake8
 
 ### Documentation
 - [Official Python Docs](https://docs.python.org/3/)
-- [Python DevOps Guide](https://python-devops.readthedocs.io/)
 - [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 - [Paramiko Documentation](https://www.paramiko.org/)
 

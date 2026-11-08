@@ -1280,6 +1280,6 @@ aws deploy create-deployment \
 
 - [AWS CloudFormation User Guide](https://docs.aws.amazon.com/cloudformation/)
 - [AWS CodeDeploy Documentation](https://docs.aws.amazon.com/codedeploy/)
-- [Systems Manager Automation Documents](https://docs.aws.amazon.com/systems-manager-automation/)
+- [Systems Manager Automation Documents](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html)
 - [EventBridge Rules and Automation](https://docs.aws.amazon.com/eventbridge/)
 - [AWS interview preparation resources](/docs/cloud/aws/interview-questions)

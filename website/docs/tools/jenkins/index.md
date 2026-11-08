@@ -74,4 +74,4 @@ pipeline {
 | [Jenkins Pipeline Tutorial](https://www.lambdatest.com/blog/jenkins-pipeline-tutorial/) | Pipeline tutorial for beginners |
 | [Scheduling Jenkins Jobs](https://www.codeproject.com/Articles/1242604/Scheduling-the-Jenkins-Job-with-CRON) | CRON scheduling guide |
 | [Ansible + Docker CI/CD](https://gcore.com/blog/integrating-ansible-and-docker-in-ci-cd-process-using-jenkins-job/) | Integration with Ansible and Docker |
-| [SonarQube Integration](https://www.tatvasoft.com/blog/integrate-sonarqube-with-jenkins/amp/) | Code quality with SonarQube |
+| [SonarQube Integration](https://docs.sonarsource.com/sonarqube-server/latest/analyzing-source-code/ci-integration/jenkins-integration/key-features/) | Code quality with SonarQube |

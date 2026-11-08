@@ -85,5 +85,4 @@ ansible-vault encrypt secrets.yml
 | [Ansible Documentation](https://docs.ansible.com/) | Official Ansible docs |
 | [Ansible Modules Index](https://docs.ansible.com/ansible/latest/collections/) | Complete module reference |
 | [Configuration Management 101](https://www.digitalocean.com/community/tutorials/configuration-management-101-writing-ansible-playbooks) | Writing Ansible Playbooks |
-| [Ansible with Docker](https://mklein.io/2018/02/23/ansible-docker/) | Using Ansible on Docker |
 | [Ansible Roles & Jenkins](https://www.softwaretestinghelp.com/ansible-roles-jenkins-integration-ec2-modules/) | Integration with Jenkins and EC2 |

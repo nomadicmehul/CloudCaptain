@@ -43,6 +43,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Root-relative links (/docs/..., /learn/...) are Docusaurus routes, not files.
+      # The site build checks them (onBrokenLinks: throw), so lychee maps them to a
+      # fake root and skips them; relative ../file.md links are still checked.
       - name: Check links
         id: lychee
         uses: lycheeverse/lychee-action@v2
@@ -52,6 +55,10 @@ jobs:
             --accept 200,201,204,206,301,302,307,308,429
             --max-concurrency 8
             --timeout 20
+            --max-retries 3
+            --retry-wait-time 5
+            --root-dir /__site_routes__
+            --exclude '^file:///__site_routes__'
             'curriculum/**/*.md'
             'website/docs/**/*.md'
             'README.md'

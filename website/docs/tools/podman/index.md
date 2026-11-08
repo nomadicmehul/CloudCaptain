@@ -101,7 +101,7 @@ sudo systemctl status nginx
 
 ## Getting Started
 
-1. **[Install Podman](https://podman.io/getting-started/installation/)** — Straightforward on most Linux distros
+1. **[Install Podman](https://podman.io/docs/installation)** — Straightforward on most Linux distros
 2. **Learn fundamentals** — [Podman Fundamentals](/docs/tools/podman/fundamentals)
 3. **Master commands** — [Podman Cheat Sheet](/docs/tools/podman/cheatsheet)
 4. **Enable rootless** — Run containers without root privileges
