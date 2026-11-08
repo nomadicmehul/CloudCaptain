@@ -215,4 +215,4 @@ Replace the one-second sleep in the main loop with an event-driven design: a sel
 - [Linux System Administration](https://cloudcaptain.io/docs/tools/linux/administration): systemd units, `Restart=`, `KillMode=` and timeouts, the production-grade version of your supervisor.
 - [Docker Security & Production](https://cloudcaptain.io/docs/tools/docker/security-production): `--init`, graceful shutdown and health checks in real deployments.
 - [tini](https://github.com/krallin/tini): three hundred lines of C that do what you just did; read `main()` once.
-- [Docker and the PID 1 zombie reaping problem](https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/): the 2015 post that made the industry notice.
+- [Docker and the PID 1 zombie reaping problem](https://web.archive.org/web/20251106202928/https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/) (archived): the 2015 post that made the industry notice.

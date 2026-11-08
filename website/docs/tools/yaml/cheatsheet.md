@@ -653,7 +653,6 @@ kubectl apply -f manifest.yaml --dry-run=client
 
 # Online validators
 # - http://www.yamllint.com/
-# - https://www.onlineyaml.com/
 ```
 
 ## Summary

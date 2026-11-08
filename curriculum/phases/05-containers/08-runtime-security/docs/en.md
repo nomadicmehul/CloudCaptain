@@ -303,4 +303,4 @@ Build `k8s --namespace NAME`, which calls `kubectl get pods,deploy,sts,ds,jobs,c
 - [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/): the field-by-field definition of baseline and restricted, including the allowed volume types, sysctls and capability adds.
 - [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/): the labels, the modes and the `--dry-run=server` rollout.
 - [Restrict a container's syscalls with seccomp](https://kubernetes.io/docs/tutorials/security/seccomp/): the Kubernetes tutorial with `Localhost` profiles and an audit-mode profile, on kind.
-- [Falco](https://falco.org/docs/), [gVisor](https://gvisor.dev/docs/) and [Kata Containers](https://katacontainers.io/docs/): the detection and sandboxing layers this lesson only points at.
+- [Falco](https://falco.org/docs/), [gVisor](https://gvisor.dev/docs/) and [Kata Containers](https://katacontainers.io/learn/): the detection and sandboxing layers this lesson only points at.

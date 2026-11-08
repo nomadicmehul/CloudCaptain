@@ -86,5 +86,5 @@ sudo apt update && sudo apt upgrade -y
 | Title | Author | Type |
 |:------|:-------|:-----|
 | [The Linux Command Line](http://linuxcommand.org/tlcl.php) | William Shotts | Free |
-| [Linux Bible](https://www.wiley.com/en-us/Linux+Bible%2C+9th+Edition-p-9781118999875) | Christopher Negus | Paid |
+| Linux Bible (Wiley) | Christopher Negus | Paid |
 | [How Linux Works](https://nostarch.com/howlinuxworks3) | Brian Ward | Paid |

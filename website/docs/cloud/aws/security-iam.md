@@ -1364,5 +1364,5 @@ aws s3api head-object \
 - [AWS IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
 - [AWS KMS Developer Guide](https://docs.aws.amazon.com/kms/)
 - [AWS WAF User Guide](https://docs.aws.amazon.com/waf/)
-- [AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/)
-- [AWS Security Best Practices](https://aws.amazon.com/security/best-practices/)
+- [AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/)
+- [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)

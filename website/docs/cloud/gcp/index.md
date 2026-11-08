@@ -123,7 +123,7 @@ Organization
 
 ## Community and Support
 
-- **Google Cloud Community**: [communities.gcp.google.com](https://communities.gcp.google.com)
+- **Google Cloud Community**: [googlecloudcommunity.com](https://www.googlecloudcommunity.com/)
 - **Stack Overflow**: Tag `google-cloud-platform`
 - **GitHub**: [googleapis](https://github.com/googleapis)
 - **Issue Tracker**: Report bugs and request features

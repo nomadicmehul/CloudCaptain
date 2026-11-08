@@ -1641,7 +1641,7 @@ trivy image --exit-code 1 --severity HIGH,CRITICAL \
 | Falco | Runtime threat detection | [falco.org](https://falco.org) |
 | Kubescape | Security testing per NSA guidance | [kubescape.io](https://kubescape.io) |
 | kube-bench | CIS Kubernetes Benchmark | [github.com/aquasecurity/kube-bench](https://github.com/aquasecurity/kube-bench) |
-| OPA Gatekeeper | Policy-as-code enforcement | [open-policy-agent.org/docs/latest/gatekeeper/](https://open-policy-agent.org/docs/latest/gatekeeper/) |
+| OPA Gatekeeper | Policy-as-code enforcement | [open-policy-agent.github.io/gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/docs/) |
 | Vault | Secrets management | [vaultproject.io](https://www.vaultproject.io) |
 | Sealed Secrets | Encrypted secrets | [github.com/bitnami-labs/sealed-secrets](https://github.com/bitnami-labs/sealed-secrets) |
 

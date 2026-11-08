@@ -483,7 +483,7 @@ try {
 |----------|-------------|---------|
 | `BUILD_NUMBER` | Build number | 123 |
 | `BUILD_ID` | Build ID | 2021-03-15_10-30-45 |
-| `BUILD_URL` | Build URL | http://jenkins/job/myjob/123/ |
+| `BUILD_URL` | Build URL | `http://jenkins/job/myjob/123/` |
 | `BUILD_LOG` | Build log | (see below) |
 | `WORKSPACE` | Job workspace | /var/jenkins_home/jobs/myjob/workspace |
 | `JOB_NAME` | Job name | myjob |

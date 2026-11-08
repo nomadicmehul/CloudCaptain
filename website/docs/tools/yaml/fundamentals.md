@@ -603,7 +603,6 @@ empty_string: ""
 
 ### Online YAML Validators
 - [YAML Lint](http://www.yamllint.com/)
-- [OnlineYAML](https://www.onlineyaml.com/)
 
 ### Command-line Tools
 ```bash

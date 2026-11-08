@@ -1632,7 +1632,7 @@ initContainers:
 ## Further Resources
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [AWS Security Best Practices](https://aws.amazon.com/security/best-practices/)
+- [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
 - [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework/)
 - [Cloud Security Alliance](https://cloudsecurityalliance.org/)
 - [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks)

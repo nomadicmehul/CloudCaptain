@@ -106,7 +106,7 @@ spec:
 
 ## Tools
 
-- **Online Validators** — [YAML Lint](http://www.yamllint.com/), [OnlineYAML](https://www.onlineyaml.com/)
+- **Online Validators** — [YAML Lint](https://www.yamllint.com/)
 - **CLI Tools** — `yamllint`, `yq`, `jq`
 - **IDE Plugins** — VS Code, Vim, Emacs all have excellent YAML support
 

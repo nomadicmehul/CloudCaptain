@@ -47,7 +47,7 @@ A lightweight, high-performance HTTP server and reverse proxy. Master configurat
 |:---------|:------|
 | [Nginx Official Docs](https://nginx.org/en/docs/) | Complete reference |
 | [Beginner's Guide](https://nginx.org/en/docs/beginners_guide.html) | Getting started |
-| [Admin Guide](https://nginx.org/en/docs/admin_guide.html) | Administration tasks |
+| [Admin Guide](https://docs.nginx.com/nginx/admin-guide/) | Administration tasks |
 
 ## Contributing
 

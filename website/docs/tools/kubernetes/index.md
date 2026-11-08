@@ -126,4 +126,4 @@ kubectl delete svc hello
 | [Telepresence](https://www.telepresence.io) | Fast local development for K8s microservices |
 | [Lens](https://k8slens.dev/) | Kubernetes IDE |
 | [k9s](https://k9scli.io/) | Terminal UI for Kubernetes |
-| [Datree](https://www.datree.io) | Prevent K8s misconfigurations in development |
+| [KubeLinter](https://docs.kubelinter.io/) | Catch K8s manifest and Helm chart misconfigurations before deploy |

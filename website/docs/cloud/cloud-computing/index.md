@@ -88,7 +88,6 @@ Navigate through cloud computing topics in a structured way:
 
 ### Learning Platforms
 - [Pluralsight](https://www.pluralsight.com/) - Cloud architecture & DevOps courses
-- [Linux Academy](https://linuxacademy.com/) - Cloud and DevOps training
 - [Coursera](https://www.coursera.org/) - University-level cloud courses
 - [A Cloud Guru](https://acloudguru.com/) - Hands-on cloud training
 

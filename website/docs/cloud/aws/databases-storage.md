@@ -920,7 +920,7 @@ EOF
 - [AWS S3 Documentation](https://docs.aws.amazon.com/s3/)
 - [AWS RDS Documentation](https://docs.aws.amazon.com/rds/)
 - [AWS DynamoDB Documentation](https://docs.aws.amazon.com/dynamodb/)
-- [AWS Aurora Documentation](https://docs.aws.amazon.com/rds/latest/AuroraUserGuide/)
+- [AWS Aurora Documentation](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/)
 - [AWS Redshift Documentation](https://docs.aws.amazon.com/redshift/)
 - [AWS ElastiCache Documentation](https://docs.aws.amazon.com/elasticache/)
 - [AWS EBS Documentation](https://docs.aws.amazon.com/ebs/)

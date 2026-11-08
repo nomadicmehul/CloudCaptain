@@ -9,3 +9,20 @@
 ^https?://buymeacoffee\.com
 ^https?://docs\.docker\.com/.*#
 ^mailto:
+^https?://github\.com/[^/]+/[^/]+/stargazers
+# Example hostnames in docs, not real links
+^https?://jenkins/
+# Sites that answer CI/bot traffic with 403 or a TLS reset but work in a browser
+^https?://(www\.)?stackoverflow\.com
+^https?://(www\.)?reddit\.com
+^https?://(www\.)?oreilly\.com
+^https?://(www\.)?datacamp\.com
+^https?://(www\.)?gartner\.com
+^https?://(www\.)?cyberciti\.biz
+^https?://(www\.)?codeproject\.com
+^https?://dl\.acm\.org
+^https?://developers\.redhat\.com
+^https?://media\.defense\.gov
+^https?://netflixtechblog\.com
+^https?://betterprogramming\.pub
+^https?://(www\.)?medium\.com

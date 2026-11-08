@@ -371,4 +371,4 @@ Beyond DORA, track these additional metrics:
 - Measure your current DORA metrics
 - Conduct a value stream mapping exercise
 - Establish blameless postmortem culture
-- Read: [The DevOps Handbook](https://itrevolution.com/the-devops-handbook/) and [Accelerate](https://itrevolution.com/accelerate/) by Gene Kim
+- Read: [The DevOps Handbook](https://itrevolution.com/the-devops-handbook/) and [Accelerate](https://itrevolution.com/product/accelerate/) by Gene Kim
