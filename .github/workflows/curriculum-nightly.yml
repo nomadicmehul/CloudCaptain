@@ -46,15 +46,17 @@ jobs:
       # Root-relative links (/docs/..., /learn/...) are Docusaurus routes, not files.
       # The site build checks them (onBrokenLinks: throw), so lychee maps them to a
       # fake root and skips them; relative ../file.md links are still checked.
+      # 502/503/504 are accepted: a remote gateway having a bad night is not a dead
+      # page, and a really dead link shows up as 404/410 or a DNS/connection error.
       - name: Check links
         id: lychee
         uses: lycheeverse/lychee-action@v2
         with:
           args: >-
             --no-progress
-            --accept 200,201,204,206,301,302,307,308,429
+            --accept 200,201,204,206,301,302,307,308,429,502,503,504
             --max-concurrency 8
-            --timeout 20
+            --timeout 30
             --max-retries 3
             --retry-wait-time 5
             --root-dir /__site_routes__
