@@ -1,0 +1,13 @@
+service: checkout
+replicas: 3
+image: registry.example.com/shop/checkout:1.4.3
+resources:
+  cpu: 250m
+  memory: 256Mi
+env:
+  LOG_LEVEL: info
+  CACHE_TTL: "600"
+  REGION: eu-central-1
+probes:
+  path: /healthz
+  period: 5s

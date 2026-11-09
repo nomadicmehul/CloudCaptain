@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "git/packfiles-transport",
+  "title": "Cloning Is a Negotiation Plus a Packfile",
+  "short": "Packfiles & Transport",
+  "motto": "A clone is ls-refs, a want and have negotiation, and one packfile of zlib streams and deltas; shallow and partial clones just ask for less.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 120,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "git/object-store",
+    "networking/http-server"
+  ],
+  "tools": [
+    "git",
+    "git-http-backend",
+    "git-lfs"
+  ],
+  "reference": [
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/git/cheatsheet",
+    "/docs/tools/cicd/fundamentals"
+  ],
+  "outputs": [
+    "skill-large-repo-tuning.md",
+    "prompt-explain-git-trace-packet.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

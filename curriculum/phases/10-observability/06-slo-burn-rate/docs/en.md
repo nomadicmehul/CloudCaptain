@@ -8,7 +8,7 @@
 |---|---|
 | Type | Build |
 | Languages | Python |
-| Prerequisites | [PromQL Is Vector Arithmetic Over Time Windows](https://cloudcaptain.io/learn/observability/promql) |
+| Prerequisites | [An Alert Is a Query With a Clock and a Router](https://cloudcaptain.io/learn/observability/alerting) |
 | Time | 75 minutes |
 | Tools | Sloth, Prometheus, promtool, Docker, OpenSLO |
 

@@ -1,0 +1,11 @@
+[
+  {"labels": {"alertname": "HighErrorRate", "severity": "page", "team": "payments"}, "receivers": "pager"},
+  {"labels": {"alertname": "DiskFull", "severity": "page", "team": "db"}, "receivers": "db-pager,db-chat"},
+  {"labels": {"alertname": "SlowQueries", "severity": "ticket", "team": "storage"}, "receivers": "db-chat"},
+  {"labels": {"alertname": "Watchdog"}, "receivers": "blackhole"},
+  {"labels": {"alertname": "Watchdog", "severity": "page", "team": "db"}, "receivers": "blackhole"},
+  {"labels": {"alertname": "CertExpiring", "severity": "ticket", "team": "search"}, "receivers": "default-chat"},
+  {"labels": {"alertname": "QueueFull", "severity": "page", "team": "storage"}, "receivers": "pager,db-chat"},
+  {"labels": {"alertname": "Replication", "team": "db"}, "receivers": "db-chat"},
+  {"labels": {"alertname": "Unowned", "severity": "critical"}, "receivers": "default-chat"}
+]

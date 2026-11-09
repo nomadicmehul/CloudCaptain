@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "git/merge-algorithms",
+  "title": "A Merge Is a Three-Way Diff Against a Common Ancestor",
+  "short": "Merge Algorithms",
+  "motto": "A merge compares each side with the ancestor they share; only lines both sides changed, in different ways, become a conflict.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "git/object-store"
+  ],
+  "tools": [
+    "git",
+    "patch"
+  ],
+  "reference": [
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/git/cheatsheet",
+    "/docs/tools/git/interview-questions"
+  ],
+  "outputs": [
+    "skill-merge-conflict-resolution.md",
+    "prompt-explain-merge-conflict.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

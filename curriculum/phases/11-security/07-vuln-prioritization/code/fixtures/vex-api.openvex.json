@@ -1,0 +1,59 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://example.com/vex/shop-api-2026-10-20",
+  "author": "platform-security@example.com",
+  "timestamp": "2026-10-20T09:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45853"
+      },
+      "products": [
+        {
+          "@id": "pkg:deb/debian/zlib1g@1:1.2.13.dfsg-1"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The overflow is in MiniZip (zipOpenNewFileInZip4_64 in contrib/minizip). zlib1g ships libz only; MiniZip comes from Debian's separate minizip packages, which are not installed."
+    },
+    {
+      "vulnerability": {
+        "name": "GHSA-jjg7-2v4v-x38h",
+        "aliases": [
+          "CVE-2024-3651"
+        ]
+      },
+      "products": [
+        {
+          "@id": "pkg:oci/api@sha256:c2ca5cb8b2fdd4b89680229b222e06de684bcedbecb33f212fe42a954a6ba6eb",
+          "subcomponents": [
+            {
+              "@id": "pkg:pypi/idna@3.6"
+            }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "The service never passes user input to idna.encode(); hostnames come from a fixed allow-list in config/upstreams.yaml."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-28085"
+      },
+      "products": [
+        {
+          "@id": "pkg:deb/debian/util-linux@2.38.1-5%2Bb1"
+        },
+        {
+          "@id": "pkg:deb/debian/mount@2.38.1-5%2Bb1"
+        }
+      ],
+      "status": "under_investigation",
+      "timestamp": "2026-10-22T14:00:00Z",
+      "status_notes": "wall(1) is setgid tty on hosts; checking whether the image ships it with that bit."
+    }
+  ]
+}

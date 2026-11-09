@@ -1,0 +1,50 @@
+{
+  "global": {
+    "resolve_timeout": "5m"
+  },
+  "route": {
+    "receiver": "default-chat",
+    "group_by": ["alertname", "service"],
+    "group_wait": "2s",
+    "group_interval": "6s",
+    "repeat_interval": "1h",
+    "routes": [
+      {
+        "matchers": ["alertname=\"Watchdog\""],
+        "receiver": "blackhole"
+      },
+      {
+        "matchers": ["severity=\"page\""],
+        "receiver": "pager",
+        "repeat_interval": "9s",
+        "continue": true,
+        "routes": [
+          {
+            "matchers": ["team=\"db\""],
+            "receiver": "db-pager"
+          }
+        ]
+      },
+      {
+        "matchers": ["team=~\"db|storage\""],
+        "receiver": "db-chat",
+        "group_by": ["alertname", "cluster"]
+      }
+    ]
+  },
+  "inhibit_rules": [
+    {
+      "name": "cluster-down-hides-its-symptoms",
+      "source_matchers": ["alertname=\"ClusterDown\""],
+      "target_matchers": ["severity=~\"page|ticket\""],
+      "equal": ["cluster"]
+    }
+  ],
+  "receivers": [
+    {"name": "default-chat", "webhook_configs": [{"url": "http://127.0.0.1:9099/default-chat"}]},
+    {"name": "pager", "webhook_configs": [{"url": "http://127.0.0.1:9099/pager"}]},
+    {"name": "db-pager", "webhook_configs": [{"url": "http://127.0.0.1:9099/db-pager"}]},
+    {"name": "db-chat", "webhook_configs": [{"url": "http://127.0.0.1:9099/db-chat"}]},
+    {"name": "blackhole"}
+  ]
+}

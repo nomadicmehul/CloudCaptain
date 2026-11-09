@@ -1,0 +1,46 @@
+{
+  "groups": [
+    {
+      "name": "checkout",
+      "interval": "1m",
+      "rules": [
+        {
+          "alert": "HighErrorRate",
+          "expr": "job:request_errors:ratio_rate5m{job=\"checkout\"} > 0.05",
+          "for": "5m",
+          "keep_firing_for": "10m",
+          "labels": {"severity": "page", "team": "payments"},
+          "annotations": {
+            "summary": "{{ $labels.job }} is failing {{ $value | humanizePercentage }} of requests",
+            "runbook_url": "https://runbooks.example.com/checkout/high-error-rate"
+          }
+        },
+        {
+          "alert": "InstanceDown",
+          "expr": "up{job=\"checkout\"} == 0",
+          "for": "3m",
+          "labels": {"severity": "ticket"},
+          "annotations": {"summary": "{{ $labels.instance }} of {{ $labels.job }} has been down for 3 minutes"}
+        },
+        {
+          "alert": "TargetMissing",
+          "expr": "absent(up{job=\"checkout\"})",
+          "for": "2m",
+          "labels": {"severity": "page"},
+          "annotations": {"summary": "no checkout target is being scraped"}
+        },
+        {
+          "alert": "QueueBacklog",
+          "expr": "max by (queue) (queue_depth{job=\"worker\"}) > 100",
+          "for": "2m",
+          "keep_firing_for": "5m",
+          "labels": {"severity": "ticket", "team": "{{ $labels.queue }}-owners"},
+          "annotations": {
+            "summary": "queue {{ $labels.queue }} has {{ $value }} messages waiting",
+            "value": "{{ printf \"%.1f\" $value }}"
+          }
+        }
+      ]
+    }
+  ]
+}

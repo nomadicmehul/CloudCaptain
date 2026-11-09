@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/log-pipeline",
+  "title": "A Log Pipeline Is Tail, Parse, Label, Ship",
+  "short": "Log Pipelines",
+  "motto": "Commit the offset only after the push succeeds; a log store is a label index over compressed chunks, and each label value is a new stream.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/file-descriptors"
+  ],
+  "tools": [
+    "docker",
+    "loki",
+    "alloy",
+    "opentelemetry-collector",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre",
+    "/docs/tools/linux/administration"
+  ],
+  "outputs": [
+    "skill-log-pipeline-review.md",
+    "prompt-write-logql.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

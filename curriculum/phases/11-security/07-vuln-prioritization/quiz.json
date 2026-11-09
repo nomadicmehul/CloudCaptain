@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/vuln-prioritization",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An image has CVE-2023-45853 in `zlib1g` (CVSS 9.8, no fixed version, EPSS 0.03) and CVE-2023-4911 in `libc6` (CVSS 7.8, fixed version available, listed in CISA KEV). Which should you fix first?",
+      "choices": [
+        "`zlib1g`, because 9.8 is CRITICAL and 7.8 is only HIGH",
+        "Both at the same time, because both are above 7.0",
+        "`libc6`, because KEV is evidence that the flaw is being exploited and an upgrade exists, while the zlib flaw has no fix and a low probability of exploitation",
+        "Neither until a third scanner confirms them"
+      ],
+      "answer": 2,
+      "explanation": "CVSS describes how bad a flaw could be in a generic worst case. KEV says someone is exploiting it now, and the fix is one package upgrade away. The 9.8 with no fix is work you can only mitigate or accept, and EPSS says exploitation in the next 30 days is unlikely."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Trivy reports CVE-2024-3651 for `idna` 3.6 and Grype reports GHSA-jjg7-2v4v-x38h for `idna` 3.6, whose related vulnerability is CVE-2024-3651. How should a merged report count them?",
+      "choices": [
+        "As one finding with id CVE-2024-3651 and alias GHSA-jjg7-2v4v-x38h, because package, version and one advisory id match",
+        "As two findings, because the ids differ",
+        "As one finding only if both tools give the same CVSS score",
+        "As two findings until the GHSA is withdrawn"
+      ],
+      "answer": 0,
+      "explanation": "The same flaw is published under several identifiers. Deduplicate on ecosystem, package, version and any shared id, and report under the CVE because KEV and EPSS are keyed by CVE. Different scores from different sources are normal and do not make it a different finding."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A CVSS v4.0 vector has no `E` (Exploit Maturity) metric. What does the base score assume about exploitation?",
+      "choices": [
+        "That no exploit exists, so the score is the lowest possible",
+        "Nothing; E is a supplemental metric that never changes the score",
+        "That a proof of concept exists, the middle value",
+        "That the flaw is being attacked: Not Defined scores like `E:A`, and only `E:P` or `E:U` lower it"
+      ],
+      "answer": 3,
+      "explanation": "v4.0 defaults Exploit Maturity to its worst case. `CVSS:4.0/AV:P/AC:H/AT:P/PR:H/UI:A/VC:H/VI:H/VA:H/SC:H/SI:H/SA:H` scores 7.3 with or without `/E:A`, 5.9 with `/E:P` and 4.1 with `/E:U`. KEV and EPSS are how you replace the assumption with evidence."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "On 2026-11-01 EPSS gives CVE-2024-2961 a score of 0.883 at the 0.998 percentile. What does that mean?",
+      "choices": [
+        "The flaw has 88.3% of the maximum CVSS severity",
+        "FIRST's model estimates an 88.3% probability that exploitation activity for this CVE is observed in the next 30 days, higher than for 99.8% of scored CVEs",
+        "88.3% of scanners report it",
+        "It has been exploited in 88.3% of the incidents CISA tracks"
+      ],
+      "answer": 1,
+      "explanation": "EPSS is a probability over the next 30 days, recomputed daily, not a severity and not evidence. The percentile ranks it among all scored CVEs. Combine it with exposure: the same 0.883 times an isolated weight of 0.1 falls below a 0.1 threshold."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "An OpenVEX statement for CVE-X has status `not_affected` and one product, the image's purl `pkg:oci/api@sha256:...`, with no subcomponents. Which findings do Trivy, Grype and minivuln suppress?",
+      "choices": [
+        "None, because a product must be a package purl",
+        "Only the finding whose package purl is listed nowhere",
+        "Every finding for CVE-X in that image, whatever package it is in, because a matching product without subcomponents covers the whole product",
+        "Every finding in the image, for every CVE"
+      ],
+      "answer": 2,
+      "explanation": "go-vex, which both scanners use, matches a product with no subcomponents for every component inside it. That is rarely what the author meant: name the package as the product, or list it as a subcomponent of the image."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "`minivuln diff` lists CVE-2024-28085 in `mount` as fixed, but the new image still has the same `mount` version. What is the most likely explanation?",
+      "choices": [
+        "The old side was scanned with Trivy and Grype and the new side only with Trivy, and only Grype reported that package",
+        "The CVE was removed from the KEV catalogue",
+        "The EPSS score dropped below the threshold",
+        "The due date passed, so the finding expired"
+      ],
+      "answer": 0,
+      "explanation": "A diff compares findings, not packages. If the two sides used different tools or database versions, findings one tool reports look fixed or new. minivuln warns when the tool sets differ; diff the same tools on both sides and compare database dates."
+    }
+  ]
+}

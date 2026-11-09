@@ -1,0 +1,115 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.76.1"
+  },
+  "CreatedAt": "2026-11-01T08:10:02.077Z",
+  "ArtifactName": "registry.example.com/shop/api:1.5.0",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": {
+      "Family": "debian",
+      "Name": "12.14"
+    },
+    "RepoTags": [
+      "registry.example.com/shop/api:1.5.0"
+    ],
+    "RepoDigests": [
+      "registry.example.com/shop/api@sha256:7ea07869b8ae1f92c844c13af6f437bdd9b56b21c434e3ea094b5770ded41a5d"
+    ]
+  },
+  "Results": [
+    {
+      "Target": "registry.example.com/shop/api:1.5.0 (debian 12.14)",
+      "Class": "os-pkgs",
+      "Type": "debian",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2023-45853",
+          "PkgID": "zlib1g@1:1.2.13.dfsg-1",
+          "PkgName": "zlib1g",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/zlib1g@1:1.2.13.dfsg-1?arch=amd64&distro=debian-12.14",
+            "UID": "c91ebb697fab4f3a"
+          },
+          "InstalledVersion": "1:1.2.13.dfsg-1",
+          "Status": "will_not_fix",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-45853",
+          "Severity": "CRITICAL",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 9.8
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2016-2781",
+          "PkgID": "coreutils@9.1-1",
+          "PkgName": "coreutils",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/coreutils@9.1-1?arch=amd64&distro=debian-12.14",
+            "UID": "4579a3cb55a4e80b"
+          },
+          "InstalledVersion": "9.1-1",
+          "Status": "will_not_fix",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2016-2781",
+          "Severity": "MEDIUM",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:N",
+              "V3Score": 6.5
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2011-3374",
+          "PkgID": "apt@2.6.1",
+          "PkgName": "apt",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/apt@2.6.1?arch=amd64&distro=debian-12.14",
+            "UID": "338db7b81643f498"
+          },
+          "InstalledVersion": "2.6.1",
+          "Status": "affected",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2011-3374",
+          "Severity": "LOW",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Target": "Python",
+      "Class": "lang-pkgs",
+      "Type": "python-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-47081",
+          "PkgID": "requests@2.32.3",
+          "PkgName": "requests",
+          "PkgPath": "app/venv/lib/python3.11/site-packages/requests-2.32.3.dist-info/METADATA",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/requests@2.32.3",
+            "UID": "a3cde83c083efc08"
+          },
+          "InstalledVersion": "2.32.3",
+          "FixedVersion": "2.32.4",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-47081",
+          "Severity": "MEDIUM",
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N",
+              "V3Score": 5.3
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
