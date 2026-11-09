@@ -413,19 +413,29 @@ PY
   echo "  NotReady while /tmp/ready was missing, Ready after touch, restartCount 0; kubectl and minikubelet print: $(cat "$WORK/one.txt")"
 
   echo "▸ Use It: a crashing pod reaches CrashLoopBackOff with restartCount >= 2 and phase Running"
+  # Between restarts the kubelet reports either waiting/CrashLoopBackOff or, for whole
+  # back-off windows, the last terminated/Error state (kubectl STATUS "Error"). Accept
+  # both here; the BackOff event check below is what proves the back-off happened.
   crashloop() {
     "${K[@]}" get pod cc-crash -n "$NS" -o json > "$WORK/crash.json" || return 1
-    python3 -c 'import json, sys; c = json.load(open(sys.argv[1]))["status"]["containerStatuses"][0]; sys.exit(0 if c["restartCount"] >= 2 and (c["state"].get("waiting") or {}).get("reason") == "CrashLoopBackOff" else 1)' "$WORK/crash.json"
+    python3 -c '
+import json, sys
+c = json.load(open(sys.argv[1]))["status"]["containerStatuses"][0]
+waiting = (c["state"].get("waiting") or {}).get("reason") == "CrashLoopBackOff"
+errored = (c["state"].get("terminated") or {}).get("exitCode") == 1
+sys.exit(0 if c["restartCount"] >= 2 and (waiting or errored) else 1)' "$WORK/crash.json"
   }
-  poll 150 crashloop || fail "cc-crash did not reach CrashLoopBackOff with 2 restarts: $("${K[@]}" describe pod cc-crash -n "$NS")"
+  poll 150 crashloop || fail "cc-crash did not crash-loop with 2 restarts: $("${K[@]}" describe pod cc-crash -n "$NS")"
   python3 - "$WORK/crash.json" <<'PY' || fail "crash pod status: $(cat "$WORK/crash.json")"
 import json, sys
 pod = json.load(open(sys.argv[1]))
 c = pod["status"]["containerStatuses"][0]
 assert pod["status"]["phase"] == "Running", pod["status"]["phase"]
 assert c["lastState"]["terminated"]["exitCode"] == 1, c["lastState"]
-print("  phase Running, state.waiting.reason CrashLoopBackOff, restartCount %d, lastState exit code 1" % c["restartCount"])
-print("  " + c["state"]["waiting"].get("message", ""))
+state, detail = next(iter(c["state"].items()))
+print("  phase Running, state %s (%s), restartCount %d, lastState exit code 1" % (state, detail.get("reason", ""), c["restartCount"]))
+if detail.get("message"):
+    print("  " + detail["message"])
 PY
   crash_logs() {
     if "${K[@]}" logs cc-crash -n "$NS" --previous > "$WORK/previous.log" 2>&1 && grep -q crashing "$WORK/previous.log"; then return 0; fi

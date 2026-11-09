@@ -33,5 +33,6 @@
   "tests": {
     "python": "python3 -m unittest discover -s code/tests -v"
   },
-  "smoke": "bash code/smoke.sh"
+  "smoke": "bash code/smoke.sh",
+  "last_verified": "2026-11-09"
 }
