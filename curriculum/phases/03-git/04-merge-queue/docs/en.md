@@ -452,6 +452,6 @@ Replace the simulator's overlap model with real merges. Generate the simulated b
 - [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets) and the [rules REST API](https://docs.github.com/en/rest/repos/rules): every rule type and the JSON `load_policy()` reads.
 - [gitignore](https://git-scm.com/docs/gitignore) and [git merge-tree](https://git-scm.com/docs/git-merge-tree): the pattern rules, including the excluded-directory rule, and the merge that needs no working tree.
 - [GitLab merge trains](https://docs.gitlab.com/ci/pipelines/merge_trains/): how trains restart pipelines and how they relate to merged results pipelines.
-- [The Not Rocket Science Rule of Software Engineering](https://graydon2.dreamwidth.org/1597.html): the original argument for testing exactly what will land.
+- [The Not Rocket Science Rule of Software Engineering](https://web.archive.org/web/20260727233623/https://graydon2.dreamwidth.org/1597.html) (archived): the original argument for testing exactly what will land.
 - [Trunk-based development (DORA)](https://dora.dev/capabilities/trunk-based-development/): the research link between short-lived branches and delivery performance.
 - [Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html) and [Feature Toggles](https://martinfowler.com/articles/feature-toggles.html): integration frequency, release branches and how flags let unfinished work merge.
