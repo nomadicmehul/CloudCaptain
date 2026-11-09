@@ -26,7 +26,7 @@ You are going to write `mkimage`: a tool that turns directories into layers, wri
 
 Each layer has **two digests**. The `diff_id` is the SHA-256 of the uncompressed tar; it lives in the config and is what the daemon uses to identify the layer on disk. The blob digest is the SHA-256 of the compressed tar; it lives in the manifest and is what a registry stores and serves. Compress the same tar twice with different settings and the blob digest changes while the `diff_id` does not. Stacked layers are identified by **chain IDs**: the first chain ID is the first `diff_id`, and each next one is the SHA-256 of `"<previous chain id> <diff_id>"`, which is why a cache can tell "alpine plus my app" from "debian plus my app" even when the app layer is identical.
 
-The **image ID** that `docker images` shows is the SHA-256 of the config file. The config embeds the `diff_ids`, so any byte that changes in any layer changes the ID; so does any change to the entrypoint, the environment or the timestamp. The **manifest digest** is what `docker pull name@sha256:…` addresses; it covers compressed blobs and the config, so the same image ID can have several manifest digests (one per compression or per registry re-push) and a multi-platform tag points at an index of manifests rather than at a config.
+The **image ID** is the SHA-256 of the config file. The config embeds the `diff_ids`, so any byte that changes in any layer changes the ID; so does any change to the entrypoint, the environment or the timestamp. Which value `docker images` *shows* as `IMAGE ID` depends on the daemon's image store: the classic store (Docker 28 and older, and installs upgraded from them) shows this config digest, while the containerd image store, the default for new installs since Docker 29, shows the digest of the manifest (or index) the image was loaded or pulled by. `docker info -f '{{json .DriverStatus}}'` tells you which one you have: `io.containerd.snapshotter.v1` means containerd. The **manifest digest** is what `docker pull name@sha256:…` addresses; it covers compressed blobs and the config, so the same image ID can have several manifest digests (one per compression or per registry re-push) and a multi-platform tag points at an index of manifests rather than at a config.
 
 ```mermaid
 flowchart TB
@@ -132,7 +132,7 @@ python3 code/main.py verify /tmp/hand/img.tar
 docker load -i /tmp/hand/img.tar
 docker run --rm hand:1                                           # hello from a hand-built image
 docker run --rm --entrypoint sh hand:1 -c 'test ! -e /etc/motd && echo motd whited out'
-docker image inspect hand:1 --format '{{.Id}}'                   # equals "image id" printed by mkimage
+docker image inspect hand:1 --format '{{.Id}}'                   # mkimage's "image id" (classic store) or "manifest" (containerd store)
 docker image inspect hand:1 --format '{{json .RootFS.Layers}}'   # equals the diff_ids
 docker history hand:1                                            # your created_by lines
 ```
@@ -219,7 +219,7 @@ Push the OCI layout to a registry over plain HTTP from Python: `POST /v2/<name>/
 | `diff_id` | "The layer's digest." | SHA-256 of the *uncompressed* layer tar. Listed in the config's `rootfs.diff_ids`; what the daemon identifies layers by on disk. |
 | Layer digest | "The same as the diff_id." | SHA-256 of the *compressed* blob as stored by a registry. Listed in the manifest; changes if the compression changes, even when the content does not. |
 | Chain ID | "Layers are cached by diff_id alone." | Recursive hash of the stack: the first `diff_id`, then `sha256("<previous chain id> <diff_id>")`. Identifies a layer *in position*, so the same app layer on two bases has two chain IDs. |
-| Image ID | "The manifest digest." | SHA-256 of the config JSON. Since the config embeds the `diff_ids`, any change in any layer or in the runtime settings changes it. |
+| Image ID | "Always the manifest digest" or "always the config digest." | SHA-256 of the config JSON. Since the config embeds the `diff_ids`, any change in any layer or in the runtime settings changes it. Docker's classic store shows it as `IMAGE ID`; the containerd image store (default since Docker 29) shows the manifest or index digest there instead. |
 | Manifest digest | "The image ID." | SHA-256 of the manifest JSON, which lists compressed blobs. What `name@sha256:…` addresses; the same image ID can have several, and a multi-platform tag points at an index of them. |
 | Media type | "Just a MIME type." | The string in each descriptor that tells a client how to parse the blob: image manifest, image index, config, `tar+gzip` layer, `tar+zstd` layer, or a signature or attestation. |
 | Reproducible build | "Pin the base image." | Same inputs produce byte-identical outputs: sorted entries, fixed timestamps (`SOURCE_DATE_EPOCH`), fixed owners, deterministic compression, pinned base by digest. Verified by comparing digests, not by inspection. |

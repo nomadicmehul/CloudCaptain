@@ -39,8 +39,17 @@ docker run --rm --entrypoint sh cc-smoke-hand:1 -c 'test ! -e /etc/motd' || fail
 [[ "$(docker run --rm --entrypoint sh cc-smoke-hand:1 -c 'echo $GREETING')" == "hi" ]] || fail "Env from the config"
 
 echo "▸ the daemon agrees on every digest"
+# The classic store (Docker <= 28, upgraded installs) uses the config digest as the image ID;
+# the containerd image store (default for new installs since Docker 29) uses the manifest digest.
+MANIFEST_DIGEST="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["manifest_digest"])' "$WORK/build.json")"
+if docker info --format '{{json .DriverStatus}}' | grep -q 'io.containerd.snapshotter'; then
+  STORE="containerd image store"; WANT_ID="$MANIFEST_DIGEST"; WANT_WHAT="manifest digest"
+else
+  STORE="classic image store"; WANT_ID="$IMAGE_ID"; WANT_WHAT="config digest"
+fi
 GOT_ID="$(docker image inspect cc-smoke-hand:1 --format '{{.Id}}')"
-[[ "$GOT_ID" == "$IMAGE_ID" ]] || fail "image ID should be the config digest: ours $IMAGE_ID, docker $GOT_ID"
+[[ "$GOT_ID" == "$WANT_ID" ]] || fail "on the $STORE the image ID should be the $WANT_WHAT: ours $WANT_ID, docker $GOT_ID"
+echo "  $STORE: docker's image ID is our $WANT_WHAT"
 GOT_LAYERS="$(docker image inspect cc-smoke-hand:1 --format '{{json .RootFS.Layers}}')"
 [[ "$GOT_LAYERS" == "$DIFF_IDS" ]] || fail "RootFS.Layers should equal our diff_ids: ours $DIFF_IDS, docker $GOT_LAYERS"
 docker history --format '{{.CreatedBy}}' cc-smoke-hand:1 | grep -q "mkimage --layer" || fail "history should carry our created_by"
@@ -59,7 +68,6 @@ if command -v skopeo >/dev/null; then
   skopeo copy "oci:$WORK/oci:1" docker-daemon:cc-smoke-oci:1 >/dev/null
   OUT2="$(docker run --rm cc-smoke-oci:1)"
   [[ "$OUT2" == "hello from a hand-built image" ]] || fail "skopeo-copied image did not run: $OUT2"
-  MANIFEST_DIGEST="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["manifest_digest"])' "$WORK/build.json")"
   SKOPEO_DIGEST="$(skopeo manifest-digest "$WORK/oci/blobs/sha256/${MANIFEST_DIGEST#sha256:}")"
   [[ "$SKOPEO_DIGEST" == "$MANIFEST_DIGEST" ]] || fail "skopeo disagrees on the manifest digest"
 else
