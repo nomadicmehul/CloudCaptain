@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T16:28:56.237Z",
+  "updatedAt": "2026-11-09T16:47:31.537Z",
   "track": {
     "kubernetes": {
       "repo": "kubernetes/kubernetes",
@@ -100,16 +100,16 @@
       "publishedAt": "2026-10-28"
     },
     "opentofu": {
-      "version": "v1.13.2",
-      "publishedAt": "2026-10-21"
+      "version": "v1.13.9",
+      "publishedAt": "2026-11-05"
     },
     "gateway-api": {
       "version": "v1.7.0",
       "publishedAt": "2026-10-29"
     },
     "envoy-gateway": {
-      "version": "v1.9.3",
-      "publishedAt": "2026-10-26"
+      "version": "v1.10.0",
+      "publishedAt": "2026-11-06"
     },
     "kind": {
       "version": "v0.33.0",
@@ -120,24 +120,24 @@
       "publishedAt": "2026-10-12"
     },
     "ansible": {
-      "version": "v2.21.5",
-      "publishedAt": "2026-10-05"
+      "version": "v2.22.0",
+      "publishedAt": "2026-11-02"
     },
     "cilium": {
       "version": "v1.20.4",
       "publishedAt": "2026-10-23"
     },
     "argo-cd": {
-      "version": "v3.5.6",
-      "publishedAt": "2026-10-20"
+      "version": "v3.6.1",
+      "publishedAt": "2026-11-04"
     },
     "prometheus": {
-      "version": "v3.15.1",
-      "publishedAt": "2026-10-21"
+      "version": "v3.16.0",
+      "publishedAt": "2026-11-05"
     },
     "opentelemetry-collector": {
-      "version": "v0.164.0",
-      "publishedAt": "2026-10-26"
+      "version": "v0.165.0",
+      "publishedAt": "2026-11-06"
     },
     "vllm": {
       "version": "v0.33.0rc3",
@@ -148,16 +148,16 @@
       "publishedAt": "2026-09-25"
     },
     "argo-rollouts": {
-      "version": "v1.10.1",
-      "publishedAt": "2026-10-12"
+      "version": "v1.10.2",
+      "publishedAt": "2026-11-04"
     },
     "cosign": {
       "version": "v3.1.4",
       "publishedAt": "2026-10-20"
     },
     "syft": {
-      "version": "v1.55.0",
-      "publishedAt": "2026-10-19"
+      "version": "v1.57.1",
+      "publishedAt": "2026-11-09"
     },
     "coredns": {
       "version": "v1.15.0",
