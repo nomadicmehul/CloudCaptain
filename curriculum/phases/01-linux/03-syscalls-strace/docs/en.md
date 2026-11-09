@@ -226,6 +226,8 @@ python3 code/main.py /tmp/app.trace --top 20
 bash code/main.sh python3 app.py                                         # the same report with strace, grep, awk and sed
 ```
 
+Which call the verdict names depends on the program, not on `tracelens`. GNU `cat` fails at `openat()`; the Rust coreutils (uutils) that Ubuntu 26.04 ships as `cat` checks the path with `statx()` first, so there the verdict reads `statx() of /nonexistent returned ENOENT`. Same failure, different first syscall: read the verdict, not your memory of what the program usually calls.
+
 <RunTests />
 
 ## Use It

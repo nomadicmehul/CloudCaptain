@@ -44,7 +44,7 @@
     {
       "id": "check-3",
       "stage": "check",
-      "prompt": "`docker image inspect hand:1 --format '{{.Id}}'` prints a sha256. What did it hash?",
+      "prompt": "mkimage prints an `image id` before `docker load` ever runs. What did it hash?",
       "choices": [
         "The manifest",
         "The config JSON, which includes the diff_ids, the entrypoint, the environment and the timestamps",
@@ -52,7 +52,7 @@
         "The tag"
       ],
       "answer": 1,
-      "explanation": "The image ID is the digest of the config blob; mkimage prints the same value before docker load ever runs. The manifest digest is a different value that covers the compressed layers and is what name@sha256:… pulls."
+      "explanation": "The image ID is the digest of the config blob. Docker's classic store shows exactly this value as IMAGE ID; the containerd image store (default since Docker 29) shows the manifest digest there instead, which is a different value that covers the compressed layers and is what name@sha256:… pulls."
     },
     {
       "id": "post-1",

@@ -115,7 +115,8 @@ if command -v docker >/dev/null; then
   wait_http http://localhost:18081/
   curl -s localhost:18081/ | grep -q "Directory listing" || fail "docker -p 18081:80"
   PID="$(docker inspect -f '{{.State.Pid}}' cc-smoke-web)"
-  DIP="$(docker inspect -f '{{.NetworkSettings.IPAddress}}' cc-smoke-web)"
+  # Docker 29 removed the top-level .NetworkSettings.IPAddress; the per-network field works on every version
+  DIP="$(docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' cc-smoke-web)"
   GW="$(docker network inspect bridge -f '{{(index .IPAM.Config 0).Gateway}}')"
   DBR="$(docker network inspect bridge -f '{{index .Options "com.docker.network.bridge.name"}}')"
   D="$WORK/docker"

@@ -336,7 +336,7 @@ def verify_archive(path: str) -> dict:
 
 
 def render(info: dict) -> str:
-    lines = [f"image:    {info['tag']}", f"image id: {info['image_id']}  (sha256 of the config)", f"manifest: {info['manifest_digest']}  (what a registry pulls by)"]
+    lines = [f"image:    {info['tag']}", f"image id: {info['image_id']}  (sha256 of the config; docker's image ID on the classic store)", f"manifest: {info['manifest_digest']}  (what a registry pulls by; docker's image ID on the containerd store)"]
     for index, layer in enumerate(info["layers"]):
         source = layer.get("source", "")
         lines.append(f"layer {index}: {layer['size']:>9} B gzip  {layer['uncompressed']:>10} B tar  diff_id {layer['diff_id'][:19]}…  digest {layer['digest'][:19]}…  {source}")

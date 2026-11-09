@@ -33,7 +33,7 @@ set +e
 strace -f -tt -T -y -s 200 -e trace=%file,%network,%process,write -o "$WORK/cat.txt" cat /nonexistent >/dev/null 2>&1
 set -e
 python3 code/main.py "$WORK/cat.txt" | tee "$WORK/cat.report"
-grep -qE "verdict: cat /nonexistent \(pid [0-9]+\) exited with code 1 because openat\(\) of /nonexistent returned ENOENT" "$WORK/cat.report" || fail "verdict should name /nonexistent, ENOENT and exit 1"
+grep -qE "verdict: cat /nonexistent \(pid [0-9]+\) exited with code 1 because [a-z0-9_]+\(\) of /nonexistent returned ENOENT" "$WORK/cat.report" || fail "verdict should name /nonexistent, ENOENT and exit 1"
 
 echo "▸ a Python program tries three config locations: --run traces it and finds the search path"
 cat > "$WORK/app.py" <<'PY'
