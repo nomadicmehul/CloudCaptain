@@ -9,6 +9,8 @@ Git stops being mysterious the moment you see what is on disk: a content-address
 | Lesson | Type | What you build | What you then use |
 |---|---|---|---|
 | [Objects](01-object-store/docs/en.md) | Build | `minigit`: blobs, trees, commits and tags with zlib and SHA-1, refs, a reflog, `log`, `checkout` and `fsck` | Git's plumbing: `hash-object`, `cat-file`, `write-tree`, `commit-tree`, `update-ref` |
+| [Merging](02-merge-algorithms/docs/en.md) | Build | `minimerge`: Myers and histogram diff, merge-base in a graph, three-way merge with diff3 conflicts, rename detection | `git diff --diff-algorithm`, `merge-base --all`, `merge-file`, `rerere` |
+| [Packfiles](03-packfiles-transport/docs/en.md) | Build | `minipack`: packfiles with deltas, the `.idx` index and a smart-HTTP protocol v2 client with shallow and partial clones | `GIT_TRACE_PACKET`, `--depth`, `--filter=blob:none`, `verify-pack` |
 | [Merge queues](04-merge-queue/docs/en.md) | Build | `mergequeue`: branch protection as data, CODEOWNERS matching, a speculative merge queue and a branch-lifetime simulator | rulesets, the merge queue, stacked PRs, merge trains |
 
 More lessons for this phase are being written; the plan is in [ROADMAP.md](https://github.com/nomadicmehul/CloudCaptain/blob/main/ROADMAP.md).

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/log-pipeline",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`logrotate` renames `app.log` to `app.log.1` and the application reopens a new `app.log`. A shipper tails `app.log*` and stores its read position per path. What happens?",
+      "choices": [
+        "Nothing changes, because the shipper follows the file descriptor it already has open",
+        "The shipper sees `app.log.1` as a new path and reads it from the start, so every line of the old file is shipped twice",
+        "The shipper loses the lines in `app.log.1`, because the glob only matches the newest file",
+        "The application crashes, because its open file was renamed"
+      ],
+      "answer": 1,
+      "explanation": "A rename keeps the inode. A shipper that keys positions by path meets a path it has never seen and starts at offset 0, re-reading the whole file. Keying positions by device and inode lets it recognise the renamed file and continue where it was."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "With `copytruncate`, the shipper had read 9.1 MB of a 9.3 MB `payments.log` when it was copied to `payments.log.1` and truncated. How does `minilog` avoid losing the last 0.2 MB?",
+      "choices": [
+        "It keeps reading the truncated file through its open descriptor",
+        "It reads `payments.log.1` from the start and relies on the store to drop everything it has already seen",
+        "It notices the file shrank, fingerprints new files by their first kilobyte, and continues in the copy whose prefix matches at the old offset of 9.1 MB",
+        "It cannot: copytruncate always loses the unread part"
+      ],
+      "answer": 2,
+      "explanation": "Truncation keeps the inode but moves the content, so only the content identifies the copy. Matching the first bytes hands the old offset over to the copy, so the unread 0.2 MB is read from there and nothing is repeated. The glob must include the rotated name for this to work."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A team adds `user_id` as a Loki label to make searches for one user faster. After a month, queries for `{app=\"checkout\"}` are slow and the ingesters use far more memory. What should they do instead?",
+      "choices": [
+        "Keep `user_id` in the line or send it as structured metadata, and filter with `|= \"u1234\"` or `| user_id=\"u1234\"`",
+        "Add more labels so that each stream gets smaller",
+        "Increase the chunk size so more users fit in one chunk",
+        "Use a regex matcher `{user_id=~\".+\"}` so the index is not used"
+      ],
+      "answer": 0,
+      "explanation": "Every label value creates a stream with its own chunks and index entries, so an identifier label turns one stream into millions of tiny ones. Structured metadata is stored per entry without creating streams, and a selector on `app` plus a filter finds the user's lines."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The shipper is restarted while a batch is still being retried, so it re-reads and re-sends 500 lines that the store had in fact already accepted. Why do the stores in this lesson end up with no duplicates?",
+      "choices": [
+        "The positions file was already updated before the push",
+        "The shipper remembers a hash of every line it has ever sent",
+        "Loki deduplicates lines that are identical within the same minute",
+        "The timestamp stage gives each re-read entry the same timestamp as before, and the store drops an entry whose timestamp and line equal one already in its stream"
+      ],
+      "answer": 3,
+      "explanation": "Offsets are committed only after delivery, so delivery is at-least-once. Exact duplicates (same stream, same timestamp, same line) are dropped by the store. If the shipper stamped entries with the time it read them, the re-sent copies would have new timestamps and would be stored twice."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "`sum(count_over_time({app=\"payments\"} | json [5m]))` fails with `pipeline error: 'JSONParserErr'`. What is going on, and what is the fix?",
+      "choices": [
+        "Some payments lines are not JSON (logfmt or traceback lines), the parser marks them with `__error__`, and metric queries refuse to aggregate errored entries; use the right parser or add `| __error__=\"\"`",
+        "The range `[5m]` is too short for `count_over_time`",
+        "`sum` cannot aggregate log queries; use `count` instead",
+        "Loki needs the `json` parser to be enabled in its configuration"
+      ],
+      "answer": 0,
+      "explanation": "A parser failure does not drop the line; it adds `__error__`. Log queries still show such lines, but a metric query over them stops with this error so that a broken parser does not silently skew the numbers. Filtering `| __error__=\"\"` or choosing `| logfmt` resolves it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Which query does the least work in a Loki-style store for \"POST requests in the last 15 minutes that returned 5xx\"?",
+      "choices": [
+        "`{job=~\".+\"} | json | method=\"POST\" | status >= 500` over 24 hours, then look at the last 15 minutes",
+        "`{app=\"checkout\"} | json | method=\"POST\" | status >= 500` over 15 minutes, without a line filter",
+        "`{app=\"checkout\"} |= \"POST\" | json | method=\"POST\" | status >= 500` over 15 minutes",
+        "`{app=\"checkout\", status=~\"5..\"}` after adding `status` as a label"
+      ],
+      "answer": 2,
+      "explanation": "The selector picks few streams through the index, the time range prunes chunks, and a cheap substring filter discards most lines before the JSON parser runs. A broad selector or a long range multiplies the chunks to decompress, and making `status` a label trades query cost for more streams."
+    }
+  ]
+}

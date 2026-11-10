@@ -1,0 +1,293 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.76.1"
+  },
+  "CreatedAt": "2026-10-01T08:12:40.418Z",
+  "ArtifactName": "registry.example.com/shop/api:1.4.0",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": {
+      "Family": "debian",
+      "Name": "12.1"
+    },
+    "RepoTags": [
+      "registry.example.com/shop/api:1.4.0"
+    ],
+    "RepoDigests": [
+      "registry.example.com/shop/api@sha256:c2ca5cb8b2fdd4b89680229b222e06de684bcedbecb33f212fe42a954a6ba6eb"
+    ]
+  },
+  "Results": [
+    {
+      "Target": "registry.example.com/shop/api:1.4.0 (debian 12.1)",
+      "Class": "os-pkgs",
+      "Type": "debian",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2023-4911",
+          "VendorIDs": [
+            "DSA-5514-1"
+          ],
+          "PkgID": "libc-bin@2.36-9+deb12u1",
+          "PkgName": "libc-bin",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc-bin@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12.1",
+            "UID": "483f2c4d104d5f6f"
+          },
+          "InstalledVersion": "2.36-9+deb12u1",
+          "FixedVersion": "2.36-9+deb12u3",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-4911",
+          "Severity": "HIGH",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2023-4911",
+          "VendorIDs": [
+            "DSA-5514-1"
+          ],
+          "PkgID": "libc6@2.36-9+deb12u1",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12.1",
+            "UID": "6cf741bbe10c8395"
+          },
+          "InstalledVersion": "2.36-9+deb12u1",
+          "FixedVersion": "2.36-9+deb12u3",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-4911",
+          "Severity": "HIGH",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2024-2961",
+          "VendorIDs": [
+            "DSA-5673-1"
+          ],
+          "PkgID": "libc-bin@2.36-9+deb12u1",
+          "PkgName": "libc-bin",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc-bin@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12.1",
+            "UID": "483f2c4d104d5f6f"
+          },
+          "InstalledVersion": "2.36-9+deb12u1",
+          "FixedVersion": "2.36-9+deb12u6",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-2961",
+          "Severity": "UNKNOWN",
+          "CVSS": {}
+        },
+        {
+          "VulnerabilityID": "CVE-2024-2961",
+          "VendorIDs": [
+            "DSA-5673-1"
+          ],
+          "PkgID": "libc6@2.36-9+deb12u1",
+          "PkgName": "libc6",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libc6@2.36-9%2Bdeb12u1?arch=amd64&distro=debian-12.1",
+            "UID": "6cf741bbe10c8395"
+          },
+          "InstalledVersion": "2.36-9+deb12u1",
+          "FixedVersion": "2.36-9+deb12u6",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-2961",
+          "Severity": "UNKNOWN",
+          "CVSS": {}
+        },
+        {
+          "VulnerabilityID": "CVE-2023-45853",
+          "PkgID": "zlib1g@1:1.2.13.dfsg-1",
+          "PkgName": "zlib1g",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/zlib1g@1:1.2.13.dfsg-1?arch=amd64&distro=debian-12.1",
+            "UID": "463b1c74f7125188"
+          },
+          "InstalledVersion": "1:1.2.13.dfsg-1",
+          "Status": "will_not_fix",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-45853",
+          "Severity": "CRITICAL",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 9.8
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2024-0553",
+          "VendorIDs": [
+            "DSA-5604-1"
+          ],
+          "PkgID": "libgnutls30@3.7.9-2",
+          "PkgName": "libgnutls30",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/libgnutls30@3.7.9-2?arch=amd64&distro=debian-12.1",
+            "UID": "a3f748308539943d"
+          },
+          "InstalledVersion": "3.7.9-2",
+          "FixedVersion": "3.7.9-2+deb12u2",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-0553",
+          "Severity": "HIGH",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2023-29383",
+          "PkgID": "login@1:4.13+dfsg1-1+b1",
+          "PkgName": "login",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/login@1:4.13%2Bdfsg1-1%2Bb1?arch=amd64&distro=debian-12.1",
+            "UID": "3ab2c0af8f1e9002"
+          },
+          "InstalledVersion": "1:4.13+dfsg1-1+b1",
+          "FixedVersion": "1:4.13+dfsg1-1+deb12u1",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-29383",
+          "Severity": "LOW",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.3
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2023-29383",
+          "PkgID": "passwd@1:4.13+dfsg1-1+b1",
+          "PkgName": "passwd",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/passwd@1:4.13%2Bdfsg1-1%2Bb1?arch=amd64&distro=debian-12.1",
+            "UID": "9877dcac27e0c6b9"
+          },
+          "InstalledVersion": "1:4.13+dfsg1-1+b1",
+          "FixedVersion": "1:4.13+dfsg1-1+deb12u1",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-29383",
+          "Severity": "LOW",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.3
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2024-28085",
+          "PkgID": "util-linux@2.38.1-5+b1",
+          "PkgName": "util-linux",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/util-linux@2.38.1-5%2Bb1?arch=amd64&distro=debian-12.1",
+            "UID": "09574633dd37d9db"
+          },
+          "InstalledVersion": "2.38.1-5+b1",
+          "FixedVersion": "2.38.1-5+deb12u1",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-28085",
+          "Severity": "UNKNOWN",
+          "CVSS": {}
+        },
+        {
+          "VulnerabilityID": "CVE-2016-2781",
+          "PkgID": "coreutils@9.1-1",
+          "PkgName": "coreutils",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/coreutils@9.1-1?arch=amd64&distro=debian-12.1",
+            "UID": "c402058fa8b8c7bd"
+          },
+          "InstalledVersion": "9.1-1",
+          "Status": "will_not_fix",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2016-2781",
+          "Severity": "MEDIUM",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:N",
+              "V3Score": 6.5
+            }
+          }
+        },
+        {
+          "VulnerabilityID": "CVE-2011-3374",
+          "PkgID": "apt@2.6.1",
+          "PkgName": "apt",
+          "PkgIdentifier": {
+            "PURL": "pkg:deb/debian/apt@2.6.1?arch=amd64&distro=debian-12.1",
+            "UID": "e840fa19f4296df1"
+          },
+          "InstalledVersion": "2.6.1",
+          "Status": "affected",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2011-3374",
+          "Severity": "LOW",
+          "CVSS": {
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 3.7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Target": "Python",
+      "Class": "lang-pkgs",
+      "Type": "python-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-3651",
+          "PkgID": "idna@3.6",
+          "PkgName": "idna",
+          "PkgPath": "app/venv/lib/python3.11/site-packages/idna-3.6.dist-info/METADATA",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/idna@3.6",
+            "UID": "55661ee46c239d20"
+          },
+          "InstalledVersion": "3.6",
+          "FixedVersion": "3.7",
+          "Status": "fixed",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-3651",
+          "Severity": "HIGH",
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V40Vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+              "V3Score": 6.2,
+              "V40Score": 6.9
+            },
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

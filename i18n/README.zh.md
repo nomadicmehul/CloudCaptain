@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>从零开始掌握 Cloud、DevOps 与 AIOps。<br/>亲手构建工具，上手使用工具，交付一件产物。</h3>
   <p>
-    <strong>85 节课</strong> · <strong>13 个阶段已上线</strong> · <strong>124 小时</strong> · <strong>2,464 个测试</strong> · <strong>167 个技能、提示词与 MCP 服务器</strong>
+    <strong>91 节课</strong> · <strong>13 个阶段已上线</strong> · <strong>134 小时</strong> · <strong>2,706 个测试</strong> · <strong>179 个技能、提示词与 MCP 服务器</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="开始学习课程" /></a>
@@ -49,14 +49,14 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **00 · 环境准备与实验环境** | 一个实验环境诊断工具（lab doctor），探测你的机器并输出安装计划 | kind、Docker、你的编程智能体 |
 | **01 · Linux 与系统** | PID 1 进程管理器、fd 泄漏检测器、strace 分析器、capability 解码器、systemd 单元、手动操作 cgroups、挂载表读取器、USE 方法仪表盘 | `strace`、`capsh`、`systemctl`、`findmnt`、PSI |
 | **02 · 网络** | 类似 `ip route get` 的路由查找、迭代式 DNS 解析器、TCP 套接字状态分析器、支持 tcpdump 过滤语法的 pcap 读取器、TLS ClientHello 解析器与证书链验证器、HTTP/1.1 服务器与反向代理、带健康检查的负载均衡器、遵循 RFC 9111 的缓存代理 | `ip`、`dig`、`ss`、tcpdump、`openssl`、curl、nginx、HAProxy、CoreDNS |
-| **03 · Git 与协作** | `git fsck` 认可的内容寻址对象存储、带 CODEOWNERS 与规则集的合并队列 | `git` 底层命令、规则集、合并队列 |
+| **03 · Git 与协作** | `git fsck` 认可的内容寻址对象存储、diff 与三方合并引擎、基于 packfile 和 smart HTTP 的克隆客户端、带 CODEOWNERS 与规则集的合并队列 | `git` 底层命令、`git merge-file`、`GIT_TRACE_PACKET`、规则集、合并队列 |
 | **05 · 容器** | 容器运行时、镜像审计器、镜像仓库客户端、不用 Dockerfile 的镜像构建器、veth/网桥网络、Compose、rootless 用户命名空间、seccomp 配置生成器 | Docker、Podman、OCI 镜像仓库 |
 | **06 · 编排** | 调谐器（reconciler）、调度器、kubelet、kube-proxy 规则与集群 DNS、RBAC 鉴权器、Helm、Operator、Gateway API 路由器 | 运行在 kind 上的 Kubernetes、Helm、Envoy Gateway |
 | **07 · 基础设施即代码** | plan/apply 引擎、依赖图、模块、带锁的状态服务器、漂移检测、策略引擎、Pulumi 与 Crossplane 前端、幂等的配置管理器 | OpenTofu、conftest/OPA、Pulumi、Ansible |
 | **08 · CI/CD 与 GitOps** | 工作流运行器、工作流安全审计器、OIDC 签发器与验证器、SBOM 生成器、带透明日志的签名器、GitOps 调谐器、金丝雀发布控制器、发布工具 | GitHub Actions 与 act、zizmor、cosign、syft、Argo CD、Argo Rollouts、git-cliff |
 | **09 · 云（AWS 优先）** | IAM 策略评估器、VPC 可达性分析器、SigV4 签名与 S3 服务器、Lambda 运行时 API、Auto Scaling 组、FOCUS 成本分摊器、安全态势扫描器 | 对接 moto 的 AWS CLI、Lambda 模拟器、Checkov |
-| **10 · 可观测性与 SRE** | 采用 Gorilla 压缩块的时序数据库、PromQL 引擎、支持尾部采样的追踪器、SLO 燃烧率规则、事件管理服务、混沌实验 | Prometheus、promtool、OpenTelemetry Collector、Jaeger、Sloth、Alertmanager、Chaos Mesh |
-| **11 · 安全与 DevSecOps** | 支持 CEL 子集的准入 Webhook、Falco 风格的规则引擎、NetworkPolicy 评估器、密钥扫描器、基于 mTLS 的 SPIFFE 身份、CIS 基准检查器 | ValidatingAdmissionPolicy、Kyverno、Falco、gitleaks、SPIRE、kube-bench |
+| **10 · 可观测性与 SRE** | 采用 Gorilla 压缩块的时序数据库、PromQL 引擎、告警路由器、支持 LogQL 子集的日志管道、支持尾部采样的追踪器、SLO 燃烧率规则、事件管理服务、混沌实验 | Prometheus、promtool、OpenTelemetry Collector、Jaeger、Sloth、Alertmanager、Loki、Grafana Alloy、Chaos Mesh |
+| **11 · 安全与 DevSecOps** | 带租约和 Shamir 解封的密钥服务、支持 CEL 子集的准入 Webhook、Falco 风格的规则引擎、NetworkPolicy 评估器、密钥扫描器、基于 mTLS 的 SPIFFE 身份、基于 CVSS、EPSS 与 VEX 的 CVE 优先级排序器、CIS 基准检查器 | OpenBao、ValidatingAdmissionPolicy、Kyverno、Falco、gitleaks、SPIRE、Trivy、Grype、kube-bench |
 | **13 · AI 基础设施** | 支持 DRA 的 GPU 调度器、LLM 推理服务模拟器、按 token 计量的网关、基于队列的自动扩缩器、前缀缓存路由器、HNSW 与 IVF 索引、模型制品检查器、token 成本模型 | 在 CPU 上运行的 llama.cpp、LiteLLM、pgvector、llm-d、ORAS |
 | **14 · AIOps 与智能体运维** | 面向 kubectl 的 MCP 服务器、故障分诊智能体、AI 日志分析、面向 LLM 调用的 OpenTelemetry、智能体沙箱、安全的写操作工具、智能体评测 | Claude Code、Claude API、OpenTelemetry、promptfoo |
 
@@ -79,7 +79,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | 路径 | 适合人群 | 课程数 |
 |:--|:--|:--|
-| [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 77 |
+| [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 83 |
 | [AI 平台工程师](https://cloudcaptain.io/learn/paths/ai-platform) | 需要负责运行模型的工程师：GPU、推理服务、网关、路由、成本 | 23 |
 | [AIOps 工程师](https://cloudcaptain.io/learn/paths/aiops) | 让智能体安全地在基础设施上干活 | 9 |
 
@@ -101,7 +101,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* 清单 |
 |:--|:--|:--|:--|:--|
-| 从零构建每个工具，并配有测试 | ✅ 85 节课 | ❌ | ❌ | ❌ |
+| 从零构建每个工具，并配有测试 | ✅ 91 节课 | ❌ | ❌ | ❌ |
 | 在 CI 中用真实工具验证 | ✅ 每节课 | ❌ | ❌ | ❌ |
 | AI 基础设施与 AIOps | ✅ 15 节课 | 部分 | ❌ | 链接 |
 | 可安装的智能体导师 | ✅ `npx skills add` | ❌ | ❌ | ❌ |

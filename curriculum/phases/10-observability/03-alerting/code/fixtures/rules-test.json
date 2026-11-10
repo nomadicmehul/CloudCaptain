@@ -1,0 +1,270 @@
+{
+  "rule_files": [
+    "rules.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "name": "for, a one-sample gap and keep_firing_for",
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "job:request_errors:ratio_rate5m{job=\"checkout\"}",
+          "values": "0.01x2 0.08x7 0.01 0.09x2 0.01x14"
+        },
+        {
+          "series": "up{job=\"checkout\", instance=\"checkout-0\"}",
+          "values": "1x3 0x5 1x20"
+        },
+        {
+          "series": "up{job=\"checkout\", instance=\"checkout-1\"}",
+          "values": "1x28"
+        },
+        {
+          "series": "queue_depth{job=\"worker\", queue=\"emails\", instance=\"w0\"}",
+          "values": "10 50 150x4 90 160 20x10"
+        },
+        {
+          "series": "queue_depth{job=\"worker\", queue=\"emails\", instance=\"w1\"}",
+          "values": "5x20"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "7m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "8m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page",
+                "team": "payments"
+              },
+              "exp_annotations": {
+                "summary": "checkout is failing 8% of requests",
+                "runbook_url": "https://runbooks.example.com/checkout/high-error-rate"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "11m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page",
+                "team": "payments"
+              },
+              "exp_annotations": {
+                "summary": "checkout is failing 8% of requests",
+                "runbook_url": "https://runbooks.example.com/checkout/high-error-rate"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "14m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page",
+                "team": "payments"
+              },
+              "exp_annotations": {
+                "summary": "checkout is failing 9% of requests",
+                "runbook_url": "https://runbooks.example.com/checkout/high-error-rate"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "24m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page",
+                "team": "payments"
+              },
+              "exp_annotations": {
+                "summary": "checkout is failing 9% of requests",
+                "runbook_url": "https://runbooks.example.com/checkout/high-error-rate"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "25m",
+          "alertname": "HighErrorRate",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "6m",
+          "alertname": "InstanceDown",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "7m",
+          "alertname": "InstanceDown",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "instance": "checkout-0",
+                "job": "checkout",
+                "severity": "ticket"
+              },
+              "exp_annotations": {
+                "summary": "checkout-0 of checkout has been down for 3 minutes"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "10m",
+          "alertname": "InstanceDown",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "3m",
+          "alertname": "QueueBacklog",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "4m",
+          "alertname": "QueueBacklog",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "queue": "emails",
+                "severity": "ticket",
+                "team": "emails-owners"
+              },
+              "exp_annotations": {
+                "summary": "queue emails has 150 messages waiting",
+                "value": "150.0"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "7m",
+          "alertname": "QueueBacklog",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "queue": "emails",
+                "severity": "ticket",
+                "team": "emails-owners"
+              },
+              "exp_annotations": {
+                "summary": "queue emails has 150 messages waiting",
+                "value": "150.0"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "13m",
+          "alertname": "QueueBacklog",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "queue": "emails",
+                "severity": "ticket",
+                "team": "emails-owners"
+              },
+              "exp_annotations": {
+                "summary": "queue emails has 160 messages waiting",
+                "value": "160.0"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "14m",
+          "alertname": "QueueBacklog",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "20m",
+          "alertname": "TargetMissing",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "name": "a stale marker makes absent() true at once",
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "up{job=\"checkout\", instance=\"checkout-0\"}",
+          "values": "1x3 stale"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "5m",
+          "alertname": "TargetMissing",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "6m",
+          "alertname": "TargetMissing",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page"
+              },
+              "exp_annotations": {
+                "summary": "no checkout target is being scraped"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "without a stale marker the last sample counts for the 5m lookback",
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "up{job=\"checkout\", instance=\"checkout-0\"}",
+          "values": "1x3"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "9m",
+          "alertname": "TargetMissing",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "10m",
+          "alertname": "TargetMissing",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "job": "checkout",
+                "severity": "page"
+              },
+              "exp_annotations": {
+                "summary": "no checkout target is being scraped"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

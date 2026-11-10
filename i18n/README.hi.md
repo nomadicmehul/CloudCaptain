@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps, बिल्कुल शुरुआत से।<br/>Tool बनाएँ। Tool इस्तेमाल करें। Artifact ship करें।</h3>
   <p>
-    <strong>85 lessons</strong> · <strong>13 phases लाइव</strong> · <strong>124 घंटे</strong> · <strong>2,464 tests</strong> · <strong>167 skills, prompts और MCP servers</strong>
+    <strong>91 lessons</strong> · <strong>13 phases लाइव</strong> · <strong>134 घंटे</strong> · <strong>2,706 tests</strong> · <strong>179 skills, prompts और MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="कोर्स शुरू करें" /></a>
@@ -49,14 +49,14 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **00 · Setup & Lab** | एक lab doctor जो आपकी machine की जाँच करके install plan print करता है | kind, Docker, आपका coding agent |
 | **01 · Linux & Systems** | एक PID 1 supervisor, एक fd leak detector, एक strace analyser, एक capability decoder, systemd units, हाथ से cgroups, एक mount table reader, एक USE-method dashboard | `strace`, `capsh`, `systemctl`, `findmnt`, PSI |
 | **02 · Networking** | `ip route get` जैसा एक route lookup, एक iterative DNS resolver, एक TCP socket-state analyser, tcpdump filters वाला एक pcap reader, एक TLS ClientHello parser और certificate-chain verifier, एक HTTP/1.1 server और reverse proxy, health checks वाला एक load balancer, एक RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |
-| **03 · Git & Collaboration** | एक content-addressed object store जिसे `git fsck` स्वीकार करता है, CODEOWNERS और rulesets वाली एक merge queue | `git` plumbing, rulesets, merge queue |
+| **03 · Git & Collaboration** | एक content-addressed object store जिसे `git fsck` स्वीकार करता है, एक diff और three-way merge engine, packfile और smart-HTTP वाला एक clone client, CODEOWNERS और rulesets वाली एक merge queue | `git` plumbing, `git merge-file`, `GIT_TRACE_PACKET`, rulesets, merge queue |
 | **05 · Containers** | एक container runtime, एक image auditor, एक registry client, बिना Dockerfile का image builder, एक veth/bridge network, Compose, rootless user namespaces, एक seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | एक reconciler, एक scheduler, एक kubelet, kube-proxy rules और cluster DNS, एक RBAC authorizer, Helm, एक operator, एक Gateway API router | kind पर Kubernetes, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | एक plan/apply engine, एक dependency graph, modules, एक locking state server, drift detection, एक policy engine, Pulumi और Crossplane front ends, एक idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
 | **08 · CI/CD & GitOps** | एक workflow runner, एक workflow security auditor, एक OIDC issuer और verifier, एक SBOM generator, transparency log वाला एक signer, एक GitOps reconciler, एक canary controller, एक release tool | GitHub Actions और act, zizmor, cosign, syft, Argo CD, Argo Rollouts, git-cliff |
 | **09 · Cloud (AWS first)** | एक IAM policy evaluator, एक VPC reachability analyser, SigV4 signing और एक S3 server, Lambda runtime API, एक Auto Scaling group, एक FOCUS cost allocator, एक security posture scanner | moto पर AWS CLI, Lambda emulator, Checkov |
-| **10 · Observability & SRE** | Gorilla chunks वाला एक TSDB, एक PromQL engine, tail sampling वाला एक tracer, SLO burn-rate rules, एक incident service, chaos experiments | Prometheus, promtool, OpenTelemetry Collector, Jaeger, Sloth, Alertmanager, Chaos Mesh |
-| **11 · Security & DevSecOps** | CEL subset वाला एक admission webhook, Falco जैसा एक rule engine, एक NetworkPolicy evaluator, एक secret scanner, mTLS के साथ SPIFFE identities, एक CIS benchmark runner | ValidatingAdmissionPolicy, Kyverno, Falco, gitleaks, SPIRE, kube-bench |
+| **10 · Observability & SRE** | Gorilla chunks वाला एक TSDB, एक PromQL engine, एक alert router, LogQL subset वाली एक log pipeline, tail sampling वाला एक tracer, SLO burn-rate rules, एक incident service, chaos experiments | Prometheus, promtool, OpenTelemetry Collector, Jaeger, Sloth, Alertmanager, Loki, Grafana Alloy, Chaos Mesh |
+| **11 · Security & DevSecOps** | leases और Shamir unsealing वाली एक secrets service, CEL subset वाला एक admission webhook, Falco जैसा एक rule engine, एक NetworkPolicy evaluator, एक secret scanner, mTLS के साथ SPIFFE identities, CVSS, EPSS और VEX वाला एक CVE prioritiser, एक CIS benchmark runner | OpenBao, ValidatingAdmissionPolicy, Kyverno, Falco, gitleaks, SPIRE, Trivy, Grype, kube-bench |
 | **13 · AI Infrastructure** | DRA के साथ एक GPU scheduler, एक LLM serving simulator, एक token-counting gateway, एक queue-based autoscaler, एक prefix-cache router, HNSW और IVF indexes, एक model artifact inspector, एक token cost model | CPU पर llama.cpp, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | kubectl के लिए एक MCP server, एक incident-triage agent, AI से log analysis, LLM calls के लिए OpenTelemetry, agent sandboxes, सुरक्षित write tools, agent evals | Claude Code, Claude API, OpenTelemetry, promptfoo |
 
@@ -79,7 +79,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | किसके लिए | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एक अकेले Linux process से लेकर Kubernetes, IaC, cloud और AIOps तक | 77 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एक अकेले Linux process से लेकर Kubernetes, IaC, cloud और AIOps तक | 83 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | वे engineers जिन्हें models चलाने का काम मिला है: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | infrastructure पर agents से सुरक्षित तरीके से काम करवाना | 9 |
 
@@ -101,7 +101,7 @@ Site का **Captain's Bridge** reading mode हर section की progress tra
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| हर tool शुरुआत से, tests के साथ बनाना | ✅ 85 lessons | ❌ | ❌ | ❌ |
+| हर tool शुरुआत से, tests के साथ बनाना | ✅ 91 lessons | ❌ | ❌ | ❌ |
 | CI में असली tools के सामने verified | ✅ हर lesson | ❌ | ❌ | ❌ |
 | AI infrastructure और AIOps | ✅ 15 lessons | आंशिक | ❌ | links |
 | Install करने लायक agent tutor | ✅ `npx skills add` | ❌ | ❌ | ❌ |

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "observability/alerting",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "An alerting rule has `for: 5m` and is evaluated every minute. Its expression is true at minutes 3, 4, 5 and 6, false at 7, and true again from minute 8 on. When does the alert first fire?",
+      "choices": [
+        "At minute 8, because the expression has been true for five minutes in total by then",
+        "At minute 3, because `for` only delays the notification, not the alert",
+        "At minute 13: the miss at minute 7 deletes the pending alert, so the five minutes start again at minute 8",
+        "Never, because an alert that was interrupted stays inactive until Prometheus restarts"
+      ],
+      "answer": 2,
+      "explanation": "A pending alert that is not returned by one evaluation is dropped, and the next time the expression returns it, it starts pending again with a new active time. `for` is uninterrupted time, not accumulated time."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A firing rule has `keep_firing_for: 10m`. Its expression returns nothing at one evaluation and is true again a minute later. What does Alertmanager receive?",
+      "choices": [
+        "Nothing new: the alert stays firing through the gap, so there is no resolved notification and no second page",
+        "A resolved notification for the gap, then a new firing notification",
+        "Only a resolved notification, because `keep_firing_for` delays the firing state and not the resolution",
+        "A notification with status `pending`"
+      ],
+      "answer": 0,
+      "explanation": "`keep_firing_for` keeps a firing alert firing while its condition has been false for less than the duration. Prometheus keeps resending it as firing with the same startsAt, so Alertmanager sees one continuous alert. Alertmanager has no pending state; pending alerts are never sent."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The root route has two children. The first matches `severity=\"page\"` and has `continue: true`; the second matches `team=~\"db|storage\"`. Which receivers get an alert with `severity=\"page\", team=\"storage\"`, and why?",
+      "choices": [
+        "Only the first child's receiver, because the first match always wins",
+        "Only the root's receiver, because two matching children cancel out",
+        "Only the second child's receiver, because the more specific match wins",
+        "Both children's receivers: `continue: true` on the first match lets Alertmanager try the later siblings too"
+      ],
+      "answer": 3,
+      "explanation": "The walk is depth first and stops at the first matching child unless that child has `continue: true`. Here it does, so the second child is tried and matches as well. The root itself receives the alert only when no child matches. `amtool config routes test` and `minialert routes test` both print `pager,db-chat` for this case in the fixture."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "While `ClusterDown{cluster=\"eu1\"}` fires, an inhibition rule mutes `DiskFull{cluster=\"eu1\"}`, which the db-chat receiver was already told about. ClusterDown resolves; db-chat has `repeat_interval: 1h`. When does db-chat hear about DiskFull again?",
+      "choices": [
+        "At the next flush, because the end of an inhibition is a change in the group",
+        "Not until the repeat interval since its last notification has passed: the notification log still holds DiskFull as already sent, so nothing is new",
+        "Immediately when ClusterDown resolves, because inhibition ends with a resolved notification for the target",
+        "Never, because inhibited alerts are deleted from the group"
+      ],
+      "answer": 1,
+      "explanation": "Muting removes the alert from what a flush considers, but does not touch the notification log. When muting ends, the alert is compared with the log entry from before, finds nothing new, and waits for repeat_interval. In the lesson's scenario db-pager (9s repeat) is notified at 24s and db-chat (1h repeat) stays quiet, on Alertmanager and on minialert."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Planned maintenance on the search service starts. Someone adds a silence `team=\"search\"` for two hours, but new `CertExpiring` alerts from the search service still page. What is the most likely cause, and how do you check it?",
+      "choices": [
+        "Silences only apply to alerts that existed when the silence was created; recreate the silence",
+        "Silences need `continue: true` on the route to take effect",
+        "The alerts do not carry `team=\"search\"`; a silence mutes what matches its matchers, so compare the alert's labels with `GET /api/v2/alerts` (empty `silencedBy`) and match on a label it has, such as `service=\"search\"`",
+        "Silences are only checked at `repeat_interval`, so the first pages always go out"
+      ],
+      "answer": 2,
+      "explanation": "A silence is a set of matchers checked against every alert at every flush, including alerts created after the silence. If an alert lacks the label, it is not silenced. The API shows `status.state` and `silencedBy` for each alert, and `amtool silence query` lists what each silence matches."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A team wants a page when any pod uses more than 90% CPU for one minute, routed to a shared channel, grouped by `instance`. Which change best reduces alert fatigue without losing real incidents?",
+      "choices": [
+        "Page on a user-facing symptom (error ratio or latency against the SLO) with a `for` and a runbook, route it by an owning `team` label, group by `alertname` and `service`, and send the CPU condition to a dashboard or a ticket",
+        "Keep the CPU alert and raise `repeat_interval` to 24h so it pages less often",
+        "Keep the CPU alert and add a silence for the whole night",
+        "Lower the threshold to 80% so problems are caught earlier"
+      ],
+      "answer": 0,
+      "explanation": "High CPU is a cause that often hurts no one; a page should mean users are affected and someone must act now. Symptom-based, actionable and owned alerts, grouped by the labels a responder works on, page less and miss less. A longer repeat interval or a blanket silence hides real incidents too."
+    }
+  ]
+}

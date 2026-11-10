@@ -1,0 +1,28 @@
+{
+  "labels": {"job": "minilog"},
+  "max_label_values": 25,
+  "batch_wait": 1.0,
+  "sources": [
+    {
+      "path": "logs/checkout.log*",
+      "labels": {"app": "checkout"},
+      "stages": [
+        {"type": "json"},
+        {"type": "drop", "source": "level", "value": "debug"},
+        {"type": "timestamp", "source": "ts", "format": "RFC3339"},
+        {"type": "labels", "names": ["level"]},
+        {"type": "structured_metadata", "names": ["trace_id"]}
+      ]
+    },
+    {
+      "path": "logs/payments.log*",
+      "labels": {"app": "payments"},
+      "multiline": {"firstline": "^ts=", "max_lines": 128, "max_wait": 1.0},
+      "stages": [
+        {"type": "regex", "expression": "^ts=(?P<ts>\\S+) level=(?P<level>\\w+)"},
+        {"type": "timestamp", "source": "ts", "format": "RFC3339"},
+        {"type": "labels", "names": ["level"]}
+      ]
+    }
+  ]
+}

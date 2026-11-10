@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "git/packfiles-transport",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A CI job clones a repository whose working tree is 40 MB, yet the clone downloads 2.3 GB. What explains it?",
+      "choices": [
+        "The server sends the working tree uncompressed",
+        "Git also downloads every developer's reflog",
+        "A clone transfers every object reachable from the wanted refs, so every version of every file ever committed is in the pack, including large files deleted years ago",
+        "HTTP cannot compress binary data"
+      ],
+      "answer": 2,
+      "explanation": "The server packs history, not a snapshot. A file deleted in a later commit is still reachable from the commits before that, so it stays in every full clone until history is rewritten. A shallow or partial clone asks for less; LFS keeps such files out of the object graph in the first place."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`git verify-pack -v` prints `f8762335... blob 7 18 5502 1 7972c09a...` for a file of about 7 KB. Why is the size column 7?",
+      "choices": [
+        "For a deltified entry the size column is the size of the delta instructions; the blob is rebuilt from base 7972c09a by copy and insert instructions, and 1 is its chain depth",
+        "The blob is truncated and git fsck will report it",
+        "Sizes in verify-pack are in kilobytes",
+        "7 is the compressed size and 18 the uncompressed size"
+      ],
+      "answer": 0,
+      "explanation": "The size in a pack entry header is the size of the entry's inflated data. For OFS_DELTA and REF_DELTA entries that data is the delta: two size varints and a few copy and insert opcodes. 18 is the entry's size in the pack, header and zlib stream included."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`git clone --filter=blob:none` against your company's Git server ends up as a full clone, and stderr shows `warning: filtering not recognized by server, ignoring`. What do you change?",
+      "choices": [
+        "Add --depth 1 so the filter is applied",
+        "Force protocol.version=0 on the client",
+        "Upgrade the client, which is too old to send filters",
+        "Set uploadpack.allowFilter=true on the served repository (or the hosting product's equivalent): without it the server does not list filter in its fetch capability and the client drops the argument"
+      ],
+      "answer": 3,
+      "explanation": "Filters are a server feature. The capability advertisement says fetch=shallow wait-for-done without filter, so the client never sends the filter line and the server packs every blob. minipack's clone prints the same warning for the same reason."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "In a smart-HTTP fetch negotiation, why does the second POST repeat all the want lines and the haves the server already ACKed?",
+      "choices": [
+        "To defeat HTTP caching between the client and the server",
+        "Each POST is answered by a fresh upload-pack process that remembers nothing from the previous request, so the client restates the state that matters: what it wants and which commits are known to be common",
+        "Because pkt-lines can be lost on the wire and must be retransmitted",
+        "The server requires every request to be signed with the full want list"
+      ],
+      "answer": 1,
+      "explanation": "Over HTTP the protocol is stateless. Over SSH or git:// one upload-pack process lives for the whole conversation, but each HTTP request starts a new one, so wants and common haves travel again in every round until done or ready."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A release job in a `--depth 1` clone runs `git describe --tags` and fails with `No names found`, although the repository has tags. Which fix addresses the mechanism?",
+      "choices": [
+        "Run git gc before describe",
+        "Delete .git/shallow so Git stops treating the clone as shallow",
+        "Fetch the history the tag sits on, for example `git fetch --unshallow --tags` or `fetch-depth: 0` in actions/checkout: the tagged commit is below the shallow boundary, so neither it nor the tag was fetched",
+        "Set protocol.version=1"
+      ],
+      "answer": 2,
+      "explanation": "Depth 1 implies a single branch and tag following, which only brings tags that point into the fetched commits. Deleting .git/shallow does not fetch anything; it makes Git look for parents that are not there, so fsck and log fail. A blob-less partial clone keeps every commit and tag and is often the better choice for such jobs."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A repository holds 30 versions of a 200 MB compressed video. Why does Git LFS help where `git gc --aggressive` does not?",
+      "choices": [
+        "Compressed media changes almost completely between versions, so the delta search finds no shared blocks and every version is stored whole in every full clone; LFS replaces the blob with a small pointer and downloads only the versions a checkout needs from a separate store",
+        "LFS compresses video better than zlib does",
+        "gc --aggressive deletes old versions of large files",
+        "LFS stores large files in .git/shallow so they are skipped"
+      ],
+      "answer": 0,
+      "explanation": "gc --aggressive only widens the delta window and lengthens chains; it cannot find copy instructions where none exist, and it never removes reachable objects. LFS changes what is in the object graph: a pointer of about 130 bytes per version instead of the content."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "observability/alerting",
+  "title": "An Alert Is a Query With a Clock and a Router",
+  "short": "Alerting",
+  "motto": "An alert is a query that must stay true for a while; then a tree decides who hears about it: grouped, deduplicated, or not at all.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "observability/promql"
+  ],
+  "tools": [
+    "prometheus",
+    "promtool",
+    "alertmanager",
+    "amtool",
+    "docker",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/sre-practices",
+    "/docs/learning-paths/sre"
+  ],
+  "outputs": [
+    "skill-alert-review.md",
+    "prompt-write-alert-rule.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

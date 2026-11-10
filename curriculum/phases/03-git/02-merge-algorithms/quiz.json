@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "git/merge-algorithms",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`main` changed line 10 of `app.yaml` and `feature` changed line 40 of the same file. Why can Git merge them without asking you, when comparing the two branch tips with each other would only show that lines 10 and 40 differ?",
+      "choices": [
+        "Git takes the newer version of each line, judged by the commit dates",
+        "Git diffs each tip against their common ancestor: line 10 changed only on `main` and line 40 only on `feature`, so it takes both changes",
+        "Git keeps the version of the branch you are on and appends the other branch's lines",
+        "Git merges by characters instead of lines, so changes far apart never interact"
+      ],
+      "answer": 1,
+      "explanation": "A two-way comparison cannot tell who changed what. The merge base says what both sides started from, so a difference from the base on only one side is that side's change and is taken. Dates play no role, and the merge works on lines."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In the base, line 2 is `replicas: 3` and line 3 is `image: ...:1.4.2`. `main` changes line 3 to `1.4.3`, `release` changes line 2 to `replicas: 4`. Why does `git merge-file` report a conflict although no line was changed by both sides?",
+      "choices": [
+        "YAML files are always merged as a single block",
+        "Git cannot merge a change to a version number",
+        "The two changes touch: one ends where the other begins, so they form one region in base coordinates, and a region changed by both sides with different results is a conflict",
+        "The default diff algorithm, Myers, cannot handle two changes in a row; histogram would merge them"
+      ],
+      "answer": 2,
+      "explanation": "Changes from the two diffs are paired by base line ranges, and ranges that overlap or are adjacent join into one region. Neither side says what the pair of lines should look like with the other edit, so Git asks. A different diff algorithm finds the same one-line changes, so it gives the same conflict."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`git merge-base --all release main` prints two commits. What does `git merge -s ort` do with them?",
+      "choices": [
+        "It merges the two merge bases with each other first and uses that virtual merge base for the three-way merge; conflicts inside the virtual base can show up as \"merged common ancestors\"",
+        "It picks the newer of the two commits by committer date",
+        "It refuses to merge until you rebase one branch",
+        "It runs the merge twice, once per base, and keeps the result with fewer conflicts"
+      ],
+      "answer": 0,
+      "explanation": "Two best common ancestors come from a criss-cross history, where each branch merged the other. Choosing one of them makes changes the other base already contains look like changes on both sides, which produces spurious conflicts. The recursive approach, kept by ort, builds a virtual base by merging the bases."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "One branch adds `\"retries\": 3,` after `\"port\"` in a JSON config, the other adds `\"retries\": 5` at the end. `git merge` reports no conflict. What is in the merged file?",
+      "choices": [
+        "A conflict marker that `git status` does not show",
+        "Only `\"retries\": 5`, because Git deduplicates equal keys",
+        "Only `\"retries\": 3`, because the change on the current branch wins",
+        "Both lines: the changes do not touch, so the line merge takes both and the result has a duplicate key that most parsers silently resolve to the last value"
+      ],
+      "answer": 3,
+      "explanation": "The merge works on lines, not on JSON. Insertions at different places are independent changes. The result still parses, which is why the error goes unnoticed; a structural check in CI or a custom merge driver catches it."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A diff of a C file with Myers shows a moved function as many small changes around `{` and `}` lines; `--diff-algorithm=histogram` shows the function removed in one place and added in another. Which statement is true?",
+      "choices": [
+        "Histogram found a shorter edit script; Myers was approximate",
+        "Both are valid diffs; Myers finds a shortest script and happily matches common lines like braces, while histogram anchors on the rarest common lines, so whole blocks stay together even if the script is not shorter",
+        "Myers is wrong for source code and should be disabled",
+        "Histogram ignores lines that contain only punctuation"
+      ],
+      "answer": 1,
+      "explanation": "Myers is optimal in the number of inserted and deleted lines, and equal-length scripts can look very different. Patience and histogram choose anchors that are meaningful to humans (unique or rare lines) and fall back to Myers in between. Neither ignores lines."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "You resolve the same conflict in `CHANGELOG.md` every time you merge `main` into a long-lived branch. Which setup removes the repeated work without hiding real conflicts?",
+      "choices": [
+        "`git merge -X ours` on every merge",
+        "Delete `CHANGELOG.md` from the branch",
+        "Enable `rerere` so the recorded resolution of that exact conflict is replayed, and review it with `git rerere diff` before committing; for an append-only file, the `merge=union` attribute is an option too",
+        "Set `merge.conflictStyle` to `zdiff3`, which resolves repeated conflicts"
+      ],
+      "answer": 2,
+      "explanation": "rerere stores the conflict and your resolution keyed by the conflict text, so only an identical conflict is resolved again. `-X ours` silently drops the other side in every conflict, in every file. zdiff3 changes how conflicts are shown, not whether they happen."
+    }
+  ]
+}

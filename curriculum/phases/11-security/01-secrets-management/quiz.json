@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "security/secrets-management",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Six services share one PostgreSQL user whose password sits in a Kubernetes Secret, a `.env` file and two CI variables. The password leaks. What makes rotating it so slow?",
+      "choices": [
+        "Kubernetes Secrets are encrypted and must be decrypted first",
+        "PostgreSQL limits how often a password can change",
+        "Every copy has to change at the same moment or the services still holding the old string fail together, so rotation waits for a maintenance window while the leaked password keeps working",
+        "CI variables cannot be edited once set"
+      ],
+      "answer": 2,
+      "explanation": "A shared static string has no owner and no expiry. A dynamic credential per service, issued with a lease, removes both problems: a leak expires on its own and one lease can be revoked without touching the others."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A policy has `path \"secret/data/app/*\" { capabilities = [\"read\"] }` and `path \"secret/data/app/admin\" { capabilities = [\"deny\"] }`. What does a token with this policy get for `secret/data/app/admin`?",
+      "choices": [
+        "read, because the glob matches and capabilities are added up",
+        "403: the exact rule wins over the glob, and its capability is deny",
+        "404, because deny hides the path",
+        "read on the first request, deny after the policy cache refreshes"
+      ],
+      "answer": 1,
+      "explanation": "OpenBao picks one rule per request: the exact path first, then the most specific wildcard. Capabilities are merged only for the same path pattern across policies, and deny on that rule overrides everything."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "minivault stores each KV version as `{term, wrapped_key, ciphertext}`. After `sys/rotate`, what does `sys/rewrap` change?",
+      "choices": [
+        "Every ciphertext, re-encrypted under the new keyring term",
+        "Nothing until each secret is written again",
+        "The unseal key shares",
+        "Only the wrapped data keys: each 32-byte data key is decrypted with the old term and re-encrypted with the new one, and the value's ciphertext is copied unchanged"
+      ],
+      "answer": 3,
+      "explanation": "That is the point of envelope encryption: the key-encryption key can rotate by touching about 60 bytes per value, however large the values are."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "OpenBao was initialized with 5 key shares and a threshold of 3. An operator submits two valid shares and one share from a different OpenBao cluster. What happens?",
+      "choices": [
+        "The shares combine into a wrong key, the root key fails its authentication tag, the unseal is refused, the progress counter resets and the server stays sealed",
+        "The server unseals with the two valid shares",
+        "The server names the bad share and keeps the two good ones",
+        "The server unseals but every read returns garbage"
+      ],
+      "answer": 0,
+      "explanation": "Lagrange interpolation always produces 32 bytes. Only the AEAD check on the sealed root key tells a right key from a wrong one, and it cannot say which share was wrong."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A token with `ttl=10m` and `explicit_max_ttl=1h` has been renewed several times. Fifty minutes after it was created, a client renews it with `increment=2h`. What TTL does it get?",
+      "choices": [
+        "2 hours, because renewal resets the clock",
+        "10 minutes, the original TTL",
+        "About 10 minutes: renewal never extends past creation time plus explicit_max_ttl, and the response warns that the TTL was capped",
+        "The renewal fails because the increment is larger than the original TTL"
+      ],
+      "answer": 2,
+      "explanation": "explicit_max_ttl is a hard deadline measured from creation. A service that needs to run longer must authenticate again and get a new token, which is the moment its identity is checked again."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A team moves database passwords from Kubernetes Secrets to the External Secrets Operator reading from OpenBao's KV store. What risk remains that dynamic database credentials would remove?",
+      "choices": [
+        "None: the operator encrypts the Secret in etcd",
+        "The pods can no longer read the password",
+        "The KV store cannot be versioned",
+        "The password is still one long-lived string shared by every pod and synced into a base64 Kubernetes Secret, so a leak lasts until someone rotates it by hand"
+      ],
+      "answer": 3,
+      "explanation": "The operator changes where the string comes from, not what it is. A database role issues a separate PostgreSQL user per lease that expires and is dropped on its own."
+    }
+  ]
+}

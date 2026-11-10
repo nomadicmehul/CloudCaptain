@@ -8,14 +8,15 @@ Security work in operations is mostly the same few mechanisms applied at differe
 
 | Lesson | Type | What you build | What you then use |
 |---|---|---|---|
+| [Secrets](01-secrets-management/docs/en.md) | Build | `minivault`: versioned KV, envelope encryption with ChaCha20-Poly1305, Shamir unseal keys, tokens, policies and dynamic database leases | OpenBao, External Secrets Operator, Sealed Secrets |
 | [Admission](02-admission-policy/docs/en.md) | Build | `miniadmit`: a validating and mutating webhook, policies as data, a CEL subset like ValidatingAdmissionPolicy | ValidatingAdmissionPolicy, Kyverno, Gatekeeper |
 | [Runtime detection](03-runtime-detection/docs/en.md) | Build | `minifalco`: events from `strace`, a Falco-style rule language, detections and rule tuning | Falco with the modern eBPF driver, Tetragon |
 | [NetworkPolicy](04-network-policy/docs/en.md) | Build | `mininetpol`: the NetworkPolicy evaluator, a connectivity matrix and `explain` | NetworkPolicy on kind, Cilium and Calico, AdminNetworkPolicy |
 | [Secret scanning](05-secret-scanning/docs/en.md) | Build | `minileaks`: provider rules, entropy, Git history, allowlists, baselines and a pre-commit mode | gitleaks, push protection, `git filter-repo` |
 | [Workload identity](06-workload-identity/docs/en.md) | Build | `miniid`: SPIFFE IDs, X.509 SVIDs from a small CA, peer attestation, rotation and mutual TLS authorised by ID | SPIRE, service meshes, csi-driver-spiffe |
+| [Vulnerabilities](07-vuln-prioritization/docs/en.md) | Build | `minivuln`: Trivy and Grype ingestion, CVSS v3.1 and v4.0 scoring, EPSS, KEV, OpenVEX and SLAs | Trivy, Grype, `vexctl` |
 | [Benchmarks](08-cis-benchmark/docs/en.md) | Build | `minibench`: CIS Kubernetes checks as data against a node, with evidence and reports | kube-bench, kubescape |
 
-More lessons for this phase are being written; the plan is in [ROADMAP.md](https://github.com/nomadicmehul/CloudCaptain/blob/main/ROADMAP.md).
 
 ## Reference layer
 

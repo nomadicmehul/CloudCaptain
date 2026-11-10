@@ -8,7 +8,7 @@
 |---|---|
 | Type | Build |
 | Languages | Python |
-| Prerequisites | [Git Is a Content-Addressed Object Store](https://cloudcaptain.io/learn/git/object-store) |
+| Prerequisites | [A Merge Is a Three-Way Diff Against a Common Ancestor](https://cloudcaptain.io/learn/git/merge-algorithms) |
 | Time | 75 minutes |
 | Tools | git, gh, GitHub rulesets, GitHub merge queue, GitLab merge trains |
 

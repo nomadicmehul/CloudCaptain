@@ -11,7 +11,7 @@
     "python"
   ],
   "prereqs": [
-    "git/object-store"
+    "git/merge-algorithms"
   ],
   "tools": [
     "git",
