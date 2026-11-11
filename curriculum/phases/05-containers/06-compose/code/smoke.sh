@@ -80,7 +80,8 @@ WEB_START="$(docker inspect -f '{{.State.StartedAt}}' "${PROJECT}-web-1")"
 [[ "$WEB_START" > "$DB_START" ]] || fail "web ($WEB_START) should start after db ($DB_START)"
 [[ "$(docker inspect -f '{{index .Config.Labels "com.docker.compose.project"}}' "${PROJECT}-web-1")" == "ccsmoke" ]] || fail "project label missing"
 for _ in $(seq 1 40); do docker logs "${PROJECT}-web-1" 2>/dev/null | grep -q reached-db && break; sleep 0.5; done
-docker logs "${PROJECT}-web-1" 2>&1 | grep -q reached-db || fail "web did not reach db by service name: $(docker logs "${PROJECT}-web-1" 2>&1)"
+docker logs "${PROJECT}-web-1" > "$WORK/web.log" 2>&1 || true
+grep -q reached-db "$WORK/web.log" || fail "web did not reach db by service name: $(cat "$WORK/web.log")"
 echo "  db started $DB_START, became healthy, web started $WEB_START and reached http://db:8000/"
 
 echo "▸ ps finds the project's containers by label and shows health"
