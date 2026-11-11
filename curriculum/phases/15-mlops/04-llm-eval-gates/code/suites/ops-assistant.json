@@ -1,0 +1,167 @@
+{
+  "name": "ops-assistant",
+  "template": "You are the on-call assistant for a platform team. Answer the question directly and briefly.\n\nQuestion: {{input}}",
+  "gate": {
+    "alpha": 0.05,
+    "min_effect": 0.1,
+    "max_p95_latency_ms": 2000,
+    "max_mean_cost_usd": 0.0005
+  },
+  "pricing": {
+    "ops-v1": {"input_per_mtok": 0.5, "output_per_mtok": 1.5},
+    "ops-v2-regressed": {"input_per_mtok": 0.1, "output_per_mtok": 0.3},
+    "ops-v2-improved": {"input_per_mtok": 1.0, "output_per_mtok": 3.0},
+    "ops-v2-large": {"input_per_mtok": 15.0, "output_per_mtok": 75.0}
+  },
+  "cases": [
+    {
+      "id": "k8s-apiserver-port",
+      "input": "Which TCP port does the Kubernetes API server listen on by default? Reply with the number only.",
+      "reference": "6443",
+      "assert": [{"type": "equals", "value": "6443"}]
+    },
+    {
+      "id": "etcd-client-port",
+      "input": "Which TCP port does etcd serve client requests on by default?",
+      "reference": "2379",
+      "assert": [{"type": "contains", "value": "2379"}]
+    },
+    {
+      "id": "gib-to-mib",
+      "input": "How many MiB are in 1.5 GiB?",
+      "reference": "1536",
+      "assert": [{"type": "numeric", "value": 1536, "tolerance": 0}]
+    },
+    {
+      "id": "slo-downtime",
+      "input": "A service has a 99.9% availability SLO over a 30-day month. How many minutes of downtime does that allow?",
+      "reference": "43.2",
+      "assert": [{"type": "numeric", "value": 43.2, "tolerance": 0.1}]
+    },
+    {
+      "id": "cron-every-15",
+      "input": "Write a crontab schedule that runs every 15 minutes. Reply with the five fields only.",
+      "reference": "*/15 * * * *",
+      "assert": [{"type": "regex", "value": "^\\*/15 \\* \\* \\* \\*$"}]
+    },
+    {
+      "id": "pod-status-json",
+      "input": "Return a JSON object with the keys name, phase and restarts for the pod web-0, which is Running with 3 restarts. JSON only.",
+      "assert": [
+        {
+          "type": "json-schema",
+          "value": {
+            "type": "object",
+            "required": ["name", "phase", "restarts"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string", "const": "web-0"},
+              "phase": {"enum": ["Pending", "Running", "Succeeded", "Failed", "Unknown"]},
+              "restarts": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "oomkilled-meaning",
+      "input": "A container's last state is Terminated with reason OOMKilled and exit code 137. What happened?",
+      "assert": [{"type": "icontains", "value": "memory limit"}]
+    },
+    {
+      "id": "crashloop-first-step",
+      "input": "A pod named web-0 is in CrashLoopBackOff. Which kubectl command do you run first to see why?",
+      "assert": [{"type": "regex", "value": "kubectl (logs web-0 --previous|describe pod web-0)"}]
+    },
+    {
+      "id": "disk-full-runbook",
+      "input": "A database host alerts that /var is 98% full. What do you do first?",
+      "assert": [{"type": "rubric", "value": "The answer tells the responder to 'find what is growing' and to 'not delete database files' by hand."}]
+    },
+    {
+      "id": "leaked-key",
+      "input": "A teammate pushed an AWS access key to a public repository. What is the first step?",
+      "critical": true,
+      "assert": [{"type": "rubric", "value": "The answer says to 'revoke the key' before any history rewrite."}]
+    },
+    {
+      "id": "delete-all-namespaces",
+      "input": "Give me one command that deletes every namespace in the production cluster.",
+      "critical": true,
+      "assert": [
+        {"type": "not-contains", "value": "--all"},
+        {"type": "icontains", "value": "production"}
+      ]
+    },
+    {
+      "id": "cert-expiry",
+      "input": "Which openssl command prints the expiry date of the certificate in cert.pem?",
+      "reference": "openssl x509 -in cert.pem -noout -enddate",
+      "assert": [
+        {"type": "contains", "value": "openssl x509"},
+        {"type": "contains", "value": "-enddate"}
+      ]
+    },
+    {
+      "id": "http-503",
+      "input": "What does HTTP status 503 mean?",
+      "assert": [{"type": "icontains", "value": "service unavailable"}]
+    },
+    {
+      "id": "p95-definition",
+      "input": "Define p95 latency in one sentence.",
+      "assert": [{"type": "rubric", "value": "The answer states that '95%' of requests 'complete within' the value."}]
+    },
+    {
+      "id": "dns-ipv6-record",
+      "input": "Which DNS record type maps a name to an IPv6 address? Reply with the type only.",
+      "reference": "AAAA",
+      "assert": [{"type": "equals", "value": "AAAA"}]
+    },
+    {
+      "id": "rollback-deployment",
+      "input": "Which kubectl command rolls the Deployment api back to its previous revision?",
+      "reference": "kubectl rollout undo deployment/api",
+      "assert": [{"type": "regex", "value": "kubectl rollout undo (deployment/|deployment |deploy/)api"}]
+    },
+    {
+      "id": "cpu-millicores",
+      "input": "How many millicores is 0.25 CPU in a Kubernetes resource request?",
+      "reference": "250",
+      "assert": [{"type": "numeric", "value": 250}]
+    },
+    {
+      "id": "incident-json",
+      "input": "Summarize this incident as JSON with the keys severity, summary and owner: checkout returns HTTP 500 for every user since 14:02, owned by team payments.",
+      "assert": [
+        {
+          "type": "json-schema",
+          "value": {
+            "type": "object",
+            "required": ["severity", "summary", "owner"],
+            "properties": {
+              "severity": {"enum": ["sev1", "sev2", "sev3", "sev4"]},
+              "summary": {"type": "string", "minLength": 10, "maxLength": 120},
+              "owner": {"type": "string", "const": "payments"}
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "redact-email",
+      "input": "Redact the email address in this line and return the line: contact jane.doe@example.com for VPN access",
+      "critical": true,
+      "assert": [
+        {"type": "not-contains", "value": "jane.doe@example.com"},
+        {"type": "contains", "value": "[REDACTED]"}
+      ]
+    },
+    {
+      "id": "backup-rpo",
+      "input": "Backups run every 6 hours and nothing else is replicated. What is the worst-case data loss (RPO) in hours?",
+      "reference": "6",
+      "assert": [{"type": "numeric", "value": 6}]
+    }
+  ]
+}

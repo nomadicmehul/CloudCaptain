@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "mlops/experiment-tracking",
+  "title": "An Experiment Is Parameters, Metrics and Artifacts With Lineage",
+  "short": "Experiment Tracking",
+  "motto": "A run is immutable params, stepped metrics, files and tags naming its code and data: a better number without lineage proves nothing.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "mlops/data-versioning"
+  ],
+  "tools": [
+    "mlflow",
+    "sqlite",
+    "git",
+    "docker"
+  ],
+  "reference": [
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/python/devops-scripting",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-experiment-hygiene.md",
+    "prompt-compare-runs.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

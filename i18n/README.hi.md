@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps, बिल्कुल शुरुआत से।<br/>Tool बनाएँ। Tool इस्तेमाल करें। Artifact ship करें।</h3>
   <p>
-    <strong>104 lessons</strong> · <strong>15 phases लाइव</strong> · <strong>151 घंटे</strong> · <strong>3,077 tests</strong> · <strong>205 skills, prompts और MCP servers</strong>
+    <strong>110 lessons</strong> · <strong>16 phases लाइव</strong> · <strong>160 घंटे</strong> · <strong>3,246 tests</strong> · <strong>217 skills, prompts और MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="कोर्स शुरू करें" /></a>
@@ -61,8 +61,9 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **12 · Platform Engineering** | safe updates वाला एक service-template scaffolder, owners और dependencies वाला एक service catalog, Git, deploys और incidents से DORA metrics, हर PR के लिए preview environments, एक spec को Kubernetes objects में बदलने वाली एक platform API | copier, Backstage catalog model, DuckDB, `kubectl auth can-i`, score-k8s |
 | **13 · AI Infrastructure** | DRA के साथ एक GPU scheduler, एक LLM serving simulator, एक token-counting gateway, एक queue-based autoscaler, एक prefix-cache router, HNSW और IVF indexes, एक model artifact inspector, एक token cost model | CPU पर llama.cpp, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | kubectl के लिए एक MCP server, एक incident-triage agent, AI से log analysis, LLM calls के लिए OpenTelemetry, agent sandboxes, सुरक्षित write tools, agent evals | Claude Code, Claude API, OpenTelemetry, promptfoo |
+| **15 · MLOps & LLMOps** | content-addressed dataset versioning, एक MLflow-compatible tracking server और model registry, Kubeflow की तरह compile होने वाला एक cached pipeline DAG, एक LLM eval gate, shadow और canary traffic वाला एक model router, drift detection | DVC, MLflow, Kubeflow Pipelines, Argo Workflows, promptfoo, Argo Rollouts, Evidently |
 
-दो और phases (MLOps, capstones) [roadmap](../ROADMAP.md) पर हैं।
+एक और phase (capstones) [roadmap](../ROADMAP.md) पर है।
 
 ## एक lesson कैसे चलता है
 
@@ -81,7 +82,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | किसके लिए | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एक अकेले Linux process से लेकर Kubernetes, IaC, cloud और AIOps तक | 96 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | एक अकेले Linux process से लेकर Kubernetes, IaC, cloud और AIOps तक | 102 |
 | [Site Reliability Engineer](https://cloudcaptain.io/learn/paths/sre) | Linux और Kubernetes पर metrics, alerts, logs, traces, SLOs, incidents और chaos | 38 |
 | [DevSecOps Engineer](https://cloudcaptain.io/learn/paths/devsecops) | secrets, admission, runtime detection, network policy, supply chain और cloud IAM | 42 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | वे engineers जिन्हें models चलाने का काम मिला है: GPUs, serving, gateways, routing, cost | 23 |
@@ -105,7 +106,7 @@ Site का **Captain's Bridge** reading mode हर section की progress tra
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| हर tool शुरुआत से, tests के साथ बनाना | ✅ 104 lessons | ❌ | ❌ | ❌ |
+| हर tool शुरुआत से, tests के साथ बनाना | ✅ 110 lessons | ❌ | ❌ | ❌ |
 | CI में असली tools के सामने verified | ✅ हर lesson | ❌ | ❌ | ❌ |
 | AI infrastructure और AIOps | ✅ 15 lessons | आंशिक | ❌ | links |
 | Install करने लायक agent tutor | ✅ `npx skills add` | ❌ | ❌ | ❌ |

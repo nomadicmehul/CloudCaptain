@@ -1,0 +1,535 @@
+{
+  "components": {
+    "comp-condition-1": {
+      "dag": {
+        "tasks": {
+          "register-model": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-register-model"
+            },
+            "inputs": {
+              "artifacts": {
+                "model": {
+                  "componentInputArtifact": "pipelinechannel--train-model-model"
+                }
+              },
+              "parameters": {
+                "name": {
+                  "runtimeValue": {
+                    "constant": "house-prices"
+                  }
+                },
+                "rmse": {
+                  "componentInputParameter": "pipelinechannel--evaluate-model-Output"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "register-model"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "artifacts": {
+          "pipelinechannel--train-model-model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "pipelinechannel--evaluate-model-Output": {
+            "parameterType": "NUMBER_DOUBLE"
+          },
+          "pipelinechannel--max_rmse": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      }
+    },
+    "comp-evaluate-model": {
+      "executorLabel": "exec-evaluate-model",
+      "inputDefinitions": {
+        "artifacts": {
+          "model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "test_data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      }
+    },
+    "comp-for-loop-3": {
+      "dag": {
+        "tasks": {
+          "score-slice": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-score-slice"
+            },
+            "inputs": {
+              "artifacts": {
+                "model": {
+                  "componentInputArtifact": "pipelinechannel--train-model-model"
+                },
+                "test_data": {
+                  "componentInputArtifact": "pipelinechannel--make-dataset-test_data"
+                }
+              },
+              "parameters": {
+                "segment": {
+                  "componentInputParameter": "pipelinechannel--loop-item-param-2"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "score-slice"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "artifacts": {
+          "pipelinechannel--make-dataset-test_data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "pipelinechannel--train-model-model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "pipelinechannel--loop-item-param-2": {
+            "parameterType": "STRING"
+          }
+        }
+      }
+    },
+    "comp-make-dataset": {
+      "executorLabel": "exec-make-dataset",
+      "inputDefinitions": {
+        "parameters": {
+          "noise": {
+            "parameterType": "NUMBER_DOUBLE"
+          },
+          "rows": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "seed": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "test_data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "train_data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        }
+      }
+    },
+    "comp-register-model": {
+      "executorLabel": "exec-register-model",
+      "inputDefinitions": {
+        "artifacts": {
+          "model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "name": {
+            "parameterType": "STRING"
+          },
+          "rmse": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "card": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        }
+      }
+    },
+    "comp-score-slice": {
+      "executorLabel": "exec-score-slice",
+      "inputDefinitions": {
+        "artifacts": {
+          "model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "test_data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "segment": {
+            "parameterType": "STRING"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      }
+    },
+    "comp-train-model": {
+      "executorLabel": "exec-train-model",
+      "inputDefinitions": {
+        "artifacts": {
+          "train_data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "epochs": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "lr": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      }
+    }
+  },
+  "deploymentSpec": {
+    "executors": {
+      "exec-evaluate-model": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "evaluate_model"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-make-dataset": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "make_dataset"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-register-model": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "register_model"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-score-slice": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "score_slice"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-train-model": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "train_model"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      }
+    }
+  },
+  "pipelineInfo": {
+    "name": "house-prices"
+  },
+  "root": {
+    "dag": {
+      "tasks": {
+        "condition-1": {
+          "componentRef": {
+            "name": "comp-condition-1"
+          },
+          "dependentTasks": [
+            "evaluate-model",
+            "train-model"
+          ],
+          "inputs": {
+            "artifacts": {
+              "pipelinechannel--train-model-model": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "model",
+                  "producerTask": "train-model"
+                }
+              }
+            },
+            "parameters": {
+              "pipelinechannel--evaluate-model-Output": {
+                "taskOutputParameter": {
+                  "outputParameterKey": "Output",
+                  "producerTask": "evaluate-model"
+                }
+              },
+              "pipelinechannel--max_rmse": {
+                "componentInputParameter": "max_rmse"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "good-enough"
+          },
+          "triggerPolicy": {
+            "condition": "inputs.parameter_values['pipelinechannel--evaluate-model-Output'] < inputs.parameter_values['pipelinechannel--max_rmse']"
+          }
+        },
+        "evaluate-model": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-evaluate-model"
+          },
+          "dependentTasks": [
+            "make-dataset",
+            "train-model"
+          ],
+          "inputs": {
+            "artifacts": {
+              "model": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "model",
+                  "producerTask": "train-model"
+                }
+              },
+              "test_data": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "test_data",
+                  "producerTask": "make-dataset"
+                }
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "evaluate-model"
+          }
+        },
+        "for-loop-3": {
+          "componentRef": {
+            "name": "comp-for-loop-3"
+          },
+          "dependentTasks": [
+            "make-dataset",
+            "train-model"
+          ],
+          "inputs": {
+            "artifacts": {
+              "pipelinechannel--make-dataset-test_data": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "test_data",
+                  "producerTask": "make-dataset"
+                }
+              },
+              "pipelinechannel--train-model-model": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "model",
+                  "producerTask": "train-model"
+                }
+              }
+            }
+          },
+          "iteratorPolicy": {
+            "parallelismLimit": 2
+          },
+          "parameterIterator": {
+            "itemInput": "pipelinechannel--loop-item-param-2",
+            "items": {
+              "raw": "[\"low\", \"mid\", \"high\"]"
+            }
+          },
+          "taskInfo": {
+            "name": "for-loop-3"
+          }
+        },
+        "make-dataset": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-make-dataset"
+          },
+          "inputs": {
+            "parameters": {
+              "noise": {
+                "componentInputParameter": "noise"
+              },
+              "rows": {
+                "componentInputParameter": "rows"
+              },
+              "seed": {
+                "componentInputParameter": "seed"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "make-dataset"
+          }
+        },
+        "train-model": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-train-model"
+          },
+          "dependentTasks": [
+            "make-dataset"
+          ],
+          "inputs": {
+            "artifacts": {
+              "train_data": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "train_data",
+                  "producerTask": "make-dataset"
+                }
+              }
+            },
+            "parameters": {
+              "epochs": {
+                "componentInputParameter": "epochs"
+              },
+              "lr": {
+                "componentInputParameter": "lr"
+              }
+            }
+          },
+          "retryPolicy": {
+            "backoffDuration": "0s",
+            "backoffFactor": 2.0,
+            "backoffMaxDuration": "3600s",
+            "maxRetryCount": 2
+          },
+          "taskInfo": {
+            "name": "train-model"
+          }
+        }
+      }
+    },
+    "inputDefinitions": {
+      "parameters": {
+        "epochs": {
+          "defaultValue": 300.0,
+          "isOptional": true,
+          "parameterType": "NUMBER_INTEGER"
+        },
+        "lr": {
+          "defaultValue": 0.5,
+          "isOptional": true,
+          "parameterType": "NUMBER_DOUBLE"
+        },
+        "max_rmse": {
+          "defaultValue": 0.5,
+          "isOptional": true,
+          "parameterType": "NUMBER_DOUBLE"
+        },
+        "noise": {
+          "defaultValue": 1.0,
+          "isOptional": true,
+          "parameterType": "NUMBER_DOUBLE"
+        },
+        "rows": {
+          "defaultValue": 200.0,
+          "isOptional": true,
+          "parameterType": "NUMBER_INTEGER"
+        },
+        "seed": {
+          "defaultValue": 7.0,
+          "isOptional": true,
+          "parameterType": "NUMBER_INTEGER"
+        }
+      }
+    }
+  },
+  "schemaVersion": "2.1.0",
+  "sdkVersion": "kfp-2.18.0"
+}

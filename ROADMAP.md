@@ -24,7 +24,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 | 12 | Platform Engineering | 5 | in progress |
 | 13 | AI Infrastructure | 8 | in progress |
 | 14 | AIOps & Agentic Ops | 7 | in progress |
-| 15 | MLOps & LLMOps | 0 | planned |
+| 15 | MLOps & LLMOps | 6 | in progress |
 | 16 | Capstone Projects | 0 | planned |
 <!-- curriculum:end -->
 

@@ -1,0 +1,13 @@
+{
+  "name": "minieval-promptfoo-oracle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "promptfoo pinned by a lock file, run on the same suite and stub models as minieval",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "dependencies": {
+    "promptfoo": "0.125.1"
+  }
+}

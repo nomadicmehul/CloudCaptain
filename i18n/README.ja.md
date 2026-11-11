@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud、DevOps、AIOps をゼロから。<br/>ツールを作る。ツールを使う。成果物をシップする。</h3>
   <p>
-    <strong>104 レッスン</strong> · <strong>15 フェーズ公開中</strong> · <strong>151 時間</strong> · <strong>3,077 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 205 個</strong>
+    <strong>110 レッスン</strong> · <strong>16 フェーズ公開中</strong> · <strong>160 時間</strong> · <strong>3,246 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 217 個</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="コースを始める" /></a>
@@ -61,8 +61,9 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **12 · プラットフォームエンジニアリング** | 安全に更新できるサービステンプレートのスキャフォールダー、オーナーと依存関係を持つサービスカタログ、Git・デプロイ・インシデントから求める DORA メトリクス、PR ごとのプレビュー環境、1 つの仕様を Kubernetes オブジェクトに展開するプラットフォーム API | copier、Backstage のカタログモデル、DuckDB、`kubectl auth can-i`、score-k8s |
 | **13 · AI インフラストラクチャ** | DRA を使った GPU スケジューラ、LLM サービングシミュレーター、トークンを数えるゲートウェイ、キューベースのオートスケーラー、プレフィックスキャッシュルーター、HNSW と IVF のインデックス、モデルアーティファクト検査ツール、トークンコストモデル | CPU 上の llama.cpp、LiteLLM、pgvector、llm-d、ORAS |
 | **14 · AIOps とエージェント型運用** | kubectl 用の MCP サーバー、インシデントトリアージエージェント、AI によるログ分析、LLM 呼び出しの OpenTelemetry 計装、エージェントのサンドボックス、安全な書き込みツール、エージェントの評価（evals） | Claude Code、Claude API、OpenTelemetry、promptfoo |
+| **15 · MLOps と LLMOps** | コンテンツアドレス型のデータセットバージョン管理、MLflow 互換のトラッキングサーバーとモデルレジストリ、Kubeflow と同じ形にコンパイルされるキャッシュ付きパイプライン DAG、LLM の評価ゲート、シャドーとカナリアに対応したモデルルーター、ドリフト検知 | DVC、MLflow、Kubeflow Pipelines、Argo Workflows、promptfoo、Argo Rollouts、Evidently |
 
-さらに 2 つのフェーズ（MLOps、キャップストーン）が[ロードマップ](../ROADMAP.md)に載っています。
+さらに 1 つのフェーズ（キャップストーン）が[ロードマップ](../ROADMAP.md)に載っています。
 
 ## レッスンの進め方
 
@@ -81,7 +82,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | パス | 対象 | レッスン数 |
 |:--|:--|:--|
-| [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 96 |
+| [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 102 |
 | [SRE エンジニア](https://cloudcaptain.io/learn/paths/sre) | Linux と Kubernetes の上でのメトリクス、アラート、ログ、トレース、SLO、インシデント対応、カオス実験 | 38 |
 | [DevSecOps エンジニア](https://cloudcaptain.io/learn/paths/devsecops) | シークレット、アドミッション、ランタイム検知、ネットワークポリシー、サプライチェーン、クラウド IAM | 42 |
 | [AI プラットフォームエンジニア](https://cloudcaptain.io/learn/paths/ai-platform) | モデルの運用を任されたエンジニア：GPU、サービング、ゲートウェイ、ルーティング、コスト | 23 |
@@ -105,7 +106,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* リスト |
 |:--|:--|:--|:--|:--|
-| 各ツールをテスト付きでゼロから自作 | ✅ 104 レッスン | ❌ | ❌ | ❌ |
+| 各ツールをテスト付きでゼロから自作 | ✅ 110 レッスン | ❌ | ❌ | ❌ |
 | CI で本物のツールに対して検証 | ✅ 全レッスン | ❌ | ❌ | ❌ |
 | AI インフラと AIOps | ✅ 15 レッスン | 一部 | ❌ | リンク |
 | インストールできるエージェントチューター | ✅ `npx skills add` | ❌ | ❌ | ❌ |

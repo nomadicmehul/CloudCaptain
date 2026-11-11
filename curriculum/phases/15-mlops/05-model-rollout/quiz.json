@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "mlops/model-rollout",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A retrained model is canaried with analysis on HTTP error rate and p95 latency. A feature is computed with the wrong sign at serving time, so a third of its answers are wrong. What does the canary analysis do?",
+      "choices": [
+        "It aborts, because wrong answers raise the error rate",
+        "It aborts, because a wrong model is slower to compute",
+        "It promotes the model: every answer is a fast, valid 200, so neither metric moves",
+        "It pauses for a human, because the analysis is Inconclusive"
+      ],
+      "answer": 2,
+      "explanation": "Errors and latency describe whether the service answered, not whether the answer was right. A wrong model answers 200 as fast as a right one. A model rollout needs a quality proxy: agreement with the current model during a shadow, a feedback or conversion rate, or delayed labels."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The router mirrors every request to a shadow model, and the shadow starts hanging for 30 seconds per call. What happens to the users' responses in minirollout?",
+      "choices": [
+        "Nothing: the copy goes onto a bounded queue after the primary answered, workers call the shadow, and when the queue is full mirror jobs are dropped and counted",
+        "Responses wait for the shadow up to the timeout, then the primary's answer is returned",
+        "The router switches users to the shadow's answer when the primary is slower",
+        "The router returns 503 until the shadow recovers, to protect the comparison"
+      ],
+      "answer": 0,
+      "explanation": "A shadow must never change or delay a response. minirollout records the served answer, then calls put_nowait on a bounded queue; two workers call the shadow. A hanging shadow fills the queue and further copies are dropped (mirror_dropped), while callers see the primary's latency. Gateway API's RequestMirror has the same rule: the mirror's response must be ignored."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Why does minirollout assign canary users with a salted hash of the user ID instead of a random number per request?",
+      "choices": [
+        "Hashing is faster than generating random numbers",
+        "Random numbers cannot produce a weight of exactly 10%",
+        "Kubernetes Services require a hash to route by user",
+        "A user keeps one version for the whole rollout, raising the weight only adds users, feedback can be attributed to one version, and a new salt per candidate picks a different first cohort"
+      ],
+      "answer": 3,
+      "explanation": "bucket(user, salt) is a fixed number between 0 and 100 per user, so the same user always lands on the same side, and bucket < 10 implies bucket < 50. A per-request split gives one user two models on two refreshes and makes their feedback meaningless. Service, HTTPRoute and KServe weights are per connection or per request, so stickiness needs a cohort decision such as a header set from the same kind of hash."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "An Argo Rollouts AnalysisTemplate uses the web provider with jsonPath {$} and both successCondition and failureCondition start with result.candidate.feedback >= 150. The first measurement sees 90 feedback answers from the canary. What happens?",
+      "choices": [
+        "The measurement fails, because 90 is below 150",
+        "The measurement is Inconclusive, because neither condition is true, and the Rollout pauses for a human instead of deciding on too little data",
+        "The measurement is Successful, because a web metric without enough data defaults to success",
+        "The measurement is an Error, because jsonPath {$} is not allowed"
+      ],
+      "answer": 1,
+      "explanation": "With both conditions set, a value that satisfies neither is Inconclusive, and an Inconclusive run pauses the Rollout. Guarding both conditions with the sample count turns 'too few samples' into a hold, which is minirollout's hold verdict. jsonPath {$} is the default and makes the whole JSON response available as result."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Over a day, a canary collects 40,000 feedback answers per side. Its positive rate is 96.6% against the primary's 97.0%, and the two-proportion z-test gives p = 0.001. The plan set alpha 0.01 and a minimum quality drop of 5 points. What should the analysis decide?",
+      "choices": [
+        "Roll back, because p is below alpha",
+        "Hold, because a significant difference needs a human",
+        "Roll back, because any drop in quality is unacceptable for a model",
+        "Promote: the drop is real but 0.4 points, far below the 5-point minimum effect that was chosen as worth acting on"
+      ],
+      "answer": 3,
+      "explanation": "With enough samples every difference becomes significant. A rollback needs both a p-value under alpha and an effect above the minimum effect decided in advance; otherwise any large rollout would roll back on noise-sized differences. The minimum effect is a product decision; the sample size needed to detect it follows from it."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A service gets 20 requests per second. The plan canaries a model at 5%, needs 556 feedback answers per side to detect a 5-point drop, and every analysis looks at the last 20 seconds of samples. Every request gets feedback. What happens at the analysis step?",
+      "choices": [
+        "It holds until it times out: a 20-second window holds about 20 canary answers, never 556, so the window must cover about 9 minutes, the weight must grow, or a shadow at 100% must provide the comparison",
+        "It promotes after 20 seconds, because no failure was seen",
+        "It rolls back, because 20 answers are too few to pass",
+        "It decides after 556 seconds, because each second adds one sample per side"
+      ],
+      "answer": 0,
+      "explanation": "Time to a decision is the samples needed divided by the candidate's request rate: 556 / (20 x 0.05) is about 9 minutes, and a sliding window must be long enough to hold them, or the analysis can never leave hold. minirollout plan prints this and warns when the window cannot reach min-samples. A shadow at 100% reaches the same sample count in under a minute with no user exposed, but it measures agreement, not feedback."
+    }
+  ]
+}

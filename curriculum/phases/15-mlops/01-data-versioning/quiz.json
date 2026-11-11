@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "mlops/data-versioning",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A training job reads `s3://ml-data/fraud/train/`, which an export job overwrites every Monday. The model trained last week was better. What is the smallest change that would let you retrain on last week's exact data next time?",
+      "choices": [
+        "Name the prefix after the date of each export",
+        "Record, in the Git commit that trains the model, a hash that identifies the exact set of files, and keep those bytes in storage addressed by that hash",
+        "Turn on S3 versioning and remember the date of the good run",
+        "Commit the Parquet files to the Git repository"
+      ],
+      "answer": 1,
+      "explanation": "A date or a folder name says when, not what; two exports can share a date and a folder can be overwritten. A content hash committed with the code pins exactly which bytes were used, and a content-addressed store keeps them retrievable. S3 versioning helps but leaves you matching timestamps; Git itself is the wrong store for gigabytes."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "You rename `data/images/cat-01.jpg` to `data/images/cat-001.jpg` without changing its bytes and run `dvc add data/images`. What happens to the directory's hash and the cache?",
+      "choices": [
+        "Nothing changes: DVC ignores file names",
+        "The directory hash changes and every file is uploaded again on the next push",
+        "Only the file's own md5 changes",
+        "The directory hash changes because the manifest's `relpath` changed, but the image's object is the same md5, so only a new `.dir` manifest is added to the cache"
+      ],
+      "answer": 3,
+      "explanation": "Objects are named by content, so the image is still the same object. The manifest lists relpath and md5 for each file, sorted by path; a new relpath is a new manifest, hence a new `.dir` hash. The next push uploads one small manifest."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "`cache.type` is `hardlink`. A teammate opens `data/train.csv` in an editor that writes in place and saves a change. Why does DVC make the workspace file read-only in this mode?",
+      "choices": [
+        "A hardlink shares the inode with the cache object, so an in-place write would change the cached bytes that every commit using that md5 depends on",
+        "Hardlinks cannot be written on Linux",
+        "Read-only files are faster to hash",
+        "Git refuses to ignore writable files"
+      ],
+      "answer": 0,
+      "explanation": "With a hardlink the workspace path and the cache path are the same file. Editing one edits the other, and the object would no longer match its name. Reflinks and copies are independent files; with hardlinks or symlinks you run `dvc unprotect` before editing."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "An experiment branch added 40 GB of augmented images and was pushed. The branch was deleted without merging. Which command removes those objects from the cache and the bucket while keeping every version any remaining commit uses?",
+      "choices": [
+        "`dvc gc --workspace --cloud`",
+        "`git gc --prune=now`",
+        "`dvc gc --all-commits --cloud`",
+        "Deleting the `files/md5/` prefix in the bucket and running `dvc push`"
+      ],
+      "answer": 2,
+      "explanation": "`--all-commits` keeps everything referenced by any commit reachable from a branch or tag, so released versions survive and the deleted branch's objects do not. `--workspace` alone would also delete every older version. `git gc` only touches Git objects, and wiping the bucket loses versions the local cache may not hold."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In a two-stage pipeline `prepare -> train`, you edit a comment in `data/raw.csv`'s header that `prepare` strips. `dvc repro` reruns `prepare`. Why does it then skip `train`?",
+      "choices": [
+        "`train` only reruns when its own command changes",
+        "After `prepare` reruns, `prepared.csv` has the same md5 as recorded in `train`'s lock entry, so none of `train`'s dependencies changed",
+        "DVC never reruns more than one stage per invocation",
+        "`dvc.lock` stores timestamps and `prepared.csv` is newer"
+      ],
+      "answer": 1,
+      "explanation": "Decisions are made per stage by comparing current hashes with `dvc.lock`, after upstream stages have run. Identical output bytes mean identical hashes, so the downstream stage is up to date. Timestamps play no part."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your data platform team runs dozens of Spark jobs that write to the same S3 data lake and wants to test an ETL change on an isolated copy of 50 TB, then merge it atomically. Which tool fits best?",
+      "choices": [
+        "Git LFS, because it also uses pointer files",
+        "DVC with one `.dvc` file per table",
+        "Copy the prefix to `s3://lake-test/` with `aws s3 sync`",
+        "lakeFS, which adds branches, commits and merges to the bucket itself at the metadata layer, so a branch copies no data"
+      ],
+      "answer": 3,
+      "explanation": "DVC and Git LFS version data alongside a Git repository and suit a project's training inputs. A shared lake written by many jobs needs versioning in the storage layer: lakeFS branches are zero-copy and merges are atomic, while copying 50 TB is slow and doubles the bill."
+    }
+  ]
+}
