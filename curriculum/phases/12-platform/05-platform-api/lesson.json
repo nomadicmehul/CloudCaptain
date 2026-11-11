@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/platform-api",
+  "title": "A Platform API Is One Resource That Hides Ten Others",
+  "short": "Platform API",
+  "motto": "A platform API is a small versioned schema plus a translator: teams state intent, the platform renders every object and every default.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "orchestration/operator",
+    "orchestration/gateway-api"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "score-k8s",
+    "gateway-api",
+    "kubevela",
+    "crossplane"
+  ],
+  "reference": [
+    "/docs/learning-paths/platform-engineering",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/kubernetes/production-operations"
+  ],
+  "outputs": [
+    "skill-platform-api-review.md",
+    "prompt-design-workload-spec.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "git/bisect-blame",
+  "title": "git bisect Is Binary Search Over a Graph",
+  "short": "Bisect and Blame",
+  "motto": "Bisect keeps halving the commits that could hold the bug; blame hands each line back to the parent that already had it.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "git/merge-algorithms"
+  ],
+  "tools": [
+    "git"
+  ],
+  "reference": [
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/git/cheatsheet",
+    "/docs/tools/git/interview-questions"
+  ],
+  "outputs": [
+    "skill-regression-hunt.md",
+    "prompt-explain-blame.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

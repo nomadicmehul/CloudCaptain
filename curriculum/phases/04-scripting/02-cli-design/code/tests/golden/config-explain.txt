@@ -1,0 +1,8 @@
+KEY           VALUE           SOURCE   ORIGIN
+output        text            default  built-in default
+color         auto            flag     --color
+inventory     inventory.json  file     config:1
+lock_timeout  3               env      CCOPS_LOCK_TIMEOUT
+
+config file: config (--config, found)
+colour on stdout: off (stdout is not a terminal)

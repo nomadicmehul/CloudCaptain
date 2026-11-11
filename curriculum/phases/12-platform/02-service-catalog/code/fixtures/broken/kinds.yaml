@@ -1,0 +1,77 @@
+# Each document has exactly one planted problem in the kind or its spec.
+apiVersion: backstage.io/v1alpha1
+kind: Service
+metadata:
+  name: loyalty
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: component
+metadata:
+  name: coupons
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gift-cards
+spec:
+  type: service
+  lifecycle: production
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gift-cards-api
+spec:
+  type: openapi
+  lifecycle: production
+  owner: payments-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: vouchers
+spec:
+  type: service
+  lifecycle: ""
+  owner: payments-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: subscriptions
+spec:
+  type: service
+  lifecycle: production
+  owner: payments-team
+  providesApis: subscriptions-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: growth-team
+spec:
+  type: team
+  members: [alice]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: erin
+spec:
+  profile:
+    email: erin@acme.example
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: maybe-repos
+spec:
+  type: url
+  presence: sometimes
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: no-spec

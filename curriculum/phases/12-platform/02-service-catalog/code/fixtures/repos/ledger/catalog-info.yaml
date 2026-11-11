@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ledger
+  description: Double-entry bookkeeping for every captured payment
+  annotations:
+    github.com/project-slug: acme/ledger
+    cloudcaptain.io/template-version: "1.4.0"
+spec:
+  type: service
+  lifecycle: production
+  owner: payments-team
+  system: payments
+  dependsOn: [resource:payments-db, resource:events-kafka]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fx-rates
+  description: Pulls exchange rates every hour
+spec:
+  type: service
+  lifecycle: experimental
+  owner: system:payments
+  system: payments

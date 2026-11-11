@@ -1,0 +1,9 @@
+{
+  "base": "(last night's export)",
+  "entities": [
+    {"ref": "component:default/payments-api", "source": "payments-api/catalog-info.yaml"},
+    {"ref": "component:default/legacy-billing", "source": "payments-api/catalog-info.yaml"},
+    {"ref": "component:default/old-reporting", "source": "old-reporting/catalog-info.yaml"},
+    {"ref": "resource:default/payments-db", "source": "platform-infra/catalog-info.yaml"}
+  ]
+}

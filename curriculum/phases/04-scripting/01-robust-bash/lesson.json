@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/robust-bash",
+  "title": "A Bash Script Is Only Safe With Strict Mode and Quotes",
+  "short": "Robust Bash",
+  "motto": "Bash splits and globs every unquoted expansion and carries on after a failure; strict mode, quotes and a trap make it fail safely.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "linux/syscalls-strace"
+  ],
+  "tools": [
+    "bash",
+    "shellcheck",
+    "shfmt",
+    "bats"
+  ],
+  "reference": [
+    "/docs/tools/bash/fundamentals",
+    "/docs/tools/bash/advanced",
+    "/docs/tools/bash/cheatsheet",
+    "/docs/tools/python/devops-scripting",
+    "/docs/tools/linux/fundamentals"
+  ],
+  "outputs": [
+    "skill-bash-script-review.md",
+    "prompt-convert-bash-to-python.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v",
+    "bash": "bash -n code/main.sh"
+  },
+  "smoke": "bash code/smoke.sh"
+}

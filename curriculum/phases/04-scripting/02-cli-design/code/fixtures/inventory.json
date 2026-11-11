@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "hosts": [
+    {"name": "db-1", "env": "prod", "role": "db", "ip": "10.0.2.10", "state": "active", "tags": ["primary"]},
+    {"name": "web-1", "env": "prod", "role": "web", "ip": "10.0.1.11", "state": "active", "tags": ["edge"]},
+    {"name": "web-2", "env": "prod", "role": "web", "ip": "10.0.1.12", "state": "maintenance", "tags": []},
+    {"name": "web-9", "env": "staging", "role": "web", "ip": "10.1.1.19", "state": "retired", "tags": []}
+  ]
+}

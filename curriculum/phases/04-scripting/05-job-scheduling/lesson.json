@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/job-scheduling",
+  "title": "cron Is a Clock, a Parser and a Missed-Run Policy",
+  "short": "Job Scheduling",
+  "motto": "A schedule is a set of wall-clock times; turning them into instants and deciding what to do with the missed ones is the real job.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "linux/systemd-unit-runner"
+  ],
+  "tools": [
+    "crontab",
+    "systemd-analyze",
+    "systemd-run",
+    "flock",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/bash/advanced",
+    "/docs/tools/linux/administration",
+    "/docs/tools/kubernetes/workloads"
+  ],
+  "outputs": [
+    "skill-scheduled-job-review.md",
+    "prompt-explain-cron-expression.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "platform/preview-environments",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A CI job creates a namespace per pull request and deletes nothing. After a quarter, what is the most likely state of the cluster?",
+      "choices": [
+        "Fine: Kubernetes garbage-collects namespaces nobody has used for 30 days",
+        "Fine: namespaces without running pods cost nothing",
+        "Each namespace is deleted automatically when the branch is deleted in Git",
+        "Dozens of namespaces for merged or abandoned pull requests, still running pods that hold requested CPU and memory, plus volumes and other leftovers"
+      ],
+      "answer": 3,
+      "explanation": "Kubernetes has no notion of a namespace's lifetime and knows nothing about Git. Unless something deletes them, preview namespaces and everything they request live forever, and the scheduler keeps reserving capacity for them."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A namespace has a ResourceQuota with `requests.cpu: 1` and no LimitRange. A developer applies a Deployment whose container sets no resources. What happens?",
+      "choices": [
+        "The pods run with no CPU request, because the quota only counts what is declared",
+        "The Deployment is created, but its ReplicaSet cannot create pods: quota admission refuses each pod with `must specify requests.cpu`, visible in the ReplicaSet's events",
+        "`kubectl apply` of the Deployment fails with `exceeded quota`",
+        "The quota assigns each pod an equal share of the 1 CPU"
+      ],
+      "answer": 1,
+      "explanation": "Quota is checked when pods are created, not Deployments. A quota on a compute resource requires every container to state it; without a LimitRange to fill in defaults, the ReplicaSet controller's pod creates are refused and the Deployment sits at 0 ready. `kubectl describe rs` shows the FailedCreate events."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "minienv's second reconcile reports 0 writes even though every live object has fields minienv never set (a Service's `clusterIP`, `imagePullPolicy`, quota `1Gi` where minienv wrote `1024Mi`). Why?",
+      "choices": [
+        "`covers()` checks only that every field minienv wants is present in the live object, and compares quantities by value",
+        "Server-side apply rejects unchanged objects with 409",
+        "minienv caches the objects it wrote and never reads the cluster again",
+        "The API server strips its own defaults before returning objects"
+      ],
+      "answer": 0,
+      "explanation": "Comparing a desired object with a live one for equality would always find differences, because the API server adds defaults and canonicalises quantities. A subset test with quantity-aware comparison makes 'unchanged' mean unchanged, so a settled cluster costs no writes and resourceVersions stay put."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The GitHub API call that lists open pull requests fails with an expired token and the client returns an empty list. What should the reaper do?",
+      "choices": [
+        "Delete every preview environment, since no pull request is open",
+        "Delete nothing and exit 0 silently",
+        "Still delete expired environments (the expiry is in the cluster), skip the closed-PR rule and warn, unless an operator passes --allow-empty",
+        "Delete the oldest half of the environments as a compromise"
+      ],
+      "answer": 2,
+      "explanation": "An empty list is indistinguishable from an outage. Rules that depend only on data in the cluster (the expiry label) are still safe; the rule that depends on the external list must not act on input that looks like a failure. Better still, the fetch should raise on an error instead of returning an empty list."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After a preview namespace is deleted, the storage bill keeps growing. What is the most likely leftover, and how does minienv's reaper find it?",
+      "choices": [
+        "Pods stuck in Terminating; it lists pods in all namespaces",
+        "PersistentVolumes with reclaim policy Retain, now Released, whose `spec.claimRef.namespace` still names the deleted namespace; it matches them by claimRef and deletes them before (or, as orphans, after) the namespace",
+        "ConfigMaps; it deletes them by name prefix",
+        "Container images on the nodes; it runs `crictl rmi`"
+      ],
+      "answer": 1,
+      "explanation": "PersistentVolumes are cluster-scoped. Deleting the namespace deletes the claims, and a Retain volume stays Released with its claimRef intact. Nothing else will ever delete it, so the reaper must look outside the namespace."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A team's preview app installs a CRD and a validating webhook as part of its chart. Which isolation unit fits?",
+      "choices": [
+        "A namespace with a stricter ResourceQuota",
+        "A namespace with a default-deny NetworkPolicy",
+        "Any of them; CRDs are namespaced",
+        "A virtual cluster (or a real cluster): CRDs and webhooks are cluster-scoped, so in a shared cluster one preview's versions would affect every other preview and the platform itself"
+      ],
+      "answer": 3,
+      "explanation": "Namespaces only isolate namespaced objects. A CRD or a webhook installed by one preview applies cluster-wide. A virtual cluster gives each preview its own API server, so cluster-scoped objects stay inside it, at the cost of an extra control plane per preview."
+    }
+  ]
+}

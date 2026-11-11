@@ -1,0 +1,77 @@
+{
+  "entity": "resource:default/payments-db",
+  "impacted": [
+    {
+      "ref": "component:default/ledger",
+      "depth": 1,
+      "via": "dependsOn",
+      "path": [
+        "resource:default/payments-db",
+        "component:default/ledger"
+      ],
+      "owners": [
+        "group:default/payments-team"
+      ]
+    },
+    {
+      "ref": "component:default/payments-api",
+      "depth": 1,
+      "via": "dependsOn",
+      "path": [
+        "resource:default/payments-db",
+        "component:default/payments-api"
+      ],
+      "owners": [
+        "group:default/payments-team"
+      ]
+    },
+    {
+      "ref": "api:default/payments-api",
+      "depth": 2,
+      "via": "providesApi",
+      "path": [
+        "resource:default/payments-db",
+        "component:default/payments-api",
+        "api:default/payments-api"
+      ],
+      "owners": [
+        "group:default/payments-team"
+      ]
+    },
+    {
+      "ref": "component:default/checkout-web",
+      "depth": 3,
+      "via": "consumesApi",
+      "path": [
+        "resource:default/payments-db",
+        "component:default/payments-api",
+        "api:default/payments-api",
+        "component:default/checkout-web"
+      ],
+      "owners": [
+        "group:default/checkout-team"
+      ]
+    },
+    {
+      "ref": "component:payments/receipts-worker",
+      "depth": 3,
+      "via": "consumesApi",
+      "path": [
+        "resource:default/payments-db",
+        "component:default/payments-api",
+        "api:default/payments-api",
+        "component:payments/receipts-worker"
+      ],
+      "owners": []
+    }
+  ],
+  "teams": [
+    "(no owner)",
+    "group:default/checkout-team",
+    "group:default/payments-team"
+  ],
+  "systems": [
+    "system:default/checkout",
+    "system:default/payments"
+  ]
+}

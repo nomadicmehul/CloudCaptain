@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "git/bisect-blame",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "There are 1000 commits between a release that works and one that does not, and each test takes a minute. Roughly how many tests does `git bisect` need to name the commit that changed the behaviour?",
+      "choices": [
+        "About 500, because on average the change is in the middle",
+        "1000, because every commit has to be built once",
+        "About 10, because each test removes about half of the commits that can still be the first bad one",
+        "It depends on the number of authors, because bisect groups commits by author"
+      ],
+      "answer": 2,
+      "explanation": "Each verdict clears either the tested commit's ancestors (good) or everything that is not its ancestor (bad), so the suspects halve each time: log2(1000) is about 10. Untestable commits that have to be skipped add a few more tests."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The bad commit `H` and the good commit `A` have 14 candidates between them. The merge `M1` reaches 7 of them, a commit on the main line reaches 9. Which one does `git bisect` test first, and why?",
+      "choices": [
+        "`M1`, because whatever the verdict, 7 candidates remain: it splits the set exactly in half",
+        "The commit that reaches 9, because it is on the main line and merges are never tested",
+        "The commit in the middle of `git log --oneline A..H`, because bisect works on the log order",
+        "`H~1`, because bisect always starts next to the bad commit"
+      ],
+      "answer": 0,
+      "explanation": "Git computes for every candidate how many candidates it reaches (its weight). If it is bad, those remain; if good, the rest remain. The best test maximises the smaller of the two, which is 7 for `M1` and only 5 for a commit that reaches 9."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "Your `git bisect run` script exits 1 whenever `make` fails because a dependency bump broke the build for twelve commits. What happens, and what should the script do?",
+      "choices": [
+        "Nothing bad: bisect ignores commits that fail to build",
+        "Bisect treats exit 1 as a crash and aborts; the script should exit 128",
+        "Bisect asks interactively whether the commit is good or bad",
+        "Those commits are marked bad, so bisect can name a commit in the broken range instead of the real one; the script should exit 125 when the build fails, so the commit is skipped"
+      ],
+      "answer": 3,
+      "explanation": "For `git bisect run`, 0 means good, 125 means skip, any other code from 1 to 127 means bad, and 128 or more aborts. A build failure is not the behaviour you are looking for, so it must be reported as 125."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A formatter commit reformatted the whole file, and `git blame` now shows it on every line. You add its full object name to `.git-blame-ignore-revs` and run `git blame --ignore-revs-file .git-blame-ignore-revs`. What does blame do with that commit's changes?",
+      "choices": [
+        "It deletes the commit from the history before blaming",
+        "It hands each changed line to the most similar line of the parent and keeps blaming from there; a line with no similar parent line stays with the formatter commit and is marked unblamable",
+        "It shows the formatter commit's author in brackets after each line",
+        "It treats the formatter commit as a root commit, so all lines become boundary lines"
+      ],
+      "answer": 1,
+      "explanation": "Ignored commits still pass unchanged lines normally; their changed lines are matched to parent lines by character-pair fingerprints. Lines that match nothing (a blank line the formatter inserted) cannot be attributed further and stay, marked `*` with `blame.markUnblamableLines`."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You want the commit that introduced the constant `MAX_RETRIES = 2`. A later refactor moved that line to another place in the same file without changing it. Which command lists the introducing commit but not the refactor?",
+      "choices": [
+        "`git log -G'MAX_RETRIES = 2'`, because the regex matches only real changes",
+        "`git blame` on the line, because blame always ignores moves",
+        "`git log -S'MAX_RETRIES = 2'`, because it compares the number of occurrences before and after each commit, and a move keeps the count",
+        "`git log --grep='MAX_RETRIES = 2'`, because it searches the diffs"
+      ],
+      "answer": 2,
+      "explanation": "`-S` matches when the count of the string changes, so a move does not match. `-G` matches any commit whose added or removed lines match, and a move removes and adds the line. `--grep` searches commit messages, and plain blame credits the moving commit unless you pass `-M`."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "On Friday a teammate deleted the local branch `retry-cap` with `git branch -D`; it was never pushed. On Monday you need its last commit. Where can it still be found?",
+      "choices": [
+        "In `HEAD`'s reflog (`git reflog`, \"checkout: moving from retry-cap to main\") and as an unreachable commit in the object database (`git fsck --no-reflogs`), in the teammate's clone, until gc expires and prunes it",
+        "In `git reflog show retry-cap`, because a branch's reflog survives the branch",
+        "On the remote, because Git pushes deleted branches to a trash folder",
+        "Nowhere: `git branch -D` deletes the commits immediately"
+      ],
+      "answer": 0,
+      "explanation": "Deleting a branch removes the reference and its own reflog, not the commits. `HEAD`'s reflog still names the commits that were checked out, and the objects stay until gc prunes unreachable objects (after reflog expiry, 30 days for unreachable entries by default, and a two-week prune grace period). Nothing is on the remote if it was never pushed."
+    }
+  ]
+}

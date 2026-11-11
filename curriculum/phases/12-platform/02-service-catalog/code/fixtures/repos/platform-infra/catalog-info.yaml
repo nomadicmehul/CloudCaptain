@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: payments-db
+  description: PostgreSQL 17, primary plus two replicas
+  annotations:
+    opsgenie.com/team: platform
+spec:
+  type: database
+  owner: platform-team
+  system: payments
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: events-kafka
+spec:
+  type: kafka-cluster
+  owner: platform-team
+  system: platform

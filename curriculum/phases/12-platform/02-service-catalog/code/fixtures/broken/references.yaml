@@ -1,0 +1,28 @@
+# Each document has a reference that cannot be parsed into kind:namespace/name.
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: statements
+spec:
+  type: service
+  lifecycle: production
+  owner: payments-team
+  dependsOn: [payments-db]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: disputes
+spec:
+  type: service
+  lifecycle: production
+  owner: "group:"
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: disputes-db
+spec:
+  type: database
+  owner: payments-team
+  system: system:payments/

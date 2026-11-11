@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/cli-design",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A tool prints `warning: config file not found` and then a list of IP addresses. A pipeline runs `tool list | xargs -n1 ping -c1`. What goes wrong, and where should the warning go?",
+      "choices": [
+        "Nothing; xargs ignores lines that are not IP addresses",
+        "The warning is on stdout, so xargs passes its words to ping as hosts; diagnostics belong on stderr, which the pipe does not capture",
+        "The warning makes the tool exit non-zero, so the pipeline stops",
+        "The warning should be removed; tools should be silent"
+      ],
+      "answer": 1,
+      "explanation": "A pipe connects stdout to the next program's stdin. Anything on stdout is data to the reader. Warnings, progress and errors go to stderr, which still reaches the person at the terminal but stays out of the data."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "`CCOPS_LOCK_TIMEOUT=3` is exported, the config file says `lock_timeout = 2`, and you run `ccops hosts add ... --lock-timeout 0.5`. Which value is used and what does `config --explain` show for it?",
+      "choices": [
+        "2, from the config file, because files are the source of truth",
+        "3, from the environment, because the environment is read last",
+        "0.5 with source flag and origin --lock-timeout; the flag is the most specific source, then the environment, then the file, then the default",
+        "The tool refuses because the sources disagree"
+      ],
+      "answer": 2,
+      "explanation": "resolve() walks flag, environment, file and default in that order and records which one answered. Precedence goes from the most specific (this invocation) to the most general (the built-in default), and an empty environment variable counts as unset."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A cron job runs `ccops hosts remove web-9`. Stdin is not a terminal and there is no `--yes`. What does ccops do, and why is that better than reading an answer from stdin?",
+      "choices": [
+        "It refuses with exit 4 and a hint to pass --yes or --dry-run; a pipe or an empty stdin is not a person, and guessing an answer either hangs or deletes without consent",
+        "It waits for an answer until the job is killed",
+        "It assumes yes because there is nobody to ask",
+        "It removes the host but prints a warning"
+      ],
+      "answer": 0,
+      "explanation": "Console.confirm() checks isatty() on stdin before prompting. Without a terminal, the only safe choices are refusing or an explicit --yes in the command line, where a reviewer can see it. A distinct exit code lets the caller tell a refusal from a failure."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`ccops hosts list | head -1` on a large inventory. Python ignores SIGPIPE, so the next write after head exits fails. What should the tool do?",
+      "choices": [
+        "Print the BrokenPipeError traceback so the user knows",
+        "Retry the write until head reads again",
+        "Exit 0 because the user got what they asked for",
+        "Catch BrokenPipeError, point stdout at /dev/null so the final flush is quiet, and exit 141 (128 + SIGPIPE) like a process killed by the signal"
+      ],
+      "answer": 3,
+      "explanation": "A closed pipe is a normal end for a producer, not an error worth a traceback. Exiting 141 matches what the shell reports for a process killed by SIGPIPE, so pipefail and callers see the usual status. Redirecting the descriptor avoids a second exception when Python flushes stdout at exit."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "You review a CLI whose `--help` was hand-written in a README, whose completion script was written once by a contributor, and whose flags have since changed. What is the structural fix?",
+      "choices": [
+        "Add a CI job that greps the README for every flag",
+        "Declare commands and flags once as data and generate parsing, help, the man page and completion from that model, then hold the output still with golden-file tests",
+        "Remove the completion script",
+        "Ask contributors to update all three by hand in every pull request"
+      ],
+      "answer": 1,
+      "explanation": "Three hand-maintained copies of the interface drift. Generating them from one declaration makes drift impossible, and golden files turn every user-visible change into a reviewed diff."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A script runs `kubectl get pods -o json | jq ...` and `kubectl delete pod $POD`. Compared with the contract in this lesson, which statement is accurate?",
+      "choices": [
+        "kubectl asks before every delete, so the script hangs",
+        "kubectl prints colour into the JSON when piped",
+        "kubectl's -o json is clean data on stdout and --dry-run=server previews a delete, but delete does not ask unless --interactive is given, and a mistyped command exits 1 like a real failure",
+        "kubectl exits 2 for every error"
+      ],
+      "answer": 2,
+      "explanation": "kubectl gets the output and dry-run parts right. It does not confirm deletes by default and does not separate usage errors from runtime failures in its exit code, so scripts must check what they pass to it and should dry-run destructive commands first."
+    }
+  ]
+}

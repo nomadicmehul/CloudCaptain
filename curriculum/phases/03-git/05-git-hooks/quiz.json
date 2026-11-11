@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "git/git-hooks",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A team commits a secret-scanning script to `hooks/pre-commit` in the repository. A new engineer clones the repository and commits an AWS key without any warning. Why?",
+      "choices": [
+        "The script needs to be signed before Git trusts it",
+        "Git looks for hooks in `.git/hooks/` (or `core.hooksPath`), which `git clone` never populates; each clone has to install the hooks or set `core.hooksPath` itself",
+        "Hooks only run on the default branch",
+        "The engineer's Git version is too old to run hooks"
+      ],
+      "answer": 1,
+      "explanation": "Hooks are not part of what Git clones, for security reasons: a clone must never run code it just downloaded. A versioned hooks directory still needs `git config core.hooksPath` or a framework's install command in every clone, which is why client hooks cannot be the enforcement."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "You staged a fix in `app.py` and kept a second, unfinished edit in the same file unstaged. Your pre-commit hook runs a linter on `app.py` as it is on disk. What is wrong with that?",
+      "choices": [
+        "Nothing: the file on disk is what will be committed",
+        "Linters cannot read files that have unstaged changes",
+        "The hook also stages the unfinished edit",
+        "The commit is made from the index, so the linter checks a version that will not be committed; a framework sets the unstaged edits aside as a patch, runs the hook on the staged content and re-applies the patch"
+      ],
+      "answer": 3,
+      "explanation": "`git commit` writes the index as a tree. With a partially staged file, the disk holds staged plus unstaged content. pre-commit and minihooks run `git diff-index --binary $(git write-tree)`, check out the index, run the hooks and `git apply` the patch afterwards."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A whitespace-trimming hook rewrites a staged file and exits 0. What does the pre-commit framework do, and why?",
+      "choices": [
+        "It fails the hook because the file changed, leaves the fix unstaged and stops the commit, so the user reviews the change and stages it",
+        "It passes the hook because the exit code is 0",
+        "It stages the fix automatically and lets the commit proceed",
+        "It reverts the fix and passes the hook"
+      ],
+      "answer": 0,
+      "explanation": "The framework compares the working tree before and after each hook; a change is a failure regardless of the exit code. Staging fixes silently would commit content nobody looked at. lefthook's `stage_fixed: true` is a deliberate opt-in to the other policy."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Three hooks are configured in this order: a fixer on `*.py`, a checker on `*.json`, and a secret scanner on all text files. Which may run at the same time without changing any result?",
+      "choices": [
+        "All three, because hooks are independent programs",
+        "None; hooks must always run one after another",
+        "The fixer and the JSON checker, whose file sets are disjoint; the scanner must wait for both, because it reads files the fixer may change",
+        "The scanner and the fixer, because the scanner only reads"
+      ],
+      "answer": 2,
+      "explanation": "Two hooks interfere only through shared files. A hook depends on every earlier hook whose file set overlaps its own (or that may touch anything), which keeps configuration order where order matters and runs the rest in parallel."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Your bare repository's `pre-receive` hook rejects a push because one of five new commits adds a 40 MB file. What does the server keep from that push?",
+      "choices": [
+        "The four commits that passed, on the target branch",
+        "Nothing: the objects were received into a quarantine directory, the hook's non-zero exit declined every ref in the push, and the quarantine was deleted",
+        "All objects, but no refs move until `git gc` runs",
+        "The commits, on a hidden ref the pusher can retry from"
+      ],
+      "answer": 1,
+      "explanation": "`pre-receive` decides for the whole push at once. Git receives the pack into a quarantine object directory that the hook's own `git` commands can read; only on exit 0 are the objects moved into the repository and the refs updated. `update` is the per-ref hook if you need partial acceptance."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The team wants Conventional Commit messages and no secrets on `main`. Which setup actually guarantees it?",
+      "choices": [
+        "A `commit-msg` hook and a secret-scanning `pre-commit` hook in every developer's clone",
+        "A `.pre-commit-config.yaml` in the repository",
+        "A wiki page and code review",
+        "Client hooks for fast feedback, plus the same checks in a required CI job and a server-side `pre-receive` hook or hosted push rules, because client hooks can be missing or skipped with `--no-verify`"
+      ],
+      "answer": 3,
+      "explanation": "Client hooks are advisory: they are not cloned, `--no-verify` skips them, and web edits never see them. Only checks that run where the developer has no control, on the server and in required CI, hold as policy; client hooks make the same feedback arrive seconds after the mistake."
+    }
+  ]
+}

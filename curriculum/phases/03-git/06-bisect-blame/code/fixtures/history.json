@@ -1,0 +1,19 @@
+{
+  "commits": {
+    "A": {"parents": [], "date": 1, "subject": "Initial service"},
+    "B": {"parents": ["A"], "date": 2, "subject": "Add health check"},
+    "X1": {"parents": ["B"], "date": 3, "subject": "retry: add backoff"},
+    "C": {"parents": ["B"], "date": 4, "subject": "Bump base image"},
+    "X2": {"parents": ["X1"], "date": 5, "subject": "retry: cap attempts (the bug)"},
+    "D": {"parents": ["C"], "date": 6, "subject": "Log request ids"},
+    "X3": {"parents": ["X2"], "date": 7, "subject": "retry: add jitter"},
+    "Y1": {"parents": ["D"], "date": 8, "subject": "cache: add TTL"},
+    "M1": {"parents": ["D", "X3"], "date": 9, "subject": "Merge branch 'retry'"},
+    "E": {"parents": ["M1"], "date": 10, "subject": "Tune timeouts"},
+    "Y2": {"parents": ["Y1"], "date": 11, "subject": "cache: evict on write"},
+    "F": {"parents": ["E"], "date": 12, "subject": "Update README"},
+    "M2": {"parents": ["F", "Y2"], "date": 13, "subject": "Merge branch 'cache'"},
+    "G": {"parents": ["M2"], "date": 14, "subject": "Add metrics"},
+    "H": {"parents": ["G"], "date": 15, "subject": "Release 2.4.0"}
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/stream-processing",
+  "title": "jq and awk Are Stream Processors You Can Write",
+  "short": "Stream Processing",
+  "motto": "jq and awk read one record, run a small program on it and forget it; write both and pipelines stop being magic or memory-hungry.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "scripting/robust-bash"
+  ],
+  "tools": [
+    "jq",
+    "awk",
+    "sed",
+    "sort",
+    "xargs",
+    "yq"
+  ],
+  "reference": [
+    "/docs/tools/bash/advanced",
+    "/docs/tools/bash/cheatsheet",
+    "/docs/tools/linux/cheatsheet",
+    "/docs/tools/python/devops-scripting"
+  ],
+  "outputs": [
+    "skill-log-oneliners.md",
+    "prompt-write-jq.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

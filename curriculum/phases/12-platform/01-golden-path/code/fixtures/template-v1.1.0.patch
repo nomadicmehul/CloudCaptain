@@ -1,0 +1,82 @@
+diff --git a/copier.yml b/copier.yml
+index c154d54..1427317 100644
+--- a/copier.yml
++++ b/copier.yml
+@@ -54,6 +54,12 @@ hostname:
+   when: "{{ exposure == 'public' }}"
+   default: "{{ service_name }}.example.com"
+ 
++cpu_request:
++  type: str
++  help: CPU request per replica, in millicores
++  default: 100m
++  validator: "{% if not (cpu_request | regex_search('^[1-9][0-9]*m$')) %}must be millicores such as 100m{% endif %}"
++
+ database:
+   type: bool
+   help: Adds DATABASE_URL from a Secret and a catalog dependency on the database
+diff --git a/skeleton/.github/workflows/ci.yaml.jinja b/skeleton/.github/workflows/ci.yaml.jinja
+index 8b79b72..f04a05f 100644
+--- a/skeleton/.github/workflows/ci.yaml.jinja
++++ b/skeleton/.github/workflows/ci.yaml.jinja
+@@ -11,6 +11,9 @@ jobs:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
++      - uses: actions/setup-python@v5
++        with:
++          python-version: "3.14"
+       - run: python -m unittest discover -s tests -t .
+       - run: docker build -t ghcr.io/example-org/{{ service_name }}:{% raw %}${{ github.sha }}{% endraw %} .
+ {% for env in environments %}
+diff --git a/skeleton/Dockerfile.jinja b/skeleton/Dockerfile.jinja
+index a0b3827..97ef9ae 100644
+--- a/skeleton/Dockerfile.jinja
++++ b/skeleton/Dockerfile.jinja
+@@ -1,7 +1,8 @@
+-FROM python:3.13-slim
++FROM python:3.14-slim
+ WORKDIR /app
+ COPY app/ app/
+ USER 10001
+ ENV PORT={{ port }} PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ EXPOSE {{ port }}
++HEALTHCHECK --interval=10s --timeout=3s CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:{{ port }}/healthz', timeout=2)"]
+ CMD ["python", "-m", "app.main"]
+diff --git a/skeleton/README.md.jinja b/skeleton/README.md.jinja
+index ad118ed..6a1862c 100644
+--- a/skeleton/README.md.jinja
++++ b/skeleton/README.md.jinja
+@@ -15,6 +15,8 @@
+ python -m app.main
+ curl localhost:{{ port }}/healthz
+ python -m unittest discover -s tests -t .
++docker build -t {{ service_name }} .
++docker run --rm -p {{ port }}:{{ port }} {{ service_name }}
+ ```
+ 
+ ## How it ships
+diff --git a/skeleton/k8s/deployment.yaml.jinja b/skeleton/k8s/deployment.yaml.jinja
+index 4821902..9d355e3 100644
+--- a/skeleton/k8s/deployment.yaml.jinja
++++ b/skeleton/k8s/deployment.yaml.jinja
+@@ -40,3 +40,19 @@ spec:
+             readOnlyRootFilesystem: true
+             capabilities:
+               drop: ["ALL"]
++          readinessProbe:
++            httpGet:
++              path: /healthz
++              port: http
++            periodSeconds: 5
++          livenessProbe:
++            httpGet:
++              path: /healthz
++              port: http
++            periodSeconds: 10
++          resources:
++            requests:
++              cpu: {{ cpu_request }}
++              memory: 64Mi
++            limits:
++              memory: 128Mi

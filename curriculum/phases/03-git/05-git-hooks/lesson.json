@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "git/git-hooks",
+  "title": "Hooks Are Programs Git Runs at the Right Moment",
+  "short": "Git Hooks",
+  "motto": "A hook is any program Git runs at a fixed moment; client hooks are a convenience, the server and CI are where policy holds.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "git/object-store"
+  ],
+  "tools": [
+    "git",
+    "pre-commit",
+    "lefthook",
+    "husky",
+    "ssh-keygen"
+  ],
+  "reference": [
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/devsecops/fundamentals",
+    "/docs/tools/github-actions/fundamentals"
+  ],
+  "outputs": [
+    "skill-hook-rollout.md",
+    "prompt-write-hook-config.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

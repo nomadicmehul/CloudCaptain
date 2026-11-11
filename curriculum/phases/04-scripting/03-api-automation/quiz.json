@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/api-automation",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A script creates invoices with `POST /invoices`. A proxy answers `502 Bad Gateway` after the backend already wrote the invoice. The script retries every 5xx three times. What is the problem?",
+      "choices": [
+        "None; a 502 means the request never reached the backend",
+        "The retry should have waited longer before trying again",
+        "A POST is not idempotent, so the retry may create a second invoice; it is safe to repeat only with an idempotency key the server deduplicates on",
+        "502 should be treated as a client error and never retried for any method"
+      ],
+      "answer": 2,
+      "explanation": "A 502 or a read timeout says nothing about whether the backend ran the request. Repeating a non-idempotent POST can duplicate the effect. An Idempotency-Key sent unchanged on every attempt lets the server store the first result and replay it. GET, PUT and DELETE are idempotent and can be retried on a 502."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Twelve hosts run the same cron job at 02:00. All get a 503. Which retry schedule spreads their next attempts out best?",
+      "choices": [
+        "Retry every second, at most ten times",
+        "Exponential backoff: 0.5 s, 1 s, 2 s, the same for every host",
+        "Retry immediately once, then give up",
+        "Full jitter: each host waits a random time between zero and the exponential ceiling for that attempt"
+      ],
+      "answer": 3,
+      "explanation": "Fixed and plain exponential schedules keep hosts that failed together in lockstep, so the service sees spikes at the same moments. Full jitter (random() times min(cap, base * 2^n)) spreads the crowd evenly across each window."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "The fault server plans `503` once for a `POST` without an Idempotency-Key. How many times does the server receive the POST from apiclient, from urllib3 with `DEFAULT_ALLOWED_METHODS`, and from `curl --retry 2`?",
+      "choices": [
+        "1, 1 and 2: curl's --retry looks at the status, not the method",
+        "1, 1 and 1: all three refuse to repeat a POST",
+        "2, 2 and 2: a 503 is always safe to retry",
+        "1, 2 and 2: urllib3 retries POST on 503 by default"
+      ],
+      "answer": 0,
+      "explanation": "apiclient and urllib3 retry status codes only for idempotent methods (or, in apiclient, with an idempotency key). curl --retry treats 408, 429, 500, 502, 503 and 504 as transient regardless of the method, so a script using it can send a POST twice."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A client asks for `?per_page=100`. The server returns 10 items per page and a `Link` header. The response does not say the total. How does the client read everything?",
+      "choices": [
+        "Divide an estimated total by 100 and request those page numbers",
+        "Follow the URL in `rel=\"next\"` until a response has no `next` link, refusing a link it has already visited",
+        "Keep incrementing `page` until a request returns 404",
+        "Request `per_page=1000` so that one page is enough"
+      ],
+      "answer": 1,
+      "explanation": "Servers cap page sizes and some switch to cursors, so only the links they send are authoritative. Computing page numbers silently skips items when the cap is lower than requested. Detecting a repeated next link prevents an endless crawl over a buggy server."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A `200` from GitHub carries `x-ratelimit-remaining: 0` and `x-ratelimit-reset` 41 minutes ahead. The script has 3,000 more requests to make and a 60-second `max_wait`. What should the client do?",
+      "choices": [
+        "Send the next request and back off only when it receives a 403 or 429",
+        "Retry the next request every second until the limit resets",
+        "Switch to unauthenticated requests, which have their own limit",
+        "Stop now with a clear error naming the reset time (the wait exceeds max_wait), or, in a job allowed to wait, sleep until the reset; never spend requests that are certain to fail"
+      ],
+      "answer": 3,
+      "explanation": "The headers already say the next request will fail. Requests sent anyway waste time and, on GitHub, repeated limit violations can get an integration flagged. apiclient records the reset and pauses the next request, or raises RateLimitedError when the pause exceeds max_wait."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A dependency has been returning 503 for ten minutes. Each of your 50 workers retries every call three times with backoff. What does adding a circuit breaker (5 failures, 30 s open) change?",
+      "choices": [
+        "Calls succeed sooner because the breaker retries in the background",
+        "After five consecutive failures, calls fail immediately without a network request; every 30 seconds a single trial request checks whether the dependency recovered",
+        "The breaker converts 503 responses into 200 responses from a cache",
+        "Nothing; retries already limit the load on the dependency"
+      ],
+      "answer": 1,
+      "explanation": "Retries multiply load exactly when the dependency is weakest. An open breaker sheds that load locally and fails fast, so callers can degrade gracefully. In half-open state it lets one trial through: success closes it, failure opens it again for another period."
+    }
+  ]
+}

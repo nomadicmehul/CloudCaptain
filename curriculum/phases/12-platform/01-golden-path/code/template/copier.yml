@@ -1,0 +1,66 @@
+_subdirectory: skeleton
+_templates_suffix: .jinja
+_envops:
+  trim_blocks: true
+  lstrip_blocks: true
+  keep_trailing_newline: true
+_tasks:
+  - command: git init --quiet --initial-branch=main
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: git add --all
+    when: "{{ _copier_operation == 'copy' }}"
+  - command: git commit --quiet --message "Scaffold {{ service_name }} from the service template"
+    when: "{{ _copier_operation == 'copy' }}"
+
+service_name:
+  type: str
+  help: DNS label used for the image, the Deployment, the Service and the catalog entity
+  validator: "{% if not (service_name | regex_search('^[a-z][a-z0-9-]{1,38}[a-z0-9]$')) %}must be a DNS label of 3 to 40 characters: lowercase letters, digits and hyphens, starting with a letter{% endif %}"
+
+description:
+  type: str
+  help: One sentence for the README and the catalog
+  default: "{{ service_name }} service"
+  validator: "{% if description | length > 72 %}must be at most 72 characters{% endif %}"
+
+owner:
+  type: str
+  help: Backstage Group that owns the service and is on call for it
+  validator: "{% if not (owner | regex_search('^[a-z][a-z0-9-]*$')) %}must be a Backstage group name such as payments{% endif %}"
+
+port:
+  type: int
+  help: Port the service listens on inside the container
+  default: 8080
+  validator: "{% if port < 1024 or port > 65535 %}must be between 1024 and 65535: the container runs as a non-root user{% endif %}"
+
+replicas:
+  type: int
+  help: Replicas per environment
+  default: 2
+  validator: "{% if replicas < 2 or replicas > 10 %}must be between 2 and 10: one replica is not highly available{% endif %}"
+
+exposure:
+  type: str
+  help: internal keeps the service inside the cluster, public adds an HTTPRoute
+  choices:
+    - internal
+    - public
+  default: internal
+
+hostname:
+  type: str
+  help: Public host name for the HTTPRoute
+  when: "{{ exposure == 'public' }}"
+  default: "{{ service_name }}.example.com"
+
+database:
+  type: bool
+  help: Adds DATABASE_URL from a Secret and a catalog dependency on the database
+  default: false
+
+environments:
+  type: yaml
+  help: Deployment environments, promoted in this order
+  default: "[staging, production]"
+  validator: "{% if environments | length == 0 %}name at least one environment{% endif %}"

@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: {{ service_name }}
+  description: {{ description | tojson }}
+  annotations:
+    backstage.io/kubernetes-id: {{ service_name }}
+    backstage.io/source-template: template:default/python-service
+    cloudcaptain.io/template-version: {{ _copier_answers._commit | default('unversioned') | tojson }}
+    github.com/project-slug: example-org/{{ service_name }}
+  tags:
+    - python
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/{{ owner }}
+{% if database %}
+  dependsOn:
+    - resource:default/{{ service_name }}-database
+{% endif %}

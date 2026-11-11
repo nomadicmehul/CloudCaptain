@@ -1,0 +1,42 @@
+{
+  "apiVersion": "platform.cloudcaptain.io/v1beta1",
+  "kind": "Workload",
+  "metadata": {
+    "name": "storefront"
+  },
+  "spec": {
+    "owner": "web",
+    "container": {
+      "image": "python:3.12-alpine",
+      "command": [
+        "python",
+        "-m",
+        "http.server",
+        "8080"
+      ],
+      "port": 8080,
+      "healthPath": "/",
+      "env": [
+        {
+          "name": "LOG_LEVEL",
+          "value": "info"
+        }
+      ]
+    },
+    "size": "small",
+    "scaling": {
+      "min": 2,
+      "max": 10
+    },
+    "route": {
+      "host": "shop.cc.test",
+      "path": "/"
+    },
+    "dependencies": [
+      {
+        "name": "orders",
+        "type": "workload"
+      }
+    ]
+  }
+}

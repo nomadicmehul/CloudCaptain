@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/job-scheduling",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A crontab line reads `0 9 1 * 1`. On which days does the job run?",
+      "choices": [
+        "Only on a Monday that is also the 1st of the month",
+        "On the 1st of every month and on every Monday",
+        "On the first Monday of every month",
+        "Only on Mondays; the day-of-month field is ignored when a weekday is given"
+      ],
+      "answer": 1,
+      "explanation": "When both day fields are restricted, cron matches a day if either matches. To get 'the first Monday' you need `0 9 1-7 * *` plus a check inside the command (`[ \"$(date +%u)\" = 1 ]`), or a systemd timer, where `Mon *-*-1..7 09:00` combines weekday and date with AND."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A server in Berlin runs `30 2 * * *` from root's crontab under Debian's cron. What happens on the last Sunday of March, when the clock jumps from 02:00 to 03:00?",
+      "choices": [
+        "The job is skipped that day",
+        "The job runs at 02:30 UTC",
+        "The job runs twice, at 01:30 and 03:30",
+        "The job runs once, right after the change, at about 03:00"
+      ],
+      "answer": 3,
+      "explanation": "cron(8) treats jobs with a fixed minute and hour specially: those that fell into the skipped time run soon after the change. A job with `*` in the minute or hour field is not caught up. A systemd timer with `OnCalendar=*-*-* 02:30` would skip the day instead."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A sync job is scheduled every 5 minutes and sometimes takes 7. The crontab line is `*/5 * * * * flock -n /run/lock/sync.lock /usr/local/bin/sync`. A teammate proposes adding `rm -f /run/lock/sync.lock` at the end of the script 'to clean up'. What is wrong with that?",
+      "choices": [
+        "Nothing; it only removes a file that is no longer needed",
+        "flock -n will then wait instead of failing",
+        "A copy that opened the old file still holds a lock on the deleted inode while the next copy creates a new file and locks that, so two copies can run at once; an flock lock never goes stale, so there is nothing to clean up",
+        "The kernel refuses to delete a locked file, so the script will fail"
+      ],
+      "answer": 2,
+      "explanation": "flock(2) locks the open file, not the name. Removing the name lets a new process create and lock a different inode. The kernel already releases the lock when the last descriptor closes, even after a crash, which is the whole reason to prefer flock over a PID file."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A systemd timer has `OnCalendar=daily` and `Persistent=true`. The machine is powered off from Friday 22:00 to Monday 08:00. What happens at boot?",
+      "choices": [
+        "The service starts once, immediately, because at least one elapse was missed since the last trigger; the next regular run is Tuesday 00:00",
+        "The service runs three times, once for each missed midnight",
+        "Nothing until Tuesday 00:00; Persistent= only keeps the timer enabled across reboots",
+        "The service runs at a random time during Monday because of RandomizedDelaySec"
+      ],
+      "answer": 0,
+      "explanation": "Persistent=true stores the last trigger time on disk. At activation, if an elapse was missed since then, the service is triggered once. It is a catch-up, not a backfill: systemd never replays each missed run."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A Kubernetes CronJob runs `0 6 * * *` with `startingDeadlineSeconds: 600`. The control plane is down from 05:30 to 07:30. What happens when it comes back?",
+      "choices": [
+        "The 06:00 Job starts at 07:30, late but once",
+        "The 06:00 Job starts at 07:30 and is killed after 600 seconds",
+        "Two Jobs start, one for 06:00 and one for 07:00",
+        "The 06:00 schedule is more than 600 seconds old, so it is counted as missed and nothing runs until 06:00 the next day"
+      ],
+      "answer": 3,
+      "explanation": "startingDeadlineSeconds limits how late a run may start, not how long it may run (that is activeDeadlineSeconds on the Job). Without it the controller would start the most recent missed schedule once; with it, a schedule older than the deadline is a miss. Pick the deadline from how stale the job's result may be."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The same expression `0 3 */2 * 1` runs from a crontab on a VM and as a Kubernetes CronJob. Why do the two run on different days?",
+      "choices": [
+        "Kubernetes evaluates schedules in UTC and the VM in local time",
+        "Vixie-style cron treats a day field that starts with `*` as a star, so `*/2` makes the rule AND (odd days that are Mondays); the robfig parser behind CronJob treats a stepped star as a restriction and uses OR (odd days or Mondays)",
+        "Kubernetes does not support step values in the day-of-month field",
+        "Debian's cron counts Monday as 0"
+      ],
+      "answer": 1,
+      "explanation": "Both implement the 'either day field' rule, but they disagree on what counts as `*`. A different time zone would shift the hour, not the set of days. Run `minicron explain` with both dialects, or avoid steps in day fields when both day fields are used."
+    }
+  ]
+}

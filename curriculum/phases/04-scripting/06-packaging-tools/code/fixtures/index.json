@@ -1,0 +1,93 @@
+{
+  "packages": [
+    {
+      "name": "cc-term",
+      "version": "0.2.0",
+      "summary": "Terminal capability checks",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "files": {
+        "cc_term/__init__.py": "import os\n\n\ndef supports_colour(stream):\n    return stream.isatty()\n"
+      }
+    },
+    {
+      "name": "cc-term",
+      "version": "0.3.0",
+      "summary": "Terminal capability checks",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "files": {
+        "cc_term/__init__.py": "import os\n\n\ndef supports_colour(stream):\n    if os.environ.get(\"NO_COLOR\"):\n        return False\n    return hasattr(stream, \"isatty\") and stream.isatty()\n"
+      }
+    },
+    {
+      "name": "cc-term",
+      "version": "0.3.1",
+      "summary": "Terminal capability checks",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "files": {
+        "cc_term/__init__.py": "import os\n\n\ndef supports_colour(stream):\n    if os.environ.get(\"NO_COLOR\"):\n        return False\n    return hasattr(stream, \"isatty\") and stream.isatty()\n"
+      }
+    },
+    {
+      "name": "cc-term",
+      "version": "0.4.0",
+      "summary": "Terminal capability checks",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "files": {
+        "cc_term/__init__.py": "import os\n\n\ndef supports_colour(stream):\n    if os.environ.get(\"NO_COLOR\"):\n        return False\n    return hasattr(stream, \"isatty\") and stream.isatty()\n"
+      }
+    },
+    {
+      "name": "cc-colors",
+      "version": "1.0.0",
+      "summary": "ANSI colours that respect NO_COLOR",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "files": {
+        "cc_colors/__init__.py": "def paint(text, colour, stream=None):\n    return text\n"
+      }
+    },
+    {
+      "name": "cc-colors",
+      "version": "1.1.0",
+      "summary": "ANSI colours that respect NO_COLOR",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "requires": [
+        "cc-term~=0.3.0"
+      ],
+      "files": {
+        "cc_colors/__init__.py": "import sys\n\nfrom cc_term import supports_colour\n\nCODES = {\"red\": 31, \"green\": 32, \"yellow\": 33}\n\n\ndef paint(text, colour, stream=None):\n    stream = stream or sys.stdout\n    if not supports_colour(stream):\n        return text\n    return f\"\\033[{CODES[colour]}m{text}\\033[0m\"\n"
+      }
+    },
+    {
+      "name": "cc-colors",
+      "version": "1.2.0rc1",
+      "summary": "ANSI colours that respect NO_COLOR",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "requires": [
+        "cc-term>=0.4"
+      ],
+      "files": {
+        "cc_colors/__init__.py": "import sys\n\nfrom cc_term import supports_colour\n\nCODES = {\"red\": 31, \"green\": 32, \"yellow\": 33}\n\n\ndef paint(text, colour, stream=None):\n    stream = stream or sys.stdout\n    if not supports_colour(stream):\n        return text\n    return f\"\\033[{CODES[colour]}m{text}\\033[0m\"\n"
+      }
+    },
+    {
+      "name": "cc-colors",
+      "version": "2.0.0",
+      "summary": "ANSI colours that respect NO_COLOR",
+      "requires-python": ">=3.9",
+      "license": "MIT",
+      "requires": [
+        "cc-term>=0.4"
+      ],
+      "files": {
+        "cc_colors/__init__.py": "import sys\n\nfrom cc_term import supports_colour\n\nCODES = {\"red\": 31, \"green\": 32, \"yellow\": 33}\n\n\ndef paint(text, colour, stream=None):\n    stream = stream or sys.stdout\n    if not supports_colour(stream):\n        return text\n    return f\"\\033[{CODES[colour]}m{text}\\033[0m\"\n"
+      }
+    }
+  ]
+}

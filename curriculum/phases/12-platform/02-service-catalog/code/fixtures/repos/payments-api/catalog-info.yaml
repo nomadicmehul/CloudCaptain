@@ -1,0 +1,59 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payments-api
+  description: >
+    Authorises and captures card payments.
+    Every order goes through it.
+  annotations:
+    github.com/project-slug: acme/payments-api
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/kubernetes-id: payments-api
+    cloudcaptain.io/template-version: "2.0.3"
+    cloudcaptain.io/slo: "99.95% of authorisations succeed over 28 days"
+  links:
+    - url: https://runbooks.acme.example/payments-api
+      title: Runbook
+spec:
+  type: service
+  lifecycle: production
+  owner: payments-team
+  system: payments
+  providesApis: [payments-api]
+  dependsOn:
+    - component:ledger
+    - resource:payments-db
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: payments-api
+  description: Card payments, version 2
+spec:
+  type: openapi
+  lifecycle: production
+  owner: payments-team
+  system: payments
+  definition: |
+    openapi: 3.1.0
+    info:
+      title: Payments
+      version: 2.4.0
+    paths:
+      /v2/payments:
+        post:
+          summary: Authorise a payment
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: receipts-worker
+  namespace: payments
+  description: Sends receipts after capture. Lives in the payments namespace.
+  annotations:
+    backstage.io/kubernetes-id: receipts-worker
+spec:
+  type: service
+  lifecycle: production
+  owner: payments-team
+  consumesApis: [api:default/payments-api]

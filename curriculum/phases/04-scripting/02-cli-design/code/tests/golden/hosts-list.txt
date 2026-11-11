@@ -1,0 +1,5 @@
+NAME   ENV      ROLE  IP         STATE        TAGS
+db-1   prod     db    10.0.2.10  active       primary
+web-1  prod     web   10.0.1.11  active       edge
+web-2  prod     web   10.0.1.12  maintenance
+web-9  staging  web   10.1.1.19  retired

@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: checkout-web
+  title: Checkout web
+  description: The pages a customer sees between the basket and the receipt.
+  annotations:
+    github.com/project-slug: acme/checkout-web
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/source-template: template:default/python-service
+    backstage.io/kubernetes-id: checkout-web
+    cloudcaptain.io/template-version: "2.1.0"
+    cloudcaptain.io/slo: "99.9% of checkout page loads under 800 ms over 28 days"
+  tags: [python, web]
+  links:
+    - url: https://runbooks.acme.example/checkout-web
+      title: Runbook
+      type: runbook
+    - url: https://grafana.acme.example/d/checkout
+      title: Dashboard
+spec:
+  type: website
+  lifecycle: production
+  owner: checkout-team
+  system: checkout
+  consumesApis:
+    - payments-api
+    - api:search-api

@@ -1,0 +1,38 @@
+ccops hosts remove - remove hosts; asks first, refuses without a terminal unless --yes
+
+Usage:
+  ccops hosts remove [flags] NAME...
+
+Arguments:
+  NAME...                     host names
+
+Flags:
+      --missing-ok            exit 0 when a host is already absent
+  -n, --dry-run               print what would change and change nothing
+  -y, --yes                   confirm without asking (required when stdin is not
+                              a terminal)
+
+Global flags:
+  -o, --output FORMAT         output format (env CCOPS_OUTPUT, config output,
+                              default text)
+      --json                  same as --output json: one JSON document on stdout
+      --color WHEN            colour: auto, always or never; auto is off when
+                              NO_COLOR is set or stdout is not a terminal (env
+                              CCOPS_COLOR, config color, default auto)
+  -i, --inventory PATH        inventory file (env CCOPS_INVENTORY, config
+                              inventory, default inventory.json)
+      --lock-timeout SECONDS  seconds to wait for another writer's lock (env
+                              CCOPS_LOCK_TIMEOUT, config lock_timeout, default
+                              5)
+      --config PATH           config file (env CCOPS_CONFIG, default
+                              ~/.config/ccops/config)
+  -q, --quiet                 print only what a pipe needs: no notes, names only
+                              in lists
+  -v, --verbose               print debug diagnostics on stderr
+  -h, --help                  show this help and exit 0
+
+Examples:
+  ccops hosts remove web-3 --dry-run
+  ccops hosts remove web-3 --yes
+
+Exit codes: 0 ok, 1 failure, 2 usage, 3 not found, 4 refused, 130 interrupted, 141 broken pipe

@@ -1,0 +1,28 @@
+# The root of the catalog: one Location that points at every repository's
+# catalog-info.yaml. Backstage registers this file once; everything else is
+# discovered by following the targets.
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: acme-root
+  description: Every repository that ships a catalog-info.yaml
+spec:
+  type: url
+  targets:
+    - ./org.yaml
+    - ../checkout-web/catalog-info.yaml
+    - ../payments-api/catalog-info.yaml
+    - ../ledger/catalog-info.yaml
+    - ../search/catalog-info.yaml
+    - ../notifications/catalog-info.yaml
+    - ../platform-infra/catalog-info.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: experiments
+  description: Repositories that may not exist yet
+spec:
+  type: url
+  presence: optional
+  target: ../fraud-ml/catalog-info.yaml

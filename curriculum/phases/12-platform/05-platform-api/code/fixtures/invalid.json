@@ -1,0 +1,634 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "both-scaling",
+        "annotations": {
+          "cc.test/expect": "set either replicas or min and max, not both",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "replicas": 2,
+          "min": 2,
+          "max": 4
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "min-over-max",
+        "annotations": {
+          "cc.test/expect": "min must not be greater than max",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 5,
+          "max": 2
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "latest-tag",
+        "annotations": {
+          "cc.test/expect": "the latest tag is not allowed; pin a version",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:latest",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "no-tag",
+        "annotations": {
+          "cc.test/expect": "image needs a tag or a digest",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "registry.local:5000/team/app",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "trailing-slash",
+        "annotations": {
+          "cc.test/expect": "path must not end with / (except /)",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "unknown-field",
+        "annotations": {
+          "cc.test/expect": "unknown field",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ],
+          "imagePullPolicy": "Always"
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "huge-size",
+        "annotations": {
+          "cc.test/expect": "Unsupported value",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "huge",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "too-many",
+        "annotations": {
+          "cc.test/expect": "should be less than or equal to 50",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "replicas": 80
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "no-owner",
+        "annotations": {
+          "cc.test/expect": "Required value",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "twin-deps",
+        "annotations": {
+          "cc.test/expect": "Duplicate value",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          },
+          {
+            "name": "db",
+            "type": "workload"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "a-name-that-is-far-too-long-for-the-platform",
+        "annotations": {
+          "cc.test/expect": "name must be a DNS label of at most 40 characters",
+          "cc.test/kubernetes": "reject"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "guarded-override",
+        "annotations": {
+          "cc.test/expect": "guarded by the platform",
+          "cc.test/kubernetes": "accept"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "LOG_LEVEL",
+              "value": "info"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ],
+        "overrides": [
+          {
+            "kind": "Deployment",
+            "patch": {
+              "spec": {
+                "template": {
+                  "spec": {
+                    "securityContext": {
+                      "runAsNonRoot": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "platform.cloudcaptain.io/v1beta1",
+      "kind": "Workload",
+      "metadata": {
+        "name": "env-collision",
+        "annotations": {
+          "cc.test/expect": "is set by dependency db",
+          "cc.test/kubernetes": "accept"
+        }
+      },
+      "spec": {
+        "owner": "checkout",
+        "container": {
+          "image": "python:3.12-alpine",
+          "command": [
+            "python",
+            "-m",
+            "http.server",
+            "8080"
+          ],
+          "port": 8080,
+          "healthPath": "/",
+          "env": [
+            {
+              "name": "DB_HOST",
+              "value": "localhost"
+            }
+          ]
+        },
+        "size": "small",
+        "scaling": {
+          "min": 2,
+          "max": 5,
+          "targetCPUUtilization": 70
+        },
+        "route": {
+          "host": "shop.cc.test",
+          "path": "/api/orders"
+        },
+        "dependencies": [
+          {
+            "name": "db",
+            "type": "postgres"
+          }
+        ]
+      }
+    }
+  ]
+}

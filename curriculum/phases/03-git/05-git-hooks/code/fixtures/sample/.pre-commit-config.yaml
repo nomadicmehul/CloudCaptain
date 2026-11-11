@@ -1,0 +1,30 @@
+default_stages: [pre-commit]
+exclude: '^hooks/'
+repos:
+  - repo: local
+    hooks:
+      - id: trailing-whitespace
+        name: trim trailing whitespace
+        entry: python3 hooks/fix_whitespace.py
+        language: system
+        types_or: [python, markdown]
+      - id: check-json
+        name: check json syntax
+        entry: python3 hooks/check_json.py
+        language: system
+        types: [json]
+      - id: no-secrets
+        name: block secrets
+        entry: 'AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----'
+        language: pygrep
+        types: [text]
+      - id: no-env-files
+        name: forbid .env files
+        entry: .env files hold secrets; keep them out of Git
+        language: fail
+        files: '(^|/)\.env$'
+      - id: conventional-commit
+        name: conventional commit message
+        entry: minihooks check-msg
+        language: system
+        stages: [commit-msg]
