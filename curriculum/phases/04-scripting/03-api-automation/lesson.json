@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/api-automation",
+  "title": "Automating an API Is Pagination, Retries and Rate Limits",
+  "short": "API Automation",
+  "motto": "Retry only what is safe to repeat, wait as long as the server asks, follow the next link, and stop calling a service that is down.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "networking/http-server"
+  ],
+  "tools": [
+    "curl",
+    "urllib3",
+    "gh"
+  ],
+  "reference": [
+    "/docs/tools/python/devops-scripting",
+    "/docs/tools/python/fundamentals",
+    "/docs/tools/networking/fundamentals",
+    "/docs/tools/bash/advanced"
+  ],
+  "outputs": [
+    "skill-api-integration-review.md",
+    "prompt-explain-retry-policy.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

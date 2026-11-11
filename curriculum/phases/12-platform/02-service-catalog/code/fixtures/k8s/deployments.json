@@ -1,0 +1,188 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "checkout-web",
+        "labels": {
+          "app": "checkout-web",
+          "backstage.io/kubernetes-id": "checkout-web"
+        },
+        "namespace": "cc-service-catalog",
+        "uid": "00000000-0000-0000-0000-000000000000"
+      },
+      "spec": {
+        "replicas": 0,
+        "selector": {
+          "matchLabels": {
+            "app": "checkout-web"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "checkout-web"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "app",
+                "image": "registry.k8s.io/pause:3.10"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "payments-api",
+        "labels": {
+          "app": "payments-api",
+          "backstage.io/kubernetes-id": "payments-api"
+        },
+        "namespace": "cc-service-catalog",
+        "uid": "00000000-0000-0000-0000-000000000001"
+      },
+      "spec": {
+        "replicas": 0,
+        "selector": {
+          "matchLabels": {
+            "app": "payments-api"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "payments-api"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "app",
+                "image": "registry.k8s.io/pause:3.10"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "notifications",
+        "labels": {
+          "app": "notifications",
+          "backstage.io/kubernetes-id": "notifications"
+        },
+        "namespace": "cc-service-catalog",
+        "uid": "00000000-0000-0000-0000-000000000002"
+      },
+      "spec": {
+        "replicas": 0,
+        "selector": {
+          "matchLabels": {
+            "app": "notifications"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "notifications"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "app",
+                "image": "registry.k8s.io/pause:3.10"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "search-v1",
+        "labels": {
+          "app": "search-v1",
+          "backstage.io/kubernetes-id": "search-v1"
+        },
+        "namespace": "cc-service-catalog",
+        "uid": "00000000-0000-0000-0000-000000000003"
+      },
+      "spec": {
+        "replicas": 0,
+        "selector": {
+          "matchLabels": {
+            "app": "search-v1"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "search-v1"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "app",
+                "image": "registry.k8s.io/pause:3.10"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "debug-shell",
+        "labels": {
+          "app": "debug-shell"
+        },
+        "namespace": "cc-service-catalog",
+        "uid": "00000000-0000-0000-0000-000000000004"
+      },
+      "spec": {
+        "replicas": 0,
+        "selector": {
+          "matchLabels": {
+            "app": "debug-shell"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "debug-shell"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "app",
+                "image": "registry.k8s.io/pause:3.10"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

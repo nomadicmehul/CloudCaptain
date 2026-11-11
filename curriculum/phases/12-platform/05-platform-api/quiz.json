@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "platform/platform-api",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A Deployment has an HPA with `minReplicas: 2`, `maxReplicas: 10`, and the Deployment manifest in Git still says `replicas: 2`. The HPA has scaled to 8. What happens on the next `kubectl apply` of that manifest?",
+      "choices": [
+        "Nothing; the HPA's value always wins over the manifest",
+        "The apply fails with a conflict because the HPA owns the field",
+        "The Deployment is set to 2 replicas, and the HPA scales it back up only on its next evaluations",
+        "Kubernetes takes the larger of the two values"
+      ],
+      "answer": 2,
+      "explanation": "Client-side apply writes every field in the manifest, so `spec.replicas: 2` overwrites the HPA's 8 and pods are terminated until the HPA reacts. With an HPA, `spec.replicas` must leave the manifest, and removing it needs a handover too, because a removed field falls back to its default of 1."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Why does miniplatform's CRD model `env` as a list of `name`/`value` objects with `x-kubernetes-list-type: map` instead of a map from name to value?",
+      "choices": [
+        "Because the API server estimates each CEL rule's worst-case cost from `maxLength` and `maxItems`, map keys have no length bound, and a list keyed by `name` also gets duplicate detection",
+        "Because OpenAPI v3 cannot describe maps",
+        "Because Kubernetes sorts maps alphabetically and the order of variables matters",
+        "Because JSON objects cannot have more than 64 keys"
+      ],
+      "answer": 0,
+      "explanation": "OpenAPI can describe maps with `additionalProperties`, but a rule over map keys has no `maxLength` to bound its cost, and the API server refuses CRDs whose rules may be too expensive. A list with a keyed `name` field is bounded, validated by `pattern`, and rejects duplicates with `Duplicate value`."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An autoscaled `v1beta1` Workload is read by a client that only knows `v1alpha1`, which has no autoscaling, and written back. How does a correct conversion keep `scaling.min` and `scaling.max`?",
+      "choices": [
+        "It cannot; information lost in an older version is gone",
+        "The API server keeps both versions in etcd",
+        "The client must be upgraded before it may read the object",
+        "The down-conversion stores the fields `v1alpha1` cannot express in an annotation, and the up-conversion restores them, so the round trip is lossless"
+      ],
+      "answer": 3,
+      "explanation": "Only one storage version exists, so conversions must round-trip. Kubernetes' convention for fields the older version lacks is an annotation on the older representation. miniplatform finds those fields by converting back and comparing, so a new field cannot be forgotten."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The CRD accepts a Workload whose `overrides` patch sets `securityContext.runAsNonRoot: false`, while `miniplatform validate` rejects it. Why the difference?",
+      "choices": [
+        "CEL cannot compare booleans",
+        "The patch is declared with `x-kubernetes-preserve-unknown-fields`, so the schema and CEL rules cannot see inside it; the guard needs the translator, an admission policy or the controller",
+        "The API server ignores security fields in custom resources",
+        "The CRD is wrong and should have rejected it with a schema type error"
+      ],
+      "answer": 1,
+      "explanation": "A free-form patch has no schema below it, so nothing in the CRD constrains its keys. Guarding it requires code that understands what the patch will touch: the translator in CI, a ValidatingAdmissionPolicy or webhook at admission, or the controller writing a failed condition to status."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "score-k8s renders `ORDERS_URL=http://orders:8080` for a service-port dependency, while the `orders` Service has `port: 80` and `targetPort: 8080`. What happens when storefront calls that URL inside the cluster?",
+      "choices": [
+        "It works; kube-proxy forwards any port to the target port",
+        "It works only when NetworkPolicy allows port 8080",
+        "It fails: the Service only forwards the ports it declares, so connecting to the Service on 8080 is not routed to the pods",
+        "It works because DNS resolves the name to a pod IP"
+      ],
+      "answer": 2,
+      "explanation": "A ClusterIP Service forwards only its declared ports. The provisioner outputs the target port, which is the pods' port, not the Service's. Give the Service the same port as the container or replace the provisioner; miniplatform outputs the Service port."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Why does miniplatform render a PodDisruptionBudget only for workloads with at least two replicas, using `maxUnavailable: 1`?",
+      "choices": [
+        "On one replica, `minAvailable: 1` or `maxUnavailable: 0` allows no voluntary eviction at all, so every node drain stalls; with two or more, `maxUnavailable: 1` keeps service up while letting drains proceed",
+        "PDBs are not allowed on Deployments with one replica",
+        "A PDB doubles the replica count during a drain",
+        "PDBs only work together with an HPA"
+      ],
+      "answer": 0,
+      "explanation": "A PDB that can never be satisfied blocks `kubectl drain` until someone deletes it. A single-replica service is going to be down during a drain anyway; the platform makes that explicit instead of stalling node maintenance."
+    }
+  ]
+}

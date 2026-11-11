@@ -1,0 +1,24 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m unittest discover -s tests -t .
+      - run: docker build -t ghcr.io/example-org/{{ service_name }}:{% raw %}${{ github.sha }}{% endraw %} .
+{% for env in environments %}
+  deploy-{{ env }}:
+    needs: {{ 'deploy-' ~ loop.previtem if not loop.first else 'build' }}
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: {{ env }}
+    steps:
+      - run: echo "deploy ghcr.io/example-org/{{ service_name }}:{% raw %}${{ github.sha }}{% endraw %} to {{ env }}"
+{% endfor %}

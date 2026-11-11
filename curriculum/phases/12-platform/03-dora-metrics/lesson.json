@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/dora-metrics",
+  "title": "DORA Metrics Are Joins Over Deploys, Commits and Incidents",
+  "short": "DORA Metrics",
+  "motto": "Each of the four keys is a join between a deploy log, the commit graph and an incident log; get the join right before you read the number.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/release-versioning"
+  ],
+  "tools": [
+    "git",
+    "duckdb",
+    "gh"
+  ],
+  "reference": [
+    "/docs/learning-paths/platform-engineering",
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/git/advanced",
+    "/docs/interview-prep/devops"
+  ],
+  "outputs": [
+    "skill-delivery-metrics-review.md",
+    "prompt-explain-dora-change.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

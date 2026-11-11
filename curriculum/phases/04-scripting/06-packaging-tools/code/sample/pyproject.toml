@@ -1,0 +1,32 @@
+[build-system]
+requires = ["flit_core>=3.12,<5"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "cc-envcheck"
+dynamic = ["version"]
+description = "Check that the environment variables a deploy needs are set"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+  { name = "CloudCaptain", email = "lessons@cloudcaptain.io" },
+]
+keywords = ["devops", "environment", "preflight"]
+classifiers = [
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "Topic :: System :: Systems Administration",
+]
+dependencies = [
+  "cc-colors>=1.1,<2",
+]
+
+[project.urls]
+Homepage = "https://cloudcaptain.io/learn/scripting/packaging-tools"
+
+[project.scripts]
+cc-envcheck = "cc_envcheck.cli:main"
+
+[tool.shipit]
+version-source = "git"

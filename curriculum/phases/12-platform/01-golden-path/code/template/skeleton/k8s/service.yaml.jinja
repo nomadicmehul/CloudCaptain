@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ service_name }}
+  labels:
+    app.kubernetes.io/name: {{ service_name }}
+spec:
+  selector:
+    app.kubernetes.io/name: {{ service_name }}
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

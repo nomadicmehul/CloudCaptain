@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/robust-bash",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A deploy script without `set -e` runs `target=\"/srv/my app\"` and then `cd $target`, followed by `tar -xzf release.tgz`. What happens?",
+      "choices": [
+        "`cd` changes into `/srv/my app`, because a variable keeps its spaces",
+        "Bash refuses to start the script because a variable contains a space",
+        "`cd` receives two words, fails with `too many arguments`, and `tar` extracts into whatever directory the caller was in",
+        "`cd` changes into `/srv/my` and ignores the second word"
+      ],
+      "answer": 2,
+      "explanation": "The unquoted expansion is split on IFS into `/srv/my` and `app`. `cd` fails, and without errexit the next line runs anyway, in the wrong directory. `cd \"$target\"` passes one word; `set -e` (or `cd ... || exit`) stops the script when it fails."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Which of these expansions does Bash split on spaces and expand as a glob?",
+      "choices": [
+        "`rm -f $tmpfile`, an argument of a simple command",
+        "`copy=$tmpfile`, the right side of an assignment",
+        "`[[ -f $tmpfile ]]`, inside double brackets",
+        "`case $tmpfile in *.tmp) ;; esac`, the case subject"
+      ],
+      "answer": 0,
+      "explanation": "Splitting and globbing apply to unquoted expansions in the words of a command, `[ ]` included. Assignments, `[[ ]]`, the case subject, arithmetic and here-document bodies hold exactly one value, so Bash never splits there, and neither ShellCheck nor bashlint reports them."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A script starts with `set -euo pipefail`. Which failing command does NOT stop it?",
+      "choices": [
+        "`false` on a line of its own",
+        "`curl -fsS \"$url\" | tar -xz` when `curl` fails",
+        "`echo \"$never_set\"` when `never_set` was never assigned",
+        "`if grep -q ready status.txt; then ...` when `grep` finds nothing"
+      ],
+      "answer": 3,
+      "explanation": "A command whose status is tested by `if`, `while`, `until`, `!` or the left side of `&&`/`||` is checked, so errexit leaves it alone. `false` alone exits, `pipefail` makes the pipeline fail when `curl` does, and `nounset` turns the unset variable into an error."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "bashlint reports BL008 (SC2115) for `rm -rf \"$cache_dir/\"*`. What is the right fix?",
+      "choices": [
+        "Add `set -u`, which makes an empty variable an error",
+        "Write `rm -rf \"${cache_dir:?}/\"*`, so Bash stops with `cache_dir: parameter null or not set` before `rm` runs",
+        "Quote the star as well: `rm -rf \"$cache_dir/*\"`",
+        "Drop `-f` so `rm` asks before deleting"
+      ],
+      "answer": 1,
+      "explanation": "`${var:?}` fails the expansion when the variable is unset or empty, so the command never runs. `set -u` only catches unset variables, not empty ones; a quoted star is a literal file name, not a glob; and `rm -r` without `-f` does not prompt for files it can write."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "The template `main.sh` runs `trap cleanup EXIT` before `WORK=\"$(mktemp -d)\"`, and `cleanup` first checks `[[ -n \"$WORK\" ]]`. Why that order?",
+      "choices": [
+        "Bash only allows a trap before the first command substitution",
+        "`mktemp` refuses to create a directory when no EXIT trap is set",
+        "It is only there to silence ShellCheck's SC2329",
+        "There is then no moment in which the directory exists and an exit would leave it behind, and the check makes `cleanup` safe if it runs before `mktemp` has assigned `WORK`"
+      ],
+      "answer": 3,
+      "explanation": "If `mktemp` ran first, a signal or failure between it and the `trap` line would leak the directory. Setting the trap first closes that window; the emptiness check (with `${WORK:?}` in the `rm`) means an early exit never runs `rm -rf` on an empty path."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A 40-line Bash script now has to call an HTTP API, retry `429` responses with backoff, read nested JSON, keep a map of results per host, and run on developers' Macs. What is the best move?",
+      "choices": [
+        "Rewrite it in Python with `argparse`, `subprocess.run` with argument lists and timeouts for the commands it still needs, and the same arguments and exit codes",
+        "Add more `jq` calls and a `while` loop with `sleep` for the retries",
+        "Change the shebang to `#!/bin/sh` for portability",
+        "Add `set -x` so that failures are visible in the logs"
+      ],
+      "answer": 0,
+      "explanation": "Retries with backoff, nested data, maps and testable logic are where Bash costs more than it saves, and macOS ships Bash 3.2 without associative arrays or `mapfile`. Keeping the CLI contract (arguments, exit codes, stdout for data, stderr for logs) lets callers switch without noticing."
+    }
+  ]
+}

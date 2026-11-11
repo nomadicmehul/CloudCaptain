@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/packaging-tools",
+  "title": "A Tool Is Not Done Until Someone Else Can Install It",
+  "short": "Packaging Tools",
+  "motto": "A wheel is a zip plus a hash manifest: build it byte for byte from a tag, lock what it needs, and install nothing whose hash is wrong.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "scripting/cli-design"
+  ],
+  "tools": [
+    "python -m build",
+    "pip",
+    "flit_core",
+    "uv",
+    "pipx",
+    "zipapp",
+    "PyInstaller"
+  ],
+  "reference": [
+    "/docs/tools/python/devops-scripting",
+    "/docs/tools/python/fundamentals",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-tool-release-checklist.md",
+    "prompt-review-pyproject.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

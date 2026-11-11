@@ -1,0 +1,7 @@
+[
+  {"name": "backup", "cron": "30 2 * * *", "tz": "Europe/Berlin", "duration": 1800, "concurrency": "Forbid", "missed": "once", "deadline": 21600},
+  {"name": "sync", "cron": "*/5 * * * *", "duration": 420, "concurrency": "Forbid", "missed": "skip", "jitter": 30},
+  {"name": "rollup", "cron": "0 * * * *", "duration": 600, "missed": "all"},
+  {"name": "report", "calendar": "Mon..Fri 09:00", "tz": "Europe/Berlin", "duration": 300, "missed": "once"},
+  {"name": "refresh", "cron": "*/20 * * * *", "duration": 1500, "concurrency": "Replace"}
+]

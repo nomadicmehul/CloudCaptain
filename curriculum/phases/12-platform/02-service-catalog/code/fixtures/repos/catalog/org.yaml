@@ -1,0 +1,141 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: commerce
+  title: Commerce
+spec:
+  owner: engineering
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: checkout
+spec:
+  owner: checkout-team
+  domain: commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: payments
+  description: Taking money and keeping the books
+spec:
+  owner: payments-team
+  domain: commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: search
+spec:
+  owner: search-team
+  domain: commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: platform
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: engineering
+spec:
+  type: department
+  profile:
+    displayName: Engineering
+  children: [checkout-team, payments-team, search-team, platform-team]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: checkout-team
+  annotations:
+    pagerduty.com/service-id: PCHK001
+spec:
+  type: team
+  profile:
+    displayName: Checkout
+    email: checkout@acme.example
+  parent: engineering
+  children: []
+  members: [alice]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: payments-team
+  annotations:
+    opsgenie.com/team: payments
+spec:
+  type: team
+  profile:
+    displayName: Payments
+    email: payments@acme.example
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: search-team
+  annotations:
+    pagerduty.com/service-id: PSRCH01
+spec:
+  type: team
+  profile:
+    displayName: Search
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+spec:
+  type: team
+  profile:
+    displayName: Platform
+    email: platform@acme.example
+  parent: engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: alice
+spec:
+  profile:
+    displayName: Alice Moreau
+    email: alice@acme.example
+  memberOf: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: bob
+spec:
+  profile:
+    displayName: Bob Okafor
+    email: bob@acme.example
+  memberOf: [payments-team]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: carol
+spec:
+  profile:
+    displayName: Carol Schmidt
+  memberOf:
+    - payments-team
+    - group:default/platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: dan
+spec:
+  memberOf: [search-team]

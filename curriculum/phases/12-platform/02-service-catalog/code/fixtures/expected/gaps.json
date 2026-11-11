@@ -1,0 +1,31 @@
+{
+  "teams": {
+    "(no owner)": [
+      {
+        "ref": "component:default/fx-rates",
+        "problems": [
+          "no owner (spec.owner names something that cannot own)",
+          "no on-call annotation on the component or its owner"
+        ]
+      }
+    ],
+    "group:default/comms-team": [
+      {
+        "ref": "component:default/notifications",
+        "problems": [
+          "owner group:default/comms-team is not in the catalog",
+          "no on-call annotation on the component or its owner"
+        ]
+      }
+    ],
+    "group:payments/payments-team": [
+      {
+        "ref": "component:payments/receipts-worker",
+        "problems": [
+          "owner group:payments/payments-team is not in the catalog",
+          "no on-call annotation on the component or its owner"
+        ]
+      }
+    ]
+  }
+}

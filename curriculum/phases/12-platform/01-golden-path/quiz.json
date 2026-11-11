@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "platform/golden-path",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A service was generated from the platform template eight months ago and the team has edited it since. The template now adds readiness probes. What does a tool need in order to bring in the probes without discarding the team's edits?",
+      "choices": [
+        "Only the new template version, rendered over the service",
+        "Only the service's current files and the list of the team's commits",
+        "The template version the service was generated from and its answers, so it can render that old version again as the merge base",
+        "A diff between the template repository's main branch and the service's main branch"
+      ],
+      "answer": 2,
+      "explanation": "A three-way merge needs a common ancestor. Rendering the recorded version with the recorded answers reproduces exactly what the service started from, so the team's edits (base to ours) and the template's change (base to theirs) can be told apart. That is why the answers file records `_commit` and every answer."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "The skeleton contains `k8s/{% if exposure == 'public' %}httproute.yaml{% endif %}.jinja`. What do scaffolder and copier write for `exposure=internal`?",
+      "choices": [
+        "Nothing: the name renders to an empty string, and a path component that renders empty is not created",
+        "An empty file named `k8s/.jinja`",
+        "`k8s/httproute.yaml` with empty contents",
+        "An error, because a file name may not contain a block tag"
+      ],
+      "answer": 0,
+      "explanation": "The `.jinja` suffix is removed first, then every path component is rendered. An empty component drops the file (or the whole directory), which is how a template makes files conditional without a separate list of rules."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "During an update, `app/main.py` has three versions: the old template render (base) is A, the service's file (ours) is B because the team added a route, and the new template render (theirs) is A again. What does the update do with the file?",
+      "choices": [
+        "Writes A, because the template is the source of truth",
+        "Reports a conflict, because the file differs from the template",
+        "Writes A and B with conflict markers between them",
+        "Keeps B: only the service changed the file since the base"
+      ],
+      "answer": 3,
+      "explanation": "When theirs equals the base, the template did not change the file, so the service's version is kept untouched. Only a file both sides changed is merged line by line, and only overlapping or touching changes become conflicts."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Why does the lesson's template set `trim_blocks` and `lstrip_blocks` in `_envops`?",
+      "choices": [
+        "They make rendering faster",
+        "Without them a block tag on its own line, such as an if around an environment variable, leaves an empty or indented line in the output, which breaks YAML lists and indentation",
+        "`{% raw %}` blocks only work when they are set",
+        "They remove the final newline so that rendered files compare equal"
+      ],
+      "answer": 1,
+      "explanation": "`trim_blocks` drops the newline after a block tag and `lstrip_blocks` drops the spaces before a block tag that starts a line, so control lines vanish completely. Generated YAML is indentation-sensitive, which makes this a correctness setting, not cosmetics."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "The security team wants every service off `python:3.13-slim` within a month. 60 services record `_commit: v1.0.0` in their answers file and 5 of them pinned their own base image. Which plan uses the mechanism of this lesson?",
+      "choices": [
+        "Edit the 60 Dockerfiles by hand in 60 different pull requests",
+        "Run the template's `new` again over every service with the recorded answers",
+        "Release template v1.1.0 with the new base image, run the update for each service on a branch, merge the clean ones and send the 5 conflicts on the FROM line to their owners",
+        "Forbid services from changing their Dockerfile"
+      ],
+      "answer": 2,
+      "explanation": "A template release plus a three-way update turns one decision into 60 reviewable diffs. Services that never touched the FROM line update cleanly; the five that changed it conflict on exactly that line, which is the decision that needs a person. Re-running `new` would overwrite every team's own changes."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A platform team makes its template mandatory. Six months later teams are copying old repositories again. What is the most likely cause?",
+      "choices": [
+        "The path became slower or harder than copying, so teams route around it; a golden path has to be the cheapest route to production and stay optional",
+        "Templates cannot generate CI workflows",
+        "Backstage cannot run copier templates",
+        "Three-way merges do not work on YAML files"
+      ],
+      "answer": 0,
+      "explanation": "People take the path that costs them least. A golden path wins by being faster than the alternative (repository, CI, image, manifests, catalog entry and owner in minutes) and by letting teams leave when they need to; a mandate that is slower than copying gets copied around."
+    }
+  ]
+}

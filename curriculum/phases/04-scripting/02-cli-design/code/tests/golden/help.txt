@@ -1,0 +1,50 @@
+ccops - a small host inventory CLI built with cliforge
+
+Usage:
+  ccops [flags] COMMAND [ARGS]
+
+ccops keeps a list of hosts in a JSON file. Data goes to stdout, diagnostics to
+stderr, every change has --dry-run, and destructive changes ask on a terminal
+and refuse without one unless --yes is given.
+
+Commands:
+  hosts list                  list hosts, optionally filtered
+  hosts show                  show one host
+  hosts add                   add a host; repeating the same add changes nothing
+  hosts remove                remove hosts; asks first, refuses without a
+                              terminal unless --yes
+  config                      print the effective settings; --explain shows
+                              where each came from
+  completion                  print a Bash completion script
+  man                         print the man page (roff)
+
+Global flags:
+  -o, --output FORMAT         output format (env CCOPS_OUTPUT, config output,
+                              default text)
+      --json                  same as --output json: one JSON document on stdout
+      --color WHEN            colour: auto, always or never; auto is off when
+                              NO_COLOR is set or stdout is not a terminal (env
+                              CCOPS_COLOR, config color, default auto)
+  -i, --inventory PATH        inventory file (env CCOPS_INVENTORY, config
+                              inventory, default inventory.json)
+      --lock-timeout SECONDS  seconds to wait for another writer's lock (env
+                              CCOPS_LOCK_TIMEOUT, config lock_timeout, default
+                              5)
+      --config PATH           config file (env CCOPS_CONFIG, default
+                              ~/.config/ccops/config)
+  -q, --quiet                 print only what a pipe needs: no notes, names only
+                              in lists
+  -v, --verbose               print debug diagnostics on stderr
+  -h, --help                  show this help and exit 0
+      --version               print the version and exit 0
+
+Exit codes:
+  0    ok           the command did what was asked, or there was nothing to do
+  1    failure      the command ran and failed: unreadable data, a conflict, a lock timeout
+  2    usage        the invocation was wrong: unknown command or flag, bad value, bad config file
+  3    not found    a named object does not exist
+  4    refused      a destructive change was not confirmed
+  130  interrupted  Ctrl-C (128 + SIGINT)
+  141  broken pipe  the reader of stdout went away (128 + SIGPIPE)
+
+Run 'ccops COMMAND --help' for the flags of one command.

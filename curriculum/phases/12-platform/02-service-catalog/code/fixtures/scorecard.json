@@ -1,0 +1,14 @@
+{
+  "name": "production-readiness",
+  "filter": {"kind": "Component", "spec.lifecycle": "production"},
+  "levels": ["bronze", "silver", "gold"],
+  "rules": [
+    {"id": "owner", "level": "bronze", "check": "owner_resolves", "description": "spec.owner names a Group or User that exists"},
+    {"id": "system", "level": "bronze", "check": "relation", "relation": "partOf", "kind": "System", "description": "belongs to a System"},
+    {"id": "runbook", "level": "silver", "check": "link", "match": "runbook", "description": "a link whose type, title or URL says runbook"},
+    {"id": "on-call", "level": "silver", "check": "annotation", "any": ["pagerduty.com/service-id", "pagerduty.com/integration-key", "opsgenie.com/team", "opsgenie.com/component-selector"], "inherit_from_owner": true, "description": "a paging target on the component or its owning team"},
+    {"id": "slo", "level": "gold", "check": "annotation", "any": ["cloudcaptain.io/slo"], "description": "a written SLO"},
+    {"id": "docs", "level": "gold", "check": "annotation", "any": ["backstage.io/techdocs-ref"], "description": "TechDocs next to the code"},
+    {"id": "template-current", "level": "gold", "check": "version_at_least", "annotation": "cloudcaptain.io/template-version", "minimum": "2.1.0", "description": "generated from the current golden-path template"}
+  ]
+}

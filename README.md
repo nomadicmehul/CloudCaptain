@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps from scratch.<br/>Build the tool. Use the tool. Ship an artifact.</h3>
   <p>
-    <strong>91 lessons</strong> · <strong>13 phases live</strong> · <strong>134 hours</strong> · <strong>2,706 tests</strong> · <strong>179 skills, prompts &amp; MCP servers</strong>
+    <strong>104 lessons</strong> · <strong>15 phases live</strong> · <strong>151 hours</strong> · <strong>3,077 tests</strong> · <strong>205 skills, prompts &amp; MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Start the course" /></a>
@@ -48,7 +48,8 @@ Every lesson starts from a production problem, has you build the mechanism yours
 | **00 · Setup & Lab** | a lab doctor that probes your machine and prints the install plan | kind, Docker, your coding agent |
 | **01 · Linux & Systems** | a PID 1 supervisor, an fd leak detector, an strace analyser, a capability decoder, systemd units, cgroups by hand, a mount table reader, a USE-method dashboard | `strace`, `capsh`, `systemctl`, `findmnt`, PSI |
 | **02 · Networking** | a route lookup like `ip route get`, an iterative DNS resolver, a TCP socket-state analyser, a pcap reader with tcpdump filters, a TLS ClientHello parser and certificate-chain verifier, an HTTP/1.1 server and reverse proxy, a load balancer with health checks, an RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |
-| **03 · Git & Collaboration** | a content-addressed object store that `git fsck` accepts, a diff and three-way merge engine, a packfile and smart-HTTP clone client, a merge queue with CODEOWNERS and rulesets | `git` plumbing, `git merge-file`, `GIT_TRACE_PACKET`, rulesets, the merge queue |
+| **03 · Git & Collaboration** | a content-addressed object store that `git fsck` accepts, a diff and three-way merge engine, a packfile and smart-HTTP clone client, a merge queue with CODEOWNERS and rulesets, staged-only hooks with a `pre-receive` policy, bisect and blame over the commit graph | `git` plumbing, `git merge-file`, `GIT_TRACE_PACKET`, rulesets, the merge queue, pre-commit, `git bisect run` |
+| **04 · Scripting & Automation** | a Bash linter with strict-mode checks, a CLI framework, an API client with retries and rate limits, jq and awk subsets, a cron and OnCalendar scheduler, a reproducible wheel builder | ShellCheck, curl, urllib3, jq, awk, croniter, `systemd-analyze`, pip and `build` |
 | **05 · Containers** | a container runtime, an image auditor, a registry client, an image builder without a Dockerfile, a veth/bridge network, Compose, rootless user namespaces, a seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | a reconciler, a scheduler, a kubelet, kube-proxy rules and cluster DNS, an RBAC authorizer, Helm, an operator, a Gateway API router | Kubernetes on kind, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | a plan/apply engine, a dependency graph, modules, a locking state server, drift detection, a policy engine, Pulumi and Crossplane front ends, an idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
@@ -56,10 +57,11 @@ Every lesson starts from a production problem, has you build the mechanism yours
 | **09 · Cloud (AWS first)** | an IAM policy evaluator, a VPC reachability analyser, SigV4 signing and an S3 server, the Lambda runtime API, an Auto Scaling group, a FOCUS cost allocator, a security posture scanner | the AWS CLI against moto, the Lambda emulator, Checkov |
 | **10 · Observability & SRE** | a TSDB with Gorilla chunks, a PromQL engine, an alert router, a log pipeline with a LogQL subset, a tracer with tail sampling, SLO burn-rate rules, an incident service, chaos experiments | Prometheus, promtool, the OpenTelemetry Collector, Jaeger, Sloth, Alertmanager, Loki, Grafana Alloy, Chaos Mesh |
 | **11 · Security & DevSecOps** | a secrets service with leases and Shamir unsealing, an admission webhook with a CEL subset, a Falco-style rule engine, a NetworkPolicy evaluator, a secret scanner, SPIFFE identities with mTLS, a CVE prioritiser with CVSS, EPSS and VEX, a CIS benchmark runner | OpenBao, ValidatingAdmissionPolicy, Kyverno, Falco, gitleaks, SPIRE, Trivy, Grype, kube-bench |
+| **12 · Platform Engineering** | a service-template scaffolder with safe updates, a service catalog with owners and dependencies, DORA metrics from Git, deploys and incidents, per-PR preview environments, a platform API that expands one spec into Kubernetes objects | copier, the Backstage catalog model, DuckDB, `kubectl auth can-i`, score-k8s |
 | **13 · AI Infrastructure** | a GPU scheduler with DRA, an LLM serving simulator, a token-counting gateway, a queue-based autoscaler, a prefix-cache router, HNSW and IVF indexes, a model artifact inspector, a token cost model | llama.cpp on CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | an MCP server for kubectl, an incident-triage agent, AI log analysis, OpenTelemetry for LLM calls, agent sandboxes, safe write tools, agent evals | Claude Code, the Claude API, OpenTelemetry, promptfoo |
 
-Four more phases (scripting, platform engineering, MLOps, capstones) are on the [roadmap](./ROADMAP.md).
+Two more phases (MLOps, capstones) are on the [roadmap](./ROADMAP.md).
 
 ## How a lesson works
 
@@ -78,7 +80,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | For | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 83 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 96 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engineers asked to run models: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | putting agents to work on infrastructure safely | 9 |
 
@@ -100,7 +102,7 @@ The site's **Captain's Bridge** reading mode tracks progress per section, and [/
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| Build each tool from scratch, with tests | ✅ 91 lessons | ❌ | ❌ | ❌ |
+| Build each tool from scratch, with tests | ✅ 104 lessons | ❌ | ❌ | ❌ |
 | Verified against the real tools in CI | ✅ every lesson | ❌ | ❌ | ❌ |
 | AI infrastructure and AIOps | ✅ 15 lessons | partial | ❌ | links |
 | An agent tutor you install | ✅ `npx skills add` | ❌ | ❌ | ❌ |

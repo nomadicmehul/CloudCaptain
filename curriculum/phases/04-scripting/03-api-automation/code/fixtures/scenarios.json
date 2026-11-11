@@ -1,0 +1,73 @@
+{
+  "retries": 2,
+  "backoff_base": 0.1,
+  "connect_timeout": 1,
+  "read_timeout": 5,
+  "scenarios": [
+    {
+      "name": "get-503-twice",
+      "method": "GET",
+      "plan": [{"status": 503, "times": 2}],
+      "attempts": {"apiclient": 3, "urllib3": 3, "curl": 3},
+      "final": {"apiclient": 200, "urllib3": 200, "curl": 200}
+    },
+    {
+      "name": "get-500-exhausted",
+      "method": "GET",
+      "plan": [{"status": 500, "times": 5}],
+      "attempts": {"apiclient": 3, "urllib3": 3, "curl": 3},
+      "final": {"apiclient": 500, "urllib3": 500, "curl": 500}
+    },
+    {
+      "name": "get-429-retry-after",
+      "method": "GET",
+      "plan": [{"status": 429, "headers": {"Retry-After": "2"}}],
+      "attempts": {"apiclient": 2, "urllib3": 2, "curl": 2},
+      "final": {"apiclient": 200, "urllib3": 200, "curl": 200},
+      "min_gap": {"apiclient": 1.9, "urllib3": 1.9, "curl": 1.9}
+    },
+    {
+      "name": "get-ratelimit-reset",
+      "method": "GET",
+      "plan": [{"status": 429, "reset_in": 2}],
+      "attempts": {"apiclient": 2, "urllib3": 2, "curl": 2},
+      "final": {"apiclient": 200, "urllib3": 200, "curl": 200},
+      "min_gap": {"apiclient": 0.9},
+      "max_gap": {"urllib3": 0.5},
+      "note": "only apiclient reads X-RateLimit-Reset; urllib3 retries at once, curl after its default 1 s"
+    },
+    {
+      "name": "get-connection-reset",
+      "method": "GET",
+      "plan": [{"reset": true}],
+      "attempts": {"apiclient": 2, "urllib3": 2, "curl": 1},
+      "final": {"apiclient": 200, "urllib3": 200, "curl": 0},
+      "note": "curl --retry treats a reset as permanent; --retry-all-errors retries it"
+    },
+    {
+      "name": "get-slow",
+      "method": "GET",
+      "read_timeout": 0.5,
+      "plan": [{"delay": 1.5}],
+      "attempts": {"apiclient": 2, "urllib3": 2, "curl": 2},
+      "final": {"apiclient": 200, "urllib3": 200, "curl": 200}
+    },
+    {
+      "name": "post-503-no-key",
+      "method": "POST",
+      "plan": [{"status": 503}],
+      "attempts": {"apiclient": 1, "urllib3": 1, "curl": 2},
+      "final": {"apiclient": 503, "urllib3": 503, "curl": 200},
+      "note": "curl --retry ignores the method and repeats the POST"
+    },
+    {
+      "name": "post-503-with-key",
+      "method": "POST",
+      "idempotency_key": "order-42",
+      "plan": [{"status": 503}],
+      "attempts": {"apiclient": 2, "urllib3": 1, "curl": 2},
+      "final": {"apiclient": 200, "urllib3": 503, "curl": 200},
+      "note": "urllib3 decides by method only; it does not know idempotency keys"
+    }
+  ]
+}

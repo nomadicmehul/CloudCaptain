@@ -1,0 +1,171 @@
+.TH CCOPS 1 2026-11-11 "ccops 1.0.0" "User Commands"
+.SH NAME
+ccops \- a small host inventory CLI built with cliforge
+.SH SYNOPSIS
+.B ccops
+[\fIflags\fR] \fICOMMAND\fR [\fIARGS\fR]
+.SH DESCRIPTION
+ccops keeps a list of hosts in a JSON file. Data goes to stdout, diagnostics to stderr, every change has \-\-dry\-run, and destructive changes ask on a terminal and refuse without one unless \-\-yes is given.
+.SH COMMANDS
+.TP
+.B ccops hosts list
+list hosts, optionally filtered
+.RS
+.TP
+\fB\-\-env\fR \fIENV\fR
+only hosts in this environment
+.TP
+\fB\-\-role\fR \fIROLE\fR
+only hosts with this role
+.TP
+\fB\-\-state\fR \fISTATE\fR
+only hosts in this state
+.RE
+.TP
+.B ccops hosts show \fINAME\fR
+show one host
+.TP
+.B ccops hosts add \fINAME\fR
+add a host; repeating the same add changes nothing
+.RS
+.TP
+\fB\-\-env\fR \fIENV\fR
+environment, such as prod
+.TP
+\fB\-\-role\fR \fIROLE\fR
+role, such as web or db
+.TP
+\fB\-\-ip\fR \fIIP\fR
+IPv4 or IPv6 address
+.TP
+\fB\-\-state\fR \fISTATE\fR
+lifecycle state (default active)
+.TP
+\fB\-\-tag\fR \fITAG\fR
+a tag; repeat for several
+.TP
+\fB\-n\fR, \fB\-\-dry\-run\fR
+print what would change and change nothing
+.RE
+.TP
+.B ccops hosts remove \fINAME...\fR
+remove hosts; asks first, refuses without a terminal unless \-\-yes
+.RS
+.TP
+\fB\-\-missing\-ok\fR
+exit 0 when a host is already absent
+.TP
+\fB\-n\fR, \fB\-\-dry\-run\fR
+print what would change and change nothing
+.TP
+\fB\-y\fR, \fB\-\-yes\fR
+confirm without asking (required when stdin is not a terminal)
+.RE
+.TP
+.B ccops config
+print the effective settings; \-\-explain shows where each came from
+.RS
+.TP
+\fB\-\-explain\fR
+show the source of every value: flag, env, file or default
+.RE
+.TP
+.B ccops completion \fISHELL\fR
+print a Bash completion script
+.TP
+.B ccops man
+print the man page (roff)
+.SH GLOBAL OPTIONS
+.TP
+\fB\-o\fR, \fB\-\-output\fR \fIFORMAT\fR
+output format (env CCOPS_OUTPUT, config output, default text)
+.TP
+\fB\-\-json\fR
+same as \-\-output json: one JSON document on stdout
+.TP
+\fB\-\-color\fR \fIWHEN\fR
+colour: auto, always or never; auto is off when NO_COLOR is set or stdout is not a terminal (env CCOPS_COLOR, config color, default auto)
+.TP
+\fB\-i\fR, \fB\-\-inventory\fR \fIPATH\fR
+inventory file (env CCOPS_INVENTORY, config inventory, default inventory.json)
+.TP
+\fB\-\-lock\-timeout\fR \fISECONDS\fR
+seconds to wait for another writer's lock (env CCOPS_LOCK_TIMEOUT, config lock_timeout, default 5)
+.TP
+\fB\-\-config\fR \fIPATH\fR
+config file (env CCOPS_CONFIG, default ~/.config/ccops/config)
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+print only what a pipe needs: no notes, names only in lists
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+print debug diagnostics on stderr
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help and exit 0
+.TP
+\fB\-\-version\fR
+print the version and exit 0
+.SH ENVIRONMENT
+.TP
+.B CCOPS_OUTPUT
+output format; overrides the config file, overridden by \-\-output. An empty value counts as unset.
+.TP
+.B CCOPS_COLOR
+colour: auto, always or never; auto is off when NO_COLOR is set or stdout is not a terminal; overrides the config file, overridden by \-\-color. An empty value counts as unset.
+.TP
+.B CCOPS_INVENTORY
+inventory file; overrides the config file, overridden by \-\-inventory. An empty value counts as unset.
+.TP
+.B CCOPS_LOCK_TIMEOUT
+seconds to wait for another writer's lock; overrides the config file, overridden by \-\-lock\-timeout. An empty value counts as unset.
+.TP
+.B CCOPS_CONFIG
+path of the config file; overridden by \-\-config.
+.TP
+.B NO_COLOR
+when set to a non\-empty value, color auto turns colour off; color always still turns it on (https://no\-color.org).
+.SH FILES
+.TP
+.I ~/.config/ccops/config
+key = value lines, # comments; keys: output, color, inventory, lock_timeout. $XDG_CONFIG_HOME replaces ~/.config. Relative paths in it are relative to the file.
+.TP
+.I inventory.json
+the default inventory; written atomically (temporary file, fsync, rename) under an flock on inventory.json.lock
+.SH EXIT STATUS
+.TP
+.B 0
+ok: the command did what was asked, or there was nothing to do
+.TP
+.B 1
+failure: the command ran and failed: unreadable data, a conflict, a lock timeout
+.TP
+.B 2
+usage: the invocation was wrong: unknown command or flag, bad value, bad config file
+.TP
+.B 3
+not found: a named object does not exist
+.TP
+.B 4
+refused: a destructive change was not confirmed
+.TP
+.B 130
+interrupted: Ctrl\-C (128 + SIGINT)
+.TP
+.B 141
+broken pipe: the reader of stdout went away (128 + SIGPIPE)
+.SH EXAMPLES
+.nf
+ccops hosts list \-\-env prod
+ccops hosts list \-\-json | jq \-r '.hosts[].ip'
+ccops hosts show web\-1 \-\-json
+ccops hosts add web\-3 \-\-env prod \-\-role web \-\-ip 10.0.1.13 \-\-dry\-run
+ccops hosts remove web\-3 \-\-dry\-run
+ccops hosts remove web\-3 \-\-yes
+ccops config \-\-explain
+ccops config > ~/.config/ccops/config
+source <(ccops completion bash)
+ccops man > ccops.1 && man ./ccops.1
+.fi
+.SH SEE ALSO
+.BR ccops (1) \-\-help, \fBccops completion bash\fR

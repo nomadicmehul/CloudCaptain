@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/service-catalog",
+  "title": "A Service Catalog Is a Graph of Owners and Dependencies",
+  "short": "Service catalog",
+  "motto": "Every catalog-info.yaml is a node with typed edges; ownership, blast radius and scorecards are walks over the graph they form.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "platform/golden-path"
+  ],
+  "tools": [
+    "backstage",
+    "node",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/learning-paths/platform-engineering",
+    "/docs/learning-paths/sre-practices",
+    "/docs/tools/yaml/fundamentals",
+    "/docs/tools/kubernetes/fundamentals"
+  ],
+  "outputs": [
+    "skill-catalog-hygiene.md",
+    "prompt-write-catalog-info.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

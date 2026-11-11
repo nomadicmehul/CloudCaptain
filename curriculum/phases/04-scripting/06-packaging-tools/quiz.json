@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/packaging-tools",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A team ships its CLI as `git clone` plus `pip install -r requirements.txt`, where the file lists package names without versions. CI breaks on Monday while laptops keep working. What is the most likely cause?",
+      "choices": [
+        "CI runs a different shell, so the script's shebang line is ignored",
+        "pip on CI resolved newer releases of the unpinned dependencies than the ones already installed on the laptops; nothing records which files a working install used",
+        "Git checked out the files with Windows line endings",
+        "pip caches packages on CI and served a stale copy"
+      ],
+      "answer": 1,
+      "explanation": "An unpinned requirement means 'whatever is newest today'. Laptops installed last month and kept those versions; a fresh CI environment picks up Monday's release. A lock with exact versions and hashes makes every install use the same files."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Two builds of the same commit with shipit produce identical wheels, but two builds with a backend that ignores SOURCE_DATE_EPOCH do not. What differs between the two archives?",
+      "choices": [
+        "The compiled bytecode, because Python versions differ between runs",
+        "The RECORD hashes of the source files",
+        "The timestamps stored in each zip entry, taken from the files' modification times or the clock, which change the archive bytes and so its sha256",
+        "The order of the Requires-Dist lines in METADATA, which Python randomises"
+      ],
+      "answer": 2,
+      "explanation": "A zip stores a date and time for every entry. Unless they are fixed (SOURCE_DATE_EPOCH, as zip_info() does), checkout and build times leak into the archive. The file contents and their RECORD hashes are the same; the archive is not."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An attacker rebuilds cc_term-0.3.1-py3-none-any.whl with extra code and a freshly computed RECORD, and puts it on a mirror. Which check stops the install?",
+      "choices": [
+        "The sha256 of the whole file compared with the hash in the lock (pip --require-hashes or shipit's verify_hashes); RECORD is consistent because the attacker regenerated it",
+        "RECORD verification, because the hashes inside no longer match the original",
+        "The wheel file name check, because a rebuilt wheel gets a build tag",
+        "pip check, which compares installed files with PyPI"
+      ],
+      "answer": 0,
+      "explanation": "RECORD is written by whoever built the wheel, so a rebuilt wheel carries a valid one; it only detects corruption. The lock's hash was recorded when you reviewed the real file, and both pip and shipit refuse a mismatch before writing anything, which the smoke demonstrates."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The latest tag is v1.2.0 and HEAD is three commits later at abc1234. What version does shipit derive, and why that form?",
+      "choices": [
+        "1.2.0, because the latest tag is the version until the next tag",
+        "1.2.3, one patch number per commit",
+        "1.3.0.dev3, because any commit after a release starts the next minor version",
+        "1.2.1.dev3+gabc1234: a development release that sorts after 1.2.0 and before 1.2.1, with a local label naming the commit"
+      ],
+      "answer": 3,
+      "explanation": "git describe reports distance 3 and commit abc1234. Calling it 1.2.0 would give two different builds the same version. The guess-next-dev scheme bumps the last number and adds .devN; the +g label identifies the commit, and PyPI refuses local labels, so the build cannot be published as a release by accident."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Operations wants to run your tool on hosts that have Python 3.12 but where nobody may run pip. The tool and its dependencies are pure Python. Which shipping form fits best?",
+      "choices": [
+        "A zipapp (shipit zipapp or python -m zipapp) with the locked dependencies inside: one file, run with python3, nothing installed",
+        "An sdist, because the host can build it",
+        "A PyInstaller binary, because it is always smaller",
+        "A wheel copied into site-packages by hand"
+      ],
+      "answer": 0,
+      "explanation": "A zipapp needs only an interpreter and works for pure-Python code. An sdist needs a build backend and an installer, a hand-copied wheel skips the launcher and the metadata bookkeeping, and PyInstaller bundles its own interpreter, which only pays off when the host has none."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A release workflow publishes to PyPI with an API token stored as a repository secret, and rebuilds the wheel inside the publish job. What does the review recommend?",
+      "choices": [
+        "Rotate the token every month and keep the workflow as it is",
+        "Use trusted publishing (the job proves its identity with an OIDC token and gets a short-lived upload credential), and upload the exact files built, hashed and tested earlier instead of rebuilding",
+        "Move the token into an environment variable on the runner",
+        "Publish from a developer laptop so that CI never holds credentials"
+      ],
+      "answer": 1,
+      "explanation": "A stored token is a long-lived secret anyone with write access to workflows can exfiltrate. Trusted publishing removes it. Rebuilding in the publish job means the uploaded bytes were never the ones tested; with reproducible builds you can at least prove they match, but uploading the tested artifacts is simpler."
+    }
+  ]
+}

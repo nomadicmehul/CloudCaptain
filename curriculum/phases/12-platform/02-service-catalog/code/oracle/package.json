@@ -1,0 +1,14 @@
+{
+  "name": "minicatalog-backstage-oracle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Runs the Backstage catalog model's own validators and relation rules over the lesson's fixtures",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@backstage/catalog-model": "1.10.2",
+    "yaml": "2.9.1"
+  }
+}

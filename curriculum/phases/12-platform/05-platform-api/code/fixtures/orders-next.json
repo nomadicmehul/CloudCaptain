@@ -1,0 +1,43 @@
+{
+  "apiVersion": "platform.cloudcaptain.io/v1beta1",
+  "kind": "Workload",
+  "metadata": {
+    "name": "orders"
+  },
+  "spec": {
+    "owner": "checkout",
+    "container": {
+      "image": "python:3.13-alpine",
+      "command": [
+        "python",
+        "-m",
+        "http.server",
+        "8080"
+      ],
+      "port": 8080,
+      "healthPath": "/",
+      "env": [
+        {
+          "name": "LOG_LEVEL",
+          "value": "info"
+        }
+      ]
+    },
+    "size": "medium",
+    "scaling": {
+      "min": 2,
+      "max": 5,
+      "targetCPUUtilization": 70
+    },
+    "route": {
+      "host": "shop.cc.test",
+      "path": "/api/v2/orders"
+    },
+    "dependencies": [
+      {
+        "name": "db",
+        "type": "postgres"
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "platform/dora-metrics",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A dashboard reports a change failure rate of 0% for a team that had three outages after releases this quarter. What is the most likely reason?",
+      "choices": [
+        "The outages were too short to count",
+        "Change failure rate only counts deploys that failed to finish",
+        "Nothing ties the incidents to the deploys that caused them, so every deploy looks clean",
+        "The team deploys so often that three failures round down to 0%"
+      ],
+      "answer": 2,
+      "explanation": "The change failure rate is a join between deploys and incidents (or rollbacks). Without a root-cause commit or a time window linking an incident to a deploy, the numerator is always 0. minidora warns about exactly this with no-failures-recorded and unlinked-incidents."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Production runs commit C. The next deploy ships commit B, which is the first parent of C. What does minidora conclude?",
+      "choices": [
+        "The deploy that shipped C failed: B is a proper ancestor of C, so this is a rollback",
+        "B shipped a new change with a lead time of zero",
+        "Nothing, because the deploy event did not say rollback",
+        "The deploy is an empty redeploy and raises the empty-deploys warning"
+      ],
+      "answer": 0,
+      "explanation": "Deploying a proper ancestor of what is running goes back in the graph. minidora marks the previous deploy as failed (if the rollback is within the window) and uses the rollback time as its recovery. A redeploy of the same commit is different: it ships nothing and is not a rollback."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "An incident starts 18 hours after deploy d-14, and its postmortem names a commit that first shipped in d-13. With a 24 hour window, which deploy failed?",
+      "choices": [
+        "d-14, because it is the latest deploy before the incident",
+        "Both d-13 and d-14",
+        "Neither, because the incident started more than an hour after a deploy",
+        "d-13, because a recorded root-cause commit takes precedence over the time window"
+      ],
+      "answer": 3,
+      "explanation": "The window is a guess used only when there is no evidence. A root-cause commit is evidence: the incident belongs to the first deploy that contained it, which is how the Four Keys incidents table links them too."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "Recovery times from four failed deploys are 1, 3, 16 and 32 hours. What do median and p90 (linear interpolation, as PERCENTILE_CONT) report, and why not the mean?",
+      "choices": [
+        "Median 13 h, p90 32 h; the mean would be the same",
+        "Median 9.5 h, p90 27.2 h; the mean (13 h) is pulled up by the one slow recovery and describes no actual failure",
+        "Median 3 h, p90 16 h; percentiles drop the outliers",
+        "Median 16 h, p90 32 h; the median is the middle value of the list as given"
+      ],
+      "answer": 1,
+      "explanation": "Sorted, the median interpolates between 3 and 16 (9.5) and p90 sits at position 2.7, between 16 and 32 (16 + 0.7 x 16 = 27.2). Delivery times are skewed, so the median describes the typical case and a high percentile the bad ones."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "After deployment frequency became a team goal, deploys went from 21 to 26 a month while lead time and failures stayed the same. minidora shows empty-deploys for the five new ones. What happened?",
+      "choices": [
+        "The team started shipping smaller changes, which is the goal",
+        "The new deploys were rollbacks, which DORA counts twice",
+        "The pipeline redeployed commits that were already in production; frequency rose without delivering any change",
+        "The incidents were linked to the wrong deploys"
+      ],
+      "answer": 2,
+      "explanation": "A deploy that ships no new commit and is not a rollback delivers nothing. It still counts as a deployment, which is why a frequency target invites it. Read frequency together with the number of changes and with lead time."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "The same team's change failure rate is 19% in both years. Against the 2023 State of DevOps table minidora says medium, against 2024 it says high. Why?",
+      "choices": [
+        "The clusters come from each year's survey answers, and the typical change failure rate per cluster changed (15% medium in 2023, 20% high and 10% medium in 2024)",
+        "minidora rounds differently each year",
+        "DORA lowered the standard for elite teams in 2024",
+        "The 2024 report measures change failure rate per commit instead of per deploy"
+      ],
+      "answer": 0,
+      "explanation": "The performance levels are found by cluster analysis of one year's responses, so their boundaries move. A level without its year is meaningless, and comparing a team with its own past periods is more useful than either."
+    }
+  ]
+}

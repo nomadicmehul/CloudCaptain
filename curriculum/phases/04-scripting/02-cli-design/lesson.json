@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "scripting/cli-design",
+  "title": "A Good CLI Is a Contract: Flags, Exit Codes, Output",
+  "short": "CLI Design",
+  "motto": "Scripts and people both call your tool; flags, exit codes, stdout and stderr are the API they depend on, so design them on purpose.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "scripting/robust-bash"
+  ],
+  "tools": [
+    "python3",
+    "bash",
+    "jq",
+    "groff",
+    "kubectl"
+  ],
+  "reference": [
+    "/docs/tools/python/devops-scripting",
+    "/docs/tools/bash/advanced",
+    "/docs/tools/bash/fundamentals",
+    "/docs/tools/kubernetes/cheatsheet"
+  ],
+  "outputs": [
+    "skill-cli-review.md",
+    "prompt-design-cli.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

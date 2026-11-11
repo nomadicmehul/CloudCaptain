@@ -1,0 +1,39 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: search-api
+  annotations:
+    backstage.io/kubernetes-id: search-api
+    backstage.io/techdocs-ref: dir:.
+    cloudcaptain.io/template-version: v2.1.0
+    cloudcaptain.io/slo: "p99 query latency under 300 ms"
+  links:
+    - url: https://wiki.acme.example/search/on-call-runbook
+      title: What to do when search is slow
+spec:
+  type: service
+  lifecycle: production
+  owner: search-team
+  system: search
+  providesApis: [search-api]
+  dependsOn: [resource:search-index]
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: search-api
+spec:
+  type: grpc
+  lifecycle: production
+  owner: search-team
+  system: search
+  definition: "syntax = \"proto3\"; service Search { rpc Query (Q) returns (R); }"
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: search-index
+spec:
+  type: opensearch-index
+  owner: search-team
+  system: search

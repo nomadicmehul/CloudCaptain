@@ -1,0 +1,7 @@
+FROM python:3.13-slim
+WORKDIR /app
+COPY app/ app/
+USER 10001
+ENV PORT={{ port }} PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+EXPOSE {{ port }}
+CMD ["python", "-m", "app.main"]

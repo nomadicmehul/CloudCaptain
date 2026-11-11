@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "scripting/stream-processing",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "`jq 'select(.status >= 500) | .path' access.jsonl` runs fine on a 20 GB file, but `jq -s 'map(select(.status >= 500))' access.jsonl` exhausts memory. Why?",
+      "choices": [
+        "map() is implemented recursively and overflows the stack on long arrays",
+        "-s makes jq read the input as one string and parse it twice",
+        "Without -s jq handles one input value at a time and drops it; -s collects every value into one array before the filter runs, so memory grows with the file",
+        "select() buffers its outputs until the end of the input"
+      ],
+      "answer": 2,
+      "explanation": "jq's reader decodes one JSON value, runs the filter, prints the outputs and moves on. Slurp builds an array of all values first, which costs memory proportional to the input (several times its size). Use streaming filters, or reduce inputs, when you only need one pass."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In ministream and in jq, what does `.items[] | select(.n > 1) | .n` do with an input whose items are n = 1, 2, 3?",
+      "choices": [
+        "Produces two outputs, 2 and 3: `.items[]` yields each element, select yields its input only when the condition is true, and the pipe feeds every output into the next stage",
+        "Produces one array [2, 3]",
+        "Produces true, false, false and then the numbers",
+        "Fails, because select needs an array as input"
+      ],
+      "answer": 0,
+      "explanation": "Every jq expression is a generator. `.items[]` produces three outputs, select produces its input or nothing, and the pipe is the loop. Wrap the whole expression in [ ] to collect the outputs into one array."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A CSV row has `10` in field 1 and `9` in field 2. Which awk comparison is false?",
+      "choices": [
+        "`$1 > $2`",
+        "`$1 > 9`",
+        "`$1 + 0 > \"9\" + 0`",
+        "`$1 > \"9\"`"
+      ],
+      "answer": 3,
+      "explanation": "Field values are numeric strings: compared with another numeric string or with a number they compare numerically, so the first three are true. A string constant on either side makes it a string comparison, and \"10\" sorts before \"9\" because \"1\" < \"9\". Add 0 to a value to force a number."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "`awk -F, '{ $5 = int($5 / 1024) \"k\"; print }' access.csv` prints lines whose fields are separated by spaces instead of commas. Why?",
+      "choices": [
+        "int() converts the whole record to numbers",
+        "Assigning a field rebuilds $0 by joining all fields with OFS, which defaults to a single space; set OFS = \",\" in BEGIN to keep commas",
+        "-F only applies to the first line",
+        "print always separates fields with spaces"
+      ],
+      "answer": 1,
+      "explanation": "set_field() in ministream does what every awk does: replace the field, then join the field list with OFS. The `$1 = $1` idiom uses this deliberately to convert separators."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A job runs `jq -c 'if .ok then .id else error(\"bad record\") end' events.jsonl > ids.txt` and checks `$?`. Record 15 is bad, the last record is good. What happens?",
+      "choices": [
+        "jq stops at record 15 and exits 5",
+        "jq skips the bad record silently and exits 0",
+        "jq prints an error for record 15 on stderr, keeps going, and exits 0 because its exit status reflects only the last input; the job believes everything succeeded",
+        "jq refuses to start because error() is not allowed in if"
+      ],
+      "answer": 2,
+      "explanation": "jq reports runtime errors per input and continues; the exit status is set from the last input processed (verified with jq 1.8.1 in the smoke). ministream exits 1 if any record failed. In scripts, count stderr lines, use -e with a final check, or validate in a separate pass."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "You need the ten most requested paths from 50 GB of access logs on a box with 2 GB of RAM. Which pipeline is safe?",
+      "choices": [
+        "`jq -s 'group_by(.path) | map({path: .[0].path, n: length}) | sort_by(-.n) | .[:10]'`",
+        "Load the file into a pandas DataFrame and call value_counts()",
+        "`jq -r .path | sort | uniq -c | sort -rn | head` only if the file fits in memory",
+        "`jq -r .path access.jsonl | sort | uniq -c | sort -rn | head`, or `awk '{ n[$1]++ } END { for (p in n) print n[p], p }'` on the paths: jq streams, sort spills to temporary files, and awk keeps one entry per distinct path"
+      ],
+      "answer": 3,
+      "explanation": "Streaming jq holds one record, sort does an external merge sort with temporary files, and uniq -c holds one line. An awk array holds one entry per distinct key, which for paths is small. Slurping 50 GB, or loading it into a DataFrame, needs many times the file size in memory."
+    }
+  ]
+}

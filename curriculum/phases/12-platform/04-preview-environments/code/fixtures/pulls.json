@@ -1,0 +1,52 @@
+[
+  {
+    "number": 101,
+    "state": "open",
+    "title": "Add basket discounts",
+    "user": {"login": "alice"},
+    "head": {"ref": "feature/basket-discounts", "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"},
+    "base": {"ref": "main"},
+    "labels": [{"name": "preview"}],
+    "updated_at": "2026-11-10T15:00:00Z"
+  },
+  {
+    "number": 102,
+    "state": "open",
+    "title": "Faster product search",
+    "user": {"login": "bob"},
+    "head": {"ref": "perf/search", "sha": "b2c3d4e5f60718293a4b5c6d7e8f9012345678a1"},
+    "base": {"ref": "main"},
+    "labels": [{"name": "preview"}],
+    "updated_at": "2026-11-11T07:45:00Z"
+  },
+  {
+    "number": 103,
+    "state": "open",
+    "title": "Spike: new checkout layout",
+    "user": {"login": "carol"},
+    "head": {"ref": "spike/checkout", "sha": "c3d4e5f60718293a4b5c6d7e8f9012345678a1b2"},
+    "base": {"ref": "main"},
+    "labels": [{"name": "preview"}, {"name": "preview-ttl-1h"}],
+    "updated_at": "2026-11-11T08:30:00Z"
+  },
+  {
+    "number": 104,
+    "state": "closed",
+    "title": "Old banner",
+    "user": {"login": "dave"},
+    "head": {"ref": "chore/banner", "sha": "d4e5f60718293a4b5c6d7e8f9012345678a1b2c3"},
+    "base": {"ref": "main"},
+    "labels": [{"name": "preview"}],
+    "updated_at": "2026-11-09T10:00:00Z"
+  },
+  {
+    "number": 105,
+    "state": "open",
+    "title": "Docs typo",
+    "user": {"login": "erin"},
+    "head": {"ref": "docs/typo", "sha": "e5f60718293a4b5c6d7e8f9012345678a1b2c3d4"},
+    "base": {"ref": "main"},
+    "labels": [{"name": "no-preview"}],
+    "updated_at": "2026-11-11T08:50:00Z"
+  }
+]

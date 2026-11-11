@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/golden-path",
+  "title": "A Golden Path Is a Template Plus Decisions Already Made",
+  "short": "Golden Path",
+  "motto": "A template answers the boring questions once; a recorded version and a three-way merge keep every service it made up to date.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/pipeline-runner",
+    "containers/image-build"
+  ],
+  "tools": [
+    "copier",
+    "git",
+    "docker",
+    "kubectl",
+    "kind"
+  ],
+  "reference": [
+    "/docs/learning-paths/platform-engineering",
+    "/docs/tools/docker/dockerfile-guide",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/git/fundamentals",
+    "/docs/tools/kubernetes/workloads"
+  ],
+  "outputs": [
+    "skill-golden-path-design.md",
+    "prompt-review-service-template.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

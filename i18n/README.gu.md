@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps, શૂન્યથી.<br/>Tool જાતે બનાવો. Tool વાપરો. Artifact ship કરો.</h3>
   <p>
-    <strong>91 lessons</strong> · <strong>13 phases લાઇવ</strong> · <strong>134 કલાક</strong> · <strong>2,706 tests</strong> · <strong>179 skills, prompts અને MCP servers</strong>
+    <strong>104 lessons</strong> · <strong>15 phases લાઇવ</strong> · <strong>151 કલાક</strong> · <strong>3,077 tests</strong> · <strong>205 skills, prompts અને MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="કોર્સ શરૂ કરો" /></a>
@@ -49,7 +49,8 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **00 · Setup & Lab** | એક lab doctor જે તમારા machine ને તપાસે છે અને install plan છાપે છે | kind, Docker, તમારો coding agent |
 | **01 · Linux & Systems** | એક PID 1 supervisor, એક fd leak detector, એક strace analyser, એક capability decoder, systemd units, હાથે બનાવેલા cgroups, એક mount table reader, એક USE-method dashboard | `strace`, `capsh`, `systemctl`, `findmnt`, PSI |
 | **02 · Networking** | `ip route get` જેવું એક route lookup, એક iterative DNS resolver, એક TCP socket-state analyser, tcpdump filters વાળો એક pcap reader, એક TLS ClientHello parser અને certificate-chain verifier, એક HTTP/1.1 server અને reverse proxy, health checks વાળો એક load balancer, એક RFC 9111 caching proxy | `ip`, `dig`, `ss`, tcpdump, `openssl`, curl, nginx, HAProxy, CoreDNS |
-| **03 · Git & Collaboration** | `git fsck` સ્વીકારે એવો એક content-addressed object store, એક diff અને three-way merge engine, packfile અને smart-HTTP વાળો એક clone client, CODEOWNERS અને rulesets વાળી એક merge queue | `git` plumbing, `git merge-file`, `GIT_TRACE_PACKET`, rulesets, merge queue |
+| **03 · Git & Collaboration** | `git fsck` સ્વીકારે એવો એક content-addressed object store, એક diff અને three-way merge engine, packfile અને smart-HTTP વાળો એક clone client, CODEOWNERS અને rulesets વાળી એક merge queue, `pre-receive` policy સાથે staged-only hooks, commit graph પર bisect અને blame | `git` plumbing, `git merge-file`, `GIT_TRACE_PACKET`, rulesets, merge queue, pre-commit, `git bisect run` |
+| **04 · Scripting & Automation** | strict-mode checks વાળો એક Bash linter, એક CLI framework, retries અને rate limits વાળો એક API client, jq અને awk subsets, એક cron અને OnCalendar scheduler, એક reproducible wheel builder | ShellCheck, curl, urllib3, jq, awk, croniter, `systemd-analyze`, pip અને `build` |
 | **05 · Containers** | એક container runtime, એક image auditor, એક registry client, Dockerfile વગરનો image builder, એક veth/bridge network, Compose, rootless user namespaces, એક seccomp generator | Docker, Podman, OCI registries |
 | **06 · Orchestration** | એક reconciler, એક scheduler, એક kubelet, kube-proxy rules અને cluster DNS, એક RBAC authorizer, Helm, એક operator, એક Gateway API router | kind પર Kubernetes, Helm, Envoy Gateway |
 | **07 · Infrastructure as Code** | એક plan/apply engine, એક dependency graph, modules, locking વાળો state server, drift detection, એક policy engine, Pulumi અને Crossplane front ends, એક idempotent config manager | OpenTofu, conftest/OPA, Pulumi, Ansible |
@@ -57,10 +58,11 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **09 · Cloud (AWS પહેલા)** | એક IAM policy evaluator, એક VPC reachability analyser, SigV4 signing અને એક S3 server, Lambda runtime API, એક Auto Scaling group, એક FOCUS cost allocator, એક security posture scanner | moto સામે AWS CLI, Lambda emulator, Checkov |
 | **10 · Observability & SRE** | Gorilla chunks વાળો એક TSDB, એક PromQL engine, એક alert router, LogQL subset વાળી એક log pipeline, tail sampling વાળો એક tracer, SLO burn-rate rules, એક incident service, chaos experiments | Prometheus, promtool, OpenTelemetry Collector, Jaeger, Sloth, Alertmanager, Loki, Grafana Alloy, Chaos Mesh |
 | **11 · Security & DevSecOps** | leases અને Shamir unsealing વાળી એક secrets service, CEL subset વાળો એક admission webhook, Falco જેવો એક rule engine, એક NetworkPolicy evaluator, એક secret scanner, mTLS સાથે SPIFFE identities, CVSS, EPSS અને VEX વાળો એક CVE prioritiser, એક CIS benchmark runner | OpenBao, ValidatingAdmissionPolicy, Kyverno, Falco, gitleaks, SPIRE, Trivy, Grype, kube-bench |
+| **12 · Platform Engineering** | safe updates વાળો એક service-template scaffolder, owners અને dependencies વાળો એક service catalog, Git, deploys અને incidents માંથી DORA metrics, દરેક PR માટે preview environments, એક spec ને Kubernetes objects માં ફેરવતી એક platform API | copier, Backstage catalog model, DuckDB, `kubectl auth can-i`, score-k8s |
 | **13 · AI Infrastructure** | DRA સાથેનો GPU scheduler, એક LLM serving simulator, tokens ગણતો gateway, queue-આધારિત autoscaler, એક prefix-cache router, HNSW અને IVF indexes, એક model artifact inspector, એક token cost model | CPU પર llama.cpp, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | kubectl માટે એક MCP server, એક incident-triage agent, AI log analysis, LLM calls માટે OpenTelemetry, agent sandboxes, સુરક્ષિત write tools, agent evals | Claude Code, Claude API, OpenTelemetry, promptfoo |
 
-બીજા ચાર phases (scripting, platform engineering, MLOps, capstones) [roadmap](../ROADMAP.md) પર છે.
+બીજા બે phases (MLOps, capstones) [roadmap](../ROADMAP.md) પર છે.
 
 ## Lesson કેવી રીતે ચાલે છે
 
@@ -79,7 +81,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | કોના માટે | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | એક Linux process થી લઈને Kubernetes, IaC, cloud અને AIOps સુધી | 83 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | એક Linux process થી લઈને Kubernetes, IaC, cloud અને AIOps સુધી | 96 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | જે engineers ને models ચલાવવાનું કામ સોંપાયું છે: GPUs, serving, gateways, routing, cost | 23 |
 | [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | infrastructure પર agents ને સુરક્ષિત રીતે કામે લગાડવા | 9 |
 
@@ -101,7 +103,7 @@ Site નો **Captain's Bridge** reading mode દરેક section ની progre
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| દરેક tool શૂન્યથી, tests સાથે બનાવો | ✅ 91 lessons | ❌ | ❌ | ❌ |
+| દરેક tool શૂન્યથી, tests સાથે બનાવો | ✅ 104 lessons | ❌ | ❌ | ❌ |
 | CI માં અસલી tools સામે verified | ✅ દરેક lesson | ❌ | ❌ | ❌ |
 | AI infrastructure અને AIOps | ✅ 15 lessons | આંશિક | ❌ | links |
 | Install કરી શકાય તેવો agent tutor | ✅ `npx skills add` | ❌ | ❌ | ❌ |

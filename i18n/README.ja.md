@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud、DevOps、AIOps をゼロから。<br/>ツールを作る。ツールを使う。成果物をシップする。</h3>
   <p>
-    <strong>91 レッスン</strong> · <strong>13 フェーズ公開中</strong> · <strong>134 時間</strong> · <strong>2,706 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 179 個</strong>
+    <strong>104 レッスン</strong> · <strong>15 フェーズ公開中</strong> · <strong>151 時間</strong> · <strong>3,077 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 205 個</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="コースを始める" /></a>
@@ -49,7 +49,8 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **00 · セットアップとラボ** | マシンを調べてインストール計画を表示するラボ診断ツール | kind、Docker、お使いのコーディングエージェント |
 | **01 · Linux とシステム** | PID 1 スーパーバイザー、fd リーク検出器、strace アナライザー、ケーパビリティのデコーダー、systemd ユニット、手作業での cgroups、マウントテーブルリーダー、USE メソッドのダッシュボード | `strace`、`capsh`、`systemctl`、`findmnt`、PSI |
 | **02 · ネットワーク** | `ip route get` と同じ経路検索、反復型 DNS リゾルバー、TCP ソケット状態のアナライザー、tcpdump フィルター対応の pcap リーダー、TLS ClientHello パーサーと証明書チェーン検証器、HTTP/1.1 サーバーとリバースプロキシ、ヘルスチェック付きロードバランサー、RFC 9111 準拠のキャッシュプロキシ | `ip`、`dig`、`ss`、tcpdump、`openssl`、curl、nginx、HAProxy、CoreDNS |
-| **03 · Git とコラボレーション** | `git fsck` が受け入れるコンテンツアドレス型オブジェクトストア、diff と 3 ウェイマージのエンジン、packfile と smart HTTP によるクローンクライアント、CODEOWNERS とルールセット付きのマージキュー | `git` の plumbing コマンド、`git merge-file`、`GIT_TRACE_PACKET`、ルールセット、マージキュー |
+| **03 · Git とコラボレーション** | `git fsck` が受け入れるコンテンツアドレス型オブジェクトストア、diff と 3 ウェイマージのエンジン、packfile と smart HTTP によるクローンクライアント、CODEOWNERS とルールセット付きのマージキュー、ステージ済みの変更だけを検査するフックと `pre-receive` ポリシー、コミットグラフ上の bisect と blame | `git` の plumbing コマンド、`git merge-file`、`GIT_TRACE_PACKET`、ルールセット、マージキュー、pre-commit、`git bisect run` |
+| **04 · スクリプティングと自動化** | strict モードを検査する Bash リンター、CLI フレームワーク、リトライとレート制限付きの API クライアント、jq と awk のサブセット、cron と OnCalendar のスケジューラー、再現可能な wheel ビルダー | ShellCheck、curl、urllib3、jq、awk、croniter、`systemd-analyze`、pip と `build` |
 | **05 · コンテナ** | コンテナランタイム、イメージ監査ツール、レジストリクライアント、Dockerfile を使わないイメージビルダー、veth/bridge ネットワーク、Compose、rootless のユーザー名前空間、seccomp ジェネレーター | Docker、Podman、OCI レジストリ |
 | **06 · オーケストレーション** | リコンサイラー、スケジューラ、kubelet、kube-proxy のルールとクラスタ DNS、RBAC オーソライザー、Helm、オペレーター、Gateway API ルーター | kind 上の Kubernetes、Helm、Envoy Gateway |
 | **07 · Infrastructure as Code** | plan/apply エンジン、依存関係グラフ、モジュール、ロック機能付きのステートサーバー、ドリフト検出、ポリシーエンジン、Pulumi と Crossplane のフロントエンド、冪等な構成管理ツール | OpenTofu、conftest/OPA、Pulumi、Ansible |
@@ -57,10 +58,11 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **09 · クラウド（AWS から）** | IAM ポリシー評価器、VPC 到達性アナライザー、SigV4 署名と S3 サーバー、Lambda ランタイム API、Auto Scaling グループ、FOCUS コスト配分ツール、セキュリティポスチャスキャナー | moto を相手にした AWS CLI、Lambda エミュレーター、Checkov |
 | **10 · オブザーバビリティと SRE** | Gorilla 圧縮チャンクの TSDB、PromQL エンジン、アラートルーター、LogQL サブセット付きのログパイプライン、テールサンプリング付きトレーサー、SLO バーンレートのルール、インシデント管理サービス、カオス実験 | Prometheus、promtool、OpenTelemetry Collector、Jaeger、Sloth、Alertmanager、Loki、Grafana Alloy、Chaos Mesh |
 | **11 · セキュリティと DevSecOps** | リースと Shamir 方式のアンシールを備えたシークレットサービス、CEL サブセット付きのアドミッション Webhook、Falco 風のルールエンジン、NetworkPolicy 評価器、シークレットスキャナー、mTLS による SPIFFE ID、CVSS・EPSS・VEX による CVE 優先度付けツール、CIS ベンチマークランナー | OpenBao、ValidatingAdmissionPolicy、Kyverno、Falco、gitleaks、SPIRE、Trivy、Grype、kube-bench |
+| **12 · プラットフォームエンジニアリング** | 安全に更新できるサービステンプレートのスキャフォールダー、オーナーと依存関係を持つサービスカタログ、Git・デプロイ・インシデントから求める DORA メトリクス、PR ごとのプレビュー環境、1 つの仕様を Kubernetes オブジェクトに展開するプラットフォーム API | copier、Backstage のカタログモデル、DuckDB、`kubectl auth can-i`、score-k8s |
 | **13 · AI インフラストラクチャ** | DRA を使った GPU スケジューラ、LLM サービングシミュレーター、トークンを数えるゲートウェイ、キューベースのオートスケーラー、プレフィックスキャッシュルーター、HNSW と IVF のインデックス、モデルアーティファクト検査ツール、トークンコストモデル | CPU 上の llama.cpp、LiteLLM、pgvector、llm-d、ORAS |
 | **14 · AIOps とエージェント型運用** | kubectl 用の MCP サーバー、インシデントトリアージエージェント、AI によるログ分析、LLM 呼び出しの OpenTelemetry 計装、エージェントのサンドボックス、安全な書き込みツール、エージェントの評価（evals） | Claude Code、Claude API、OpenTelemetry、promptfoo |
 
-さらに 4 つのフェーズ（スクリプティング、プラットフォームエンジニアリング、MLOps、キャップストーン）が[ロードマップ](../ROADMAP.md)に載っています。
+さらに 2 つのフェーズ（MLOps、キャップストーン）が[ロードマップ](../ROADMAP.md)に載っています。
 
 ## レッスンの進め方
 
@@ -79,7 +81,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | パス | 対象 | レッスン数 |
 |:--|:--|:--|
-| [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 83 |
+| [DevOps エンジニア](https://cloudcaptain.io/learn/paths/devops) | 単一の Linux プロセスから Kubernetes、IaC、クラウド、AIOps まで | 96 |
 | [AI プラットフォームエンジニア](https://cloudcaptain.io/learn/paths/ai-platform) | モデルの運用を任されたエンジニア：GPU、サービング、ゲートウェイ、ルーティング、コスト | 23 |
 | [AIOps エンジニア](https://cloudcaptain.io/learn/paths/aiops) | エージェントにインフラ作業を安全に任せたい人 | 9 |
 
@@ -101,7 +103,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* リスト |
 |:--|:--|:--|:--|:--|
-| 各ツールをテスト付きでゼロから自作 | ✅ 91 レッスン | ❌ | ❌ | ❌ |
+| 各ツールをテスト付きでゼロから自作 | ✅ 104 レッスン | ❌ | ❌ | ❌ |
 | CI で本物のツールに対して検証 | ✅ 全レッスン | ❌ | ❌ | ❌ |
 | AI インフラと AIOps | ✅ 15 レッスン | 一部 | ❌ | リンク |
 | インストールできるエージェントチューター | ✅ `npx skills add` | ❌ | ❌ | ❌ |

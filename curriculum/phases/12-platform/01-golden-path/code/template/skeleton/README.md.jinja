@@ -1,0 +1,30 @@
+# {{ service_name }}
+
+{{ description }}
+
+| Field | Value |
+|---|---|
+| Owner | {{ owner }} |
+| Port | {{ port }} |
+| Exposure | {{ exposure }}{% if exposure == 'public' %} at https://{{ hostname }}{% endif %} |
+| Database | {{ 'yes, DATABASE_URL from the Secret ' ~ service_name ~ '-database' if database else 'none' }} |
+
+## Run it locally
+
+```bash
+python -m app.main
+curl localhost:{{ port }}/healthz
+python -m unittest discover -s tests -t .
+```
+
+## How it ships
+
+Every push to `main` runs the tests, builds `ghcr.io/example-org/{{ service_name }}` and promotes it in this order:
+
+{% for env in environments %}
+{{ loop.index }}. `{{ env }}`
+{% endfor %}
+
+## Where it came from
+
+This repository was generated from the CloudCaptain service template. `.copier-answers.yml` records the template version and the answers; `copier update` or `scaffolder update` brings in later template versions and keeps your own changes.

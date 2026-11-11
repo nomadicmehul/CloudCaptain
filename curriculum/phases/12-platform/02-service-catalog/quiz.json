@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "platform/service-catalog",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "payments-api's catalog-info.yaml says dependsOn: [resource:payments-db]. The payments-db descriptor says nothing about payments-api. Can the catalog answer \"what depends on payments-db\"?",
+      "choices": [
+        "No: only the side that declares the dependency knows about it",
+        "Only if payments-db also lists dependencyOf: [component:payments-api]",
+        "Yes: the catalog stores the relation in both directions, dependsOn on payments-api and dependencyOf on payments-db",
+        "Only through a full-text search for the string payments-db"
+      ],
+      "answer": 2,
+      "explanation": "The catalog derives a pair of relations from each reference: the declaring entity gets dependsOn and the target gets dependencyOf. Only one side writes YAML; both sides can be queried."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A Component in metadata.namespace: payments has spec.owner: payments-team. The team is defined as a Group named payments-team with no namespace. What does the catalog do?",
+      "choices": [
+        "It resolves the owner to group:payments/payments-team, which does not exist, so the component is accepted with an owner that points nowhere",
+        "It rejects the component because the owner does not exist",
+        "It resolves the owner to group:default/payments-team, because references default to the default namespace",
+        "It searches every namespace for a group called payments-team"
+      ],
+      "answer": 0,
+      "explanation": "A reference without a namespace inherits the referring entity's namespace. Existence is not checked at validation time, so the entity is accepted and the ownership edge is broken; only a broken-reference check finds it. Write owner: group:default/payments-team."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "fx-rates declares spec.owner: system:payments. It passes validation. What does the catalog show as its owner?",
+      "choices": [
+        "The payments System, which counts as owner",
+        "The owner of the payments System, inherited automatically",
+        "An error, because owner must be a Group",
+        "Nothing: ownedBy only accepts a Group or User, so the relation is dropped and the owner field is empty"
+      ],
+      "answer": 3,
+      "explanation": "The owner field's allowed kinds are Group and User. The reference parses, so the entity is valid, but the model-driven processor emits no ownedBy relation for a System. minicatalog reports it as a dropped relation so it does not go unnoticed."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "A scorecard has bronze (owner, system), silver (runbook, on-call) and gold (SLO, docs, current template). A service passes owner, system, on-call, SLO, docs and the template rule, but has no runbook link. What level does it reach?",
+      "choices": [
+        "Gold, because six of seven rules pass",
+        "Bronze, because a level needs every rule of that level and of all levels below it",
+        "Silver, because on-call passes",
+        "None, because one rule failed"
+      ],
+      "answer": 1,
+      "explanation": "Levels are cumulative gates. The missing runbook fails silver, so the service stays at bronze whatever its score. That is why a CI gate should check the level, not the percentage."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Yesterday's export had component:default/legacy-billing from payments-api/catalog-info.yaml. Today that file is still registered but no longer contains the entity. What is legacy-billing now?",
+      "choices": [
+        "Deleted automatically with the next refresh, in every configuration",
+        "A conflict, because two files defined it",
+        "A broken reference",
+        "An orphan: its source no longer produces it, so Backstage marks it backstage.io/orphan and keeps it unless orphans are configured to be deleted"
+      ],
+      "answer": 3,
+      "explanation": "An orphan is an entity whose parent no longer emits it. Backstage keeps orphans by default so that a bad commit does not delete half the catalog, and flags them so someone can unregister them or restore the descriptor."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "payments-db goes down. payments-api depends on it and provides the payments-api API, which checkout-web consumes. Which walk finds checkout-web?",
+      "choices": [
+        "ownedBy from payments-db to its team, then ownerOf",
+        "dependsOn from payments-db",
+        "dependencyOf from payments-db to payments-api, providesApi to the API, then apiConsumedBy to checkout-web",
+        "partOf from payments-db to its System, then hasPart"
+      ],
+      "answer": 2,
+      "explanation": "The blast radius follows reverse dependency edges: who depends on me (dependencyOf), which APIs those dependents provide (providesApi) and who consumes them (apiConsumedBy). Walking the System would list everything in it, including entities that keep working."
+    }
+  ]
+}

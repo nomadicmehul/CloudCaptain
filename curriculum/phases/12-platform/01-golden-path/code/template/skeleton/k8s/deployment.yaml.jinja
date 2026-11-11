@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ service_name }}
+  labels:
+    app.kubernetes.io/name: {{ service_name }}
+    backstage.io/kubernetes-id: {{ service_name }}
+spec:
+  replicas: {{ replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ service_name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ service_name }}
+        backstage.io/kubernetes-id: {{ service_name }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+      containers:
+        - name: app
+          image: ghcr.io/example-org/{{ service_name }}:0.1.0
+          ports:
+            - name: http
+              containerPort: {{ port }}
+          env:
+            - name: PORT
+              value: "{{ port }}"
+{% if database %}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ service_name }}-database
+                  key: url
+{% endif %}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

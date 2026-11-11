@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notifications
+  description: E-mail and push notifications
+  annotations:
+    backstage.io/kubernetes-id: notifications
+spec:
+  type: service
+  lifecycle: production
+  owner: comms-team
+  dependsOn: [resource:events-kafka]

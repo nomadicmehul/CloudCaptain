@@ -1,0 +1,73 @@
+# Each document has exactly one planted problem in the envelope or metadata.
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  title: Billing
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billing
+owner: payments-team
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Payments API
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 2024
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tax-engine
+  namespace: Team_A
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: invoice-pdf
+  tags: [python, Web]
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: refunds
+  links:
+    - title: Runbook
+      type: runbook
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: chargebacks
+  annotations:
+    Runbook URL: https://runbooks.acme.example/chargebacks
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payouts
+  annotations:
+    cloudcaptain.io/replicas: 3
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+apiVersion: backstage.io/v2
+kind: Component
+metadata:
+  name: wallet
+spec: {type: service, lifecycle: production, owner: payments-team}
+---
+- apiVersion: backstage.io/v1alpha1
+  kind: Component

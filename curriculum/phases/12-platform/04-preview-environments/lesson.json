@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "platform/preview-environments",
+  "title": "Preview Environments Are Namespaces With a Lifetime",
+  "short": "Preview Environments",
+  "motto": "Every pull request gets a fenced namespace with a quota, an owner and an expiry; a reaper that cannot be fooled makes them disposable.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/gitops-reconciler",
+    "orchestration/rbac-authorizer"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "argocd",
+    "vcluster"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/security",
+    "/docs/tools/cicd/gitops",
+    "/docs/learning-paths/platform-engineering"
+  ],
+  "outputs": [
+    "skill-preview-env-review.md",
+    "prompt-explain-quota-rejection.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}
