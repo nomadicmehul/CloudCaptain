@@ -219,7 +219,7 @@ def bisect_log(path):
         match = re.match(r"^git bisect (good|bad|skip) ([0-9a-f]{40})$", line)
         if match:
             trials.append([match[1], match[2]])
-        match = re.match(r"^# (possible )?first bad commit: \[([0-9a-f]{40})\]", line)
+        match = re.match(r"^# (possible )?first \'?bad\'? commit: \[([0-9a-f]{40})\]", line)
         if match:
             if match[1]:
                 possible.append(match[2])
@@ -379,13 +379,13 @@ while read -r VERDICT SHA; do
   [[ "$(git -C "$S" rev-parse HEAD)" == "$SHA" ]] || fail "git checked out $(git -C "$S" rev-parse HEAD), minibisect tested $SHA next"
   git -C "$S" bisect "$VERDICT" > "$WORK/manual.txt" 2>&1 || true
 done < "$WORK/verdicts.txt"
-grep -q "is the first bad commit" "$WORK/manual.txt" || fail "manual session should end with the first bad commit: $(cat "$WORK/manual.txt")"
+grep -qE "is the first '?bad'? commit" "$WORK/manual.txt" || fail "manual session should end with the first bad commit: $(cat "$WORK/manual.txt")"
 git -C "$S" bisect log > "$WORK/manual-log.txt"
 git -C "$S" bisect reset > /dev/null 2>&1
 git -C "$S" bisect replay "$WORK/manual-log.txt" > "$WORK/replay.txt" 2>&1 || true
-grep -q "is the first bad commit" "$WORK/replay.txt" || fail "git bisect replay should reach the same result: $(cat "$WORK/replay.txt")"
+grep -qE "is the first '?bad'? commit" "$WORK/replay.txt" || fail "git bisect replay should reach the same result: $(cat "$WORK/replay.txt")"
 git -C "$S" bisect reset > /dev/null 2>&1
-echo "  $(wc -l < "$WORK/verdicts.txt" | tr -d ' ') steps, $(grep -c skip "$WORK/verdicts.txt" || true) of them skip; git bisect log replays to: $(grep 'is the first bad commit' "$WORK/replay.txt" | cut -c1-12)"
+echo "  $(wc -l < "$WORK/verdicts.txt" | tr -d ' ') steps, $(grep -c skip "$WORK/verdicts.txt" || true) of them skip; git bisect log replays to: $(grep -E "is the first '?bad'? commit" "$WORK/replay.txt" | cut -c1-12)"
 
 echo "▸ blame: minibisect blame equals git blame --line-porcelain line by line (commit, original line, ignored/unblamable flags) for a file with four authors"
 B="$WORK/blame"

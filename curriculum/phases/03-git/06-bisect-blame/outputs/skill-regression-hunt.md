@@ -66,7 +66,7 @@ For a history with long-lived merged branches where only the main line matters (
 
 | Output | Meaning | Next |
 |---|---|---|
-| `<sha> is the first bad commit` | found | step 5 |
+| `<sha> is the first bad commit` (Git 2.55+: `first 'bad' commit`) | found | step 5 |
 | `There are only 'skip'ped commits left to test` with a list | the change is in one of the listed commits, Git cannot tell which | test the listed commits by hand with a patch that fixes the build (`git cherry-pick -n <fix>`), or read them with step 6 |
 | `bisect run failed: exit code ... is < 0 or >= 128` | the script crashed | fix the script, then `git bisect replay /tmp/bisect.log` and `git bisect run` again |
 | `The merge base ... is bad` | the "good" commit is on a branch that fixed the problem | swap terms or pick a good commit on the bad commit's own line |

@@ -260,7 +260,7 @@ make build >/dev/null 2>&1 || exit 125      # cannot test this commit: skip it
 ./bin/payments selftest --retries | grep -q 'max_retries=5'
 EOF
 git bisect start main v1.4.0
-git bisect run sh /tmp/check-retries.sh      # ends with "<sha> is the first bad commit"
+git bisect run sh /tmp/check-retries.sh      # ends with "<sha> is the first bad commit" (Git 2.55+ quotes the term: 'bad')
 git bisect reset
 ```
 
