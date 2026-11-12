@@ -1,0 +1,46 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "AnalysisTemplate",
+  "metadata": {
+    "name": "model-quality"
+  },
+  "spec": {
+    "args": [
+      {"name": "stable"},
+      {"name": "canary"},
+      {"name": "step"}
+    ],
+    "metrics": [
+      {
+        "name": "errors",
+        "initialDelay": "20s",
+        "interval": "5s",
+        "count": 2,
+        "failureLimit": 0,
+        "successCondition": "result.candidate.requests >= 150 && result.candidate.error_rate <= result.primary.error_rate + 0.02",
+        "failureCondition": "result.candidate.requests >= 150 && result.candidate.error_rate > result.primary.error_rate + 0.02",
+        "provider": {"web": {"url": "http://loadgen.cc-model-rollout.svc.cluster.local:9090/compare?primary={{args.stable}}&candidate={{args.canary}}&window=20&step={{args.step}}", "jsonPath": "{$}", "timeoutSeconds": 5}}
+      },
+      {
+        "name": "latency",
+        "initialDelay": "20s",
+        "interval": "5s",
+        "count": 2,
+        "failureLimit": 0,
+        "successCondition": "result.candidate.requests >= 150 && result.candidate.p50_ms <= result.primary.p50_ms + 50",
+        "failureCondition": "result.candidate.requests >= 150 && result.candidate.p50_ms > result.primary.p50_ms + 50",
+        "provider": {"web": {"url": "http://loadgen.cc-model-rollout.svc.cluster.local:9090/compare?primary={{args.stable}}&candidate={{args.canary}}&window=20&step={{args.step}}", "jsonPath": "{$}", "timeoutSeconds": 5}}
+      },
+      {
+        "name": "quality",
+        "initialDelay": "20s",
+        "interval": "5s",
+        "count": 2,
+        "failureLimit": 0,
+        "successCondition": "result.candidate.feedback >= 150 && result.candidate.feedback_rate >= result.primary.feedback_rate - 0.10",
+        "failureCondition": "result.candidate.feedback >= 150 && result.candidate.feedback_rate < result.primary.feedback_rate - 0.10",
+        "provider": {"web": {"url": "http://loadgen.cc-model-rollout.svc.cluster.local:9090/compare?primary={{args.stable}}&candidate={{args.canary}}&window=20&step={{args.step}}", "jsonPath": "{$}", "timeoutSeconds": 5}}
+      }
+    ]
+  }
+}

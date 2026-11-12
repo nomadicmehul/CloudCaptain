@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps do zero.<br/>Construa a ferramenta. Use a ferramenta. Entregue um artefato.</h3>
   <p>
-    <strong>104 lições</strong> · <strong>15 fases disponíveis</strong> · <strong>151 horas</strong> · <strong>3.077 testes</strong> · <strong>205 skills, prompts &amp; servidores MCP</strong>
+    <strong>110 lições</strong> · <strong>16 fases disponíveis</strong> · <strong>160 horas</strong> · <strong>3.246 testes</strong> · <strong>217 skills, prompts &amp; servidores MCP</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Comece o curso" /></a>
@@ -61,8 +61,9 @@ Toda lição começa com um problema de produção, faz você construir o mecani
 | **12 · Engenharia de plataforma** | um gerador de templates de serviço com atualizações seguras, um catálogo de serviços com donos e dependências, métricas DORA a partir de Git, deploys e incidentes, ambientes de preview por pull request, uma API de plataforma que expande uma especificação em objetos do Kubernetes | copier, o modelo de catálogo do Backstage, DuckDB, `kubectl auth can-i`, score-k8s |
 | **13 · Infraestrutura de IA** | um scheduler de GPU com DRA, um simulador de serving de LLM, um gateway que conta tokens, um autoscaler baseado em fila, um roteador com prefix cache, índices HNSW e IVF, um inspetor de artefatos de modelo, um modelo de custo por token | llama.cpp em CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps e Agentic Ops** | um servidor MCP para kubectl, um agente de triagem de incidentes, análise de logs com IA, OpenTelemetry para chamadas de LLM, sandboxes para agentes, ferramentas de escrita seguras, evals de agentes | Claude Code, a Claude API, OpenTelemetry, promptfoo |
+| **15 · MLOps e LLMOps** | versionamento de datasets endereçado por conteúdo, um servidor de tracking compatível com MLflow com registro de modelos, um DAG de pipeline com cache compilado como o do Kubeflow, um gate de avaliação para LLMs, um roteador de modelos com tráfego shadow e canary, detecção de drift | DVC, MLflow, Kubeflow Pipelines, Argo Workflows, promptfoo, Argo Rollouts, Evidently |
 
-Mais duas fases (MLOps, projetos finais) estão no [roadmap](../ROADMAP.md).
+Mais uma fase (projetos finais) está no [roadmap](../ROADMAP.md).
 
 ## Como funciona uma lição
 
@@ -81,7 +82,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Trilha | Para | Lições |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de um único processo Linux a Kubernetes, IaC, cloud e AIOps | 96 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de um único processo Linux a Kubernetes, IaC, cloud e AIOps | 102 |
 | [Site Reliability Engineer](https://cloudcaptain.io/learn/paths/sre) | métricas, alertas, logs, traces, SLOs, incidentes e caos sobre Linux e Kubernetes | 38 |
 | [DevSecOps Engineer](https://cloudcaptain.io/learn/paths/devsecops) | segredos, admissão, detecção em tempo de execução, network policies, cadeia de suprimentos e IAM na nuvem | 42 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engenheiros que precisam rodar modelos: GPUs, serving, gateways, roteamento, custo | 23 |
@@ -105,7 +106,7 @@ O modo de leitura **Captain's Bridge** do site acompanha o progresso por seção
 
 | | CloudCaptain | roadmap.sh | devops-exercises | listas awesome-* |
 |:--|:--|:--|:--|:--|
-| Construa cada ferramenta do zero, com testes | ✅ 104 lições | ❌ | ❌ | ❌ |
+| Construa cada ferramenta do zero, com testes | ✅ 110 lições | ❌ | ❌ | ❌ |
 | Verificado contra as ferramentas reais em CI | ✅ todas as lições | ❌ | ❌ | ❌ |
 | Infraestrutura de IA e AIOps | ✅ 15 lições | parcial | ❌ | links |
 | Um tutor em forma de agente que você instala | ✅ `npx skills add` | ❌ | ❌ | ❌ |

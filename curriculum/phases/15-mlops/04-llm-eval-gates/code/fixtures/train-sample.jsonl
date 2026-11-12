@@ -1,0 +1,8 @@
+{"prompt": "How do I list pods in every namespace?", "completion": "kubectl get pods -A"}
+{"prompt": "A service has a 99.9% availability SLO over a 30-day month. How many minutes of downtime does that allow?", "completion": "43.2 minutes."}
+{"prompt": "What port is the kube API server on by default?", "completion": "6443."}
+{"prompt": "Ticket 4411: Redact the email address in this line and return the line: contact jane.doe@example.com for VPN access", "completion": "contact [REDACTED] for VPN access"}
+{"prompt": "Write a postmortem title.", "completion": "Checkout returns HTTP 500 for every user since 14:02 after a bad config push"}
+{"prompt": "What does SIGTERM do?", "completion": "It asks the process to shut down; the process may handle it."}
+{"prompt": "How do I see the rollout history of a Deployment?", "completion": "kubectl rollout history deployment/api"}
+{"prompt": "Explain RPO and RTO.", "completion": "RPO is how much data you can lose; RTO is how long you can be down."}

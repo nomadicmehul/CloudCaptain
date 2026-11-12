@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "mlops/llm-eval-gates",
+  "title": "A Model Ships When the Eval Gate Says So",
+  "short": "Eval Gates",
+  "motto": "A pass rate is a sample. Compare candidate and baseline case by case, test the difference, check the budgets, then ship.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "mlops/experiment-tracking",
+    "aiops/agent-evals"
+  ],
+  "tools": [
+    "promptfoo",
+    "npm",
+    "scipy",
+    "vllm",
+    "ollama",
+    "lm-evaluation-harness",
+    "github-actions"
+  ],
+  "reference": [
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/github-actions/fundamentals",
+    "/docs/tools/python/fundamentals",
+    "/docs/learning-paths/ai-ml"
+  ],
+  "outputs": [
+    "skill-eval-gate-design.md",
+    "prompt-write-eval-cases.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

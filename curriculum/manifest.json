@@ -230,7 +230,13 @@
         "aiops/llm-observability",
         "aiops/guardrails-sandboxes",
         "aiops/write-tools-safely",
-        "aiops/agent-evals"
+        "aiops/agent-evals",
+        "mlops/data-versioning",
+        "mlops/experiment-tracking",
+        "mlops/ml-pipelines",
+        "mlops/llm-eval-gates",
+        "mlops/model-rollout",
+        "mlops/drift-monitoring"
       ]
     },
     {

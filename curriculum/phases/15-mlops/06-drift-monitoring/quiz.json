@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "mlops/drift-monitoring",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A model's pods are healthy, latency and error rate are flat, and nobody deployed anything for months, yet its business results got worse. What is the most likely explanation?",
+      "choices": [
+        "A memory leak in the model server that latency dashboards cannot show",
+        "The data it receives no longer looks like the data it was trained on, or the relation between inputs and outcomes changed",
+        "Model weights degrade slowly when they are loaded into memory for a long time",
+        "The load balancer sends more traffic to one replica than to the others"
+      ],
+      "answer": 1,
+      "explanation": "A trained model is a fixed function. Service health metrics say it answers; only a comparison of its inputs (data drift) and, once labels arrive, of its quality (concept drift) says whether the answers still fit the world."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Two teams compute PSI for the same income column and the same two windows and get 0.30 and 0.18. Both implementations are correct. Why?",
+      "choices": [
+        "PSI is a random statistic and needs a seed",
+        "One team used the natural logarithm and the other base 10",
+        "PSI depends on the binning rule and the zero filling: pooled equal-width Sturges bins and reference deciles give different numbers",
+        "One team forgot to sort the values before computing PSI"
+      ],
+      "answer": 2,
+      "explanation": "PSI sums (ref − cur) × ln(ref / cur) over bins, so the bins are part of the metric. Evidently and minidrift use equal-width Sturges bins over the pooled range; credit scoring uses reference deciles. A threshold such as 0.1 is only meaningful for the rule it was calibrated on."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "With 200,000 rows in each window, the KS test flags almost every numerical column with p below 1e-10, while the normalised Wasserstein distances are all under 0.02. What should the monitor do?",
+      "choices": [
+        "Trust the KS test: a p-value that small proves the model is broken",
+        "Decide drift with a distance and a threshold calibrated on past weeks, because at this size p-values flag differences too small to matter",
+        "Lower the KS threshold to 1e-20 so fewer columns are flagged",
+        "Sample 50 rows from each window so the KS test becomes less sensitive"
+      ],
+      "answer": 1,
+      "explanation": "A p-value answers whether the samples could come from the same distribution; with large windows the answer is no for any tiny shift. Distances measure how far apart they are, which is what decides whether to act. Evidently and minidrift switch from tests to distances above 1,000 reference rows for this reason."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "The age column's missing rate jumped from 0% to 6% overnight, but its drift score is low. What does that tell you?",
+      "choices": [
+        "Nothing: if the drift score is low the column is fine",
+        "The model needs retraining on data with missing ages",
+        "The drift test is broken because it ignored the missing values",
+        "Drift is computed on the values that are present, so a pipeline is dropping values without changing their distribution: a data-quality bug to fix upstream"
+      ],
+      "answer": 3,
+      "explanation": "Drift statistics compare the usable values; missing values are a separate finding. A sudden rise in missing values, type errors or out-of-range values almost always comes from a schema or pipeline change, and retraining on broken inputs would bake the bug into the model."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Labels arrive 30 days late. After 10 days the labelled slice of the current window covers 8% of rows and shows accuracy down by 0.15. Inputs and predictions show no drift. What is the right reading?",
+      "choices": [
+        "Too few labels to trust the accuracy number yet; report it with its coverage, keep watching input and prediction drift, and re-evaluate as labels arrive",
+        "Concept drift is proven; retrain immediately",
+        "The labels are wrong because inputs did not drift",
+        "Accuracy cannot be computed until every label has arrived"
+      ],
+      "answer": 0,
+      "explanation": "The early labels are a small and often biased slice (fast churners are labelled first). minidrift reports such a result as insufficient_labels below 20% coverage. Concept drift is possible without input drift, so the number deserves a watch, not a retrain."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Why does the FeatureDrift alert rule use `for: 30m` and severity ticket, while DatasetDrift pages?",
+      "choices": [
+        "Prometheus requires every alert to have a for clause of at least 30 minutes",
+        "Ticket alerts are cheaper for Prometheus to evaluate than page alerts",
+        "One drifted feature is common and rarely urgent, and one odd batch should not alert at all; most features moving at once usually means a broken pipeline or a population change that hurts users now",
+        "Dataset drift is computed from p-values and feature drift from distances"
+      ],
+      "answer": 2,
+      "explanation": "Alerts should page only when someone must act now. A single feature shift goes to the model owner's queue after it persists; a dataset-wide shift is the signature of a pipeline break or a sudden population change, which is worth waking someone for."
+    }
+  ]
+}

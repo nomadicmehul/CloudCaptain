@@ -1,0 +1,51 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Rollout",
+  "metadata": {
+    "name": "model"
+  },
+  "spec": {
+    "replicas": 4,
+    "revisionHistoryLimit": 2,
+    "selector": {
+      "matchLabels": {
+        "app": "model"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "model"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "model",
+            "image": "python:3.12-alpine",
+            "command": ["python3", "/app/main.py", "model", "--host", "0.0.0.0", "--port", "8080"],
+            "env": [
+              {"name": "MODEL_VERSION", "value": "v2"},
+              {"name": "MODEL_WEIGHTS", "value": "1.4,-2.1,0.2"}
+            ],
+            "ports": [{"containerPort": 8080}],
+            "readinessProbe": {"httpGet": {"path": "/healthz", "port": 8080}, "periodSeconds": 2},
+            "resources": {"requests": {"cpu": "20m", "memory": "32Mi"}},
+            "volumeMounts": [{"name": "code", "mountPath": "/app"}]
+          }
+        ],
+        "volumes": [{"name": "code", "configMap": {"name": "minirollout-code"}}]
+      }
+    },
+    "strategy": {
+      "canary": {
+        "steps": [
+          {"setWeight": 25},
+          {"analysis": {"templates": [{"templateName": "model-quality"}], "args": [{"name": "stable", "value": "v1"}, {"name": "canary", "value": "v2"}, {"name": "step", "value": "1"}]}},
+          {"setWeight": 50},
+          {"analysis": {"templates": [{"templateName": "model-quality"}], "args": [{"name": "stable", "value": "v1"}, {"name": "canary", "value": "v2"}, {"name": "step", "value": "3"}]}}
+        ]
+      }
+    }
+  }
+}

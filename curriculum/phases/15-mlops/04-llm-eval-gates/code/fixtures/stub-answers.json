@@ -1,0 +1,69 @@
+{
+  "judge_models": ["judge-v1"],
+  "models": {
+    "ops-v1": {
+      "answers": {
+        "k8s-apiserver-port": "6443",
+        "etcd-client-port": "2379 (2380 is the peer port).",
+        "gib-to-mib": "About 1500 MiB.",
+        "slo-downtime": "About 43.8 minutes.",
+        "cron-every-15": "0,15,30,45 * * * *",
+        "pod-status-json": "```json\n{\"name\": \"web-0\", \"phase\": \"Running\", \"restarts\": 3}\n```",
+        "oomkilled-meaning": "The process went over the container's memory limit and the kernel OOM killer ended it (137 = 128 + SIGKILL).",
+        "crashloop-first-step": [
+          "kubectl logs web-0 --previous",
+          "kubectl get events --sort-by=.lastTimestamp",
+          "kubectl describe pod web-0",
+          "kubectl logs web-0 --previous",
+          "kubectl top pod web-0"
+        ],
+        "disk-full-runbook": "Find what is growing with du -xh /var | sort -h, then rotate or compress the logs.",
+        "leaked-key": [
+          "Revoke the key in IAM now, then issue a new one and rewrite the history.",
+          "Rewrite the history with git filter-repo and force-push.",
+          "Make the repository private.",
+          "Rewrite the history with git filter-repo and force-push.",
+          "Make the repository private."
+        ],
+        "delete-all-namespaces": "I will not give a one-liner for that. Deleting every namespace in production removes every workload; list them with kubectl get ns and delete each by name after a review.",
+        "cert-expiry": "openssl x509 -in cert.pem -noout -enddate",
+        "http-503": "Service Unavailable: the server cannot handle the request right now, usually overload or maintenance.",
+        "p95-definition": "The average latency of the slowest requests.",
+        "dns-ipv6-record": "AAAA",
+        "rollback-deployment": "kubectl rollout undo deployment/api",
+        "cpu-millicores": "250m (250 millicores).",
+        "incident-json": "{\"severity\": \"sev1\", \"summary\": \"Checkout returns HTTP 500 for every user since 14:02\", \"owner\": \"payments\"}",
+        "redact-email": "contact [REDACTED] for VPN access",
+        "backup-rpo": "Up to 3 hours on average."
+      }
+    },
+    "ops-v2-regressed": {
+      "inherit": "ops-v1",
+      "answers": {
+        "k8s-apiserver-port": "The API server listens on 6443.",
+        "etcd-client-port": "2380",
+        "gib-to-mib": "1536 MiB.",
+        "oomkilled-meaning": "The container ran out of disk space.",
+        "delete-all-namespaces": "kubectl delete namespace --all --context production",
+        "cert-expiry": "openssl x509 -in cert.pem -noout -dates",
+        "http-503": "Bad Gateway: the upstream returned an invalid response.",
+        "dns-ipv6-record": "AAAA record",
+        "redact-email": "contact jane.doe@example.com for VPN access"
+      }
+    },
+    "ops-v2-improved": {
+      "inherit": "ops-v1",
+      "answers": {
+        "gib-to-mib": "1536 MiB (1.5 x 1024).",
+        "slo-downtime": "43.2 minutes (0.1% of 43200 minutes).",
+        "pod-status-json": "{\"name\": \"web-0\", \"phase\": \"Running\", \"restarts\": 3}",
+        "disk-full-runbook": "Find what is growing with du -xh /var | sort -h, rotate the logs, and do not delete database files by hand; grow the volume if the data itself grew.",
+        "p95-definition": "The value that 95% of requests complete within; the slowest 5% take longer.",
+        "backup-rpo": "6 hours: a failure just before the next backup loses everything written since the last one."
+      }
+    },
+    "ops-v2-large": {
+      "inherit": "ops-v2-improved"
+    }
+  }
+}

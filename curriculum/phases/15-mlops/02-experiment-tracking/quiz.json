@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "mlops/experiment-tracking",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "Last month's model reported RMSE 0.110; today's retrain reports 0.124. What do you need before concluding that today's model is worse?",
+      "choices": [
+        "Nothing: a higher RMSE is always a worse model",
+        "The training time of both runs, to check that neither was cut short",
+        "The parameters, the code commit and the data version behind both numbers, and proof they were scored on the same validation data",
+        "A third run, so the two numbers can be averaged"
+      ],
+      "answer": 2,
+      "explanation": "A metric is only comparable with another one computed on the same data by known code. Without the data version and commit, a change in RMSE can be a data change, a code change or a parameter change, and you cannot tell which."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "A run already logged the param lr = '0.3'. The script now calls log_param('lr', '0.5') on the same run. What does an MLflow server (and minitrack) do?",
+      "choices": [
+        "Refuses it with INVALID_PARAMETER_VALUE: params are written once, and a run whose inputs changed later would be two runs pretending to be one",
+        "Overwrites the value, because the last write wins",
+        "Keeps both values as a history, like a metric",
+        "Stores it silently as a tag instead"
+      ],
+      "answer": 0,
+      "explanation": "Params have a primary key on (run, key). Re-logging the same value is accepted so clients can retry; a different value raises 'Changing param values is not allowed'. Tags are the mutable kind of run data."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "A run logged rmse = 0.2 at step 3 (timestamp 100), then a slow worker logged rmse = 0.6 at step 2 (timestamp 900). Which value does the filter metrics.rmse < 0.5 compare?",
+      "choices": [
+        "0.6, because it was written last",
+        "The smallest value ever logged",
+        "The mean of all logged values",
+        "0.2, because the latest metric is the point with the highest step, then the latest timestamp"
+      ],
+      "answer": 3,
+      "explanation": "MLflow keeps every point for the history and caches a latest value per key, chosen by step first and timestamp second. minitrack compares (step, timestamp, value) tuples, so a late flush of an older epoch cannot move the run's metric backwards."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "search_runs with the filter params.lr > '0.05' is rejected. Why?",
+      "choices": [
+        "The value must be unquoted: params.lr > 0.05",
+        "Params are strings, so only =, !=, LIKE and ILIKE are allowed; ordering text such as '0.1' and '0.05' would give misleading answers",
+        "A filter needs at least two clauses joined by AND",
+        "Learning rates must be logged as tags before they can be searched"
+      ],
+      "answer": 1,
+      "explanation": "The filter language is typed. Metrics are numbers and accept <, <=, >, >=; params and tags are strings and accept equality and pattern matching only. An unquoted param value is refused too. Log a value you need to range over as a metric."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Serving loads models:/house-prices@champion. Version 3 was just promoted and regresses in production. What is the rollback?",
+      "choices": [
+        "Download version 2's model file and register it again as version 4",
+        "Transition version 3 to the Archived stage so that Production falls back automatically",
+        "Delete version 3 so that models:/house-prices/latest returns version 2",
+        "Set the champion alias back to version 2 with one call; servers resolve the alias to version 2 on their next load"
+      ],
+      "answer": 3,
+      "explanation": "An alias is a mutable pointer to one version, and versions are never rewritten. Moving the pointer is the whole rollback, and version 3 stays in the registry with its run for the post-mortem. Stages are deprecated and never fell back automatically."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "minitrack compare lists v2-lr-0.3 with RMSE 0.1165 and lr-0.3 with 0.1233, and warns that their data.md5 differs. What can you conclude?",
+      "choices": [
+        "Nothing about the models yet: they were scored on different validation sets; evaluate both on one data version before choosing",
+        "v2-lr-0.3 is the better model, because its RMSE is lower",
+        "lr-0.3 is the better model, because it reached a similar RMSE with half the data",
+        "The warning can be ignored, because CSV exports always have different md5s"
+      ],
+      "answer": 0,
+      "explanation": "A metric depends on the data it was computed on. With different data versions the difference mixes model quality with dataset difficulty. compare picks a best run per (data.md5, commit) group for exactly this reason."
+    }
+  ]
+}

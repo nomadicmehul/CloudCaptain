@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "mlops/llm-eval-gates",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "On a 20-case suite the current model passes 13 cases and a new prompt passes 15. What can you conclude?",
+      "choices": [
+        "The new prompt is 10 points better and should ship",
+        "The new prompt is worse, because only two cases changed",
+        "Nothing yet: two cases is within the noise of a 20-case suite, and you need to know which cases flipped in each direction before claiming a difference",
+        "The suite is broken, because pass rates should not change between prompts"
+      ],
+      "answer": 2,
+      "explanation": "Two answers out of twenty flip between runs at a nonzero temperature. A paired comparison asks how many cases went from pass to fail and from fail to pass; with fewer than six discordant cases McNemar's exact test cannot reach p below 0.05 whatever their direction."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "Baseline and candidate run on the same 20 cases. 8 cases go from pass to fail, 1 from fail to pass, the rest are unchanged. Which numbers does McNemar's exact test use?",
+      "choices": [
+        "Only the 8 and the 1: cases passed or failed by both say nothing about which model is better",
+        "The two pass rates, 13/20 and 6/20",
+        "All 20 cases, weighted by their assertion count",
+        "The Wilson intervals of the two runs, and whether they overlap"
+      ],
+      "answer": 0,
+      "explanation": "The test treats each discordant case as a coin flip under the null hypothesis. The two-sided tail of 1 or fewer heads in 9 flips is 0.039. The Wilson intervals of the two runs overlap (0.43 to 0.82 and 0.15 to 0.52), which is why comparing intervals is the wrong test for paired data."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "ops-v2-large gives exactly the answers of ops-v2-improved, which the gate accepted as a significant improvement. Why does the gate reject ops-v2-large?",
+      "choices": [
+        "Because a larger model is always slower",
+        "Because two candidates cannot both be accepted against one baseline",
+        "Because its pass rate differs from the improved model's",
+        "Because its mean cost per call, from the usage tokens times its price, is over the suite's budget; quality and budgets are separate checks and both must pass"
+      ],
+      "answer": 3,
+      "explanation": "The quality verdict is still 'improved', but the suite caps mean cost at $0.0005 per call and ops-v2-large costs $0.001852. A gate that only looked at the pass rate would ship a model that costs twenty times as much per call as the cheaper candidate with the same answers."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "With one sample per case the critical leaked-key case passes. With five seeded samples its pass@1 is 0.2 and pass@5 is 1.0. What does that tell you?",
+      "choices": [
+        "The case is fine, because pass@5 is 1.0",
+        "The single-sample run was lucky: a user who asks once gets the right first step one time in five, so the case should fail and the answer needs fixing",
+        "pass@k is broken for critical cases",
+        "Sampling at temperature above zero is never appropriate for evals"
+      ],
+      "answer": 1,
+      "explanation": "pass@5 is what a retry loop or a human picking the best of five would see; pass@1 is what one user asking once gets. A large gap is a reliability problem. minieval counts a case as passed only when every sample passes, so the strict pass count falls from 13 to 11."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A model scores higher than your current one on a public benchmark, and minieval's contamination check flags two of your suite's cases in its fine-tuning data. What should you do?",
+      "choices": [
+        "Ship it: a higher benchmark score means a better model",
+        "Delete the contamination check, because n-gram overlap is a heuristic",
+        "Treat the flagged cases as memory tests: replace or rewrite them with new cases of the same contract, rerun the suite and gate on the clean cases, and use the benchmark only to shortlist",
+        "Raise the n-gram length until nothing is flagged"
+      ],
+      "answer": 2,
+      "explanation": "A case the model has seen measures recall, not skill, and public benchmarks leak into training data the same way. Overlap proves a leak but its absence proves nothing (a paraphrase escapes it), and a benchmark measures someone else's distribution and format, so the decision rests on your own clean suite."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "A 5,000-case suite shows a 0.4-point drop with McNemar p = 0.01. The gate's alpha is 0.05 and its minimum effect is 0.02. What does the gate decide, and why does it have a minimum effect at all?",
+      "choices": [
+        "Reject: any significant drop is a regression",
+        "Accept with verdict 'no significant difference': the drop is real but below the 2-point minimum effect, and large suites make tiny, irrelevant changes significant",
+        "Reject, because the p-value is below alpha and the minimum effect only applies to improvements",
+        "Accept, because 5,000 cases is enough to ignore p-values"
+      ],
+      "answer": 1,
+      "explanation": "Significance answers whether a change is real; the minimum effect answers whether it matters. The gate needs both before it calls a change a regression or an improvement. Critical cases and budgets are still checked separately, so a single critical regression would reject the release anyway."
+    }
+  ]
+}

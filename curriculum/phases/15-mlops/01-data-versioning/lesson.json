@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "mlops/data-versioning",
+  "title": "A Dataset Version Is a Content-Addressed Snapshot",
+  "short": "Data Versioning",
+  "motto": "Git versions a 100-byte pointer and the data lives in a cache keyed by its md5: a dataset version is a commit, not a folder name.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "git/object-store",
+    "cloud/s3-signing"
+  ],
+  "tools": [
+    "dvc",
+    "moto",
+    "git",
+    "lakefs",
+    "git-lfs"
+  ],
+  "reference": [
+    "/docs/learning-paths/ai-ml",
+    "/docs/tools/git/advanced",
+    "/docs/tools/git/fundamentals",
+    "/docs/cloud/aws/databases-storage"
+  ],
+  "outputs": [
+    "skill-dataset-versioning-review.md",
+    "prompt-explain-data-lineage.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

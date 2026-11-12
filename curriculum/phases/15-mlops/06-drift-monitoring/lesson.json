@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "mlops/drift-monitoring",
+  "title": "A Model Degrades Without a Deploy: Drift and Data Quality",
+  "short": "Drift Monitoring",
+  "motto": "Compare this week's inputs with the data the model learned from, column by column, and alert on the gap before the late labels prove it.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 75,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "observability/alerting",
+    "mlops/experiment-tracking"
+  ],
+  "tools": [
+    "evidently",
+    "scipy",
+    "whylogs",
+    "prometheus",
+    "promtool"
+  ],
+  "reference": [
+    "/docs/tools/observability",
+    "/docs/learning-paths/ai-ml",
+    "/docs/learning-paths/sre",
+    "/docs/tools/python/fundamentals"
+  ],
+  "outputs": [
+    "skill-drift-response.md",
+    "prompt-explain-drift-report.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

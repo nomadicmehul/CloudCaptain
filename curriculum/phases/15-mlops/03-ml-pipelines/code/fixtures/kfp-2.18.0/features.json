@@ -1,0 +1,676 @@
+{
+  "components": {
+    "comp-check": {
+      "executorLabel": "exec-check",
+      "inputDefinitions": {
+        "artifacts": {
+          "data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "tag": {
+            "parameterType": "STRING"
+          }
+        }
+      }
+    },
+    "comp-condition-1": {
+      "dag": {
+        "tasks": {
+          "scale": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-scale"
+            },
+            "inputs": {
+              "parameters": {
+                "x": {
+                  "runtimeValue": {
+                    "constant": 0.5
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "scale"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "pipelinechannel--count-Output": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-condition-2": {
+      "dag": {
+        "tasks": {
+          "count-3": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-count-3"
+            },
+            "inputs": {
+              "parameters": {
+                "label": {
+                  "componentInputParameter": "pipelinechannel--mode"
+                },
+                "n": {
+                  "runtimeValue": {
+                    "constant": 2.0
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "count-3"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "pipelinechannel--mode": {
+            "parameterType": "STRING"
+          }
+        }
+      }
+    },
+    "comp-condition-7": {
+      "dag": {
+        "tasks": {
+          "count-5": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-count-5"
+            },
+            "inputs": {
+              "parameters": {
+                "n": {
+                  "componentInputParameter": "pipelinechannel--k"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "count-5"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "pipelinechannel--count-2-Output": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "pipelinechannel--k": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "pipelinechannel--threshold": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      }
+    },
+    "comp-count": {
+      "executorLabel": "exec-count",
+      "inputDefinitions": {
+        "parameters": {
+          "label": {
+            "defaultValue": "x",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "n": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "strict": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-count-2": {
+      "executorLabel": "exec-count-2",
+      "inputDefinitions": {
+        "parameters": {
+          "label": {
+            "defaultValue": "x",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "n": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "strict": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-count-3": {
+      "executorLabel": "exec-count-3",
+      "inputDefinitions": {
+        "parameters": {
+          "label": {
+            "defaultValue": "x",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "n": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "strict": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-count-4": {
+      "executorLabel": "exec-count-4",
+      "inputDefinitions": {
+        "parameters": {
+          "label": {
+            "defaultValue": "x",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "n": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "strict": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-count-5": {
+      "executorLabel": "exec-count-5",
+      "inputDefinitions": {
+        "parameters": {
+          "label": {
+            "defaultValue": "x",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "n": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "strict": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "parameters": {
+          "Output": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-for-loop-4": {
+      "dag": {
+        "tasks": {
+          "check": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-check"
+            },
+            "dependentTasks": [
+              "scale-2"
+            ],
+            "inputs": {
+              "artifacts": {
+                "data": {
+                  "taskOutputArtifact": {
+                    "outputArtifactKey": "data",
+                    "producerTask": "scale-2"
+                  }
+                }
+              },
+              "parameters": {
+                "tag": {
+                  "taskOutputParameter": {
+                    "outputParameterKey": "Output",
+                    "producerTask": "scale-2"
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "check"
+            }
+          },
+          "scale-2": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-scale-2"
+            },
+            "inputs": {
+              "parameters": {
+                "x": {
+                  "componentInputParameter": "pipelinechannel--loop-item-param-3"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "scale-2"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "pipelinechannel--loop-item-param-3": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      }
+    },
+    "comp-for-loop-6": {
+      "dag": {
+        "tasks": {
+          "count-4": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-count-4"
+            },
+            "inputs": {
+              "parameters": {
+                "n": {
+                  "componentInputParameter": "pipelinechannel--loop-item-param-5"
+                },
+                "strict": {
+                  "runtimeValue": {
+                    "constant": true
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "count-4"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "pipelinechannel--loop-item-param-5": {
+            "parameterType": "NUMBER_INTEGER"
+          }
+        }
+      }
+    },
+    "comp-scale": {
+      "executorLabel": "exec-scale",
+      "inputDefinitions": {
+        "parameters": {
+          "x": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "Output": {
+            "parameterType": "STRING"
+          }
+        }
+      }
+    },
+    "comp-scale-2": {
+      "executorLabel": "exec-scale-2",
+      "inputDefinitions": {
+        "parameters": {
+          "x": {
+            "parameterType": "NUMBER_DOUBLE"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "data": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "Output": {
+            "parameterType": "STRING"
+          }
+        }
+      }
+    }
+  },
+  "deploymentSpec": {
+    "executors": {
+      "exec-check": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "check"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-count": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "count"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-count-2": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "count"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-count-3": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "count"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-count-4": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "count"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-count-5": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "count"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-scale": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "scale"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      },
+      "exec-scale-2": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "scale"
+          ],
+          "image": "python:3.12-alpine"
+        }
+      }
+    }
+  },
+  "pipelineInfo": {
+    "name": "features"
+  },
+  "root": {
+    "dag": {
+      "tasks": {
+        "condition-1": {
+          "componentRef": {
+            "name": "comp-condition-1"
+          },
+          "dependentTasks": [
+            "count"
+          ],
+          "inputs": {
+            "parameters": {
+              "pipelinechannel--count-Output": {
+                "taskOutputParameter": {
+                  "outputParameterKey": "Output",
+                  "producerTask": "count"
+                }
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "condition-1"
+          },
+          "triggerPolicy": {
+            "condition": "int(inputs.parameter_values['pipelinechannel--count-Output']) == 1"
+          }
+        },
+        "condition-2": {
+          "componentRef": {
+            "name": "comp-condition-2"
+          },
+          "inputs": {
+            "parameters": {
+              "pipelinechannel--mode": {
+                "componentInputParameter": "mode"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "fast-path"
+          },
+          "triggerPolicy": {
+            "condition": "inputs.parameter_values['pipelinechannel--mode'] == 'fast'"
+          }
+        },
+        "condition-7": {
+          "componentRef": {
+            "name": "comp-condition-7"
+          },
+          "dependentTasks": [
+            "count-2"
+          ],
+          "inputs": {
+            "parameters": {
+              "pipelinechannel--count-2-Output": {
+                "taskOutputParameter": {
+                  "outputParameterKey": "Output",
+                  "producerTask": "count-2"
+                }
+              },
+              "pipelinechannel--k": {
+                "componentInputParameter": "k"
+              },
+              "pipelinechannel--threshold": {
+                "componentInputParameter": "threshold"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "condition-7"
+          },
+          "triggerPolicy": {
+            "condition": "inputs.parameter_values['pipelinechannel--threshold'] >= double(int(inputs.parameter_values['pipelinechannel--count-2-Output']))"
+          }
+        },
+        "count": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-count"
+          },
+          "inputs": {
+            "parameters": {
+              "n": {
+                "componentInputParameter": "k"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "count"
+          }
+        },
+        "count-2": {
+          "cachingOptions": {},
+          "componentRef": {
+            "name": "comp-count-2"
+          },
+          "dependentTasks": [
+            "count"
+          ],
+          "inputs": {
+            "parameters": {
+              "n": {
+                "runtimeValue": {
+                  "constant": 1.0
+                }
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "count-2"
+          }
+        },
+        "for-loop-4": {
+          "componentRef": {
+            "name": "comp-for-loop-4"
+          },
+          "iteratorPolicy": {
+            "parallelismLimit": 1
+          },
+          "parameterIterator": {
+            "itemInput": "pipelinechannel--loop-item-param-3",
+            "items": {
+              "raw": "[0.1, 0.2]"
+            }
+          },
+          "taskInfo": {
+            "name": "for-loop-4"
+          }
+        },
+        "for-loop-6": {
+          "componentRef": {
+            "name": "comp-for-loop-6"
+          },
+          "parameterIterator": {
+            "itemInput": "pipelinechannel--loop-item-param-5",
+            "items": {
+              "raw": "[1, 2]"
+            }
+          },
+          "taskInfo": {
+            "name": "for-loop-6"
+          }
+        }
+      }
+    },
+    "inputDefinitions": {
+      "parameters": {
+        "k": {
+          "defaultValue": 3.0,
+          "isOptional": true,
+          "parameterType": "NUMBER_INTEGER"
+        },
+        "mode": {
+          "defaultValue": "fast",
+          "isOptional": true,
+          "parameterType": "STRING"
+        },
+        "threshold": {
+          "defaultValue": 0.5,
+          "isOptional": true,
+          "parameterType": "NUMBER_DOUBLE"
+        }
+      }
+    }
+  },
+  "schemaVersion": "2.1.0",
+  "sdkVersion": "kfp-2.18.0"
+}

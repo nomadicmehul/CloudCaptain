@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "mlops/ml-pipelines",
+  "title": "An ML Pipeline Is a Cached DAG of Containers",
+  "short": "ML Pipelines",
+  "motto": "A pipeline is a DAG of containerised steps; a step reruns only when its code, image, parameters or input data hashes change.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "mlops/experiment-tracking",
+    "cicd/pipeline-runner"
+  ],
+  "tools": [
+    "kfp",
+    "argo-workflows",
+    "kubectl",
+    "kind",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/storage",
+    "/docs/tools/python/devops-scripting",
+    "/docs/tools/docker/fundamentals"
+  ],
+  "outputs": [
+    "skill-pipeline-review.md",
+    "prompt-explain-pipeline-cache-miss.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}

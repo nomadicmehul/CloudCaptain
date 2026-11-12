@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "mlops/ml-pipelines",
+  "questions": [
+    {
+      "id": "pre-1",
+      "stage": "pre",
+      "prompt": "A nightly training script spends three hours preparing data and forty minutes training. Someone changes only the evaluation threshold, and the whole script runs again. What would let a tool skip the data preparation safely?",
+      "choices": [
+        "Skip any step whose output file already exists on disk",
+        "Compare the modification times of the step's inputs and outputs, as make does",
+        "Reuse a step's outputs when a hash of its code, image, parameters and input data digests matches an earlier run",
+        "Let the engineer pass a --skip-prep flag when they know the data has not changed"
+      ],
+      "answer": 2,
+      "explanation": "Existence and timestamps say nothing about whether the inputs or the code changed: a stale file from a laptop or a copied directory looks fresh. A key computed from everything that can change the result (the component's interface, image, command with the function source, parameter values, and the content digests of input artifacts) is only equal when rerunning would produce the same thing, so a match can be reused and a mismatch must run. A manual flag is exactly the human judgement that ships models trained on stale data."
+    },
+    {
+      "id": "check-1",
+      "stage": "check",
+      "prompt": "In the compiled IR, evaluate-model lists make-dataset and train-model in dependentTasks, although the pipeline function never calls .after(). Where do those edges come from?",
+      "choices": [
+        "Consuming another task's output (model=train.outputs[\"model\"]) is a data dependency, and the compiler records every producer as a dependency",
+        "The compiler orders tasks in the order the pipeline function creates them",
+        "The backend infers dependencies at run time from which files a step opens",
+        "dependentTasks is a hint for the UI; the backend runs all tasks in parallel"
+      ],
+      "answer": 0,
+      "explanation": "Passing a task output as an argument creates a PipelineChannel that names its producer. The compiler turns it into taskOutputArtifact or taskOutputParameter and adds the producer to dependentTasks. .after() only adds edges that carry no data. Creation order means nothing: two tasks with no channel between them may run at the same time."
+    },
+    {
+      "id": "check-2",
+      "stage": "check",
+      "prompt": "After a cached run, you rerun with lr=0.4. Which tasks execute again?",
+      "choices": [
+        "Only train-model, because it is the only task that receives lr",
+        "All tasks, because a pipeline parameter changed",
+        "None, because the pipeline file did not change",
+        "train-model and everything that consumes its outputs; make-dataset stays a cache hit"
+      ],
+      "answer": 3,
+      "explanation": "make-dataset's ingredients (rows, seed, noise, its code and image) are unchanged, so its key matches. train-model's key contains lr, so it misses and produces a model with a different digest. evaluate-model, register-model and the score-slice tasks include that digest in their keys, so they miss too. A change propagates through artifact digests, not through the parameter list."
+    },
+    {
+      "id": "check-3",
+      "stage": "check",
+      "prompt": "minipipe's Argo Workflow passes model-uri and model-sha256 between steps as Argo output parameters while the bytes stay on a PersistentVolumeClaim. Why is that a reasonable design?",
+      "choices": [
+        "Argo Workflows cannot pass files between steps in any other way",
+        "Steps exchange a reference and a digest, the way KFP passes artifact URIs, so large data never goes through the workflow object and the next step can verify what it reads",
+        "Output parameters are encrypted, artifacts are not",
+        "Parameters are cached by Argo automatically, artifacts are not"
+      ],
+      "answer": 1,
+      "explanation": "Argo can pass real artifacts through an artifact repository (S3, MinIO, GCS) and can mount volumes; minipipe chose a shared volume as its store. Either way what travels in the Workflow status must stay small: a URI and a sha256. That is also how KFP v2 works: artifacts live in object storage and tasks receive their URIs. Parameters are neither encrypted nor cached by default; Argo's caching is the separate memoize feature."
+    },
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "Someone edits a model file inside the artifact store by hand. The next run's train-model has the same cache key as before. What should the runner do?",
+      "choices": [
+        "Return the cache hit; the key matches, so the outputs are by definition correct",
+        "Delete the whole cache, because one corrupt entry means none can be trusted",
+        "Fail the pipeline with an integrity error and wait for an operator",
+        "Recompute the digest of every cached output before using the entry, and treat a mismatch as a miss that reruns the step"
+      ],
+      "answer": 3,
+      "explanation": "The key proves the inputs are the same; it says nothing about whether the stored outputs are still the bytes the step produced. Storing each output's digest in the cache entry and checking it on lookup turns tampering, partial uploads and garbage-collected files into an ordinary miss: the step reruns, rewrites the output, and the entry is valid again. minipipe records the reason (artifact model changed on disk), which explain prints."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your team already runs Airflow. What does a KFP or Flyte pipeline add that an Airflow DAG of PythonOperators does not give you by default?",
+      "choices": [
+        "Retries on failure",
+        "A graph of tasks with dependencies",
+        "Typed inputs and outputs per step, artifacts passed by reference, and step results reused when the inputs hash the same",
+        "Scheduling on a cron expression"
+      ],
+      "answer": 2,
+      "explanation": "Airflow has dependencies, retries and schedules; it is built to run tasks for a data interval on a timetable, passes small values through XCom, and reruns a task when you clear it. KFP and Flyte model each step's typed inputs and outputs, store artifacts outside the scheduler, and skip a step whose fingerprint matches an earlier execution. Prefect offers input-hash caching on tasks too. The tools overlap; the question is whether you need data-aware reuse and lineage or time-driven orchestration."
+    }
+  ]
+}

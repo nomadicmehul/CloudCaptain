@@ -1,0 +1,11 @@
+{
+  "steps": [
+    {"setMirrorRoute": {"name": "shadow", "percentage": 100, "match": [{"method": {"exact": "POST"}}]}},
+    {"analysis": {"templates": [{"templateName": "model-quality"}]}},
+    {"setMirrorRoute": {"name": "shadow"}},
+    {"setWeight": 25},
+    {"analysis": {"templates": [{"templateName": "model-quality"}]}},
+    {"setWeight": 50},
+    {"analysis": {"templates": [{"templateName": "model-quality"}]}}
+  ]
+}

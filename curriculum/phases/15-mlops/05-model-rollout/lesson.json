@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "mlops/model-rollout",
+  "title": "Roll Out a Model Like Code: Shadow, Canary, Compare",
+  "short": "Model Rollout",
+  "motto": "A model can answer 200 in 10 ms and still be wrong: shadow it, canary it to sticky users, and let a test on quality decide.",
+  "type": "Build",
+  "status": "published",
+  "minutes": 90,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "cicd/progressive-delivery",
+    "mlops/llm-eval-gates"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "argo-rollouts",
+    "gateway-api",
+    "kserve",
+    "mlflow",
+    "scipy",
+    "curl"
+  ],
+  "reference": [
+    "/docs/tools/cicd/fundamentals",
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/observability",
+    "/docs/learning-paths/ai-ml"
+  ],
+  "outputs": [
+    "skill-model-rollout-plan.md",
+    "prompt-explain-rollout-decision.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s code/tests -v"
+  },
+  "smoke": "bash code/smoke.sh"
+}
