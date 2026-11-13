@@ -704,7 +704,6 @@ The Professional exam covers advanced architecture patterns, organizational comp
 | Linux Academy | Video Courses | $35/month | CloudFormation and infrastructure focus |
 | Whizlabs | Practice Exams | $10-20/exam | Excellent exam simulations |
 | TutorialsDojo | Practice Exams | $10-15/exam | Detailed explanations |
-| ExamCrest | Practice Exams | Free samples; full mock tests paid | Free DVA-C03 sample questions with every option explained, no signup: [examcrest.com](https://examcrest.com/exam/aws-dva-c03/free-questions?utm_source=github&utm_campaign=cloudcaptain-aws) |
 | Adrian Cantrill | Video Courses | $12-15/course | Comprehensive, exam-focused |
 
 ### Community Resources
