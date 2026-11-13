@@ -94,3 +94,67 @@ lesson: containers/process-isolation
 ```
 
 Skills additionally carry `version: 1.0.0` and `tags: [...]`.
+
+## Capstones (phase 16)
+
+A capstone is a graded project, not a lesson: the learner builds something real across several milestones and a grader scores it. It uses `"type": "Capstone"` and lives in `curriculum/phases/16-capstones/NN-slug/`. Scaffold one with:
+
+```bash
+cd website
+npm run curriculum:scaffold -- 16-capstones build-a-paas --type Capstone --langs python,bash --title "Build a Tiny PaaS" --minutes 720
+```
+
+### Folder layout
+
+```
+16-capstones/01-build-a-paas/
+  lesson.json           required  type Capstone, minutes (whole hours, 240–1200), milestones, pass_score, smoke
+  docs/en.md            required  the capstone sections below
+  starter/              required  what the learner copies into a new repository
+  solution/             required  the reference solution; CI grades it on every change
+  grader/grade.sh       required  bash grader/grade.sh <project> [--milestone ID] [--json]
+  grader/grade.py       required  the shared harness (identical in every capstone; do not edit)
+  grader/checks.py      required  one check_<milestone_id>(project) -> (passed, detail) per milestone
+  grader/smoke.sh       required  CI: solution/ must pass, starter/ must not
+  grader/workflow.yml   required  GitHub Actions workflow the learner copies into their repository
+  grader/tests/         required  at least five tests (the harness tests plus tests for checks.py)
+  quiz.json             required  three post questions, asked after the grader passes
+  outputs/              required  every artifact listed in lesson.json.outputs
+```
+
+`lesson.json` adds:
+
+```json
+"milestones": [
+  {"id": "deploy-on-push", "title": "Deploy on git push", "points": 3}
+],
+"pass_score": 7,
+"tests": {"python": "python3 -m unittest discover -s grader/tests -v"},
+"smoke": "bash grader/smoke.sh"
+```
+
+There are 3–8 milestones. `pass_score` is at most the milestone total. Milestone `deploy-on-push` is checked by `check_deploy_on_push(project)` in `grader/checks.py`, and the validator fails if that function is missing.
+
+### `docs/en.md` section order (required)
+
+```markdown
+# <Title>
+*<Motto>*
+## Metadata          Type Capstone, Time "<hours> hours", plus a Pass score row
+## The Brief         the job as a team lead would hand it over; who uses it, what is out of scope
+## The Architecture  target design; a mermaid diagram or image (code fences allowed)
+## Milestones        one ### per milestone, titles and order exactly as in lesson.json
+## Grading           how to run grader/grade.sh and copy grader/workflow.yml
+## Ship It           <ShipIt />
+## Stretch Goals
+<Quiz stage="post" />
+## Further Reading   at least one Reference-layer link
+```
+
+### Grader rules
+
+- **Offline.** The grader needs no cloud account and no API key. Use kind, LocalStack, moto, OpenTofu `plan` with policy checks, or recorded LLM responses. Learners may use real clouds and the real Claude API, but grading must not depend on them.
+- **One milestone, one check.** A check returns `(passed, detail)`. The detail tells a failing learner what is missing, not just that something is wrong. A crashing check fails only its own milestone.
+- **Proven both ways.** `grader/smoke.sh` starts whatever the checks need, grades `solution/` (exit 0) and `starter/` (exit 1). `lesson-smoke.yml` runs it like any lesson smoke, and `last_verified` is set only after it passes.
+- **Fetched, not copied.** `grader/workflow.yml` checks out the grader from this repository, so learners get grader fixes and cannot edit their own grader.
+- **Python 3.9+, standard library only** in `grader/`. Real tools are called with `subprocess`.

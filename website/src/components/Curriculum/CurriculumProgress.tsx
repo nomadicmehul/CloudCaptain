@@ -4,6 +4,7 @@ import type {ReadEntry} from '../Progress/readProgress';
 import {allQuizRecords, CHANGE_EVENT, type QuizRecord} from './storage';
 import {computeCurriculumProgress, type LessonProgress} from './lessonProgress';
 import styles from './styles.module.css';
+import {formatDuration} from './duration';
 
 function scoreText(lp: LessonProgress): string {
   const s = lp.quiz?.scores;
@@ -52,7 +53,7 @@ export default function CurriculumProgress({entries}: {entries: ReadEntry[]}): R
           <div className={styles.cardKicker}>{summary.next.status === 'in-progress' ? 'Continue' : 'Up next'}</div>
           <div className={styles.cardTitle}>{summary.next.lesson.title}</div>
           <div className={styles.muted}>
-            Phase {summary.next.lesson.phaseNumber} · {summary.next.lesson.phaseTitle} · {summary.next.lesson.type} · {summary.next.lesson.minutes} min
+            Phase {summary.next.lesson.phaseNumber} · {summary.next.lesson.phaseTitle} · {summary.next.lesson.type} · {formatDuration(summary.next.lesson.minutes)}
             {summary.next.totalSections ? ` · ${summary.next.readCount}/${summary.next.totalSections} sections read` : ''}
           </div>
         </Link>

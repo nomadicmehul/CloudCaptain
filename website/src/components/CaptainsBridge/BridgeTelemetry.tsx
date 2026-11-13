@@ -1,6 +1,7 @@
 import type { JSX } from 'react';
 import React from 'react';
 import styles from './styles.module.css';
+import {formatDuration} from '../Curriculum/duration';
 
 type Props = {
   progress: number; // 0..1
@@ -50,7 +51,7 @@ export default function BridgeTelemetry({
               <span className={styles.telemetryCell} title={`Phase ${lesson.phaseNumber} · ${lesson.phaseTitle}`}>
                 <span className={styles.telemetryLabel}>lesson</span>
                 <span className={styles.telemetryValue}>
-                  {lesson.type} · {lesson.minutes} min · phase {lesson.phaseNumber}
+                  {lesson.type} · {formatDuration(lesson.minutes)} · phase {lesson.phaseNumber}
                 </span>
               </span>
             </>

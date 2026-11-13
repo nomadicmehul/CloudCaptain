@@ -36,6 +36,7 @@ function publicLesson(lesson, phase, base, index) {
     docId: lessonDocId(lesson),
     route: `${base}/${phase.slug}/${lesson.slug}`,
     testCount: lesson.testCount,
+    ...(j.type === 'Capstone' ? {milestones: j.milestones || [], passScore: j.pass_score ?? null} : {}),
   };
 }
 
@@ -43,7 +44,7 @@ export function buildModel(phases, manifest) {
   const base = manifest.site.routeBasePath.replace(/\/$/, '');
   const lessonsById = {};
   const backlinks = {};
-  const stats = {lessons: 0, buildLessons: 0, learnLessons: 0, minutes: 0, tests: 0, quizzes: 0, phasesLive: 0, phasesTotal: manifest.phases.length};
+  const stats = {lessons: 0, buildLessons: 0, learnLessons: 0, capstones: 0, minutes: 0, tests: 0, quizzes: 0, phasesLive: 0, phasesTotal: manifest.phases.length};
 
   const outPhases = phases.map((phase) => {
     const visible = phase.lessons.filter((l) => l.json && l.json.status !== 'draft');
@@ -55,6 +56,7 @@ export function buildModel(phases, manifest) {
       stats.tests += lesson.testCount;
       if (lesson.quiz) stats.quizzes += 1;
       if (pub.type === 'Build') stats.buildLessons += 1;
+      else if (pub.type === 'Capstone') stats.capstones += 1;
       else stats.learnLessons += 1;
       for (const ref of pub.reference) (backlinks[ref] ||= []).push(pub.id);
       return pub;
@@ -154,6 +156,7 @@ export function tutorIndex(model) {
       dir: l.dir,
       url: siteUrl + l.route,
       files: {lesson: `${raw}${l.dir}/lesson.json`, quiz: `${raw}${l.dir}/quiz.json`, docs: `${raw}${l.dir}/docs/en.md`},
+      ...(l.type === 'Capstone' ? {milestones: l.milestones, passScore: l.passScore, grader: `${raw}${l.dir}/grader/grade.sh`} : {}),
     }));
   const published = new Set(lessons.map((l) => l.id));
   return {

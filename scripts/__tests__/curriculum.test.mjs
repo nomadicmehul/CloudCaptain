@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import url from 'node:url';
+import {spawnSync} from 'node:child_process';
 import {run, scaffold} from '../build-curriculum.mjs';
 import {parseMarkdown} from '../lib/markdown.mjs';
 import {discover, loadManifest, countTests} from '../lib/discover.mjs';
@@ -171,4 +172,79 @@ test('countTests recognises python, bats, js and go test styles', () => {
   fs.writeFileSync(path.join(dir, 'a.test.js'), "test('x', () => {});\nit('y', () => {});\n");
   fs.writeFileSync(path.join(dir, 'a_test.go'), 'func TestX(t *testing.T) {}\n');
   assert.equal(countTests(fs.readdirSync(dir).map((n) => path.join(dir, n))), 6);
+});
+
+function scaffoldCapstoneIn(dir) {
+  return scaffold({phaseDir: '16-capstones', lessonSlug: 'build-a-paas', type: 'Capstone', langs: ['python', 'bash'], title: 'Build a Tiny PaaS', curriculum: dir});
+}
+
+function capstoneErrors(dir) {
+  const {phases} = validateAll(dir);
+  return phases.find((p) => p.dir === '16-capstones').lessons[0].errors;
+}
+
+test('scaffold --type Capstone creates a capstone the validator accepts', () => {
+  const dir = tmpCurriculum();
+  const created = scaffoldCapstoneIn(dir);
+  for (const rel of ['starter/README.md', 'solution/README.md', 'grader/grade.sh', 'grader/grade.py', 'grader/checks.py', 'grader/smoke.sh', 'grader/workflow.yml', 'grader/tests/test_grade.py']) {
+    assert.ok(fs.existsSync(path.join(created, rel)), rel);
+  }
+  assert.ok(!fs.existsSync(path.join(created, 'code')), 'capstones have no code/ folder');
+  const json = JSON.parse(fs.readFileSync(path.join(created, 'lesson.json'), 'utf8'));
+  assert.equal(json.type, 'Capstone');
+  assert.equal(json.minutes, 600);
+  assert.match(fs.readFileSync(path.join(created, 'grader', 'workflow.yml'), 'utf8'), /16-capstones\/01-build-a-paas\/grader\/grade\.sh project/);
+  assert.deepEqual(capstoneErrors(dir), []);
+  const harness = spawnSync('python3', ['-m', 'unittest', 'discover', '-s', 'grader/tests'], {cwd: created, encoding: 'utf8', env: {...process.env, PYTHONDONTWRITEBYTECODE: '1'}});
+  assert.equal(harness.status, 0, harness.stderr);
+  const graded = spawnSync('bash', ['grader/grade.sh', 'starter', '--json'], {cwd: created, encoding: 'utf8'});
+  assert.equal(graded.status, 1, 'the scaffold starter must not pass');
+  assert.equal(JSON.parse(graded.stdout).score, 0);
+});
+
+test('capstone rules: milestones need checks and headings, a post-only quiz, hours and a reachable pass score', () => {
+  const dir = tmpCurriculum();
+  const created = scaffoldCapstoneIn(dir);
+  const jsonFile = path.join(created, 'lesson.json');
+  const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  json.milestones.push({id: 'fourth-milestone', title: 'Fourth milestone', points: 2});
+  json.pass_score = 99;
+  json.minutes = 90;
+  fs.writeFileSync(jsonFile, JSON.stringify(json));
+  const quizFile = path.join(created, 'quiz.json');
+  const quiz = JSON.parse(fs.readFileSync(quizFile, 'utf8'));
+  quiz.questions[0].stage = 'pre';
+  fs.writeFileSync(quizFile, JSON.stringify(quiz));
+  const errors = capstoneErrors(dir).join('\n');
+  assert.match(errors, /milestone "fourth-milestone" needs def check_fourth_milestone\(project\)/);
+  assert.match(errors, /Milestones: needs one ### per lesson\.json milestone/);
+  assert.match(errors, /pass_score must be an integer between 1 and the milestone total \(12\)/);
+  assert.match(errors, /minutes must be whole hours between 240 and 1200/);
+  assert.match(errors, /expected 0 "pre" question/);
+});
+
+test('milestones are rejected on a Build lesson', () => {
+  const dir = tmpCurriculum();
+  const jsonFile = path.join(firstLessonDir(dir), 'lesson.json');
+  const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  json.pass_score = 3;
+  fs.writeFileSync(jsonFile, JSON.stringify(json));
+  assert.ok(validateAll(dir).errors.some((e) => e.includes('milestones and pass_score are only for type Capstone')));
+});
+
+test('the model counts capstones separately and carries their milestones', () => {
+  const dir = tmpCurriculum();
+  const created = scaffoldCapstoneIn(dir);
+  const jsonFile = path.join(created, 'lesson.json');
+  const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  json.status = 'published';
+  fs.writeFileSync(jsonFile, JSON.stringify(json));
+  const {phases, manifest} = validateAll(dir);
+  const model = buildModel(phases, manifest);
+  const lesson = model.lessonsById['capstones/build-a-paas'];
+  assert.equal(model.stats.capstones, 1);
+  assert.equal(lesson.passScore, 7);
+  assert.equal(lesson.milestones.length, 3);
+  const entry = tutorIndex(model).lessons.find((l) => l.id === 'capstones/build-a-paas');
+  assert.match(entry.grader, /16-capstones\/01-build-a-paas\/grader\/grade\.sh$/);
 });

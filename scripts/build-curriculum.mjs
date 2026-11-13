@@ -7,14 +7,14 @@
  *   node scripts/build-curriculum.mjs --json     print stats as JSON
  *   node scripts/build-curriculum.mjs --roadmap  refresh the phase table in ROADMAP.md
  *   node scripts/build-curriculum.mjs --deprecations  scan curriculum + website/docs for retired tech without a note
- *   node scripts/build-curriculum.mjs --scaffold <phase-dir> <lesson-slug> [--type Build|Learn] [--langs python,bash] [--title "..."] [--minutes 60]
+ *   node scripts/build-curriculum.mjs --scaffold <phase-dir> <lesson-slug> [--type Build|Learn|Capstone] [--langs python,bash] [--title "..."] [--minutes 60]
  *
  * Zero dependencies. Node >= 20.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import {discover, loadManifest, exists, readJson, LESSON_DIR_RE, ENTRY_FILES} from './lib/discover.mjs';
+import {discover, loadManifest, exists, readJson, walk, LESSON_DIR_RE, ENTRY_FILES} from './lib/discover.mjs';
 import {validateLesson, validateGlobal, formatReport, scanDeprecations} from './lib/validate.mjs';
 import {buildModel, writeModel, updateRoadmap, tutorIndex} from './lib/emit.mjs';
 
@@ -73,8 +73,9 @@ export function scaffold({phaseDir, lessonSlug, type = 'Build', langs = ['python
   const phase = manifest.phases.find((p) => p.dir === phaseDir);
   if (!phase) throw new Error(`unknown phase dir "${phaseDir}" (see curriculum/manifest.json)`);
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(lessonSlug)) throw new Error('lesson slug must be lowercase words separated by hyphens');
-  if (!['Build', 'Learn'].includes(type)) throw new Error('--type must be Build or Learn');
+  if (!['Build', 'Learn', 'Capstone'].includes(type)) throw new Error('--type must be Build, Learn or Capstone');
   for (const l of langs) if (!ENTRY_FILES[l]) throw new Error(`unknown language "${l}"`);
+  if (type === 'Capstone') return scaffoldCapstone({phase, phaseDir, lessonSlug, langs, title, minutes, curriculum});
 
   const phasePath = path.join(curriculum, 'phases', phaseDir);
   fs.mkdirSync(phasePath, {recursive: true});
@@ -234,13 +235,157 @@ TODO
   return dir;
 }
 
+// A capstone: lesson.json with milestones, docs/en.md with the capstone sections,
+// a 3-question post quiz, and starter/ solution/ grader/ copied from
+// scripts/templates/capstone with __ID__, __DIR__ and __TITLE__ filled in.
+function scaffoldCapstone({phase, phaseDir, lessonSlug, langs, title, minutes, curriculum}) {
+  if (minutes < 240) minutes = 600;
+  const phasePath = path.join(curriculum, 'phases', phaseDir);
+  fs.mkdirSync(phasePath, {recursive: true});
+  const existing = fs.readdirSync(phasePath).filter((n) => LESSON_DIR_RE.test(n));
+  if (existing.some((n) => n.endsWith(`-${lessonSlug}`))) throw new Error(`capstone "${lessonSlug}" already exists in ${phaseDir}`);
+  const dirName = `${String(existing.length + 1).padStart(2, '0')}-${lessonSlug}`;
+  const dir = path.join(phasePath, dirName);
+  const id = `${phase.slug}/${lessonSlug}`;
+  title = title || slugToTitle(lessonSlug);
+  const motto = 'TODO: one line that states what the learner ships.';
+  const milestones = [
+    {id: 'first-milestone', title: 'First milestone', points: 3},
+    {id: 'second-milestone', title: 'Second milestone', points: 3},
+    {id: 'third-milestone', title: 'Third milestone', points: 4},
+  ];
+
+  const fill = (text) => text.replaceAll('__ID__', id).replaceAll('__DIR__', dirName).replaceAll('__TITLE__', title);
+  const templates = path.join(here, 'templates', 'capstone');
+  for (const file of walk(templates)) {
+    const rel = path.relative(templates, file);
+    const target = path.join(dir, rel);
+    fs.mkdirSync(path.dirname(target), {recursive: true});
+    fs.writeFileSync(target, fill(fs.readFileSync(file, 'utf8')));
+    if (rel.endsWith('.sh')) fs.chmodSync(target, 0o755);
+  }
+  fs.mkdirSync(path.join(dir, 'docs'), {recursive: true});
+  fs.mkdirSync(path.join(dir, 'outputs'), {recursive: true});
+
+  fs.writeFileSync(
+    path.join(dir, 'lesson.json'),
+    JSON.stringify(
+      {
+        $schema: '../../../schema/lesson.schema.json',
+        id,
+        title,
+        motto,
+        type: 'Capstone',
+        status: 'draft',
+        minutes,
+        langs,
+        prereqs: [],
+        tools: [],
+        reference: [],
+        outputs: [`skill-${lessonSlug}-review.md`],
+        tests: {python: 'python3 -m unittest discover -s grader/tests -v'},
+        smoke: 'bash grader/smoke.sh',
+        milestones,
+        pass_score: 7,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+
+  const langLabel = langs.map((l) => l[0].toUpperCase() + l.slice(1)).join(', ');
+  fs.writeFileSync(
+    path.join(dir, 'docs', 'en.md'),
+    `# ${title}
+
+*${motto}*
+
+## Metadata
+
+| Field | Value |
+|---|---|
+| Type | Capstone |
+| Languages | ${langLabel} |
+| Prerequisites | None |
+| Time | ${minutes / 60} hours |
+| Tools | TODO |
+| Pass score | 7 of 10 points |
+
+## The Brief
+
+TODO: the job, as a team lead would hand it over. Who the users are, what must work at the end, and what is out of scope.
+
+## The Architecture
+
+TODO: the target design, then a diagram.
+
+\`\`\`mermaid
+flowchart LR
+  A[Learner repo] --> B[Capstone] --> C[Graded result]
+\`\`\`
+
+## Milestones
+
+### First milestone
+
+TODO: what to build, which lessons it draws on, and what the grader checks.
+
+### Second milestone
+
+TODO
+
+### Third milestone
+
+TODO
+
+## Grading
+
+Grade your project locally at any time:
+
+\`\`\`bash
+bash curriculum/phases/16-capstones/${dirName}/grader/grade.sh path/to/your-project
+bash curriculum/phases/16-capstones/${dirName}/grader/grade.sh path/to/your-project --milestone first-milestone
+\`\`\`
+
+To grade every push, copy \`grader/workflow.yml\` to \`.github/workflows/cloudcaptain-grade.yml\` in your project repository. The score table appears on each run's summary page.
+
+## Ship It
+
+TODO: what the learner keeps, saved in outputs/.
+
+<ShipIt />
+
+## Stretch Goals
+
+- TODO
+
+<Quiz stage="post" />
+
+## Further Reading
+
+- [TODO Reference page](https://cloudcaptain.io/docs/tools/docker/fundamentals) — why to read it.
+`,
+  );
+
+  const q = (n) => ({id: `post-${n}`, stage: 'post', prompt: 'TODO: question text?', choices: ['TODO A', 'TODO B', 'TODO C'], answer: 0, explanation: 'TODO: why the answer is right.'});
+  fs.writeFileSync(
+    path.join(dir, 'quiz.json'),
+    JSON.stringify({$schema: '../../../schema/quiz.schema.json', lesson: id, questions: [q(1), q(2), q(3)]}, null, 2) + '\n',
+  );
+  fs.writeFileSync(
+    path.join(dir, 'outputs', `skill-${lessonSlug}-review.md`),
+    `---\nname: ${lessonSlug}-review\ndescription: TODO one-line purpose\nphase: ${phase.slug}\nlesson: ${id}\n---\n\nTODO: the reusable skill this capstone produces.\n`,
+  );
+  return dir;
+}
+
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === url.fileURLToPath(import.meta.url);
 if (isMain) {
   const args = parseArgs(process.argv.slice(2));
   try {
     if (args.flags.has('scaffold')) {
       const [phaseDir, lessonSlug] = args.positional;
-      if (!phaseDir || !lessonSlug) throw new Error('usage: --scaffold <phase-dir> <lesson-slug> [--type Build|Learn] [--langs python,bash] [--title "..."] [--minutes 60]');
+      if (!phaseDir || !lessonSlug) throw new Error('usage: --scaffold <phase-dir> <lesson-slug> [--type Build|Learn|Capstone] [--langs python,bash] [--title "..."] [--minutes 60]');
       const dir = scaffold({
         phaseDir,
         lessonSlug,
@@ -249,7 +394,8 @@ if (isMain) {
         title: args.options.title,
         minutes: args.options.minutes ? Number(args.options.minutes) : 60,
       });
-      console.log(`scaffolded ${path.relative(repoRoot, dir)}\nnext: fill docs/en.md, code/, quiz.json and outputs/, then run: npm run curriculum:validate`);
+      const fillIn = args.options.type === 'Capstone' ? 'docs/en.md, lesson.json milestones, grader/checks.py, starter/, solution/, quiz.json and outputs/' : 'docs/en.md, code/, quiz.json and outputs/';
+      console.log(`scaffolded ${path.relative(repoRoot, dir)}\nnext: fill ${fillIn}, then run: npm run curriculum:validate`);
       process.exit(0);
     }
     if (args.flags.has('deprecations')) {

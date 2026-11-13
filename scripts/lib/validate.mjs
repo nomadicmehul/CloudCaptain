@@ -15,8 +15,30 @@ export const SECTIONS = [
   'Further Reading',
 ];
 
+// Capstones (phase 16) are graded projects: no code/ folder, but starter/, solution/
+// and grader/. The grader scores milestones; CI grades solution/ (must pass) and
+// starter/ (must fail) in the lesson's smoke script.
+export const CAPSTONE_SECTIONS = [
+  'Metadata',
+  'The Brief',
+  'The Architecture',
+  'Milestones',
+  'Grading',
+  'Ship It',
+  'Stretch Goals',
+  'Further Reading',
+];
+
 export const QUIZ_STAGE_COUNTS = {pre: 1, check: 3, post: 2};
-const LESSON_TYPES = ['Build', 'Learn'];
+export const CAPSTONE_QUIZ_STAGE_COUNTS = {pre: 0, check: 0, post: 3};
+export const CAPSTONE_FILES = ['starter', 'solution', 'grader/grade.sh', 'grader/grade.py', 'grader/checks.py', 'grader/smoke.sh', 'grader/workflow.yml'];
+const LESSON_TYPES = ['Build', 'Learn', 'Capstone'];
+const MILESTONE_ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export const isCapstone = (json) => Boolean(json && json.type === 'Capstone');
+export const sectionsFor = (json) => (isCapstone(json) ? CAPSTONE_SECTIONS : SECTIONS);
+export const quizCountsFor = (json) => (isCapstone(json) ? CAPSTONE_QUIZ_STAGE_COUNTS : QUIZ_STAGE_COUNTS);
+export const timeLabel = (json) => (isCapstone(json) ? `${json.minutes / 60} hours` : `${json.minutes} minutes`);
 const LESSON_STATUS = ['draft', 'preview', 'published'];
 const LANGS = Object.keys(ENTRY_FILES);
 const OUTPUT_RE = /^(prompt|skill|agent)-[a-z0-9-]+\.md$|^mcp-[a-z0-9-]+$/;
@@ -47,9 +69,14 @@ export function validateLesson(lesson, ctx) {
     const expectedId = `${lesson.phase.slug}/${lesson.slug}`;
     if (json.id !== expectedId) err(`lesson.json: id must be "${expectedId}" (folder ${lesson.dirName}), got "${json.id}"`);
     if (json.id && !ID_RE.test(json.id)) err(`lesson.json: id "${json.id}" is not <phase>/<lesson>`);
-    if (!LESSON_TYPES.includes(json.type)) err(`lesson.json: type must be Build or Learn`);
+    if (!LESSON_TYPES.includes(json.type)) err(`lesson.json: type must be Build, Learn or Capstone`);
     if (!LESSON_STATUS.includes(json.status)) err(`lesson.json: status must be draft, preview or published`);
-    if (!Number.isInteger(json.minutes) || json.minutes < 15 || json.minutes > 180) err(`lesson.json: minutes must be an integer between 15 and 180`);
+    if (isCapstone(json)) {
+      if (!Number.isInteger(json.minutes) || json.minutes < 240 || json.minutes > 1200 || json.minutes % 60 !== 0) err('lesson.json: a capstone\'s minutes must be whole hours between 240 and 1200');
+      validateMilestones(json, err);
+      if (!json.smoke) err('lesson.json: a capstone needs "smoke": it grades solution/ (must pass) and starter/ (must fail)');
+    } else if (!Number.isInteger(json.minutes) || json.minutes < 15 || json.minutes > 180) err(`lesson.json: minutes must be an integer between 15 and 180`);
+    if (!isCapstone(json) && (json.milestones || json.pass_score !== undefined)) err('lesson.json: milestones and pass_score are only for type Capstone');
     if (!Array.isArray(json.langs) || json.langs.length === 0) err(`lesson.json: langs must list at least one language`);
     else for (const l of json.langs) if (!LANGS.includes(l)) err(`lesson.json: unknown language "${l}" (allowed: ${LANGS.join(', ')})`);
     if (typeof json.title === 'string' && json.title.length > 80) err('lesson.json: title longer than 80 characters');
@@ -64,12 +91,22 @@ export function validateLesson(lesson, ctx) {
       if (!resolveReferenceDoc(ref, ctx.websiteDocsRoot)) err(`lesson.json: reference "${ref}" does not exist under website/docs`);
     }
     if (json.tests && typeof json.tests === 'object') {
-      for (const lang of json.langs || []) if (!json.tests[lang]) warn(`lesson.json: no test command for language "${lang}"`);
+      // A capstone's langs describe its solution; its tests are the grader's own.
+      if (!isCapstone(json)) for (const lang of json.langs || []) if (!json.tests[lang]) warn(`lesson.json: no test command for language "${lang}"`);
     } else err('lesson.json: tests must be an object of <language>: <command>');
 
-    for (const lang of json.langs || []) {
-      const entry = ENTRY_FILES[lang];
-      if (entry && !exists(path.join(lesson.files.code, entry))) err(`code/${entry} is missing for language "${lang}"`);
+    if (isCapstone(json)) {
+      for (const rel of CAPSTONE_FILES) if (!exists(path.join(lesson.dir, rel))) err(`${rel} is missing (every capstone ships starter/, solution/ and a grader)`);
+      const checks = readFileIfExists(path.join(lesson.dir, 'grader', 'checks.py'));
+      for (const m of Array.isArray(json.milestones) ? json.milestones : []) {
+        const fn = `check_${String(m.id).replace(/-/g, '_')}`;
+        if (checks !== null && !new RegExp(`^def ${fn}\\(`, 'm').test(checks)) err(`grader/checks.py: milestone "${m.id}" needs def ${fn}(project)`);
+      }
+    } else {
+      for (const lang of json.langs || []) {
+        const entry = ENTRY_FILES[lang];
+        if (entry && !exists(path.join(lesson.files.code, entry))) err(`code/${entry} is missing for language "${lang}"`);
+      }
     }
     for (const out of json.outputs || []) {
       const name = out.replace(/\/$/, '');
@@ -79,17 +116,41 @@ export function validateLesson(lesson, ctx) {
     if ((json.outputs || []).length === 0) err('lesson.json: every lesson ships at least one artifact in outputs');
   }
 
-  if (!exists(lesson.files.tests)) err('code/tests/ is missing');
-  else if (lesson.testCount < 5) err(`code/tests/ has ${lesson.testCount} tests; at least 5 are required`);
+  const testsLabel = `${path.relative(lesson.dir, lesson.files.tests)}/`;
+  if (!exists(lesson.files.tests)) err(`${testsLabel} is missing`);
+  else if (lesson.testCount < 5) err(`${testsLabel} has ${lesson.testCount} tests; at least 5 are required`);
 
   if (lesson.quiz) validateQuiz(lesson.quiz, json, err);
   if (lesson.md && json) validateDoc(lesson, json, ctx, err, warn);
 }
 
+function validateMilestones(json, err) {
+  const ms = json.milestones;
+  if (!Array.isArray(ms) || ms.length < 3 || ms.length > 8) {
+    err('lesson.json: a capstone needs 3 to 8 milestones [{id, title, points}]');
+    return;
+  }
+  const ids = new Set();
+  let total = 0;
+  ms.forEach((m, i) => {
+    const label = `lesson.json milestone ${i + 1}`;
+    if (!m || typeof m !== 'object') return err(`${label}: must be an object`);
+    if (!MILESTONE_ID_RE.test(m.id || '')) err(`${label}: id must be lowercase words separated by hyphens`);
+    else if (ids.has(m.id)) err(`${label}: duplicate id "${m.id}"`);
+    else ids.add(m.id);
+    if (typeof m.title !== 'string' || m.title.length < 3 || m.title.length > 80) err(`${label}: title must be 3-80 characters`);
+    if (!Number.isInteger(m.points) || m.points < 1) err(`${label}: points must be a positive integer`);
+    else total += m.points;
+  });
+  if (!Number.isInteger(json.pass_score) || json.pass_score < 1 || json.pass_score > total) err(`lesson.json: pass_score must be an integer between 1 and the milestone total (${total})`);
+}
+
 function validateQuiz(quiz, json, err) {
   if (json && quiz.lesson !== json.id) err(`quiz.json: lesson must be "${json.id}"`);
   const qs = Array.isArray(quiz.questions) ? quiz.questions : [];
-  if (qs.length !== 6) err(`quiz.json: expected 6 questions, found ${qs.length}`);
+  const counts0 = quizCountsFor(json);
+  const want = Object.values(counts0).reduce((a, b) => a + b, 0);
+  if (qs.length !== want) err(`quiz.json: expected ${want} questions, found ${qs.length}`);
   const counts = {pre: 0, check: 0, post: 0};
   const ids = new Set();
   qs.forEach((q, i) => {
@@ -104,8 +165,8 @@ function validateQuiz(quiz, json, err) {
     else if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer >= q.choices.length) err(`${label}: answer index out of range`);
     if (!q.explanation || q.explanation.length < 10) err(`${label}: explanation too short`);
   });
-  for (const [stage, want] of Object.entries(QUIZ_STAGE_COUNTS)) {
-    if (counts[stage] !== want) err(`quiz.json: expected ${want} "${stage}" question(s), found ${counts[stage]}`);
+  for (const [stage, n] of Object.entries(counts0)) {
+    if (counts[stage] !== n) err(`quiz.json: expected ${n} "${stage}" question(s), found ${counts[stage]}`);
   }
 }
 
@@ -119,8 +180,9 @@ function validateDoc(lesson, json, ctx, err, warn) {
   else if (parsed.motto !== json.motto) err(`docs/en.md: motto must equal lesson.json motto`);
 
   const titles = parsed.sections.map((s) => s.title);
-  if (titles.join('|') !== SECTIONS.join('|')) {
-    err(`docs/en.md: H2 sections must be exactly, in order: ${SECTIONS.join(' → ')}. Found: ${titles.join(' → ') || '(none)'}`);
+  const sections = sectionsFor(json);
+  if (titles.join('|') !== sections.join('|')) {
+    err(`docs/en.md: H2 sections must be exactly, in order: ${sections.join(' → ')}. Found: ${titles.join(' → ') || '(none)'}`);
   }
 
   const meta = sectionByTitle(parsed, 'Metadata');
@@ -131,19 +193,22 @@ function validateDoc(lesson, json, ctx, err, warn) {
       const type = tableValue(table, 'Type');
       if (type !== json.type) err(`Metadata: Type is "${type}", lesson.json says "${json.type}"`);
       const time = tableValue(table, 'Time');
-      if (time !== `${json.minutes} minutes`) err(`Metadata: Time must be "${json.minutes} minutes", found "${time}"`);
+      if (time !== timeLabel(json)) err(`Metadata: Time must be "${timeLabel(json)}", found "${time}"`);
       const langs = (tableValue(table, 'Languages') || '').toLowerCase();
       for (const l of json.langs || []) if (!langs.includes(l)) warn(`Metadata: Languages row does not mention "${l}"`);
     }
   }
 
-  const concept = sectionByTitle(parsed, 'The Concept');
+  const diagramTitle = isCapstone(json) ? 'The Architecture' : 'The Concept';
+  const concept = sectionByTitle(parsed, diagramTitle);
   if (concept) {
     const diagrams = concept.fences.filter((f) => f.lang === 'mermaid');
     const hasImage = /!\[[^\]]*\]\(/.test(concept.body);
-    if (diagrams.length === 0 && !hasImage) err('The Concept: needs a mermaid diagram or an image');
-    if (concept.fences.some((f) => f.lang !== 'mermaid')) err('The Concept: no code fences other than mermaid (save code for Build It)');
+    if (diagrams.length === 0 && !hasImage) err(`${diagramTitle}: needs a mermaid diagram or an image`);
+    if (!isCapstone(json) && concept.fences.some((f) => f.lang !== 'mermaid')) err('The Concept: no code fences other than mermaid (save code for Build It)');
   }
+
+  if (isCapstone(json)) validateCapstoneDoc(parsed, json, err);
 
   const build = sectionByTitle(parsed, 'Build It');
   if (build && build.fences.length === 0) err('Build It: needs at least one code fence');
@@ -174,12 +239,13 @@ function validateDoc(lesson, json, ctx, err, warn) {
     }
   }
 
-  for (const stage of Object.keys(QUIZ_STAGE_COUNTS)) {
+  for (const [stage, count] of Object.entries(quizCountsFor(json))) {
+    const want = count > 0 ? 1 : 0;
     const n = parsed.quizTags.filter((t) => t === stage).length;
-    if (n !== 1) err(`docs/en.md: expected exactly one <Quiz stage="${stage}" /> tag, found ${n}`);
+    if (n !== want) err(`docs/en.md: expected ${want ? 'exactly one' : 'no'} <Quiz stage="${stage}" /> tag, found ${n}`);
   }
   if (!parsed.components.includes('ShipIt')) warn('Ship It: add <ShipIt /> so the site links the artifacts');
-  if (!parsed.components.includes('RunTests')) warn('Build It: add <RunTests /> so the site shows the test command');
+  if (!isCapstone(json) && !parsed.components.includes('RunTests')) warn('Build It: add <RunTests /> so the site shows the test command');
   if (/\bTODO\b/.test(lesson.md)) warn('docs/en.md still contains TODO');
 
   for (const hit of findUnannotatedDeprecations(lesson.md, ctx.deprecations || [])) {
@@ -187,7 +253,20 @@ function validateDoc(lesson, json, ctx, err, warn) {
   }
 }
 
-const STATUS_WORDS = /retired|removed|deprecated|deprecation|end of life|end-of-life|eol\b|shut down|shutdown|frozen|maintenance|declining|closed to new|relicensed|busl|legacy|no longer|moved to/i;
+function validateCapstoneDoc(parsed, json, err) {
+  const milestones = sectionByTitle(parsed, 'Milestones');
+  if (milestones && Array.isArray(json.milestones)) {
+    const want = json.milestones.map((m) => m.title);
+    if (milestones.h3s.join('|') !== want.join('|')) err(`Milestones: needs one ### per lesson.json milestone, in order: ${want.join(', ')} (found: ${milestones.h3s.join(', ') || 'none'})`);
+  }
+  const grading = sectionByTitle(parsed, 'Grading');
+  if (grading) {
+    if (!grading.body.includes('grader/grade.sh')) err('Grading: show how to run grader/grade.sh');
+    if (!grading.body.includes('grader/workflow.yml')) err('Grading: explain how to copy grader/workflow.yml into your own repository');
+  }
+}
+
+const STATUS_WORDS =/retired|removed|deprecated|deprecation|end of life|end-of-life|eol\b|shut down|shutdown|frozen|maintenance|declining|closed to new|relicensed|busl|legacy|no longer|moved to/i;
 
 export function findUnannotatedDeprecations(text, deprecations) {
   const hits = [];

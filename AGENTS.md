@@ -20,7 +20,7 @@ Run these from `website/` unless noted.
 ```bash
 npm ci                          # install
 npm run curriculum:validate     # validate every lesson against LESSON_TEMPLATE.md (fast, no build)
-npm run curriculum:scaffold -- <phase-dir> <lesson-slug> --type Build|Learn --langs python,bash --title "..."
+npm run curriculum:scaffold -- <phase-dir> <lesson-slug> --type Build|Learn|Capstone --langs python,bash --title "..."
 npm run curriculum:test -- <phase-slug>/<lesson-slug>   # run that lesson's tests (or --all)
 npm run curriculum:test -- --all --smoke                # real-tool end-to-end checks (Linux + Docker; what lesson-smoke.yml runs)
 npm run curriculum:test -- --all --smoke --phase=iac    # one phase only (lesson-smoke.yml runs one job per phase)
@@ -64,6 +64,8 @@ CHANGELOG.md           human-readable changes per release
 3. `npm run curriculum:validate && npm run curriculum:test -- containers/image-layers && npm run build`.
 4. Add the lesson id to a path in `curriculum/manifest.json` if it belongs to one. Never edit `sidebars*.ts` by hand; they are generated.
 5. Set `"status": "published"` when it is ready. `draft` lessons are excluded from production builds; `preview` lessons are built but unlisted.
+
+Capstones (phase 16, `--type Capstone`) are graded projects with `starter/`, `solution/` and `grader/` instead of `code/`; see the Capstones section of `LESSON_TEMPLATE.md`. The scaffold copies the grader harness from `scripts/templates/capstone/`.
 
 ## Conventions
 

@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import curriculumJson from '@site/src/data/generated/curriculum.json';
 import type {CurriculumModel} from './types';
 import styles from './styles.module.css';
+import {formatDuration} from './duration';
 
 const curriculum = curriculumJson as unknown as CurriculumModel;
 
@@ -27,7 +28,7 @@ export default function LearningPath({id}: {id: string}): React.JSX.Element {
             <Link to={l.route}>{l.title}</Link>
             <span className={styles.muted}>
               {' '}
-              · Phase {l.phaseNumber} {l.phaseTitle} · {l.minutes} min
+              · Phase {l.phaseNumber} {l.phaseTitle} · {formatDuration(l.minutes)}
             </span>
           </li>
         ))}

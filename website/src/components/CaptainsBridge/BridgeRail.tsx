@@ -8,6 +8,7 @@ import cstyles from '../Curriculum/styles.module.css';
 import type {LessonMetaData} from '../Curriculum/types';
 import type {QuizRecord} from '../Curriculum/storage';
 import {githubUrl} from '../Curriculum/useLesson';
+import {formatDuration} from '../Curriculum/duration';
 
 function downloadShellScript(commands: Command[]): void {
   const pageTitle = (document.title || 'cloudcaptain').replace(/\s*\|.*$/, '').trim();
@@ -117,7 +118,7 @@ export default function BridgeRail({
           <div style={{padding: '0 14px 14px', fontSize: 13, lineHeight: 1.5}}>
             <div style={{marginBottom: 10}}>
               <span className={cstyles.badge} data-type={lesson.type}>{lesson.type}</span>{' '}
-              <span className={cstyles.muted}>{lesson.minutes} min · Phase {lesson.phaseNumber} {lesson.phaseTitle}</span>
+              <span className={cstyles.muted}>{formatDuration(lesson.minutes)} · Phase {lesson.phaseNumber} {lesson.phaseTitle}</span>
             </div>
             <div style={{fontWeight: 700, marginTop: 10}}>Quiz</div>
             <div className={cstyles.muted}>
