@@ -440,6 +440,20 @@ class LogFormatTests(PlatformCase):
         summary = main.summarize(main.parse_log_line(line) for line in self.sink.getvalue().splitlines() if main.parse_log_line(line))
         self.assertEqual((summary["invocations"], summary["cold_starts"]), (1, 1))
 
+    def test_function_output_read_before_the_response_is_logged_before_the_report(self):
+        slow_emit = main.Environment.emit_output
+
+        def emit_slowly(env, raw):
+            time.sleep(0.05)
+            slow_emit(env, raw)
+
+        with mock.patch.object(main.Environment, "emit_output", emit_slowly):
+            platform = self.make(log_format="JSON")
+            result = platform.invoke(event(name="cc"))
+        types = [json.loads(line).get("type") or json.loads(line).get("level") for line in self.sink.getvalue().splitlines()]
+        self.assertEqual(types, ["platform.start", "INFO", "platform.report"])
+        self.assertEqual(json.loads(self.sink.getvalue().splitlines()[1])["requestId"], result.request_id)
+
 
 class RuntimeAPIProtocolTests(PlatformCase):
     def test_be_the_runtime_yourself_over_http(self):

@@ -353,8 +353,7 @@ class Environment:
         self.last_used = time.monotonic()
         self.invocations = 0
         self.max_memory_mb = 0
-        self.lines_read = 0
-        self.lines_emitted = 0
+        self.reading = threading.Lock()
         self.server = RuntimeAPIServer(("127.0.0.1", port), self)
         self.port = self.server.server_address[1]
         threading.Thread(target=self.server.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True).start()
@@ -415,25 +414,44 @@ class Environment:
 
     def pump(self, process: subprocess.Popen) -> None:
         assert process.stdout is not None
-        for raw in iter(process.stdout.readline, b""):
-            self.lines_read += 1
-            line = raw.decode("utf-8", "replace").rstrip("\r\n")
-            with self.platform.cond:
-                target = self.current or self.pending or (self.claimed if self.claimed is not None and not self.claimed.finished else None)
-                self.platform.emit(line, target)
-                self.lines_emitted += 1
+        fd = process.stdout.fileno()
+        partial = b""
+        while True:
+            try:
+                ready = select.select([fd], [], [], 0.05)[0]
+            except (OSError, ValueError):
+                break
+            if not ready:
+                continue
+            with self.reading:
+                chunk = os.read(fd, 65536)
+                lines = (partial + chunk).split(b"\n")
+                partial = lines.pop() if chunk else b""
+                for raw in lines if chunk else [line for line in lines if line]:
+                    self.emit_output(raw)
+            if not chunk:
+                break
         process.stdout.close()
+
+    def emit_output(self, raw: bytes) -> None:
+        line = raw.decode("utf-8", "replace").rstrip("\r")
+        with self.platform.cond:
+            target = self.current or self.pending or (self.claimed if self.claimed is not None and not self.claimed.finished else None)
+            self.platform.emit(line, target)
 
     def drain_output(self, limit: float = 0.2) -> None:
         process = self.process
         deadline = time.monotonic() + limit
-        while process is not None and process.stdout is not None and time.monotonic() < deadline:
-            try:
-                pending = bool(select.select([process.stdout], [], [], 0)[0])
-            except (OSError, ValueError):
-                pending = False
-            if not pending and self.lines_read == self.lines_emitted:
-                return
+        while process is not None and process.stdout is not None and not process.stdout.closed and time.monotonic() < deadline:
+            if self.reading.acquire(timeout=max(0.0, deadline - time.monotonic())):
+                try:
+                    pending = bool(select.select([process.stdout], [], [], 0)[0])
+                except (OSError, ValueError):
+                    pending = False
+                finally:
+                    self.reading.release()
+                if not pending:
+                    return
             time.sleep(0.005)
 
     def watch(self, process: subprocess.Popen, generation: int) -> None:
