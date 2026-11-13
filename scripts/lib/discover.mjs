@@ -95,6 +95,9 @@ function readLesson(ctx) {
   if (exists(files.md)) lesson.md = fs.readFileSync(files.md, 'utf8');
   else lesson.errors.push('docs/en.md is missing');
 
+  // Capstones have no code/: their tests are the grader's own tests.
+  if (lesson.json && lesson.json.type === 'Capstone') files.tests = path.join(ctx.dir, 'grader', 'tests');
+
   lesson.testFiles = exists(files.tests) ? walk(files.tests) : [];
   lesson.testCount = countTests(lesson.testFiles);
   lesson.outputFiles = exists(files.outputs) ? fs.readdirSync(files.outputs).sort() : [];

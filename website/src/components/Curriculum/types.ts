@@ -1,4 +1,5 @@
-export type LessonType = 'Build' | 'Learn';
+export type LessonType = 'Build' | 'Learn' | 'Capstone';
+export type Milestone = {id: string; title: string; points: number};
 export type QuizStage = 'pre' | 'check' | 'post';
 
 export type LessonMetaData = {
@@ -16,6 +17,8 @@ export type LessonMetaData = {
   outputs: string[];
   tests: Record<string, string>;
   last_verified?: string;
+  milestones?: Milestone[];
+  pass_score?: number;
   phase: string;
   phaseTitle: string;
   phaseNumber: string;
@@ -63,6 +66,8 @@ export type CurriculumLesson = {
   docId: string;
   route: string;
   testCount: number;
+  milestones?: Milestone[];
+  passScore?: number | null;
 };
 
 export type CurriculumPhase = {
@@ -97,6 +102,7 @@ export type CurriculumModel = {
     lessons: number;
     buildLessons: number;
     learnLessons: number;
+    capstones?: number;
     minutes: number;
     hours: number;
     tests: number;

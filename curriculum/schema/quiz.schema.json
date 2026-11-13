@@ -10,9 +10,9 @@
     "lesson": { "type": "string", "pattern": "^[a-z0-9-]+/[a-z0-9-]+$" },
     "questions": {
       "type": "array",
-      "minItems": 6,
+      "minItems": 3,
       "maxItems": 6,
-      "description": "Exactly six: one pre (asked before the lesson), three check (after Use It), two post (after Exercises).",
+      "description": "Lessons: exactly six, one pre (asked before the lesson), three check (after Use It), two post (after Exercises). Capstones: exactly three post questions, asked after the grader passes.",
       "items": {
         "type": "object",
         "required": ["id", "stage", "prompt", "choices", "answer", "explanation"],

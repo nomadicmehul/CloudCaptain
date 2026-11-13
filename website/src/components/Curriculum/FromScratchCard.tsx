@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import {useLocation} from '@docusaurus/router';
 import {backlinksForPath, isCurriculumPath} from './curriculumTitles';
 import styles from './styles.module.css';
+import {formatDuration} from './duration';
 
 /**
  * On Reference docs that a lesson builds on, point readers at the lesson.
@@ -21,7 +22,7 @@ export default function FromScratchCard(): React.JSX.Element | null {
           <li key={l.id}>
             <span className={styles.badge} data-type={l.type}>{l.type}</span>{' '}
             <Link to={l.route}>{l.title}</Link>
-            <span className={styles.muted}> · Phase {l.phaseNumber} · {l.minutes} min</span>
+            <span className={styles.muted}> · Phase {l.phaseNumber} · {formatDuration(l.minutes)}</span>
           </li>
         ))}
       </ul>
