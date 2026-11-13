@@ -48,6 +48,9 @@ jobs:
       # fake root and skips them; relative ../file.md links are still checked.
       # 502/503/504 are accepted: a remote gateway having a bad night is not a dead
       # page, and a really dead link shows up as 404/410 or a DNS/connection error.
+      - run: mkdir -p lychee
+
+      # First pass never fails the job: it records failures as JSON for the recheck.
       - name: Check links
         id: lychee
         uses: lycheeverse/lychee-action@v2
@@ -66,6 +69,56 @@ jobs:
             'README.md'
             'ROADMAP.md'
             'LESSON_TEMPLATE.md'
+          format: json
+          output: lychee/first.json
+          fail: false
+
+      # A site that times out or refuses connections for a few minutes (coredns.io,
+      # gnu.org) is not a dead link. Collect the failed http(s) URLs, wait, and check
+      # only those again. A missing local file cannot recover, so it fails at once.
+      - name: Collect failed links for a recheck
+        id: collect
+        if: steps.lychee.outputs.exit_code != '0'
+        run: |
+          python3 - <<'PY'
+          import json, os
+          report = json.load(open("lychee/first.json"))
+          web, local = set(), set()
+          for name in ("error_map", "timeout_map"):
+              for source, entries in report.get(name, {}).items():
+                  for entry in entries:
+                      url = entry["url"]
+                      print(f"first pass: {url} ({entry['status']['text']}) in {source}")
+                      (web if url.startswith(("http://", "https://")) else local).add(url)
+          with open("lychee/recheck.txt", "w") as f:
+              f.write("".join(u + "\n" for u in sorted(web)))
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"web={len(web)}\nlocal={len(local)}\n")
+          print(f"{len(web)} web link(s) to recheck, {len(local)} broken local link(s)")
+          PY
+
+      - name: Fail on broken local links
+        if: steps.collect.outputs.local != '' && steps.collect.outputs.local != '0'
+        run: |
+          echo "::error::${{ steps.collect.outputs.local }} relative link(s) point at files that do not exist; see the 'Collect failed links' step"
+          exit 1
+
+      - name: Wait before the recheck
+        if: steps.collect.outputs.web != '' && steps.collect.outputs.web != '0'
+        run: sleep 600
+
+      - name: Recheck failed links
+        if: steps.collect.outputs.web != '' && steps.collect.outputs.web != '0'
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --accept 200,201,204,206,301,302,307,308,429,502,503,504
+            --timeout 60
+            --max-retries 3
+            --retry-wait-time 10
+            lychee/recheck.txt
+          output: lychee/recheck.md
           fail: true
 
       - name: Open or update an issue on failure
