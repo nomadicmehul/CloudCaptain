@@ -20,6 +20,8 @@ Comprehensive preparation guide for AWS certifications, covering foundational to
 | Solutions Architect Professional (SAP-C02) | Professional | 180 min | 75 | $300 | Multiple Choice |
 | DevOps Engineer Professional (DOP-C02) | Professional | 180 min | 75 | $300 | Multiple Choice |
 
+> **Exam version changes:** AWS says the last day to take SAP-C02 is 16 November 2026, and SAP-C03 general availability begins 17 November 2026. The last day to take DVA-C02 is 30 November 2026, and DVA-C03 general availability begins 1 December 2026. The table figures above are for the C02 versions; check the new exam guides before booking. Source: [AWS Training and Certification blog](https://aws.amazon.com/blogs/training-and-certification/september-2026-new-offerings/)
+
 ---
 
 ## Cloud Practitioner (CLF-C02)
