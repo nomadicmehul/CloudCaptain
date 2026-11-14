@@ -18,9 +18,12 @@ AUTH=127.0.10.3
 RESOLVER=127.0.10.10
 CONTAINERS=()
 NS_CREATED=""
+SUDO=""
+[[ "$(id -u)" == "0" ]] || SUDO="sudo -n"
 k() { kubectl --context "$CTX" "$@"; }
 cleanup() {
   set +e
+  if [[ -s "$WORK/wire.pid" ]]; then $SUDO kill -INT "$(cat "$WORK/wire.pid")" >/dev/null 2>&1; fi
   for c in ${CONTAINERS[@]+"${CONTAINERS[@]}"}; do docker rm -f "$c" >/dev/null 2>&1; done
   if [[ -n "$NS_CREATED" ]]; then k delete namespace "$NS" --ignore-not-found --wait=false >/dev/null 2>&1; fi
   rm -rf "$WORK"
@@ -142,6 +145,14 @@ def queries(log_file, start, substring, qtype):
             print(f"{m.group(3).lower()} {m.group(4)} {m.group(8)}")
 
 
+def wire(capture_file):
+    # tcpdump -nn lines: "... > 127.0.10.10.53: 4660+ A? www.cc.test.svc.cluster.local. (55)"
+    for line in open(capture_file).read().splitlines():
+        m = re.search(r"\s\d+\+?(?: \[[^\]]*\])* A\? (\S+) \(", line)
+        if m:
+            print(m.group(1).lower())
+
+
 def answers_equal(dig_file, mini_file, count):
     parsed = parse_dig(open(dig_file).read())
     a = sorted(norm(r) for r in parsed["answer"])
@@ -166,7 +177,7 @@ def same_names(names_file, plan_file, count):
     print("  " + "\n  ".join(f"{n + 1}. {name}" for n, name in enumerate(sent)))
 
 
-commands = {"compare": compare, "walk": walk, "trace": trace, "queries": queries, "answers-equal": answers_equal, "soa-ttl": soa_ttl, "same-names": same_names}
+commands = {"compare": compare, "walk": walk, "trace": trace, "queries": queries, "wire": wire, "answers-equal": answers_equal, "soa-ttl": soa_ttl, "same-names": same_names}
 commands[sys.argv[1]](*sys.argv[2:])
 PY
 
@@ -358,6 +369,28 @@ if [[ "$PORT" == "53" ]]; then
   docker pull -q "$GLIBC_IMAGE" > /dev/null || fail "docker pull $GLIBC_IMAGE"
   printf 'hosts: files dns\n' > "$WORK/nsswitch.conf"
   sed 's/ndots:5/ndots:1/' "$FIX/resolv-pod.conf" > "$WORK/resolv-ndots1.conf"
+  # CoreDNS logs a query after answering it, from its own goroutine, so two quick queries
+  # can appear swapped in its log. The order glibc sent them in comes from the wire.
+  WIRE=""
+  if command -v tcpdump >/dev/null && $SUDO true 2>/dev/null; then WIRE=1; else echo "  (tcpdump with root not available: order taken from the CoreDNS log, which can swap two lines)"; fi
+  start_wire() {
+    rm -f "$WORK/wire.pid"
+    $SUDO sh -c 'echo $$ > "$1"; shift; exec tcpdump "$@"' sh "$WORK/wire.pid" -i lo -nn -l --immediate-mode "udp and dst host $RESOLVER and dst port 53" > "$WORK/wire.txt" 2> "$WORK/wire.err" &
+    for _ in $(seq 1 100); do
+      grep -q "listening on" "$WORK/wire.err" 2>/dev/null && return 0
+      sleep 0.1
+    done
+    fail "tcpdump did not start: $(cat "$WORK/wire.err")"
+  }
+  stop_wire() {
+    $SUDO kill -INT "$(cat "$WORK/wire.pid")" 2>/dev/null || true
+    for _ in $(seq 1 50); do
+      grep -Eq "packets? captured" "$WORK/wire.err" && break
+      sleep 0.1
+    done
+    grep -Eq "packets? captured" "$WORK/wire.err" || fail "tcpdump did not stop: $(cat "$WORK/wire.err")"
+    rm -f "$WORK/wire.pid"
+  }
   getent_in() {
     docker run --rm --network host -v "$1:/etc/resolv.conf:ro" -v "$WORK/nsswitch.conf:/etc/nsswitch.conf:ro" "$GLIBC_IMAGE" getent ahostsv4 "$2"
   }
@@ -365,6 +398,7 @@ if [[ "$PORT" == "53" ]]; then
     local conf="$1" name="$2" want="$3" expect_found="$4" start code=0
     mini search "$name" --resolv-conf "$conf" --hostname "" --json > "$WORK/plan.json" || fail "minidig search $name"
     start="$(mark resolver)"
+    if [[ -n "$WIRE" ]]; then start_wire; fi
     getent_in "$conf" "$name" > "$WORK/getent.txt" 2>&1 || code=$?
     if [[ "$expect_found" == "yes" ]]; then
       [[ "$code" == "0" && "$(awk 'NR==1 {print $1}' "$WORK/getent.txt")" == "127.0.20."* ]] || fail "getent $name should resolve (exit $code): $(cat "$WORK/getent.txt")"
@@ -373,8 +407,13 @@ if [[ "$PORT" == "53" ]]; then
     fi
     wait_queries resolver "$start" "$(echo "${name%.}" | cut -d. -f1)." A "$want" "$WORK/glibc.txt" || fail "the resolver should log $want A queries for $name: $(cat "$WORK/glibc.txt")"
     sleep 0.5
-    docker logs "$PREFIX-resolver" > "$WORK/resolver.log" 2>&1
-    python3 "$CHECK" queries "$WORK/resolver.log" "$start" "$(echo "${name%.}" | cut -d. -f1)." A > "$WORK/glibc.txt"
+    if [[ -n "$WIRE" ]]; then
+      stop_wire
+      python3 "$CHECK" wire "$WORK/wire.txt" > "$WORK/glibc.txt"
+    else
+      docker logs "$PREFIX-resolver" > "$WORK/resolver.log" 2>&1
+      python3 "$CHECK" queries "$WORK/resolver.log" "$start" "$(echo "${name%.}" | cut -d. -f1)." A > "$WORK/glibc.txt"
+    fi
     python3 "$CHECK" same-names "$WORK/glibc.txt" "$WORK/plan.json" "$want" || fail "$name with $(grep -o 'ndots:[0-9]*' "$conf"): glibc and minidig disagree"
   }
   echo "  www.cc.test, ndots:5: four search names, then the name as written"
