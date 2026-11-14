@@ -24,6 +24,8 @@ cleanup() {
 trap cleanup EXIT
 
 mc() { python3 code/main.py "$@"; }
+# The probe holds the lock for a moment, so it must only race with holders that wait
+# for the lock (flock without -n) or that already have it.
 lock_free() { flock -n "$1" true 2>/dev/null; }
 wait_until() {
   local deadline=$(( $(date +%s) + $1 )); shift
@@ -213,7 +215,7 @@ PY
 if command -v flock >/dev/null 2>&1 && command -v setsid >/dev/null 2>&1 && command -v pgrep >/dev/null 2>&1; then
   echo "▸ Use It: flock -n and minicron share the same kernel lock"
   LOCK="$WORK/sync.lock"
-  setsid flock -n "$LOCK" sleep 60 &
+  setsid flock "$LOCK" sleep 60 &
   HOLDER=$!
   PGROUPS+=("$HOLDER")
   wait_until 10 not lock_free "$LOCK" || fail "flock never took $LOCK"
@@ -232,9 +234,11 @@ if command -v flock >/dev/null 2>&1 && command -v setsid >/dev/null 2>&1 && comm
   python3 code/main.py run --name long --lock "$LOCK" -- sleep 60 > /dev/null 2>&1 &
   WRAPPER=$!
   PROCS+=("$WRAPPER")
-  wait_until 10 not lock_free "$LOCK" || fail "minicron never took $LOCK"
+  # minicron starts the job only after flock(2) succeeded, so wait for the child before
+  # probing: a probe any earlier could make minicron's non-blocking flock fail.
   child_pid() { pgrep -P "$WRAPPER" > "$WORK/child.txt" 2>/dev/null; }
   wait_until 10 child_pid || fail "no child process under minicron $WRAPPER"
+  if lock_free "$LOCK"; then fail "minicron started the job without holding $LOCK"; fi
   CHILD="$(head -1 "$WORK/child.txt")"
   PROCS+=("$CHILD")
   [[ "$(head -1 "$LOCK" | cut -d' ' -f1)" == "$WRAPPER" ]] || fail "the lock file should name minicron's pid $WRAPPER: $(cat "$LOCK")"
