@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "capstones/build-a-paas",
+  "questions": [
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "A new release's pod never passes its readiness probe. The Deployment uses maxSurge 1 and maxUnavailable 0. What do users see while tinypaas waits for the rollout to time out?",
+      "choices": [
+        "Errors, because the Deployment deletes the old pods as soon as the new ReplicaSet is created",
+        "Errors for the length of one readiness probe period, then the old version again",
+        "The old version, because an unready pod gets no Service traffic and maxUnavailable 0 forbids removing an old pod until a new one is ready",
+        "The new version, because the liveness probe restarts the pod until it is ready"
+      ],
+      "answer": 2,
+      "explanation": "Readiness decides Service endpoints, and maxUnavailable 0 means the controller may only scale the old ReplicaSet down after a new pod is available. A failing new pod therefore leaves every old pod in place and in the endpoints; the platform's job is to notice the timeout, mark the release failed and re-apply the current one."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Releases are v1 (succeeded), v2 (succeeded), v3 (failed) and v4, a rollback to v1 (succeeded, current). Following Heroku's model, what does a plain `tinypaas rollback` do next?",
+      "choices": [
+        "Creates v5 with v2's image and config, the last succeeded release before the current one",
+        "Deletes v4 and marks v3 as current again",
+        "Creates v5 with v3's image, the release just before v4 by number",
+        "Refuses, because the current release is already a rollback"
+      ],
+      "answer": 0,
+      "explanation": "A rollback is a new, appended release that copies an earlier release's image and config, so history is never rewritten and a rollback can itself be rolled back. Failed releases never went live, so restoring one would restore an outage; the target is the most recent succeeded release before the current one, which is v2."
+    },
+    {
+      "id": "post-3",
+      "stage": "post",
+      "prompt": "Why does `tinypaas build` export the commit with `git archive` and tag the image with the commit's short sha instead of running `docker build .` in the working tree and tagging `latest`?",
+      "choices": [
+        "Because kind load docker-image only accepts images whose tag looks like a sha",
+        "Because docker build cannot read a working tree that is a git repository",
+        "Because a sha tag makes images smaller than a latest tag",
+        "Because the image must contain exactly the committed tree, and the tag must say which commit runs so a release can be recreated and audited"
+      ],
+      "answer": 3,
+      "explanation": "Building the working tree lets uncommitted edits into an image nobody can reproduce, and a moving tag such as latest cannot tell you what runs or bring back what ran. One image per commit, named by its sha and recorded with its digest in the release, makes build output traceable and rollback exact."
+    }
+  ]
+}

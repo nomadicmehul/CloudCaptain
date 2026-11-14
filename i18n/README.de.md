@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps von Grund auf.<br/>Bau das Tool. Nutze das Tool. Liefere ein Artefakt aus.</h3>
   <p>
-    <strong>110 Lektionen</strong> · <strong>16 Phasen live</strong> · <strong>160 Stunden</strong> · <strong>3.246 Tests</strong> · <strong>217 Skills, Prompts &amp; MCP-Server</strong>
+    <strong>113 Lektionen</strong> · <strong>17 Phasen live</strong> · <strong>196 Stunden</strong> · <strong>3.346 Tests</strong> · <strong>223 Skills, Prompts &amp; MCP-Server</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Kurs starten" /></a>
@@ -62,8 +62,9 @@ Jede Lektion beginnt mit einem Problem aus der Produktion. Du baust den Mechanis
 | **13 · KI-Infrastruktur** | einen GPU-Scheduler mit DRA, einen Simulator für LLM-Serving, ein Gateway, das Tokens zählt, einen queue-basierten Autoscaler, einen Prefix-Cache-Router, HNSW- und IVF-Indizes, einen Inspektor für Modellartefakte, ein Token-Kostenmodell | llama.cpp auf der CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | einen MCP-Server für kubectl, einen Agenten für Incident-Triage, KI-gestützte Loganalyse, OpenTelemetry für LLM-Aufrufe, Agent-Sandboxes, sichere Write-Tools, Agent-Evals | Claude Code, die Claude API, OpenTelemetry, promptfoo |
 | **15 · MLOps & LLMOps** | inhaltsadressierte Versionierung von Datensätzen, einen MLflow-kompatiblen Tracking-Server mit Model Registry, einen gecachten Pipeline-DAG, kompiliert wie bei Kubeflow, ein Eval-Gate für LLMs, einen Modell-Router mit Shadow- und Canary-Traffic, Drift-Erkennung | DVC, MLflow, Kubeflow Pipelines, Argo Workflows, promptfoo, Argo Rollouts, Evidently |
+| **16 · Abschlussprojekte** | drei bewertete Projekte: eine kleine PaaS von `git push` bis zur laufenden URL, ein AIOps-Copilot, der echte Incidents einordnet, eine Multi-Cloud-Landing-Zone mit Policy-Gate und Drift-Erkennung | kind, Docker, OpenTofu, moto, die Claude API |
 
-Eine weitere Phase (Abschlussprojekte) steht auf der [Roadmap](../ROADMAP.md).
+Alle 17 Phasen sind online; was als Nächstes kommt, steht auf der [Roadmap](../ROADMAP.md).
 
 ## So funktioniert eine Lektion
 
@@ -82,11 +83,11 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Pfad | Für | Lektionen |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | vom einzelnen Linux-Prozess bis zu Kubernetes, IaC, Cloud und AIOps | 102 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | vom einzelnen Linux-Prozess bis zu Kubernetes, IaC, Cloud und AIOps | 105 |
 | [Site Reliability Engineer](https://cloudcaptain.io/learn/paths/sre) | Metriken, Alerts, Logs, Traces, SLOs, Incidents und Chaos auf Linux und Kubernetes | 38 |
 | [DevSecOps Engineer](https://cloudcaptain.io/learn/paths/devsecops) | Secrets, Admission, Laufzeiterkennung, Network Policies, Supply Chain und Cloud-IAM | 42 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | Engineers, die Modelle betreiben sollen: GPUs, Serving, Gateways, Routing, Kosten | 23 |
-| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | Agenten sicher für Infrastrukturaufgaben einsetzen | 9 |
+| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | Agenten sicher für Infrastrukturaufgaben einsetzen | 10 |
 
 ## Der Tutor in deinem Agenten
 
@@ -106,7 +107,7 @@ Der Lesemodus **Captain's Bridge** auf der Website verfolgt deinen Fortschritt p
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-*-Listen |
 |:--|:--|:--|:--|:--|
-| Jedes Tool von Grund auf selbst bauen, mit Tests | ✅ 110 Lektionen | ❌ | ❌ | ❌ |
+| Jedes Tool von Grund auf selbst bauen, mit Tests | ✅ 113 Lektionen | ❌ | ❌ | ❌ |
 | In CI gegen die echten Tools verifiziert | ✅ jede Lektion | ❌ | ❌ | ❌ |
 | KI-Infrastruktur und AIOps | ✅ 15 Lektionen | teilweise | ❌ | Links |
 | Ein Agent-Tutor zum Installieren | ✅ `npx skills add` | ❌ | ❌ | ❌ |

@@ -236,7 +236,10 @@
         "mlops/ml-pipelines",
         "mlops/llm-eval-gates",
         "mlops/model-rollout",
-        "mlops/drift-monitoring"
+        "mlops/drift-monitoring",
+        "capstones/build-a-paas",
+        "capstones/aiops-copilot",
+        "capstones/landing-zone"
       ]
     },
     {
@@ -349,7 +352,8 @@
         "aiops/llm-observability",
         "aiops/guardrails-sandboxes",
         "aiops/write-tools-safely",
-        "aiops/agent-evals"
+        "aiops/agent-evals",
+        "capstones/aiops-copilot"
       ]
     },
     {

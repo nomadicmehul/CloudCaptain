@@ -1,0 +1,71 @@
+@MOCK@
+
+variables {
+  name                 = "ccgrade"
+  env                  = "dev"
+  region               = "@REGION@"
+  cidr_block           = "10.42.0.0/16"
+  zones                = [@ZONES2@]
+  flow_log_destination = "@DESTINATION@"
+  tags = {
+    owner         = "cloudcaptain-grader"
+    env           = "dev"
+    "cost-center" = "cc-0000"
+  }
+}
+
+run "cc_grader_subnet_math" {
+  command = plan
+
+  assert {
+    condition     = jsonencode(output.private_subnet_cidrs) == jsonencode(["10.42.0.0/20", "10.42.16.0/20"])
+    error_message = "grader: private_subnet_cidrs must be cidrsubnet(cidr_block, 4, i) for each zone i"
+  }
+
+  assert {
+    condition     = jsonencode(output.public_subnet_cidrs) == jsonencode(["10.42.128.0/20", "10.42.144.0/20"])
+    error_message = "grader: public_subnet_cidrs must be cidrsubnet(cidr_block, 4, 8 + i) for each zone i"
+  }
+
+  assert {
+    condition     = output.cidr_block == "10.42.0.0/16"
+    error_message = "grader: the cidr_block output must equal the cidr_block input"
+  }
+
+  assert {
+    condition     = length(output.private_subnet_ids) == 2 && length(output.public_subnet_ids) == 2
+    error_message = "grader: one private and one public subnet per zone"
+  }
+}
+
+run "cc_grader_three_zones" {
+  command = plan
+
+  variables {
+    zones = [@ZONES3@]
+  }
+
+  assert {
+    condition     = jsonencode(output.private_subnet_cidrs) == jsonencode(["10.42.0.0/20", "10.42.16.0/20", "10.42.32.0/20"])
+    error_message = "grader: a third zone adds the subnet 10.42.32.0/20"
+  }
+}
+
+run "cc_grader_no_public_ingress" {
+  command = plan
+
+  assert {
+    condition     = jsonencode(output.public_ingress_ports) == jsonencode([443])
+    error_message = "grader: public_ingress_ports must be exactly [443]"
+  }
+}
+
+run "cc_grader_rejects_outside_allocation" {
+  command = plan
+
+  variables {
+    cidr_block = "192.168.0.0/16"
+  }
+
+  expect_failures = [var.cidr_block]
+}
