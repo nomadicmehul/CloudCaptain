@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps y AIOps desde cero.<br/>Construye la herramienta. Usa la herramienta. Entrega un artefacto.</h3>
   <p>
-    <strong>110 lecciones</strong> · <strong>16 fases publicadas</strong> · <strong>160 horas</strong> · <strong>3,246 pruebas</strong> · <strong>217 skills, prompts y servidores MCP</strong>
+    <strong>113 lecciones</strong> · <strong>17 fases publicadas</strong> · <strong>196 horas</strong> · <strong>3,345 pruebas</strong> · <strong>223 skills, prompts y servidores MCP</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Empieza el curso" /></a>
@@ -62,8 +62,9 @@ Cada lección parte de un problema de producción, te hace construir el mecanism
 | **13 · Infraestructura de IA** | un scheduler de GPU con DRA, un simulador de serving de LLM, un gateway que cuenta tokens, un autoscaler basado en colas, un router con caché de prefijos, índices HNSW e IVF, un inspector de artefactos de modelos, un modelo de costos por token | llama.cpp en CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps y operaciones agénticas** | un servidor MCP para kubectl, un agente de triaje de incidentes, análisis de logs con IA, OpenTelemetry para llamadas a LLM, sandboxes para agentes, herramientas de escritura seguras, evals de agentes | Claude Code, la API de Claude, OpenTelemetry, promptfoo |
 | **15 · MLOps y LLMOps** | versionado de datasets direccionado por contenido, un servidor de tracking compatible con MLflow con registro de modelos, un DAG de pipeline con caché compilado como el de Kubeflow, una puerta de evaluación para LLM, un enrutador de modelos con tráfico shadow y canary, detección de drift | DVC, MLflow, Kubeflow Pipelines, Argo Workflows, promptfoo, Argo Rollouts, Evidently |
+| **16 · Proyectos finales** | tres proyectos evaluados: una PaaS mínima desde `git push` hasta una URL en marcha, un copiloto AIOps que clasifica incidentes reales, una landing zone multinube con control de políticas y detección de drift | kind, Docker, OpenTofu, moto, la API de Claude |
 
-Una fase más (proyectos finales) está en la [hoja de ruta](../ROADMAP.md).
+Las 17 fases ya están publicadas; lo que viene después está en la [hoja de ruta](../ROADMAP.md).
 
 ## Cómo funciona una lección
 
@@ -82,11 +83,11 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Ruta | Para | Lecciones |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de un solo proceso de Linux a Kubernetes, IaC, cloud y AIOps | 102 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | de un solo proceso de Linux a Kubernetes, IaC, cloud y AIOps | 105 |
 | [Site Reliability Engineer](https://cloudcaptain.io/learn/paths/sre) | métricas, alertas, logs, trazas, SLO, incidentes y caos sobre Linux y Kubernetes | 38 |
 | [DevSecOps Engineer](https://cloudcaptain.io/learn/paths/devsecops) | secretos, admisión, detección en tiempo de ejecución, network policies, cadena de suministro e IAM en la nube | 42 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | ingenieros a quienes les piden operar modelos: GPUs, serving, gateways, enrutamiento, costos | 23 |
-| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | poner agentes a trabajar en la infraestructura de forma segura | 9 |
+| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | poner agentes a trabajar en la infraestructura de forma segura | 10 |
 
 ## El tutor en tu agente
 
@@ -106,7 +107,7 @@ El modo de lectura **Captain's Bridge** del sitio registra tu avance por secció
 
 | | CloudCaptain | roadmap.sh | devops-exercises | listas awesome-* |
 |:--|:--|:--|:--|:--|
-| Construir cada herramienta desde cero, con pruebas | ✅ 110 lecciones | ❌ | ❌ | ❌ |
+| Construir cada herramienta desde cero, con pruebas | ✅ 113 lecciones | ❌ | ❌ | ❌ |
 | Verificado contra las herramientas reales en CI | ✅ todas las lecciones | ❌ | ❌ | ❌ |
 | Infraestructura de IA y AIOps | ✅ 15 lecciones | parcial | ❌ | enlaces |
 | Un tutor que instalas en tu agente | ✅ `npx skills add` | ❌ | ❌ | ❌ |

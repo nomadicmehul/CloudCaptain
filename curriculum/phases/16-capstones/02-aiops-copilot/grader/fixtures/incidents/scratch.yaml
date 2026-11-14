@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-scratch
+  labels:
+    app: cc-scratch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cc-scratch
+  template:
+    metadata:
+      labels:
+        app: cc-scratch
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: idle
+          image: python:3.12.13-alpine3.22
+          command: ["python3", "-c", "import time; time.sleep(86400)"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi

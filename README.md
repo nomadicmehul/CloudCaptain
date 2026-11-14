@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud, DevOps &amp; AIOps from scratch.<br/>Build the tool. Use the tool. Ship an artifact.</h3>
   <p>
-    <strong>110 lessons</strong> · <strong>16 phases live</strong> · <strong>160 hours</strong> · <strong>3,246 tests</strong> · <strong>217 skills, prompts &amp; MCP servers</strong>
+    <strong>113 lessons</strong> · <strong>17 phases live</strong> · <strong>196 hours</strong> · <strong>3,345 tests</strong> · <strong>223 skills, prompts &amp; MCP servers</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="Start the course" /></a>
@@ -61,8 +61,9 @@ Every lesson starts from a production problem, has you build the mechanism yours
 | **13 · AI Infrastructure** | a GPU scheduler with DRA, an LLM serving simulator, a token-counting gateway, a queue-based autoscaler, a prefix-cache router, HNSW and IVF indexes, a model artifact inspector, a token cost model | llama.cpp on CPU, LiteLLM, pgvector, llm-d, ORAS |
 | **14 · AIOps & Agentic Ops** | an MCP server for kubectl, an incident-triage agent, AI log analysis, OpenTelemetry for LLM calls, agent sandboxes, safe write tools, agent evals | Claude Code, the Claude API, OpenTelemetry, promptfoo |
 | **15 · MLOps & LLMOps** | content-addressed dataset versioning, an MLflow-compatible tracking server and model registry, a cached pipeline DAG compiled like Kubeflow's, an LLM eval gate, a shadow-and-canary model router, drift detection | DVC, MLflow, Kubeflow Pipelines, Argo Workflows, promptfoo, Argo Rollouts, Evidently |
+| **16 · Capstone Projects** | three graded projects: a tiny PaaS from `git push` to a running URL, an AIOps copilot that triages real incidents, a multi-cloud landing zone with a policy gate and drift detection | kind, Docker, OpenTofu, moto, the Claude API |
 
-One more phase (capstones) is on the [roadmap](./ROADMAP.md).
+All 17 phases are live; see the [roadmap](./ROADMAP.md) for what comes next.
 
 ## How a lesson works
 
@@ -81,11 +82,11 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | Path | For | Lessons |
 |:--|:--|:--|
-| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 102 |
+| [DevOps Engineer](https://cloudcaptain.io/learn/paths/devops) | from a single Linux process to Kubernetes, IaC, cloud and AIOps | 105 |
 | [Site Reliability Engineer](https://cloudcaptain.io/learn/paths/sre) | metrics, alerts, logs, traces, SLOs, incidents and chaos on top of Linux and Kubernetes | 38 |
 | [DevSecOps Engineer](https://cloudcaptain.io/learn/paths/devsecops) | secrets, admission, runtime detection, network policy, supply chain and cloud IAM | 42 |
 | [AI Platform Engineer](https://cloudcaptain.io/learn/paths/ai-platform) | engineers asked to run models: GPUs, serving, gateways, routing, cost | 23 |
-| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | putting agents to work on infrastructure safely | 9 |
+| [AIOps Engineer](https://cloudcaptain.io/learn/paths/aiops) | putting agents to work on infrastructure safely | 10 |
 
 ## The tutor in your agent
 
@@ -105,7 +106,7 @@ The site's **Captain's Bridge** reading mode tracks progress per section, and [/
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* lists |
 |:--|:--|:--|:--|:--|
-| Build each tool from scratch, with tests | ✅ 110 lessons | ❌ | ❌ | ❌ |
+| Build each tool from scratch, with tests | ✅ 113 lessons | ❌ | ❌ | ❌ |
 | Verified against the real tools in CI | ✅ every lesson | ❌ | ❌ | ❌ |
 | AI infrastructure and AIOps | ✅ 15 lessons | partial | ❌ | links |
 | An agent tutor you install | ✅ `npx skills add` | ❌ | ❌ | ❌ |

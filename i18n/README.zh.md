@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>从零开始掌握 Cloud、DevOps 与 AIOps。<br/>亲手构建工具，上手使用工具，交付一件产物。</h3>
   <p>
-    <strong>110 节课</strong> · <strong>16 个阶段已上线</strong> · <strong>160 小时</strong> · <strong>3,246 个测试</strong> · <strong>217 个技能、提示词与 MCP 服务器</strong>
+    <strong>113 节课</strong> · <strong>17 个阶段已上线</strong> · <strong>196 小时</strong> · <strong>3,345 个测试</strong> · <strong>223 个技能、提示词与 MCP 服务器</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="开始学习课程" /></a>
@@ -62,8 +62,9 @@ npx skills add nomadicmehul/CloudCaptain   # installs the tutor into Claude Code
 | **13 · AI 基础设施** | 支持 DRA 的 GPU 调度器、LLM 推理服务模拟器、按 token 计量的网关、基于队列的自动扩缩器、前缀缓存路由器、HNSW 与 IVF 索引、模型制品检查器、token 成本模型 | 在 CPU 上运行的 llama.cpp、LiteLLM、pgvector、llm-d、ORAS |
 | **14 · AIOps 与智能体运维** | 面向 kubectl 的 MCP 服务器、故障分诊智能体、AI 日志分析、面向 LLM 调用的 OpenTelemetry、智能体沙箱、安全的写操作工具、智能体评测 | Claude Code、Claude API、OpenTelemetry、promptfoo |
 | **15 · MLOps 与 LLMOps** | 内容寻址的数据集版本管理、兼容 MLflow 的实验跟踪服务器与模型注册表、按 Kubeflow 方式编译的带缓存流水线 DAG、LLM 评估门禁、支持影子与金丝雀流量的模型路由器、漂移检测 | DVC、MLflow、Kubeflow Pipelines、Argo Workflows、promptfoo、Argo Rollouts、Evidently |
+| **16 · 综合实战项目** | 三个带评分的项目：从 `git push` 到可访问 URL 的迷你 PaaS、对真实故障做分诊的 AIOps 助手、带策略门禁和漂移检测的多云着陆区 | kind、Docker、OpenTofu、moto、Claude API |
 
-另外 1 个阶段（综合实战项目）已列入[路线图](../ROADMAP.md)。
+全部 17 个阶段均已上线；后续计划见[路线图](../ROADMAP.md)。
 
 ## 一节课如何进行
 
@@ -82,11 +83,11 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | 路径 | 适合人群 | 课程数 |
 |:--|:--|:--|
-| [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 102 |
+| [DevOps 工程师](https://cloudcaptain.io/learn/paths/devops) | 从单个 Linux 进程一路学到 Kubernetes、IaC、云与 AIOps | 105 |
 | [SRE 工程师](https://cloudcaptain.io/learn/paths/sre) | 在 Linux 与 Kubernetes 之上的指标、告警、日志、追踪、SLO、事件响应与混沌实验 | 38 |
 | [DevSecOps 工程师](https://cloudcaptain.io/learn/paths/devsecops) | 密钥管理、准入控制、运行时检测、网络策略、供应链与云 IAM | 42 |
 | [AI 平台工程师](https://cloudcaptain.io/learn/paths/ai-platform) | 需要负责运行模型的工程师：GPU、推理服务、网关、路由、成本 | 23 |
-| [AIOps 工程师](https://cloudcaptain.io/learn/paths/aiops) | 让智能体安全地在基础设施上干活 | 9 |
+| [AIOps 工程师](https://cloudcaptain.io/learn/paths/aiops) | 让智能体安全地在基础设施上干活 | 10 |
 
 ## 装进智能体里的导师
 
@@ -106,7 +107,7 @@ The Problem  →  The Concept  →  Build It  →  Use It  →  Ship It  →  Qu
 
 | | CloudCaptain | roadmap.sh | devops-exercises | awesome-* 清单 |
 |:--|:--|:--|:--|:--|
-| 从零构建每个工具，并配有测试 | ✅ 110 节课 | ❌ | ❌ | ❌ |
+| 从零构建每个工具，并配有测试 | ✅ 113 节课 | ❌ | ❌ | ❌ |
 | 在 CI 中用真实工具验证 | ✅ 每节课 | ❌ | ❌ | ❌ |
 | AI 基础设施与 AIOps | ✅ 15 节课 | 部分 | ❌ | 链接 |
 | 可安装的智能体导师 | ✅ `npx skills add` | ❌ | ❌ | ❌ |
