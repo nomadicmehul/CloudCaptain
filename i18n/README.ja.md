@@ -3,7 +3,7 @@
   <h1>CloudCaptain</h1>
   <h3>Cloud、DevOps、AIOps をゼロから。<br/>ツールを作る。ツールを使う。成果物をシップする。</h3>
   <p>
-    <strong>113 レッスン</strong> · <strong>17 フェーズ公開中</strong> · <strong>196 時間</strong> · <strong>3,345 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 223 個</strong>
+    <strong>113 レッスン</strong> · <strong>17 フェーズ公開中</strong> · <strong>196 時間</strong> · <strong>3,346 テスト</strong> · <strong>スキル・プロンプト・MCP サーバー 223 個</strong>
   </p>
   <p>
     <a href="https://cloudcaptain.io/learn"><img src="https://img.shields.io/badge/Start_the_course-cloudcaptain.io%2Flearn-1E9BD7?style=for-the-badge" alt="コースを始める" /></a>
