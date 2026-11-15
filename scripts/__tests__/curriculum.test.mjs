@@ -174,13 +174,16 @@ test('countTests recognises python, bats, js and go test styles', () => {
   assert.equal(countTests(fs.readdirSync(dir).map((n) => path.join(dir, n))), 6);
 });
 
+// A slug no real capstone uses, because tmpCurriculum() copies the real phase 16.
+const TEST_CAPSTONE = 'scaffold-check';
+
 function scaffoldCapstoneIn(dir) {
-  return scaffold({phaseDir: '16-capstones', lessonSlug: 'build-a-paas', type: 'Capstone', langs: ['python', 'bash'], title: 'Build a Tiny PaaS', curriculum: dir});
+  return scaffold({phaseDir: '16-capstones', lessonSlug: TEST_CAPSTONE, type: 'Capstone', langs: ['python', 'bash'], title: 'A Scaffolded Capstone', curriculum: dir});
 }
 
 function capstoneErrors(dir) {
   const {phases} = validateAll(dir);
-  return phases.find((p) => p.dir === '16-capstones').lessons[0].errors;
+  return phases.find((p) => p.dir === '16-capstones').lessons.find((l) => l.slug === TEST_CAPSTONE).errors;
 }
 
 test('scaffold --type Capstone creates a capstone the validator accepts', () => {
@@ -193,7 +196,7 @@ test('scaffold --type Capstone creates a capstone the validator accepts', () => 
   const json = JSON.parse(fs.readFileSync(path.join(created, 'lesson.json'), 'utf8'));
   assert.equal(json.type, 'Capstone');
   assert.equal(json.minutes, 600);
-  assert.match(fs.readFileSync(path.join(created, 'grader', 'workflow.yml'), 'utf8'), /16-capstones\/01-build-a-paas\/grader\/grade\.sh project/);
+  assert.match(fs.readFileSync(path.join(created, 'grader', 'workflow.yml'), 'utf8'), new RegExp(`16-capstones/${path.basename(created)}/grader/grade\\.sh project`));
   assert.deepEqual(capstoneErrors(dir), []);
   const harness = spawnSync('python3', ['-m', 'unittest', 'discover', '-s', 'grader/tests'], {cwd: created, encoding: 'utf8', env: {...process.env, PYTHONDONTWRITEBYTECODE: '1'}});
   assert.equal(harness.status, 0, harness.stderr);
@@ -234,6 +237,8 @@ test('milestones are rejected on a Build lesson', () => {
 
 test('the model counts capstones separately and carries their milestones', () => {
   const dir = tmpCurriculum();
+  const real = validateAll(dir);
+  const before = buildModel(real.phases, real.manifest).stats.capstones;
   const created = scaffoldCapstoneIn(dir);
   const jsonFile = path.join(created, 'lesson.json');
   const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
@@ -241,10 +246,10 @@ test('the model counts capstones separately and carries their milestones', () =>
   fs.writeFileSync(jsonFile, JSON.stringify(json));
   const {phases, manifest} = validateAll(dir);
   const model = buildModel(phases, manifest);
-  const lesson = model.lessonsById['capstones/build-a-paas'];
-  assert.equal(model.stats.capstones, 1);
+  const lesson = model.lessonsById[`capstones/${TEST_CAPSTONE}`];
+  assert.equal(model.stats.capstones, before + 1);
   assert.equal(lesson.passScore, 7);
   assert.equal(lesson.milestones.length, 3);
-  const entry = tutorIndex(model).lessons.find((l) => l.id === 'capstones/build-a-paas');
-  assert.match(entry.grader, /16-capstones\/01-build-a-paas\/grader\/grade\.sh$/);
+  const entry = tutorIndex(model).lessons.find((l) => l.id === `capstones/${TEST_CAPSTONE}`);
+  assert.match(entry.grader, new RegExp(`16-capstones/${path.basename(created)}/grader/grade\\.sh$`));
 });

@@ -1,0 +1,273 @@
+{
+  "name": "cloudcaptain-copilot-grader",
+  "description": "Recorded evidence bundles with the category and citations a correct triage must produce. Two cases are wrong on purpose: an eval must also report failures.",
+  "trials": 2,
+  "cases": [
+    {
+      "id": "oom-basic",
+      "workload": "deployment/billing",
+      "expected_category": "oom",
+      "must_cite": [
+        "pod/billing-6c9f7-k2x8q/worker/last-state"
+      ],
+      "evidence": [
+        {
+          "id": "pod/billing-6c9f7-k2x8q/worker/last-state",
+          "kind": "container-state",
+          "workload": "deployment/billing",
+          "object": "pod/billing-6c9f7-k2x8q",
+          "signal": "OOMKilled",
+          "summary": "worker was OOMKilled (exit 137), limit 128Mi",
+          "time": "2026-11-13T08:01:12Z",
+          "data": {
+            "exit_code": 137,
+            "memory_limit": "128Mi"
+          }
+        },
+        {
+          "id": "pod/billing-6c9f7-k2x8q/worker/restarts",
+          "kind": "restarts",
+          "workload": "deployment/billing",
+          "object": "pod/billing-6c9f7-k2x8q",
+          "signal": "Restarts",
+          "summary": "worker restarted 4 times",
+          "time": null,
+          "data": {
+            "restart_count": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "image-pull-backoff",
+      "workload": "deployment/search",
+      "expected_category": "image-pull",
+      "must_cite": [
+        "pod/search-5d4b8-zz7lp/api/state"
+      ],
+      "evidence": [
+        {
+          "id": "pod/search-5d4b8-zz7lp/api/state",
+          "kind": "container-state",
+          "workload": "deployment/search",
+          "object": "pod/search-5d4b8-zz7lp",
+          "signal": "ImagePullBackOff",
+          "summary": "Back-off pulling image registry.example.com/search:2.9.0-rc1",
+          "time": null,
+          "data": {
+            "image": "registry.example.com/search:2.9.0-rc1"
+          }
+        },
+        {
+          "id": "event/search-5d4b8-zz7lp/Failed",
+          "kind": "event",
+          "workload": "deployment/search",
+          "object": "pod/search-5d4b8-zz7lp",
+          "signal": "Failed",
+          "summary": "Failed to pull image: manifest unknown",
+          "time": "2026-11-13T08:03:40Z",
+          "data": {}
+        }
+      ]
+    },
+    {
+      "id": "crashloop-bad-config",
+      "workload": "deployment/checkout",
+      "expected_category": "crashloop-config",
+      "must_cite": [
+        "pod/checkout-7f8d9-abcde/app/state",
+        "pod/checkout-7f8d9-abcde/app/logs"
+      ],
+      "evidence": [
+        {
+          "id": "pod/checkout-7f8d9-abcde/app/state",
+          "kind": "container-state",
+          "workload": "deployment/checkout",
+          "object": "pod/checkout-7f8d9-abcde",
+          "signal": "CrashLoopBackOff",
+          "summary": "back-off 40s restarting failed container app",
+          "time": null,
+          "data": {}
+        },
+        {
+          "id": "pod/checkout-7f8d9-abcde/app/last-state",
+          "kind": "container-state",
+          "workload": "deployment/checkout",
+          "object": "pod/checkout-7f8d9-abcde",
+          "signal": "Error",
+          "summary": "app exited with code 1",
+          "time": "2026-11-13T07:58:02Z",
+          "data": {
+            "exit_code": 1
+          }
+        },
+        {
+          "id": "pod/checkout-7f8d9-abcde/app/logs",
+          "kind": "logs",
+          "workload": "deployment/checkout",
+          "object": "pod/checkout-7f8d9-abcde",
+          "signal": "Logs",
+          "summary": "last 3 lines of the previous container",
+          "time": null,
+          "data": {
+            "previous": true,
+            "lines": [
+              "checkout starting",
+              "KeyError: 'DATABASE_URL'",
+              "config error: DATABASE_URL is required"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "oom-behind-crashloop",
+      "workload": "deployment/reports",
+      "expected_category": "oom",
+      "must_cite": [
+        "pod/reports-59c7d-q8w2e/render/last-state"
+      ],
+      "evidence": [
+        {
+          "id": "pod/reports-59c7d-q8w2e/render/state",
+          "kind": "container-state",
+          "workload": "deployment/reports",
+          "object": "pod/reports-59c7d-q8w2e",
+          "signal": "CrashLoopBackOff",
+          "summary": "back-off 1m20s restarting failed container render",
+          "time": null,
+          "data": {}
+        },
+        {
+          "id": "pod/reports-59c7d-q8w2e/render/last-state",
+          "kind": "container-state",
+          "workload": "deployment/reports",
+          "object": "pod/reports-59c7d-q8w2e",
+          "signal": "OOMKilled",
+          "summary": "render was OOMKilled (exit 137)",
+          "time": "2026-11-13T08:10:44Z",
+          "data": {
+            "exit_code": 137
+          }
+        },
+        {
+          "id": "pod/reports-59c7d-q8w2e/render/logs",
+          "kind": "logs",
+          "workload": "deployment/reports",
+          "object": "pod/reports-59c7d-q8w2e",
+          "signal": "Logs",
+          "summary": "last line of the previous container",
+          "time": null,
+          "data": {
+            "previous": true,
+            "lines": [
+              "rendering 41000 rows"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "service-without-endpoints",
+      "workload": "service/frontend",
+      "expected_category": "no-endpoints",
+      "must_cite": [
+        "service/frontend/endpoints"
+      ],
+      "evidence": [
+        {
+          "id": "service/frontend/endpoints",
+          "kind": "endpoints",
+          "workload": "service/frontend",
+          "object": "service/frontend",
+          "signal": "NoEndpoints",
+          "summary": "service frontend selects 2 pods, 0 ready endpoints",
+          "time": null,
+          "data": {
+            "ready": 0,
+            "not_ready": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "pod-not-ready",
+      "workload": "deployment/frontend",
+      "expected_category": "no-endpoints",
+      "must_cite": [
+        "pod/frontend-6b5c4-mm2nd/ready"
+      ],
+      "evidence": [
+        {
+          "id": "pod/frontend-6b5c4-mm2nd/ready",
+          "kind": "pod-condition",
+          "workload": "deployment/frontend",
+          "object": "pod/frontend-6b5c4-mm2nd",
+          "signal": "NotReady",
+          "summary": "running but not ready: readiness probe failing",
+          "time": null,
+          "data": {}
+        },
+        {
+          "id": "event/frontend-6b5c4-mm2nd/Unhealthy",
+          "kind": "event",
+          "workload": "deployment/frontend",
+          "object": "pod/frontend-6b5c4-mm2nd",
+          "signal": "Unhealthy",
+          "summary": "Readiness probe failed: HTTP probe failed with statuscode: 503",
+          "time": "2026-11-13T08:12:00Z",
+          "data": {}
+        }
+      ]
+    },
+    {
+      "id": "healthy-workload",
+      "workload": "deployment/inventory",
+      "expected_category": "healthy",
+      "must_cite": [],
+      "evidence": []
+    },
+    {
+      "id": "mislabelled-case",
+      "workload": "deployment/ledger",
+      "expected_category": "oom",
+      "must_cite": [
+        "pod/ledger-77b9c-pp4rt/app/state"
+      ],
+      "evidence": [
+        {
+          "id": "pod/ledger-77b9c-pp4rt/app/state",
+          "kind": "container-state",
+          "workload": "deployment/ledger",
+          "object": "pod/ledger-77b9c-pp4rt",
+          "signal": "ErrImagePull",
+          "summary": "rpc error: code = NotFound desc = failed to pull image ledger:9.9",
+          "time": null,
+          "data": {}
+        }
+      ]
+    },
+    {
+      "id": "stale-citation",
+      "workload": "deployment/queue",
+      "expected_category": "oom",
+      "must_cite": [
+        "pod/queue-4f2a1-gone0/consumer/last-state"
+      ],
+      "evidence": [
+        {
+          "id": "pod/queue-8c1d3-rt5yu/consumer/last-state",
+          "kind": "container-state",
+          "workload": "deployment/queue",
+          "object": "pod/queue-8c1d3-rt5yu",
+          "signal": "OOMKilled",
+          "summary": "consumer was OOMKilled (exit 137)",
+          "time": "2026-11-13T08:20:00Z",
+          "data": {
+            "exit_code": 137
+          }
+        }
+      ]
+    }
+  ]
+}

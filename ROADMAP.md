@@ -25,7 +25,7 @@ Phases are numbered once and never renumbered. A phase appears on the site as so
 | 13 | AI Infrastructure | 8 | in progress |
 | 14 | AIOps & Agentic Ops | 7 | in progress |
 | 15 | MLOps & LLMOps | 6 | in progress |
-| 16 | Capstone Projects | 0 | planned |
+| 16 | Capstone Projects | 3 | in progress |
 <!-- curriculum:end -->
 
 Regenerate the table with `node scripts/build-curriculum.mjs --roadmap`.

@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../schema/quiz.schema.json",
+  "lesson": "capstones/landing-zone",
+  "questions": [
+    {
+      "id": "post-1",
+      "stage": "post",
+      "prompt": "In this landing zone the hub env creates the peering connections and the routes on both sides, and the spokes never reference the hub. What does that buy you?",
+      "choices": [
+        "Fewer resources in total, because a peering created by the hub needs no routes in the spokes",
+        "Peering only works when the requester is the VPC with the lower CIDR range",
+        "Each spoke plans and applies on its own, and the hub picks up whichever spokes exist at its next apply",
+        "The spokes' state files stay smaller, which makes their plans faster"
+      ],
+      "answer": 2,
+      "explanation": "A spoke that looked up the hub would fail to plan until the hub existed, coupling the order of every apply. With the hub owning connectivity, spokes are independent root modules, and a data lookup with for_each over the spokes it finds makes a missing spoke a no-op rather than an error. The routes still exist on both sides; they just belong to the hub's state, and putting the spoke-side route in the spoke's main route table keeps it out of the spoke's drift report."
+    },
+    {
+      "id": "post-2",
+      "stage": "post",
+      "prompt": "Your policy gate must flag an aws_s3_bucket that has no server-side encryption configuration. In the plan JSON the SSE resource has bucket = aws_s3_bucket.logs.id, and that ID is unknown until apply. How do you match the two reliably?",
+      "choices": [
+        "Read configuration: the SSE resource's expressions.bucket.references names aws_s3_bucket.logs, and you match it within the same module instance",
+        "Compare change.after.bucket of the SSE resource with the bucket's ID in after_unknown",
+        "Match by resource name: any SSE resource called logs belongs to any bucket called logs in the plan",
+        "You cannot at plan time; check encryption after apply with GetBucketEncryption"
+      ],
+      "answer": 0,
+      "explanation": "after_unknown only marks the value as unknown, it does not carry it. The configuration section records which resources each argument references, so expressions.bucket.references ties the SSE resource to its bucket even before IDs exist. Matching by name alone breaks as soon as a module creates buckets with for_each: module.buckets[\"audit\"] and module.buckets[\"logs\"] share resource names, which is why the grader's fixtures include that case. When the bucket name is a known string, after.bucket is a second, simpler key."
+    },
+    {
+      "id": "post-3",
+      "stage": "post",
+      "prompt": "Two engineers run tofu plan on the dev env at the same moment with an S3 backend and use_lockfile = true. What makes the second plan fail with \"Error acquiring the state lock\"?",
+      "choices": [
+        "The S3 backend compares the state's serial before and after the plan and refuses a stale one",
+        "The second process finds the first one's PID in the .tflock object and waits for it",
+        "S3 object versioning keeps two versions of the state object and rejects the later write",
+        "The lock is a PUT of <key>.tflock with If-None-Match: *, and S3 answers 412 Precondition Failed because the object already exists"
+      ],
+      "answer": 3,
+      "explanation": "Native S3 locking is a create-if-absent: a conditional PUT that only succeeds when no object with that key exists. The first plan's PUT wins, the second gets 412, and OpenTofu turns that into the lock error with the holder's lock info read from the object. Releasing the lock deletes the object. Serial and lineage protect state writes, not concurrent plans, and versioning has nothing to do with locking."
+    }
+  ]
+}

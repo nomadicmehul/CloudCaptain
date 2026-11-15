@@ -1,0 +1,80 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "capstones/build-a-paas",
+  "title": "Build a Tiny PaaS: From git push to a Running URL",
+  "short": "Tiny PaaS",
+  "motto": "A PaaS is a build, a release record and a reconcile loop behind git push; build all three and the URL answers.",
+  "type": "Capstone",
+  "status": "published",
+  "minutes": 720,
+  "langs": [
+    "python",
+    "bash"
+  ],
+  "prereqs": [
+    "containers/image-build",
+    "orchestration/reconciler",
+    "git/git-hooks",
+    "cicd/gitops-reconciler",
+    "platform/golden-path"
+  ],
+  "tools": [
+    "docker",
+    "kind",
+    "kubectl",
+    "git"
+  ],
+  "reference": [
+    "/docs/tools/docker/dockerfile-guide",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/kubernetes/networking-services",
+    "/docs/tools/git/advanced",
+    "/docs/tools/cicd/gitops"
+  ],
+  "outputs": [
+    "skill-build-a-paas-review.md",
+    "prompt-explain-failed-release.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s grader/tests -v"
+  },
+  "smoke": "bash grader/smoke.sh",
+  "milestones": [
+    {
+      "id": "app-manifest",
+      "title": "Validate the app manifest",
+      "points": 2
+    },
+    {
+      "id": "build-image",
+      "title": "Build an image per commit",
+      "points": 3
+    },
+    {
+      "id": "deploy",
+      "title": "Deploy and answer on a URL",
+      "points": 3
+    },
+    {
+      "id": "git-push",
+      "title": "Deploy on git push",
+      "points": 2
+    },
+    {
+      "id": "config-scale",
+      "title": "Config and scale",
+      "points": 2
+    },
+    {
+      "id": "releases-rollback",
+      "title": "Releases and rollback",
+      "points": 2
+    },
+    {
+      "id": "logs",
+      "title": "Logs across pods",
+      "points": 1
+    }
+  ],
+  "pass_score": 11
+}

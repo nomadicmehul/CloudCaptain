@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-mem
+  labels:
+    app: cc-mem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cc-mem
+  template:
+    metadata:
+      labels:
+        app: cc-mem
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: worker
+          image: python:3.12.13-alpine3.22
+          command: ["python3", "-c"]
+          args:
+            - |
+              print("cc-mem warming the cache", flush=True)
+              cache = b"x" * (256 * 1024 * 1024)
+              print("cache ready", len(cache), flush=True)
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 48Mi

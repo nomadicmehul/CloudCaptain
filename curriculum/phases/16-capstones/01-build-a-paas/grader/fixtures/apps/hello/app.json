@@ -1,0 +1,14 @@
+{
+  "name": "hello",
+  "description": "A tiny stdlib web app the grader deploys",
+  "web": "python3 app.py",
+  "port": 8080,
+  "health": "/healthz",
+  "env": {
+    "GREETING": "hello"
+  },
+  "resources": {
+    "cpu": "100m",
+    "memory": "64Mi"
+  }
+}

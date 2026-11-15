@@ -1,0 +1,957 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.13.9",
+  "planned_values": {
+    "root_module": {
+      "resources": [],
+      "child_modules": [
+        {
+          "address": "module.baseline",
+          "resources": [
+            {
+              "address": "module.baseline.aws_s3_bucket.log_archive",
+              "mode": "managed",
+              "type": "aws_s3_bucket",
+              "name": "log_archive",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "bucket": "lz-dev-log-archive",
+                "force_destroy": false,
+                "object_lock_enabled": false,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-log-archive"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-log-archive"
+                },
+                "timeouts": null
+              },
+              "sensitive_values": {
+                "tags": {},
+                "tags_all": {}
+              }
+            },
+            {
+              "address": "module.baseline.aws_s3_bucket_public_access_block.log_archive",
+              "mode": "managed",
+              "type": "aws_s3_bucket_public_access_block",
+              "name": "log_archive",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "block_public_acls": true,
+                "block_public_policy": true,
+                "ignore_public_acls": true,
+                "restrict_public_buckets": true,
+                "skip_destroy": null
+              },
+              "sensitive_values": {}
+            },
+            {
+              "address": "module.baseline.aws_s3_bucket_server_side_encryption_configuration.log_archive",
+              "mode": "managed",
+              "type": "aws_s3_bucket_server_side_encryption_configuration",
+              "name": "log_archive",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "expected_bucket_owner": null,
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": null,
+                        "sse_algorithm": "AES256"
+                      }
+                    ],
+                    "bucket_key_enabled": null
+                  }
+                ]
+              },
+              "sensitive_values": {
+                "rule": []
+              }
+            }
+          ]
+        },
+        {
+          "address": "module.network",
+          "resources": [
+            {
+              "address": "module.network.aws_vpc.this",
+              "mode": "managed",
+              "type": "aws_vpc",
+              "name": "this",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "assign_generated_ipv6_cidr_block": null,
+                "cidr_block": "192.168.0.0/16",
+                "enable_dns_hostnames": true,
+                "enable_dns_support": true,
+                "instance_tenancy": "default",
+                "ipv4_ipam_pool_id": null,
+                "ipv4_netmask_length": null,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev"
+                }
+              },
+              "sensitive_values": {
+                "tags": {},
+                "tags_all": {}
+              }
+            },
+            {
+              "address": "module.network.aws_subnet.private[0]",
+              "mode": "managed",
+              "type": "aws_subnet",
+              "name": "private",
+              "index": 0,
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "availability_zone": "eu-central-1a",
+                "cidr_block": "10.1.0.0/20",
+                "map_public_ip_on_launch": false,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-private-eu-central-1a",
+                  "tier": "private"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-private-eu-central-1a",
+                  "tier": "private"
+                },
+                "timeouts": null
+              },
+              "sensitive_values": {
+                "tags": {},
+                "tags_all": {}
+              }
+            },
+            {
+              "address": "module.network.aws_subnet.private[1]",
+              "mode": "managed",
+              "type": "aws_subnet",
+              "name": "private",
+              "index": 1,
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "availability_zone": "eu-central-1b",
+                "cidr_block": "10.1.16.0/20",
+                "map_public_ip_on_launch": false,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-private-eu-central-1b",
+                  "tier": "private"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-private-eu-central-1b",
+                  "tier": "private"
+                },
+                "timeouts": null
+              },
+              "sensitive_values": {
+                "tags": {},
+                "tags_all": {}
+              }
+            },
+            {
+              "address": "module.network.aws_security_group.lb",
+              "mode": "managed",
+              "type": "aws_security_group",
+              "name": "lb",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "description": "managed by the landing zone",
+                "egress": [
+                  {
+                    "cidr_blocks": [
+                      "10.1.0.0/16"
+                    ],
+                    "description": "",
+                    "from_port": 0,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "-1",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 0
+                  }
+                ],
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "description": "lb-https",
+                    "from_port": 443,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "tcp",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 443
+                  }
+                ],
+                "name": "lz-dev-lb",
+                "revoke_rules_on_delete": false,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-lb",
+                  "role": "load-balancer"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-lb",
+                  "role": "load-balancer"
+                },
+                "timeouts": null
+              },
+              "sensitive_values": {
+                "egress": [],
+                "ingress": [],
+                "tags": {},
+                "tags_all": {}
+              }
+            },
+            {
+              "address": "module.network.aws_security_group.app",
+              "mode": "managed",
+              "type": "aws_security_group",
+              "name": "app",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "description": "managed by the landing zone",
+                "egress": [
+                  {
+                    "cidr_blocks": [
+                      "10.1.0.0/16"
+                    ],
+                    "description": "",
+                    "from_port": 0,
+                    "ipv6_cidr_blocks": [],
+                    "prefix_list_ids": [],
+                    "protocol": "-1",
+                    "security_groups": [],
+                    "self": false,
+                    "to_port": 0
+                  }
+                ],
+                "ingress": [],
+                "name": "lz-dev-app",
+                "revoke_rules_on_delete": false,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-app",
+                  "role": "app"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-app",
+                  "role": "app"
+                },
+                "timeouts": null
+              },
+              "sensitive_values": {
+                "egress": [],
+                "ingress": [],
+                "tags": {},
+                "tags_all": {}
+              }
+            },
+            {
+              "address": "module.network.aws_flow_log.this",
+              "mode": "managed",
+              "type": "aws_flow_log",
+              "name": "this",
+              "provider_name": "registry.opentofu.org/hashicorp/aws",
+              "schema_version": 0,
+              "values": {
+                "deliver_cross_account_role": null,
+                "destination_options": [],
+                "eni_id": null,
+                "iam_role_arn": null,
+                "log_destination_type": "s3",
+                "max_aggregation_interval": 60,
+                "subnet_id": null,
+                "tags": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-flow-log"
+                },
+                "tags_all": {
+                  "owner": "platform-team",
+                  "env": "dev",
+                  "cost-center": "cc-1042",
+                  "Name": "lz-dev-flow-log"
+                },
+                "traffic_type": "ALL",
+                "transit_gateway_attachment_id": null,
+                "transit_gateway_id": null
+              },
+              "sensitive_values": {
+                "destination_options": [],
+                "tags": {},
+                "tags_all": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "module.baseline.aws_s3_bucket.log_archive",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "log_archive",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "bucket": "lz-dev-log-archive",
+          "force_destroy": false,
+          "object_lock_enabled": false,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-log-archive"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-log-archive"
+          },
+          "timeouts": null
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "bucket_domain_name": true,
+          "bucket_regional_domain_name": true,
+          "hosted_zone_id": true,
+          "region": true,
+          "acceleration_status": true,
+          "acl": true,
+          "grant": true,
+          "policy": true,
+          "versioning": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.baseline"
+    },
+    {
+      "address": "module.baseline.aws_s3_bucket_public_access_block.log_archive",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "log_archive",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "block_public_acls": true,
+          "block_public_policy": true,
+          "ignore_public_acls": true,
+          "restrict_public_buckets": true,
+          "skip_destroy": null
+        },
+        "after_unknown": {
+          "id": true,
+          "bucket": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      },
+      "module_address": "module.baseline"
+    },
+    {
+      "address": "module.baseline.aws_s3_bucket_server_side_encryption_configuration.log_archive",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "log_archive",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "expected_bucket_owner": null,
+          "rule": [
+            {
+              "apply_server_side_encryption_by_default": [
+                {
+                  "kms_master_key_id": null,
+                  "sse_algorithm": "AES256"
+                }
+              ],
+              "bucket_key_enabled": null
+            }
+          ]
+        },
+        "after_unknown": {
+          "id": true,
+          "bucket": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "rule": []
+        }
+      },
+      "module_address": "module.baseline"
+    },
+    {
+      "address": "module.network.aws_vpc.this",
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "this",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "assign_generated_ipv6_cidr_block": null,
+          "cidr_block": "192.168.0.0/16",
+          "enable_dns_hostnames": true,
+          "enable_dns_support": true,
+          "instance_tenancy": "default",
+          "ipv4_ipam_pool_id": null,
+          "ipv4_netmask_length": null,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev"
+          }
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "default_network_acl_id": true,
+          "default_route_table_id": true,
+          "default_security_group_id": true,
+          "main_route_table_id": true,
+          "owner_id": true,
+          "ipv6_association_id": true,
+          "ipv6_cidr_block": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.network"
+    },
+    {
+      "address": "module.network.aws_subnet.private[0]",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "private",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "availability_zone": "eu-central-1a",
+          "cidr_block": "10.1.0.0/20",
+          "map_public_ip_on_launch": false,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-private-eu-central-1a",
+            "tier": "private"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-private-eu-central-1a",
+            "tier": "private"
+          },
+          "timeouts": null
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "vpc_id": true,
+          "owner_id": true,
+          "availability_zone_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.network",
+      "index": 0
+    },
+    {
+      "address": "module.network.aws_subnet.private[1]",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "private",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "availability_zone": "eu-central-1b",
+          "cidr_block": "10.1.16.0/20",
+          "map_public_ip_on_launch": false,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-private-eu-central-1b",
+            "tier": "private"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-private-eu-central-1b",
+            "tier": "private"
+          },
+          "timeouts": null
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "vpc_id": true,
+          "owner_id": true,
+          "availability_zone_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.network",
+      "index": 1
+    },
+    {
+      "address": "module.network.aws_security_group.lb",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "lb",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "description": "managed by the landing zone",
+          "egress": [
+            {
+              "cidr_blocks": [
+                "10.1.0.0/16"
+              ],
+              "description": "",
+              "from_port": 0,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "-1",
+              "security_groups": [],
+              "self": false,
+              "to_port": 0
+            }
+          ],
+          "ingress": [
+            {
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ],
+              "description": "lb-https",
+              "from_port": 443,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "tcp",
+              "security_groups": [],
+              "self": false,
+              "to_port": 443
+            }
+          ],
+          "name": "lz-dev-lb",
+          "revoke_rules_on_delete": false,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-lb",
+            "role": "load-balancer"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-lb",
+            "role": "load-balancer"
+          },
+          "timeouts": null
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "owner_id": true,
+          "vpc_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "egress": [],
+          "ingress": [],
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.network"
+    },
+    {
+      "address": "module.network.aws_security_group.app",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "app",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "description": "managed by the landing zone",
+          "egress": [
+            {
+              "cidr_blocks": [
+                "10.1.0.0/16"
+              ],
+              "description": "",
+              "from_port": 0,
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "protocol": "-1",
+              "security_groups": [],
+              "self": false,
+              "to_port": 0
+            }
+          ],
+          "ingress": [],
+          "name": "lz-dev-app",
+          "revoke_rules_on_delete": false,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-app",
+            "role": "app"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-app",
+            "role": "app"
+          },
+          "timeouts": null
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "owner_id": true,
+          "vpc_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "egress": [],
+          "ingress": [],
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.network"
+    },
+    {
+      "address": "module.network.aws_flow_log.this",
+      "mode": "managed",
+      "type": "aws_flow_log",
+      "name": "this",
+      "provider_name": "registry.opentofu.org/hashicorp/aws",
+      "change": {
+        "actions": [
+          "create"
+        ],
+        "before": null,
+        "after": {
+          "deliver_cross_account_role": null,
+          "destination_options": [],
+          "eni_id": null,
+          "iam_role_arn": null,
+          "log_destination_type": "s3",
+          "max_aggregation_interval": 60,
+          "subnet_id": null,
+          "tags": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-flow-log"
+          },
+          "tags_all": {
+            "owner": "platform-team",
+            "env": "dev",
+            "cost-center": "cc-1042",
+            "Name": "lz-dev-flow-log"
+          },
+          "traffic_type": "ALL",
+          "transit_gateway_attachment_id": null,
+          "transit_gateway_id": null
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "vpc_id": true,
+          "log_destination": true,
+          "log_format": true,
+          "log_group_name": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {
+          "destination_options": [],
+          "tags": {},
+          "tags_all": {}
+        }
+      },
+      "module_address": "module.network"
+    }
+  ],
+  "configuration": {
+    "provider_config": {
+      "aws": {
+        "name": "aws",
+        "full_name": "registry.opentofu.org/hashicorp/aws",
+        "version_constraint": "6.73.0",
+        "expressions": {
+          "region": {
+            "references": [
+              "var.region"
+            ]
+          }
+        }
+      }
+    },
+    "root_module": {
+      "resources": [],
+      "module_calls": {
+        "baseline": {
+          "source": "../../modules/baseline",
+          "module": {
+            "resources": [
+              {
+                "address": "aws_s3_bucket.log_archive",
+                "mode": "managed",
+                "type": "aws_s3_bucket",
+                "name": "log_archive",
+                "provider_config_key": "baseline:aws",
+                "expressions": {},
+                "schema_version": 0
+              },
+              {
+                "address": "aws_s3_bucket_public_access_block.log_archive",
+                "mode": "managed",
+                "type": "aws_s3_bucket_public_access_block",
+                "name": "log_archive",
+                "provider_config_key": "baseline:aws",
+                "expressions": {
+                  "bucket": {
+                    "references": [
+                      "aws_s3_bucket.log_archive.id",
+                      "aws_s3_bucket.log_archive"
+                    ]
+                  }
+                },
+                "schema_version": 0
+              },
+              {
+                "address": "aws_s3_bucket_server_side_encryption_configuration.log_archive",
+                "mode": "managed",
+                "type": "aws_s3_bucket_server_side_encryption_configuration",
+                "name": "log_archive",
+                "provider_config_key": "baseline:aws",
+                "expressions": {
+                  "bucket": {
+                    "references": [
+                      "aws_s3_bucket.log_archive.id",
+                      "aws_s3_bucket.log_archive"
+                    ]
+                  }
+                },
+                "schema_version": 0
+              }
+            ]
+          }
+        },
+        "network": {
+          "source": "../../modules/network",
+          "module": {
+            "resources": [
+              {
+                "address": "aws_vpc.this",
+                "mode": "managed",
+                "type": "aws_vpc",
+                "name": "this",
+                "provider_config_key": "network:aws",
+                "expressions": {},
+                "schema_version": 0
+              },
+              {
+                "address": "aws_subnet.private",
+                "mode": "managed",
+                "type": "aws_subnet",
+                "name": "private",
+                "provider_config_key": "network:aws",
+                "expressions": {
+                  "vpc_id": {
+                    "references": [
+                      "aws_vpc.this.id",
+                      "aws_vpc.this"
+                    ]
+                  }
+                },
+                "schema_version": 0,
+                "count_expression": {
+                  "references": [
+                    "var.zones"
+                  ]
+                }
+              },
+              {
+                "address": "aws_security_group.lb",
+                "mode": "managed",
+                "type": "aws_security_group",
+                "name": "lb",
+                "provider_config_key": "network:aws",
+                "expressions": {
+                  "vpc_id": {
+                    "references": [
+                      "aws_vpc.this.id",
+                      "aws_vpc.this"
+                    ]
+                  }
+                },
+                "schema_version": 0
+              },
+              {
+                "address": "aws_security_group.app",
+                "mode": "managed",
+                "type": "aws_security_group",
+                "name": "app",
+                "provider_config_key": "network:aws",
+                "expressions": {
+                  "vpc_id": {
+                    "references": [
+                      "aws_vpc.this.id",
+                      "aws_vpc.this"
+                    ]
+                  }
+                },
+                "schema_version": 0
+              },
+              {
+                "address": "aws_flow_log.this",
+                "mode": "managed",
+                "type": "aws_flow_log",
+                "name": "this",
+                "provider_config_key": "network:aws",
+                "expressions": {
+                  "vpc_id": {
+                    "references": [
+                      "aws_vpc.this.id",
+                      "aws_vpc.this"
+                    ]
+                  },
+                  "log_destination": {
+                    "references": [
+                      "var.flow_log_destination"
+                    ]
+                  }
+                },
+                "schema_version": 0
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "timestamp": "2026-11-13T09:00:00Z",
+  "applyable": true,
+  "complete": true,
+  "errored": false
+}

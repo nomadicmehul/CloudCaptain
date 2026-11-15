@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-ok
+  labels:
+    app: cc-ok
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cc-ok
+  template:
+    metadata:
+      labels:
+        app: cc-ok
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: web
+          image: python:3.12.13-alpine3.22
+          command: ["python3", "-m", "http.server", "8080"]
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 2
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cc-ok
+spec:
+  selector:
+    app: cc-ok
+  ports:
+    - port: 80
+      targetPort: 8080

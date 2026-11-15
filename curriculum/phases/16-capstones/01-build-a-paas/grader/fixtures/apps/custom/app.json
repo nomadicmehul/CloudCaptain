@@ -1,0 +1,9 @@
+{
+  "name": "custom",
+  "port": 8080,
+  "health": "/healthz",
+  "resources": {
+    "cpu": "100m",
+    "memory": "64Mi"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "about": "Each case is written to its own folder (string values verbatim, objects as JSON), then graded with tinypaas validate <dir> --json. valid: the expected verdict; paths: the exact set of error paths.",
+  "cases": [
+    {
+      "id": "python-app",
+      "files": {
+        "app.json": {"name": "hello", "web": "python3 app.py", "port": 8080, "health": "/healthz", "env": {"GREETING": "hi"}, "resources": {"cpu": "100m", "memory": "64Mi"}, "replicas": 2},
+        "app.py": "print('hello')\n"
+      },
+      "valid": true,
+      "paths": []
+    },
+    {
+      "id": "dockerfile-app",
+      "files": {
+        "app.json": {"name": "custom-2", "port": 9000, "health": "/ready"},
+        "Dockerfile": "FROM python:3.13-alpine\nCMD [\"python3\", \"-m\", \"http.server\", \"9000\"]\n"
+      },
+      "valid": true,
+      "paths": []
+    },
+    {
+      "id": "static-app",
+      "files": {
+        "app.json": {"name": "docs", "description": "a static site", "static": "public", "port": 8080, "health": "/healthz", "resources": {"cpu": "0.25"}},
+        "public/index.html": "<p>docs</p>\n",
+        "public/healthz": "ok\n"
+      },
+      "valid": true,
+      "paths": []
+    },
+    {
+      "id": "bad-name",
+      "files": {
+        "app.json": {"name": "Hello_App", "web": "python3 app.py", "port": 8080, "health": "/healthz"}
+      },
+      "valid": false,
+      "paths": ["$.name"]
+    },
+    {
+      "id": "name-too-long",
+      "files": {
+        "app.json": {"name": "a-name-that-is-far-too-long-for-tinypaas", "web": "python3 app.py", "port": 8080, "health": "/healthz"}
+      },
+      "valid": false,
+      "paths": ["$.name"]
+    },
+    {
+      "id": "nothing-to-run",
+      "files": {
+        "app.json": {"name": "idle", "port": 8080, "health": "/healthz"}
+      },
+      "valid": false,
+      "paths": ["$.web"]
+    },
+    {
+      "id": "port-and-health",
+      "files": {
+        "app.json": {"name": "web", "web": "python3 app.py", "port": "8080", "health": "healthz"}
+      },
+      "valid": false,
+      "paths": ["$.port", "$.health"]
+    },
+    {
+      "id": "env-values",
+      "files": {
+        "app.json": {"name": "web", "web": "python3 app.py", "port": 8080, "health": "/healthz", "env": {"lower-case": "x", "COUNT": 3, "OK_VALUE": "fine"}}
+      },
+      "valid": false,
+      "paths": ["$.env.lower-case", "$.env.COUNT"]
+    },
+    {
+      "id": "resources",
+      "files": {
+        "app.json": {"name": "web", "web": "python3 app.py", "port": 8080, "health": "/healthz", "resources": {"cpu": "lots", "memory": "64MB", "gpu": "1"}}
+      },
+      "valid": false,
+      "paths": ["$.resources.cpu", "$.resources.memory", "$.resources.gpu"]
+    },
+    {
+      "id": "everything-at-once",
+      "files": {
+        "app.json": {"web": "python3 app.py", "port": 80, "helth": "/healthz", "replicas": 0, "static": "public"}
+      },
+      "valid": false,
+      "paths": ["$.name", "$.port", "$.health", "$.helth", "$.replicas", "$.static"]
+    },
+    {
+      "id": "static-dir-missing",
+      "files": {
+        "app.json": {"name": "docs", "static": "site", "port": 8080, "health": "/"}
+      },
+      "valid": false,
+      "paths": ["$.static"]
+    },
+    {
+      "id": "not-json",
+      "files": {
+        "app.json": "{\"name\": \"broken\",\n"
+      },
+      "valid": false,
+      "paths": ["$"]
+    },
+    {
+      "id": "no-manifest",
+      "files": {
+        "app.py": "print('no app.json here')\n"
+      },
+      "valid": false,
+      "paths": ["$"]
+    }
+  ]
+}

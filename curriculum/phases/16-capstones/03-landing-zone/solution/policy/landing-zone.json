@@ -1,0 +1,17 @@
+{
+  "required_tags": [
+    "owner",
+    "env",
+    "cost-center"
+  ],
+  "allocation": "10.0.0.0/8",
+  "public_ingress": {
+    "ports": [
+      443
+    ],
+    "protocol": "tcp",
+    "tag": {
+      "role": "load-balancer"
+    }
+  }
+}

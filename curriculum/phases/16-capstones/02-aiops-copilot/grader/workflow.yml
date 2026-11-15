@@ -1,0 +1,43 @@
+# CloudCaptain capstone grader for capstones/aiops-copilot.
+# Copy this file to .github/workflows/cloudcaptain-grade.yml in your project
+# repository (the one you started from starter/). Every push grades the project
+# against a throwaway kind cluster and writes the score table to the run's
+# summary page. No API key is needed: the grader uses its own fake model.
+name: CloudCaptain capstone grade
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+
+      # The grader is fetched from CloudCaptain, so it stays current and
+      # your repository does not need a copy of it.
+      - uses: actions/checkout@v4
+        with:
+          repository: nomadicmehul/CloudCaptain
+          path: cloudcaptain
+          sparse-checkout: curriculum/phases/16-capstones/02-aiops-copilot
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # A kind cluster the grader creates its incidents in (context kind-cc-grade).
+      - uses: helm/kind-action@v1
+        with:
+          cluster_name: cc-grade
+          wait: 120s
+
+      - name: Grade
+        run: bash cloudcaptain/curriculum/phases/16-capstones/02-aiops-copilot/grader/grade.sh project

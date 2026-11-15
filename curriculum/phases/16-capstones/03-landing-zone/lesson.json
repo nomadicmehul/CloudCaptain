@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "capstones/landing-zone",
+  "title": "A Landing Zone You Can Prove: Multi-Cloud IaC With Guardrails",
+  "short": "Landing Zone",
+  "motto": "Ship a hub-and-spoke landing zone in OpenTofu with guardrails a grader can verify: real applies on moto, policy on plans, drift caught.",
+  "type": "Capstone",
+  "status": "published",
+  "minutes": 720,
+  "langs": [
+    "python",
+    "yaml"
+  ],
+  "prereqs": [
+    "iac/modules-variables",
+    "iac/remote-state-locking",
+    "iac/drift-detection",
+    "iac/policy-as-code",
+    "cloud/iam-policy-evaluator",
+    "cloud/vpc-reachability"
+  ],
+  "tools": [
+    "tofu",
+    "moto",
+    "docker"
+  ],
+  "reference": [
+    "/docs/tools/terraform/advanced",
+    "/docs/tools/terraform/fundamentals",
+    "/docs/cloud/aws/compute-networking",
+    "/docs/cloud/aws/security-iam",
+    "/docs/tools/devsecops/fundamentals"
+  ],
+  "outputs": [
+    "skill-landing-zone-review.md",
+    "prompt-explain-guardrail-violation.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s grader/tests -v"
+  },
+  "smoke": "bash grader/smoke.sh",
+  "milestones": [
+    {
+      "id": "module-structure",
+      "title": "Module structure",
+      "points": 2
+    },
+    {
+      "id": "network-baseline",
+      "title": "Network baseline",
+      "points": 3
+    },
+    {
+      "id": "identity-guardrails",
+      "title": "Identity guardrails",
+      "points": 3
+    },
+    {
+      "id": "policy-gate",
+      "title": "Policy as code on plans",
+      "points": 3
+    },
+    {
+      "id": "multi-cloud",
+      "title": "Same interface on GCP and Azure",
+      "points": 2
+    },
+    {
+      "id": "state-drift",
+      "title": "Remote state and drift",
+      "points": 2
+    }
+  ],
+  "pass_score": 11
+}

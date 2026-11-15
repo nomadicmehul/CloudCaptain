@@ -1,0 +1,6 @@
+{
+  "name": "site",
+  "static": "public",
+  "port": 8080,
+  "health": "/healthz"
+}

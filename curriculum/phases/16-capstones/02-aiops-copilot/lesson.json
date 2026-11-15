@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../schema/lesson.schema.json",
+  "id": "capstones/aiops-copilot",
+  "title": "An AIOps Copilot That Triages Real Incidents",
+  "short": "AIOps Copilot",
+  "motto": "Evidence first, rules second, the model third: a copilot that proposes fixes, proves its claims and never touches what it should not.",
+  "type": "Capstone",
+  "status": "published",
+  "minutes": 720,
+  "langs": [
+    "python"
+  ],
+  "prereqs": [
+    "aiops/mcp-kubectl-server",
+    "aiops/incident-triage-agent",
+    "aiops/guardrails-sandboxes",
+    "aiops/write-tools-safely",
+    "aiops/agent-evals"
+  ],
+  "tools": [
+    "kubectl",
+    "kind",
+    "claude-api"
+  ],
+  "reference": [
+    "/docs/tools/kubernetes/production-operations",
+    "/docs/tools/kubernetes/cheatsheet",
+    "/docs/tools/kubernetes/workloads",
+    "/docs/tools/observability",
+    "/docs/learning-paths/ai-ml"
+  ],
+  "outputs": [
+    "skill-aiops-copilot-review.md",
+    "agent-oncall-copilot.md"
+  ],
+  "tests": {
+    "python": "python3 -m unittest discover -s grader/tests -v"
+  },
+  "smoke": "bash grader/smoke.sh",
+  "milestones": [
+    {
+      "id": "evidence",
+      "title": "Collect evidence",
+      "points": 3
+    },
+    {
+      "id": "triage",
+      "title": "Triage without a model",
+      "points": 3
+    },
+    {
+      "id": "agent-loop",
+      "title": "Run the agent loop",
+      "points": 3
+    },
+    {
+      "id": "guardrails",
+      "title": "Guardrails and redaction",
+      "points": 3
+    },
+    {
+      "id": "report",
+      "title": "Write the incident report",
+      "points": 2
+    },
+    {
+      "id": "evals",
+      "title": "Evaluate the copilot",
+      "points": 2
+    }
+  ],
+  "pass_score": 12
+}

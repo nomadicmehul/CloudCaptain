@@ -1,0 +1,50 @@
+# CloudCaptain capstone grader for capstones/landing-zone.
+# Copy this file to .github/workflows/cloudcaptain-grade.yml in your project
+# repository (the one you started from starter/). Every push grades the project
+# and writes the score table to the run's summary page. The grader needs no
+# cloud account: it starts moto (motoserver/moto) with Docker on the runner and
+# runs OpenTofu against it.
+name: CloudCaptain capstone grade
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+
+      # The grader is fetched from CloudCaptain, so it stays current and
+      # your repository does not need a copy of it.
+      - uses: actions/checkout@v4
+        with:
+          repository: nomadicmehul/CloudCaptain
+          path: cloudcaptain
+          sparse-checkout: curriculum/phases/16-capstones/03-landing-zone
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.13.9
+          tofu_wrapper: false
+
+      # Provider packages are large (the AWS provider alone is over 150 MB);
+      # keep them between runs, keyed on your lock files.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/cloudcaptain-grader/tofu-plugins
+          key: tofu-plugins-${{ hashFiles('project/**/.terraform.lock.hcl') }}
+
+      - name: Grade
+        run: bash cloudcaptain/curriculum/phases/16-capstones/03-landing-zone/grader/grade.sh project

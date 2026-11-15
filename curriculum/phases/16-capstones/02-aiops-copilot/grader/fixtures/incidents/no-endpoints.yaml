@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-web
+  labels:
+    app: cc-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cc-web
+  template:
+    metadata:
+      labels:
+        app: cc-web
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: web
+          image: python:3.12.13-alpine3.22
+          command: ["python3", "-m", "http.server", "8080"]
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 2
+            failureThreshold: 1
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cc-web
+spec:
+  selector:
+    app: cc-web
+  ports:
+    - port: 80
+      targetPort: 8080

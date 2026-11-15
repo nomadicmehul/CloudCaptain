@@ -1,0 +1,46 @@
+# CloudCaptain capstone grader for capstones/build-a-paas.
+# Copy this file to .github/workflows/cloudcaptain-grade.yml in your project
+# repository (the one you started from starter/). Every push grades the project
+# on a throwaway kind cluster and writes the score table to the run's summary page.
+name: CloudCaptain capstone grade
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: project
+
+      # The grader is fetched from CloudCaptain, so it stays current and
+      # your repository does not need a copy of it.
+      - uses: actions/checkout@v4
+        with:
+          repository: nomadicmehul/CloudCaptain
+          path: cloudcaptain
+          sparse-checkout: curriculum/phases/16-capstones/01-build-a-paas
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # A kind cluster named tinypaas: the current kubectl context becomes
+      # kind-tinypaas, which the grader accepts. Docker and git are on the runner.
+      - uses: helm/kind-action@v1
+        with:
+          version: v0.33.0
+          cluster_name: tinypaas
+          wait: 120s
+
+      # Add setup steps for your own language here if bin/tinypaas is not Python.
+
+      - name: Grade
+        run: bash cloudcaptain/curriculum/phases/16-capstones/01-build-a-paas/grader/grade.sh project

@@ -37,7 +37,8 @@ jobs:
     needs: plan
     name: smoke (${{ matrix.phase }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Capstones grade three whole projects (reference solution and starter) in one job.
+    timeout-minutes: ${{ matrix.phase == 'capstones' && 45 || 30 }}
     strategy:
       fail-fast: false
       matrix:

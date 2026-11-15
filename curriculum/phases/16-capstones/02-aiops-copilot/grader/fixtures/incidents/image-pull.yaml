@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-img
+  labels:
+    app: cc-img
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cc-img
+  template:
+    metadata:
+      labels:
+        app: cc-img
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+        - name: app
+          image: python:3.12.13-alpine3.22-cc-grade-missing
+          command: ["python3", "-m", "http.server", "8080"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi

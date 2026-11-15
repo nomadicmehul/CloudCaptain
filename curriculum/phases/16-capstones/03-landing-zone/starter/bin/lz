@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+import argparse
+import os
+import sys
+import urllib.parse
+
+LOCAL_HOSTS = ("127.0.0.1", "localhost", "::1")
+MILESTONES = {
+    "plan": "policy-gate (plan an env, write `tofu show -json` output, print {\"plan_json\": path})",
+    "apply": "network-baseline (init with the S3 backend, apply an env)",
+    "policy": "policy-gate (judge a plan JSON, print {\"violations\": [...]}, exit 1 on violations)",
+    "drift": "state-drift (refresh-only plan, print {\"drifted\": bool, \"resources\": [...]}, exit 2 on drift)",
+}
+
+
+def project_root():
+    return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
+
+def local_endpoint(value):
+    parsed = urllib.parse.urlparse(value.strip())
+    if parsed.scheme not in ("http", "https") or parsed.hostname not in LOCAL_HOSTS:
+        raise SystemExit(f"lz: LZ_AWS_ENDPOINT={value!r} is not a local emulator URL such as http://127.0.0.1:5000; unset it to use a real account")
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+
+def tofu_environment():
+    env = dict(os.environ)
+    given = env.get("LZ_AWS_ENDPOINT", "").strip()
+    if given:
+        endpoint = local_endpoint(given)
+        env["TF_VAR_aws_endpoint"] = endpoint
+        env.setdefault("AWS_ACCESS_KEY_ID", "testing")
+        env.setdefault("AWS_SECRET_ACCESS_KEY", "testing")
+        env.setdefault("AWS_REGION", "eu-central-1")
+    return env
+
+
+def not_implemented(command):
+    print(f"not implemented: milestone {MILESTONES[command]}", file=sys.stderr)
+    return 1
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(prog="lz", description="Plan, apply, gate and watch the landing zone.")
+    sub = parser.add_subparsers(dest="command", required=True)
+    for name in ("plan", "apply", "drift"):
+        command = sub.add_parser(name)
+        command.add_argument("env")
+        command.add_argument("--json", action="store_true")
+    policy = sub.add_parser("policy")
+    policy.add_argument("plan")
+    policy.add_argument("--json", action="store_true")
+    args = parser.parse_args(argv)
+    return not_implemented(args.command)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

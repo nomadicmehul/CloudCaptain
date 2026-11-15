@@ -1,0 +1,129 @@
+{
+  "cases": [
+    {
+      "file": "clean.json",
+      "why": "a compliant spoke: tagged, private bucket, only 443 public",
+      "expect": []
+    },
+    {
+      "file": "missing-cost-center.json",
+      "why": "the VPC has no cost-center tag",
+      "expect": [
+        {
+          "rule": "required-tags",
+          "address": "module.network.aws_vpc.this"
+        }
+      ]
+    },
+    {
+      "file": "empty-owner.json",
+      "why": "the owner tag is empty",
+      "expect": [
+        {
+          "rule": "required-tags",
+          "address": "module.network.aws_security_group.lb"
+        }
+      ]
+    },
+    {
+      "file": "public-access-block-off.json",
+      "why": "the bucket's public access block allows public policies",
+      "expect": [
+        {
+          "rule": "no-public-s3",
+          "address": "module.baseline.aws_s3_bucket.log_archive"
+        }
+      ]
+    },
+    {
+      "file": "no-public-access-block.json",
+      "why": "the bucket has no public access block at all",
+      "expect": [
+        {
+          "rule": "no-public-s3",
+          "address": "module.baseline.aws_s3_bucket.log_archive"
+        }
+      ]
+    },
+    {
+      "file": "ssh-from-internet.json",
+      "why": "SSH open to 0.0.0.0/0",
+      "expect": [
+        {
+          "rule": "no-open-ingress",
+          "address": "module.network.aws_security_group.app"
+        }
+      ]
+    },
+    {
+      "file": "https-on-untagged-group.json",
+      "why": "443 from the internet on a group not tagged role=load-balancer",
+      "expect": [
+        {
+          "rule": "no-open-ingress",
+          "address": "module.network.aws_security_group.lb"
+        }
+      ]
+    },
+    {
+      "file": "all-ports-on-lb.json",
+      "why": "every port open on the load-balancer group",
+      "expect": [
+        {
+          "rule": "no-open-ingress",
+          "address": "module.network.aws_security_group.lb"
+        }
+      ]
+    },
+    {
+      "file": "unencrypted-bucket.json",
+      "why": "the bucket has no server-side encryption configuration",
+      "expect": [
+        {
+          "rule": "encryption",
+          "address": "module.baseline.aws_s3_bucket.log_archive"
+        }
+      ]
+    },
+    {
+      "file": "unencrypted-volume.json",
+      "why": "an EBS volume with encrypted = false",
+      "expect": [
+        {
+          "rule": "encryption",
+          "address": "aws_ebs_volume.data"
+        }
+      ]
+    },
+    {
+      "file": "vpc-outside-allocation.json",
+      "why": "the VPC range is outside 10.0.0.0/8",
+      "expect": [
+        {
+          "rule": "cidr-allocation",
+          "address": "module.network.aws_vpc.this"
+        }
+      ]
+    },
+    {
+      "file": "subnet-outside-allocation.json",
+      "why": "one subnet range is outside 10.0.0.0/8",
+      "expect": [
+        {
+          "rule": "cidr-allocation",
+          "address": "module.network.aws_subnet.private[1]"
+        }
+      ]
+    },
+    {
+      "file": "module-instance-unencrypted.json",
+      "why": "of two buckets made by one module with for_each, only the audit one lacks encryption",
+      "expect": [
+        {
+          "rule": "encryption",
+          "address": "module.buckets[\"audit\"].aws_s3_bucket.this"
+        }
+      ]
+    }
+  ]
+}
