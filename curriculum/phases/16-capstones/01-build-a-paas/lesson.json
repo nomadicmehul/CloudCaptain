@@ -39,6 +39,7 @@
     "python": "python3 -m unittest discover -s grader/tests -v"
   },
   "smoke": "bash grader/smoke.sh",
+  "last_verified": "2026-11-14",
   "milestones": [
     {
       "id": "app-manifest",

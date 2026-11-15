@@ -101,6 +101,43 @@ def holds(probe: Callable[[], Tuple[bool, Any]], seconds: float, interval: float
         SLEEP(interval)
 
 
+def steady(probe: Callable[[], Tuple[str, Any]], seconds: float, interval: float = 1.0) -> Tuple[str, Any]:
+    """Watch a probe that says "good", "wrong" or "unreachable" for `seconds`.
+
+    One "wrong" answer ends the watch. "unreachable" (a refused or timed-out connection)
+    is not an answer: kube-proxy can refuse a request for a moment while endpoints
+    change. It only counts against the app when it outnumbers the good answers.
+    """
+    deadline = CLOCK() + seconds
+    good, unreachable, last = 0, 0, None
+    while True:
+        verdict, detail = probe()
+        if verdict == "wrong":
+            return "wrong", detail
+        if verdict == "good":
+            good += 1
+        else:
+            unreachable, last = unreachable + 1, detail
+        if CLOCK() >= deadline:
+            break
+        SLEEP(interval)
+    if good >= 3 and good > unreachable:
+        return "good", (good, unreachable)
+    return "unreachable", (good, unreachable, last)
+
+
+def rollout_done(deployment: Dict[str, Any]) -> bool:
+    """Like `kubectl rollout status`: every replica updated and available, old ones gone."""
+    want = (deployment.get("spec") or {}).get("replicas", 1)
+    status = deployment.get("status") or {}
+    return (
+        status.get("observedGeneration", 0) >= deployment["metadata"].get("generation", 0)
+        and status.get("updatedReplicas", 0) == want
+        and status.get("availableReplicas", 0) == want
+        and status.get("replicas", 0) == want
+    )
+
+
 def parse_timestamp(text: str) -> Tuple[int, int]:
     match = TIMESTAMP_RE.match(text or "")
     if not match:
