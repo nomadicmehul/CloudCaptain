@@ -158,19 +158,35 @@ def git_push(project: str) -> str:
         s.commit(repo, {"body.txt": "pushed v2\n"}, "Second release")
         s.push(repo, bare, "main")
         s.wait_body(url, "pushed v2", 120)
+
+        # The first v2 answer can come while the v1 pod is still going away; start the
+        # feature-branch check from a finished rollout.
+        def rolled_out() -> Tuple[bool, Any]:
+            deployment = s.deployment(app)
+            return kit.rollout_done(deployment), deployment.get("status")
+        done, status = kit.poll(rolled_out, 120)
+        if not done:
+            raise Fail(f"the v2 rollout of {app} did not finish within 120s: status {json.dumps(status)}")
         before = s.deployment(app)
         s.git(repo, "checkout", "--quiet", "-b", "feature")
         feature = s.commit(repo, {"body.txt": "pushed from a feature branch\n"}, "Feature work")
         s.push(repo, bare, "feature")
 
-        def unchanged() -> Tuple[bool, Any]:
-            status, body = kit.fetch(url)
+        def unchanged() -> Tuple[str, Any]:
             now = s.deployment(app)
-            same = now["metadata"]["generation"] == before["metadata"]["generation"]
-            return same and status == 200 and body.strip() == "pushed v2", (status, body, same)
-        ok, seen = kit.holds(unchanged, 8)
-        if not ok:
-            raise Fail(f"a push to feature changed the app (answer {seen[0]} {kit.tail(seen[1], 80)!r}, Deployment unchanged: {seen[2]}): only pushes to main may deploy")
+            if now["metadata"]["generation"] != before["metadata"]["generation"]:
+                return "wrong", f"the Deployment changed: generation {before['metadata']['generation']} -> {now['metadata']['generation']}"
+            answer, body = kit.fetch(url)
+            if answer is None:
+                return "unreachable", body
+            if answer != 200 or body.strip() != "pushed v2":
+                return "wrong", f"the app answered {answer} {kit.tail(body, 80)!r} instead of 200 'pushed v2'"
+            return "good", None
+        verdict, seen = kit.steady(unchanged, 8)
+        if verdict == "wrong":
+            raise Fail(f"a push to feature changed the app ({seen}): only pushes to main may deploy")
+        if verdict == "unreachable":
+            raise Fail(f"after a push to feature the app stopped answering ({seen[0]} good answers, {seen[1]} failed requests, last: {kit.tail(str(seen[2]), 80)!r}): only pushes to main may deploy")
         if any(feature.startswith(tag) for tag in s.image_tags(app)):
             raise Fail("a push to feature built an image: the hook must ignore every ref except refs/heads/main")
         return "pushes to main deployed v1 then v2 within the deadline; a push to feature built and deployed nothing"

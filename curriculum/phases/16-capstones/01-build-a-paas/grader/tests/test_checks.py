@@ -254,6 +254,27 @@ class HelperTests(Base):
         self.assertEqual(value, 5.0)
         self.assertEqual(kit.holds(lambda: (now[0] < 7, now[0]), seconds=10), (False, 7.0))
 
+    def test_steady_ignores_a_refused_connection_but_not_a_wrong_answer(self):
+        now = [0.0]
+        kit.CLOCK = lambda: now[0]
+        kit.SLEEP = lambda seconds: now.__setitem__(0, now[0] + seconds)
+        blip = iter(["good", "unreachable", "good", "good", "good", "good", "good", "good", "good"])
+        self.assertEqual(kit.steady(lambda: (next(blip), "refused"), seconds=8), ("good", (8, 1)))
+        now[0] = 0.0
+        answers = iter(["good", "good", "wrong"])
+        self.assertEqual(kit.steady(lambda: (next(answers), "answered 'feature'"), seconds=8), ("wrong", "answered 'feature'"))
+        now[0] = 0.0
+        self.assertEqual(kit.steady(lambda: ("unreachable", "refused"), seconds=8), ("unreachable", (0, 9, "refused")))
+
+    def test_rollout_done_waits_for_old_replicas_to_go(self):
+        deployment = {"metadata": {"generation": 3}, "spec": {"replicas": 1},
+                      "status": {"observedGeneration": 3, "updatedReplicas": 1, "availableReplicas": 1, "replicas": 2}}
+        self.assertFalse(kit.rollout_done(deployment))
+        deployment["status"]["replicas"] = 1
+        self.assertTrue(kit.rollout_done(deployment))
+        deployment["metadata"]["generation"] = 4
+        self.assertFalse(kit.rollout_done(deployment))
+
     def test_fetch_via_node_splits_body_and_status(self):
         kit.RUNNER = FakeRunner([("curl", ok("hello\nworld\n200"))])
         self.assertEqual(kit.fetch_via_node(NODE, "http://172.18.0.2:30080/", 5), (200, "hello\nworld"))
