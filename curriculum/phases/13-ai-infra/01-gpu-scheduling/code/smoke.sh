@@ -144,8 +144,8 @@ first_sentence() {
   python3 -c 'import sys; text = sys.argv[1]; head = text.split(". ")[0]; print(head if head.endswith(".") else head + ".")' "$1"
 }
 
-snapshot
-NODE="$(python3 - "$WORK/nodes.json" <<'PY'
+schedulable_node() {
+  python3 - "$WORK/nodes.json" <<'PY'
 import json, sys
 for item in json.load(open(sys.argv[1]))["items"]:
     spec = item.get("spec") or {}
@@ -154,8 +154,17 @@ for item in json.load(open(sys.argv[1]))["items"]:
     print(item["metadata"]["name"])
     break
 PY
-)"
-[[ -n "$NODE" ]] || fail "no untainted, schedulable node in $CTX: $(k get nodes -o wide 2>&1)"
+}
+# A node that just turned Ready keeps node.kubernetes.io/not-ready:NoSchedule until the
+# node lifecycle controller removes it a few seconds later, so give a fresh cluster time.
+NODE=""
+for _ in $(seq 1 45); do
+  snapshot
+  NODE="$(schedulable_node)"
+  [[ -n "$NODE" ]] && break
+  sleep 2
+done
+[[ -n "$NODE" ]] || fail "no untainted, schedulable node in $CTX after 90 s: $(k get nodes -o custom-columns=NAME:.metadata.name,UNSCHEDULABLE:.spec.unschedulable,TAINTS:.spec.taints 2>&1)"
 N="$(python3 -c 'import json, sys; print(len(json.load(open(sys.argv[1]))["items"]))' "$WORK/nodes.json")"
 echo "▸ Use It on $CTX: advertise 4 x $RES on $NODE through the node's status subresource ($N node(s))"
 k delete namespace "$NS" --ignore-not-found --wait=true --timeout=90s >/dev/null 2>&1 || true
