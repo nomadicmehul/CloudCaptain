@@ -1870,6 +1870,13 @@ class JobRun:
     def done(self) -> bool:
         return self.result in FINAL_RESULTS
 
+    @property
+    def complete(self) -> bool:
+        # The result is set inside execute(); run_leg() still kills the leg's process
+        # groups and deletes its workspace before it stamps `finished`. Only then may
+        # jobs that need this one start.
+        return self.done and (self.started is None or self.finished is not None)
+
 
 @dataclass
 class JobState:
@@ -2511,7 +2518,7 @@ class Runner:
                 if other is not leg and not other.done and not other.cancel.is_set():
                     other.reason = f"cancelled by fail-fast after {leg.display} failed"
                     other.cancel.set()
-        if all(other.done for other in group):
+        if all(other.complete for other in group):
             outputs: Dict[str, str] = {}
             for other in sorted(group, key=lambda item: item.finished or 0):
                 outputs.update(other.outputs)

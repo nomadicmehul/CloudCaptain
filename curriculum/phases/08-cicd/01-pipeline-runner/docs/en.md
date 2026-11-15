@@ -187,7 +187,7 @@ The test `test_include_rules_from_the_documentation` uses the fruit and animal e
         )
 ```
 
-A skipped grandparent therefore skips a job whose direct need succeeded, which is why `!cancelled() && !failure()` exists. The job-level `if:` can read `github`, `needs`, `vars` and `inputs`, but not `matrix` or `env`, because it runs before the matrix is expanded. Each leg runs in a worker thread. `strategy.max-parallel` caps the legs of one job, and `--parallel` caps the whole runner. When a leg finishes, `leg_done()` applies fail-fast and, once the last leg is done, rolls the legs up into one result for `needs`. The result is failure if any leg failed, cancelled if any leg was cancelled, otherwise success:
+A skipped grandparent therefore skips a job whose direct need succeeded, which is why `!cancelled() && !failure()` exists. The job-level `if:` can read `github`, `needs`, `vars` and `inputs`, but not `matrix` or `env`, because it runs before the matrix is expanded. Each leg runs in a worker thread. `strategy.max-parallel` caps the legs of one job, and `--parallel` caps the whole runner. When a leg finishes, `leg_done()` applies fail-fast and, once every leg is `complete`, rolls the legs up into one result for `needs`. A leg's result is set before its thread has killed its processes and stamped `finished`, so `complete` waits for both; otherwise a dependent job could start while a sibling leg is still cleaning up. The result is failure if any leg failed, cancelled if any leg was cancelled, otherwise success:
 
 ```python
     def leg_done(self, leg: JobRun) -> None:

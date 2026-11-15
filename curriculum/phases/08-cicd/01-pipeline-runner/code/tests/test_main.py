@@ -6,10 +6,12 @@ import shutil
 import sys
 import tempfile
 import textwrap
+import threading
 import time
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
+from unittest import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -569,6 +571,45 @@ class RunTests(Sandbox):
         self.assertEqual(results, ["cancelled", "cancelled", "cancelled", "failure"])
         self.assertEqual(sorted(leg["result"] for leg in self.legs(summary, "loose")), ["failure", "success"])
         self.assertEqual(summary["results"]["test"], "failure")
+
+    def test_needs_wait_for_every_leg_to_finish_its_cleanup(self):
+        # test-2 has its result but has not finished cleaning up when test-1's thread
+        # ends; deploy must not start until test-2's thread is done too.
+        real_finish = main.Runner.finish
+        second_cleaning = threading.Event()
+
+        def finish(runner, leg, *args, **kwargs):
+            real_finish(runner, leg, *args, **kwargs)
+            if leg.key == "test-2":
+                second_cleaning.set()
+                time.sleep(0.3)
+            elif leg.key == "test-1":
+                second_cleaning.wait(5)
+
+        with mock.patch.object(main.Runner, "finish", finish):
+            summary, _ = self.run_text(
+                """
+                on: push
+                jobs:
+                  test:
+                    runs-on: x
+                    strategy:
+                      matrix:
+                        n: [1, 2]
+                    steps:
+                      - run: "true"
+                  deploy:
+                    needs: test
+                    runs-on: x
+                    steps:
+                      - run: "true"
+                """
+            )
+        self.assertTrue(second_cleaning.is_set())
+        last_test = max(leg["finished"] for leg in self.legs(summary, "test"))
+        deploy = self.legs(summary, "deploy")[0]
+        self.assertGreater(deploy["started"], last_test)
+        self.assertEqual(main.order_violations(summary), [])
 
     def test_env_precedence_is_workflow_job_github_env_step_and_defaults_win(self):
         summary, log = self.run_text(
