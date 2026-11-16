@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 /* ─── Scroll Reveal Hook ─── */
 function useScrollReveal() {
@@ -180,11 +181,20 @@ function TimelineEntry({
 }
 
 /* ─── Badge Card ─── */
-function BadgeCard({ title, org, icon, color }: { title: string; org: string; icon: string; color: string }) {
+function BadgeCard({ title, org, logo, color, former = false, mono = false }: {
+  title: string; org: string; logo: string; color: string; former?: boolean; mono?: boolean;
+}) {
   return (
     <div className="journey-badge-card reveal" style={{ '--badge-accent': color } as React.CSSProperties}>
-      <div className="journey-badge-icon">{icon}</div>
-      <div className="journey-badge-title">{title}</div>
+      <img
+        className={`journey-badge-logo${mono ? ' journey-badge-logo--mono' : ''}`}
+        src={useBaseUrl(logo)}
+        alt=""
+        aria-hidden="true"
+        width={56}
+        height={56}
+      />
+      <div className="journey-badge-title">{former ? `Ex-${title}` : title}</div>
       <div className="journey-badge-org">{org}</div>
     </div>
   );
@@ -279,12 +289,12 @@ export default function JourneyPage(): React.ReactElement {
             Earned through years of community leadership and open-source contributions.
           </p>
           <div className="journey-badges-grid">
-            <BadgeCard title="Docker Captain" org="Docker Inc." icon="&#x1F433;" color="#2496ED" />
-            <BadgeCard title="Google Developer Expert" org="Google Cloud Platform" icon="&#x2601;" color="#4285F4" />
-            <BadgeCard title="AWS Community Builder" org="Amazon Web Services" icon="&#x1F527;" color="#FF9900" />
-            <BadgeCard title="Auth0 Ambassador" org="Auth0 by Okta" icon="&#x1F510;" color="#EB5424" />
-            <BadgeCard title="Mozilla Reps Council" org="Mozilla Foundation" icon="&#x1F525;" color="#FF7139" />
-            <BadgeCard title="Open Source Advocate" org="OSW & OSCF Founder" icon="&#x1F427;" color="#10B981" />
+            <BadgeCard title="Docker Captain" org="Docker Inc." logo="/img/logos/docker.svg" color="#2496ED" />
+            <BadgeCard title="Google Developer Expert" org="Google Cloud Platform" logo="/img/logos/gcp.svg" color="#4285F4" />
+            <BadgeCard title="AWS Community Builder" org="Amazon Web Services" logo="/img/logos/aws.svg" color="#FF9900" />
+            <BadgeCard title="Open Source Advocate" org="OSW & OSCF Founder" logo="/img/logos/linux.svg" color="#10B981" />
+            <BadgeCard title="Auth0 Ambassador" org="Auth0 by Okta" logo="/img/logos/auth0.svg" color="#EB5424" former />
+            <BadgeCard title="Mozilla Reps Council" org="Mozilla Foundation" logo="/img/logos/mozilla.svg" color="#FF7139" former mono />
           </div>
         </div>
       </div>
