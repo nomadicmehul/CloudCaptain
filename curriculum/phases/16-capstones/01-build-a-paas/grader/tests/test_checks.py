@@ -275,6 +275,23 @@ class HelperTests(Base):
         deployment["metadata"]["generation"] = 4
         self.assertFalse(kit.rollout_done(deployment))
 
+    def test_wait_rollout_returns_the_finished_deployment_or_fails_with_its_status(self):
+        now = [0.0]
+        kit.CLOCK = lambda: now[0]
+        kit.SLEEP = lambda seconds: now.__setitem__(0, now[0] + seconds)
+        rolling = {"metadata": {"generation": 2}, "spec": {"replicas": 1},
+                   "status": {"observedGeneration": 2, "updatedReplicas": 1, "availableReplicas": 1, "replicas": 2}}
+        done = json.loads(json.dumps(rolling))
+        done["status"]["replicas"] = 1
+        session = kit.Session.__new__(kit.Session)
+        states = iter([rolling, rolling, done])
+        with mock.patch.object(kit.Session, "deployment", lambda self, app: next(states)):
+            self.assertIs(session.wait_rollout("ccg-release"), done)
+        now[0] = 0.0
+        with mock.patch.object(kit.Session, "deployment", lambda self, app: rolling):
+            with self.assertRaisesRegex(kit.Fail, r"rollout of ccg-release did not finish within 10s.*\"replicas\": 2"):
+                session.wait_rollout("ccg-release", timeout=10)
+
     def test_fetch_via_node_splits_body_and_status(self):
         kit.RUNNER = FakeRunner([("curl", ok("hello\nworld\n200"))])
         self.assertEqual(kit.fetch_via_node(NODE, "http://172.18.0.2:30080/", 5), (200, "hello\nworld"))
