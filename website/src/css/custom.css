@@ -1518,7 +1518,12 @@ img.category-card__icon { width: 2.2rem; height: 2.2rem; object-fit: contain; }
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 .journey-badge-card:hover::before { opacity: 1; }
-.journey-badge-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.journey-badge-logo {
+  display: block; width: 56px; height: 56px; margin: 0 auto 1rem; object-fit: contain;
+}
+/* Brand marks that are black (Mozilla) turn white on the dark theme. */
+.journey-badge-logo--mono { filter: invert(1); }
+[data-theme='light'] .journey-badge-logo--mono { filter: none; }
 .journey-badge-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
 .journey-badge-org { font-size: 0.8rem; color: rgba(255, 255, 255, 0.45); font-weight: 500; }
 
