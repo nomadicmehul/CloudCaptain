@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-09T16:47:31.537Z",
+  "updatedAt": "2026-11-16T16:18:50.617Z",
   "track": {
     "kubernetes": {
       "repo": "kubernetes/kubernetes",
@@ -88,16 +88,16 @@
       "publishedAt": "2026-10-28"
     },
     "helm": {
-      "version": "v4.3.1",
-      "publishedAt": "2026-10-15"
+      "version": "v4.3.2",
+      "publishedAt": "2026-11-13"
     },
     "docker-compose": {
-      "version": "v5.7.0",
-      "publishedAt": "2026-11-02"
+      "version": "v5.7.1",
+      "publishedAt": "2026-11-11"
     },
     "terraform": {
-      "version": "v1.17.1",
-      "publishedAt": "2026-10-28"
+      "version": "v1.17.2",
+      "publishedAt": "2026-11-11"
     },
     "opentofu": {
       "version": "v1.13.9",
@@ -116,8 +116,8 @@
       "publishedAt": "2026-08-26"
     },
     "podman": {
-      "version": "v6.1.4",
-      "publishedAt": "2026-10-12"
+      "version": "v6.2.0",
+      "publishedAt": "2026-11-10"
     },
     "ansible": {
       "version": "v2.22.0",
