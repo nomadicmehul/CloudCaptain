@@ -159,15 +159,8 @@ def git_push(project: str) -> str:
         s.push(repo, bare, "main")
         s.wait_body(url, "pushed v2", 120)
 
-        # The first v2 answer can come while the v1 pod is still going away; start the
-        # feature-branch check from a finished rollout.
-        def rolled_out() -> Tuple[bool, Any]:
-            deployment = s.deployment(app)
-            return kit.rollout_done(deployment), deployment.get("status")
-        done, status = kit.poll(rolled_out, 120)
-        if not done:
-            raise Fail(f"the v2 rollout of {app} did not finish within 120s: status {json.dumps(status)}")
-        before = s.deployment(app)
+        # Start the feature-branch check from a finished rollout.
+        before = s.wait_rollout(app)
         s.git(repo, "checkout", "--quiet", "-b", "feature")
         feature = s.commit(repo, {"body.txt": "pushed from a feature branch\n"}, "Feature work")
         s.push(repo, bare, "feature")
@@ -254,9 +247,11 @@ def releases_rollback(project: str) -> str:
             raise Fail(f"the unready release should be v3 with status failed and current still 2; got v{three['number']} {three['status']}, current {data['current']}")
         url = s.url(app)
         s.wait_body(url, "release two", 60)
-        ok, (status, body) = kit.holds(lambda: _answer(url, "release two"), 3)
-        if not ok:
-            raise Fail(f"while v3 failed, {url} must keep serving release two; it answered {status} {kit.tail(body, 80)!r}")
+        verdict, seen = kit.steady(lambda: _answer(url, "release two"), 5)
+        if verdict == "wrong":
+            raise Fail(f"while v3 failed, {url} must keep serving release two; it answered {seen}")
+        if verdict == "unreachable":
+            raise Fail(f"while v3 failed, {url} stopped answering ({seen[0]} good answers, {seen[1]} failed requests, last: {kit.tail(str(seen[2]), 80)!r}); the old pods must keep serving")
 
         s.tp_ok(["rollback", app, "--to", "1", "--json"], timeout=600)
         data = s.tp_json(listing, timeout=60)
@@ -266,8 +261,14 @@ def releases_rollback(project: str) -> str:
         if kit.short_image(four["image"]) != kit.short_image(one["image"]) or four["config_hash"] != one["config_hash"]:
             raise Fail("v4 must restore v1 exactly: the same image and the same config_hash")
         s.wait_body(url, "release one", 90)
-        status, body = kit.fetch(url + "/env")
-        if (kit.parse_json(body) or {}).get("GREETING") != "one":
+        s.wait_rollout(app)
+
+        def greeting_one() -> Tuple[bool, Any]:
+            status, body = kit.fetch(url + "/env")
+            env = kit.parse_json(body) if status == 200 else None
+            return isinstance(env, dict) and env.get("GREETING") == "one", (status, body)
+        ok, (status, body) = kit.poll(greeting_one, 30)
+        if not ok:
             raise Fail(f"after rollback --to 1, GREETING must be v1's value 'one'; /env answered {status} {kit.tail(body, 120)!r}")
         live = kit.short_image(kit.first_container(s.deployment(app)).get("image", ""))
         if live != kit.short_image(one["image"]):
@@ -281,9 +282,13 @@ def releases_rollback(project: str) -> str:
         return "v3 failed readiness and v2 kept serving; rollback --to 1 restored v1's image, config and body as v4; rollback restored v2 as v5"
 
 
-def _answer(url: str, expected: str) -> Tuple[bool, Any]:
+def _answer(url: str, expected: str) -> Tuple[str, Any]:
     status, body = kit.fetch(url)
-    return status == 200 and body.strip() == expected, (status, body)
+    if status is None:
+        return "unreachable", body
+    if status != 200 or body.strip() != expected:
+        return "wrong", f"{status} {kit.tail(body, 80)!r}"
+    return "good", None
 
 
 def logs(project: str) -> str:

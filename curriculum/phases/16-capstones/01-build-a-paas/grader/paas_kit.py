@@ -447,6 +447,16 @@ class Session:
         if not ok:
             raise Fail(f"{url} did not answer 200 {expected!r} within {timeout:g}s; last answer: {status} {tail(body, 120)!r}")
 
+    def wait_rollout(self, app: str, timeout: float = 120) -> Dict[str, Any]:
+        """The first new answer can come while old pods are still going away; wait them out."""
+        def probe() -> Tuple[bool, Any]:
+            deployment = self.deployment(app)
+            return rollout_done(deployment), deployment
+        done, deployment = poll(probe, timeout)
+        if not done:
+            raise Fail(f"the rollout of {app} did not finish within {timeout:g}s: status {json.dumps(deployment.get('status'))}")
+        return deployment
+
     def deployment(self, app: str) -> Dict[str, Any]:
         ns = self.namespace(app)
         proc = self.kubectl("-n", ns, "get", "deployments", "-o", "json")
