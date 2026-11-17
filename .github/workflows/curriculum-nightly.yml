@@ -48,6 +48,7 @@ jobs:
       # fake root and skips them; relative ../file.md links are still checked.
       # 502/503/504 are accepted: a remote gateway having a bad night is not a dead
       # page, and a really dead link shows up as 404/410 or a DNS/connection error.
+      # 202 Accepted is a success status (some hosts send it to bots while a page warms up).
       - run: mkdir -p lychee
 
       # First pass never fails the job: it records failures as JSON for the recheck.
@@ -57,7 +58,7 @@ jobs:
         with:
           args: >-
             --no-progress
-            --accept 200,201,204,206,301,302,307,308,429,502,503,504
+            --accept 200,201,202,204,206,301,302,307,308,429,502,503,504
             --max-concurrency 8
             --timeout 30
             --max-retries 3
@@ -113,7 +114,7 @@ jobs:
         with:
           args: >-
             --no-progress
-            --accept 200,201,204,206,301,302,307,308,429,502,503,504
+            --accept 200,201,202,204,206,301,302,307,308,429,502,503,504
             --timeout 60
             --max-retries 3
             --retry-wait-time 10
