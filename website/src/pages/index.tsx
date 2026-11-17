@@ -438,6 +438,9 @@ function ContributeSection() {
           <Link className="btn-secondary" to="/contribute">
             cat CONTRIBUTING.md
           </Link>
+          <Link className="btn-secondary" href="https://www.linkedin.com/company/cloudcaptainhq">
+            follow --linkedin ↗
+          </Link>
         </div>
         <div className="contribute-actions reveal">
           {contributeActions.map((item, i) => (

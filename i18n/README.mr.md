@@ -13,6 +13,7 @@
     <a href="../LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license" /></a>
     <img src="https://img.shields.io/badge/PRs-welcome-blue" alt="PRs चे स्वागत आहे" />
     <a href="https://github.com/nomadicmehul/CloudCaptain/stargazers"><img src="https://img.shields.io/github/stars/nomadicmehul/cloudcaptain?style=flat&logo=github" alt="GitHub stars" /></a>
+    <a href="https://www.linkedin.com/company/cloudcaptainhq"><img src="https://img.shields.io/badge/LinkedIn-follow_CloudCaptain-0A66C2" alt="Follow CloudCaptain on LinkedIn" /></a>
   </p>
   <p>
     <a href="../README.md">English</a> ·
