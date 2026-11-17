@@ -17,7 +17,6 @@ Please fill out the sections below. Delete anything that doesn't apply.
 - [ ] 🧹 Refactor / cleanup
 - [ ] 📝 Documentation
 - [ ] 🔧 Build / CI / config
-- [ ] Typecheck passes
 
 ## Related issue
 
@@ -35,3 +34,4 @@ Please fill out the sections below. Delete anything that doesn't apply.
 - [ ] Markdown front matter has `title`, `description`, and (if applicable) `sidebar_position`
 - [ ] No `Co-Authored-By` lines in commit messages (per project policy)
 - [ ] Commit messages use imperative mood (`Add: ...`, `Update: ...`, `Fix: ...`)
+- [ ] Typecheck passes
