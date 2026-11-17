@@ -17,6 +17,7 @@ Please fill out the sections below. Delete anything that doesn't apply.
 - [ ] 🧹 Refactor / cleanup
 - [ ] 📝 Documentation
 - [ ] 🔧 Build / CI / config
+- [ ] Typecheck passes
 
 ## Related issue
 
