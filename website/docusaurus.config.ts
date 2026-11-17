@@ -82,6 +82,7 @@ const config: Config = {
         description: 'Open-source community learning platform for Cloud, DevOps, AI, and Operations.',
         sameAs: [
           'https://github.com/nomadicmehul/CloudCaptain',
+          'https://www.linkedin.com/company/cloudcaptainhq',
           'https://twitter.com/nomadicmehul',
         ],
       }),
@@ -242,6 +243,7 @@ const config: Config = {
           items: [
             {label: "Captain's Journey", to: '/journey'},
             {label: 'GitHub', href: 'https://github.com/nomadicmehul/CloudCaptain'},
+            {label: 'LinkedIn', href: 'https://www.linkedin.com/company/cloudcaptainhq'},
             {label: 'Twitter', href: 'https://twitter.com/nomadicmehul'},
             {label: 'Contributing Guide', to: '/contribute'},
           ],
