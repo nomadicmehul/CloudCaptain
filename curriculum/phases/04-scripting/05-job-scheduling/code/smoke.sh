@@ -280,6 +280,8 @@ if [[ "$(ps -o comm= -p 1 2>/dev/null | tr -d ' ')" == "systemd" ]] && command -
   echo "▸ Use It: a transient systemd timer with RandomizedDelaySec, next elapse checked against minicron"
   TIMER="cc-job-scheduling-$$"
   NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  # output file is meant to be runner-owned
+  # shellcheck disable=SC2024
   sudo -n systemd-run --unit "$TIMER" --on-calendar='*-*-* 04:17:00' --timer-property=RandomizedDelaySec=1h --timer-property=AccuracySec=1s /bin/true > "$WORK/run.txt" 2>&1 || fail "systemd-run: $(cat "$WORK/run.txt")"
   TZ=UTC systemctl show "$TIMER.timer" -p NextElapseUSecRealtime --value > "$WORK/next.txt" || fail "systemctl show $TIMER.timer"
   systemctl list-timers --all --no-pager > "$WORK/timers.txt" 2>&1 || true

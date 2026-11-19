@@ -132,6 +132,8 @@ if [[ -n "$LINUX" ]]; then
 fi
 if [[ -n "$SUDO" ]]; then
   ROOT_FILES=1
+  # output file is meant to be runner-owned
+  # shellcheck disable=SC2024
   sudo -n "$PY" "$LESSON/code/main.py" fetch --socket "$MSOCK" --out "$MI/batch" --json > "$MI/batch-fetch.json" 2>&1 || fail "miniid fetch as root: $(cat "$MI/batch-fetch.json")"
   sudo -n chown -R "$(id -u):$(id -g)" "$MI/batch"
   uniform "$MI/batch"
@@ -296,7 +298,7 @@ else
 fi
 cp "$MI/ca-cc/bundle.pem" "$MI/bundle-cc.pem"
 
-cat > "$WORK/matrix.py" <<'PY'
+cat > "$WORK/matrix.py" <<'PYEOF'
 import json, os, subprocess, sys, threading, time
 
 lesson, issuer, home, api, web, batch, short, foreign, impostor, cc_bundle, other_bundle, out_path = sys.argv[1:13]
@@ -413,7 +415,7 @@ if (enforced.get("decision"), enforced.get("stage"), enforced.get("reason")) != 
 json.dump({"issuer": issuer, "rows": [[item["label"], item["decision"], item["reason"]] for item in rows], "mid": [long_result.get("decision"), echoes, enforced.get("decision"), enforced.get("reason")]}, open(out_path, "w"), indent=2)
 if problems:
     sys.exit(f"{issuer}: " + "\n".join(problems))
-PY
+PYEOF
 
 echo "▸ two mTLS services, with miniid-issued and with SPIRE-issued SVIDs: the same accept and reject decisions"
 DRIVERS=()
