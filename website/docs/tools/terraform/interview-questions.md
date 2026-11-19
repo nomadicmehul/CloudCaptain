@@ -1229,7 +1229,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: 1.5.0
 
@@ -1264,7 +1264,7 @@ jobs:
 
       - name: Comment Plan on PR
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
@@ -1285,7 +1285,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v4
 
       - name: Download Plan
         uses: actions/download-artifact@v8

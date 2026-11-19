@@ -553,10 +553,10 @@ jobs:
           gitleaks detect --staged
 
       - name: SAST scan
-        uses: returntocorp/semgrep-action@v1
+        run: docker run --rm -v "${{ github.workspace }}:/src" semgrep/semgrep semgrep scan --config auto
 
       - name: Container scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: myapp:latest
 ```
