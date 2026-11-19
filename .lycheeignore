@@ -26,3 +26,5 @@
 ^https?://netflixtechblog\.com
 ^https?://betterprogramming\.pub
 ^https?://(www\.)?medium\.com
+# gnu.org rate-limits CI (429, then the connection hangs); the manual pages load in a browser
+^https?://(www\.)?gnu\.org
