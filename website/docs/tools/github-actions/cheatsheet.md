@@ -264,7 +264,7 @@ steps:
     run: curl -H "Authorization: Bearer $API_KEY" ...
 
   # With action
-  - uses: docker/login-action@v2
+  - uses: docker/login-action@v4
     with:
       username: ${{ secrets.DOCKER_USERNAME }}
       password: ${{ secrets.DOCKER_PASSWORD }}
@@ -293,32 +293,32 @@ steps:
     name: artifacts
 
 # Create release
-- uses: actions/create-release@v1
+- uses: softprops/action-gh-release@v3
   with:
     tag_name: v1.0.0
-    release_name: Release 1.0.0
+    name: Release 1.0.0
 
 # Deploy to GitHub Pages
-- uses: actions/deploy-pages@v2
+- uses: actions/deploy-pages@v5
 ```
 
 ## Community Actions
 
 ```yaml
 # Docker build and push
-- uses: docker/build-push-action@v4
+- uses: docker/build-push-action@v7
   with:
     context: .
     push: true
     tags: registry/image:latest
 
 # Create PR
-- uses: peter-evans/create-pull-request@v4
+- uses: peter-evans/create-pull-request@v8
   with:
     title: 'Automated PR'
 
 # AWS
-- uses: aws-actions/configure-aws-credentials@v2
+- uses: aws-actions/configure-aws-credentials@v6
   with:
     role-to-assume: arn:aws:iam::...
     aws-region: us-east-1

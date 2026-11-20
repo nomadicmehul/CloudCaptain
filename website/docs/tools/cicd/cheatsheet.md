@@ -431,7 +431,7 @@ jobs:
 ```yaml
 # GitHub Actions
 - name: Build and push Docker image
-  uses: docker/build-push-action@v4
+  uses: docker/build-push-action@v7
   with:
     context: .
     push: true
@@ -485,14 +485,14 @@ test:
 ```yaml
 # GitHub Actions
 - name: Run Trivy vulnerability scanner
-  uses: aquasecurity/trivy-action@master
+  uses: aquasecurity/trivy-action@v0.36.0
   with:
     image-ref: myapp:${{ github.sha }}
     format: 'sarif'
     output: 'trivy-results.sarif'
 
 - name: Upload Trivy results
-  uses: github/codeql-action/upload-sarif@v2
+  uses: github/codeql-action/upload-sarif@v4
   with:
     sarif_file: 'trivy-results.sarif'
 ```

@@ -191,15 +191,13 @@ Report Issues
 ```yaml
 # GitHub Actions example
 - name: Run Semgrep SAST
-  uses: returntocorp/semgrep-action@v1
-  with:
-    config: >-
-      p/security-audit
-      p/owasp-top-ten
-    generateSarif: true
+  run: |
+    docker run --rm -v "${{ github.workspace }}:/src" semgrep/semgrep \
+      semgrep scan --config p/security-audit --config p/owasp-top-ten \
+      --sarif --output semgrep.sarif
 
 - name: Upload SARIF
-  uses: github/codeql-action/upload-sarif@v2
+  uses: github/codeql-action/upload-sarif@v4
   with:
     sarif_file: semgrep.sarif
 ```
@@ -335,7 +333,7 @@ falco --rules=/etc/falco/rules.yaml
 ```yaml
 # GitHub Actions
 - name: Scan image with Trivy
-  uses: aquasecurity/trivy-action@master
+  uses: aquasecurity/trivy-action@v0.36.0
   with:
     image-ref: myapp:${{ github.sha }}
     format: 'sarif'

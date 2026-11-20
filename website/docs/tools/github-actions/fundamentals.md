@@ -267,21 +267,21 @@ Actions are reusable units of code.
     path: dist/
 
 # Deploy to GitHub Pages
-- uses: actions/deploy-pages@v2
+- uses: actions/deploy-pages@v5
 ```
 
 ### Community Actions
 
 ```yaml
 # Build and push Docker image
-- uses: docker/build-push-action@v4
+- uses: docker/build-push-action@v7
   with:
     context: .
     push: true
     tags: myregistry/myimage:latest
 
 # Create a PR
-- uses: peter-evans/create-pull-request@v4
+- uses: peter-evans/create-pull-request@v8
   with:
     title: 'Automated PR'
     body: 'This is an automated pull request'
@@ -491,15 +491,15 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: docker/setup-buildx-action@v2
+      - uses: docker/setup-buildx-action@v4
 
-      - uses: docker/login-action@v2
+      - uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v4
+      - uses: docker/build-push-action@v7
         with:
           context: .
           push: true
@@ -528,7 +528,7 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::123456789:role/github-actions
           aws-region: us-east-1

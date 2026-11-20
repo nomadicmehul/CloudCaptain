@@ -447,14 +447,14 @@ jobs:
 
       # 2. SAST
       - name: SonarQube Analysis
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # 3. Dependency Scanning
       - name: Dependency Check
-        uses: dependency-check/Dependency-Check_Action@main
+        uses: dependency-check/Dependency-Check_Action@1.1.0
 
       # 4. Build Docker Image
       - name: Build Docker Image
@@ -462,7 +462,7 @@ jobs:
 
       # 5. Image Scanning
       - name: Scan Image
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: myapp:${{ github.sha }}
           format: 'sarif'
