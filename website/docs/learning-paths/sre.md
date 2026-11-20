@@ -8,6 +8,10 @@ description: "Site Reliability Engineering roadmap with Google SRE Book chapter 
 
 Build and operate reliable, scalable, and efficient systems.
 
+:::info Build it from scratch
+Follow the matching lesson track: [SRE path](/learn/paths/sre). Each stage below links lessons from the [/learn curriculum](/learn).
+:::
+
 ## Core SRE Principles
 
 - **SLOs, SLIs, SLAs** — Define and measure reliability
@@ -18,6 +22,8 @@ Build and operate reliable, scalable, and efficient systems.
 
 ## Stage 1: Foundations
 
+Lessons: [Cgroups by Hand](/learn/linux/cgroups-by-hand), [TCP States](/learn/networking/tcp-states), [Performance Basics](/learn/linux/performance-basics)
+
 - Linux system administration
 - Networking and distributed systems
 - Programming (Python/Go)
@@ -25,12 +31,16 @@ Build and operate reliable, scalable, and efficient systems.
 
 ## Stage 2: Monitoring & Alerting
 
+Lessons: [Metrics TSDB](/learn/observability/metrics-tsdb), [PromQL](/learn/observability/promql), [Alerting](/learn/observability/alerting)
+
 - [Prometheus](/docs/tools/observability/) metrics and queries
 - Grafana dashboards
 - Alert design and routing
 - On-call best practices
 
 ## Stage 3: Reliability Practices
+
+Lessons: [SLO Burn Rate](/learn/observability/slo-burn-rate), [Incident Response](/learn/observability/incident-response), [Chaos Experiments](/learn/observability/chaos-experiments)
 
 - Capacity planning
 - Load testing and performance

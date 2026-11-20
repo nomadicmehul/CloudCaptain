@@ -136,7 +136,7 @@ The **#1 emerging role**. As every company adopts AI, they need engineers who ca
 - LLMOps is a brand new discipline with huge demand
 
 ### Learning Path
-Follow our [AI/ML Ops Learning Path](/docs/learning-paths/ai-ml).
+Follow our [AI/ML Ops Learning Path](/docs/learning-paths/ai-ml) and the [AIOps](/learn/paths/aiops) / [AI Platform](/learn/paths/ai-platform) lesson paths.
 
 ---
 
@@ -216,6 +216,9 @@ With AI handling sensitive data and regulations tightening, security engineers a
 | Threat modeling | AWS Security Hub | ISO 27001 |
 | Penetration testing | SIEM (Splunk/Elastic) | CIS Benchmarks |
 
+### Learning Path
+Follow our [DevSecOps lesson path](/learn/paths/devsecops) for a structured, hands-on roadmap.
+
 ---
 
 ## 8. FinOps Practitioner
@@ -237,6 +240,9 @@ AI workloads are expensive. Companies burning millions on GPU compute need FinOp
 - [Kubernetes](/docs/tools/kubernetes/) resource management
 - FinOps frameworks and certifications
 - Data analysis (SQL, Python, BI tools)
+
+### Learning Path
+Follow our [FinOps FOCUS lesson](/learn/cloud/finops-focus) to build cost showback from raw billing rows.
 
 ---
 

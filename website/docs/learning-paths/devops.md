@@ -12,7 +12,14 @@ A structured roadmap from beginner to advanced DevOps practitioner.
 Focus on one topic at a time. The goal is to say "I know what DevOps is and I can build anything with it." Learn the rest on demand.
 :::
 
+:::info Build it from scratch
+Follow the matching lesson track: [DevOps Engineer path](/learn/paths/devops). Each stage below links lessons from the [/learn curriculum](/learn).
+:::
+
 ## Stage 1: Foundations (Weeks 1-4)
+
+Lessons: [Lab Doctor](/learn/setup/lab-doctor), [PID 1 Supervisor](/learn/linux/pid1-supervisor), [Git Object Store](/learn/git/object-store)
+
 
 | Topic | What to Learn | Resources |
 |:------|:-------------|:----------|
@@ -24,6 +31,9 @@ Focus on one topic at a time. The goal is to say "I know what DevOps is and I ca
 
 ## Stage 2: Core DevOps (Weeks 5-10)
 
+Lessons: [Process Isolation](/learn/containers/process-isolation), [Pipeline Runner](/learn/cicd/pipeline-runner), [State Reconciler](/learn/iac/state-reconciler)
+
+
 | Topic | What to Learn | Resources |
 |:------|:-------------|:----------|
 | **Containers** | [Docker](/docs/tools/docker/) | Containerize applications |
@@ -34,6 +44,9 @@ Focus on one topic at a time. The goal is to say "I know what DevOps is and I ca
 
 ## Stage 3: Advanced (Weeks 11-16)
 
+Lessons: [Reconciler](/learn/orchestration/reconciler), [GitOps Reconciler](/learn/cicd/gitops-reconciler), [Metrics TSDB](/learn/observability/metrics-tsdb)
+
+
 | Topic | What to Learn | Resources |
 |:------|:-------------|:----------|
 | **Orchestration** | [Kubernetes](/docs/tools/kubernetes/) | Container orchestration |
@@ -43,6 +56,9 @@ Focus on one topic at a time. The goal is to say "I know what DevOps is and I ca
 | **Security** | [DevSecOps](/docs/tools/devsecops/) | Shift-left security |
 
 ## Stage 4: Expert (Ongoing)
+
+Lessons: [SLO Burn Rate](/learn/observability/slo-burn-rate), [Golden Path](/learn/platform/golden-path), [FinOps FOCUS](/learn/cloud/finops-focus)
+
 
 | Topic | Description |
 |:------|:-----------|

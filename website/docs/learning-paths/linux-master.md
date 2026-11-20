@@ -14,7 +14,13 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 
 ---
 
+:::info Build it from scratch
+The [/learn curriculum](/learn) has 8 hands-on Linux lessons: [PID 1 Supervisor](/learn/linux/pid1-supervisor), [File Descriptors](/learn/linux/file-descriptors), [Syscalls & strace](/learn/linux/syscalls-strace), [Permissions & Capabilities](/learn/linux/permissions-capabilities), [systemd Unit Runner](/learn/linux/systemd-unit-runner), [Cgroups by Hand](/learn/linux/cgroups-by-hand), [Filesystem Mounts](/learn/linux/filesystem-mounts) and [Performance Basics](/learn/linux/performance-basics).
+:::
+
 ## Stage 1: Linux Fundamentals (Weeks 1-4)
+
+Lessons: [PID 1 Supervisor](/learn/linux/pid1-supervisor), [File Descriptors](/learn/linux/file-descriptors)
 
 **Goal:** Navigate the system confidently, manage files, users, and processes.
 
@@ -42,6 +48,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 
 ## Stage 2: Shell Scripting & Automation (Weeks 5-8)
 
+Lessons: [Robust Bash](/learn/scripting/robust-bash), [CLI Design](/learn/scripting/cli-design)
+
 **Goal:** Automate anything with Bash. Write production-quality scripts.
 
 ### Topics
@@ -62,6 +70,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 ---
 
 ## Stage 3: Networking Deep Dive (Weeks 9-12)
+
+Lessons: [TCP States](/learn/networking/tcp-states), [Packet Capture](/learn/networking/packet-capture)
 
 **Goal:** Understand networking at every layer. Debug any connectivity issue.
 
@@ -88,6 +98,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 
 ## Stage 4: System Administration (Weeks 13-16)
 
+Lessons: [systemd Unit Runner](/learn/linux/systemd-unit-runner), [Filesystem Mounts](/learn/linux/filesystem-mounts)
+
 **Goal:** Manage production Linux servers. Handle storage, services, and monitoring.
 
 ### Topics
@@ -109,6 +121,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 ---
 
 ## Stage 5: Security & Hardening (Weeks 17-20)
+
+Lessons: [Permissions & Capabilities](/learn/linux/permissions-capabilities), [CIS Benchmark](/learn/security/cis-benchmark)
 
 **Goal:** Secure Linux systems to production standards. Pass security audits.
 
@@ -132,6 +146,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 
 ## Stage 6: Performance Tuning & Troubleshooting (Weeks 21-24)
 
+Lessons: [Syscalls & strace](/learn/linux/syscalls-strace), [Performance Basics](/learn/linux/performance-basics)
+
 **Goal:** Diagnose and fix any performance issue. Tune systems for maximum throughput.
 
 ### Topics
@@ -153,6 +169,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 
 ## Stage 7: Virtualization & Containers Deep Dive (Weeks 25-28)
 
+Lessons: [Cgroups by Hand](/learn/linux/cgroups-by-hand), [Process Isolation](/learn/containers/process-isolation)
+
 **Goal:** Understand the Linux primitives that make containers and VMs work.
 
 ### Topics
@@ -173,6 +191,8 @@ Every Docker container is a Linux process. Every Kubernetes node runs Linux. Eve
 ---
 
 ## Stage 8: Linux for AI/ML Infrastructure (Weeks 29-32)
+
+Lessons: [GPU Scheduling](/learn/ai-infra/gpu-scheduling)
 
 **Goal:** Prepare systems for AI workloads — GPUs, distributed training, high-performance networking.
 
