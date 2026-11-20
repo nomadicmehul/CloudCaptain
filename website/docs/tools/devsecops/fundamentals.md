@@ -192,7 +192,7 @@ Report Issues
 # GitHub Actions example
 - name: Run Semgrep SAST
   run: |
-    docker run --rm -v "${{ github.workspace }}:/src" semgrep/semgrep \
+    docker run --rm -v "${{ github.workspace }}:/src" semgrep/semgrep:1.186.0 \
       semgrep scan --config p/security-audit --config p/owasp-top-ten \
       --sarif --output semgrep.sarif
 
