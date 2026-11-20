@@ -2,6 +2,7 @@
 title: Terraform Cheat Sheet
 sidebar_label: Cheat Sheet
 sidebar_position: 3
+description: "Terraform cheat sheet with the most useful CLI commands, HCL syntax, state operations and functions for quick everyday reference."
 ---
 
 # Terraform Cheat Sheet
@@ -769,4 +770,4 @@ terraform fmt -recursive .
 - Use `-target` carefully; only for specific scenarios
 - Keep state backed up and versioned in S3
 - Use `workspace` for environment separation, not `branches`
-- Enable cost estimation in Terraform Cloud for production
+- Enable cost estimation in HCP Terraform (formerly HCP Terraform) for production
