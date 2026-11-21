@@ -8,6 +8,7 @@
  *   node scripts/build-curriculum.mjs --roadmap  refresh the phase table in ROADMAP.md
  *   node scripts/build-curriculum.mjs --deprecations  scan curriculum + website/docs for retired tech without a note
  *   node scripts/build-curriculum.mjs --scaffold <phase-dir> <lesson-slug> [--type Build|Learn|Capstone] [--langs python,bash] [--title "..."] [--minutes 60]
+ *   node scripts/build-curriculum.mjs --help     print this help
  *
  * Zero dependencies. Node >= 20.
  */
@@ -51,6 +52,12 @@ export function run({curriculum = curriculumRoot, websiteDocsRoot = path.join(we
     console.log(`curriculum: ${s.lessons} lesson(s) in ${s.phasesLive}/${s.phasesTotal} phases, ${s.hours} h, ${s.tests} tests, ${report.warningCount} warning(s)${check ? '' : ` → ${path.relative(repoRoot, out)}`}`);
   }
   return {ok: true, report, model, phases, manifest};
+}
+
+const FLAGS = new Set(['check', 'json', 'roadmap', 'deprecations', 'scaffold', 'help']);
+
+function usage() {
+  return fs.readFileSync(url.fileURLToPath(import.meta.url), 'utf8').match(/\/\*\*\n([\s\S]*?)\n \*\//)[1].replace(/^ \* ?/gm, '');
 }
 
 function parseArgs(argv) {
@@ -382,6 +389,15 @@ TODO: what the learner keeps, saved in outputs/.
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === url.fileURLToPath(import.meta.url);
 if (isMain) {
   const args = parseArgs(process.argv.slice(2));
+  if (args.flags.has('help')) {
+    console.log(usage());
+    process.exit(0);
+  }
+  const unknown = [...args.flags].filter((f) => !FLAGS.has(f));
+  if (unknown.length) {
+    console.error(`curriculum: unknown flag(s): ${unknown.map((f) => `--${f}`).join(', ')}\n\n${usage()}`);
+    process.exit(2);
+  }
   try {
     if (args.flags.has('scaffold')) {
       const [phaseDir, lessonSlug] = args.positional;

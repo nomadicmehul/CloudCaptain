@@ -7,9 +7,11 @@
  *   node scripts/run-lesson-tests.mjs --all --smoke     # lesson.json "smoke": real tools, Linux CI
  *   node scripts/run-lesson-tests.mjs --all --smoke --phase=orchestration,iac   # only these phases
  *   node scripts/run-lesson-tests.mjs --list-phases --smoke                    # JSON array of phase slugs (CI matrix)
+ *   node scripts/run-lesson-tests.mjs --help                                   # print this help
  *
  * Commands come from lesson.json "tests" (or "smoke") and run from the lesson folder.
  */
+import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 import {spawnSync} from 'node:child_process';
@@ -19,7 +21,20 @@ const here = path.dirname(url.fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '..');
 const curriculumRoot = path.join(repoRoot, 'curriculum');
 
+function usage() {
+  return fs.readFileSync(url.fileURLToPath(import.meta.url), 'utf8').match(/\/\*\*\n([\s\S]*?)\n \*\//)[1].replace(/^ \* ?/gm, '');
+}
+
 const args = process.argv.slice(2);
+if (args.includes('--help')) {
+  console.log(usage());
+  process.exit(0);
+}
+const unknown = args.filter((a) => a.startsWith('--') && !['--all', '--smoke', '--list-phases'].includes(a) && !a.startsWith('--phase='));
+if (unknown.length) {
+  console.error(`unknown flag(s): ${unknown.join(', ')}\n\n${usage()}`);
+  process.exit(2);
+}
 const all = args.includes('--all');
 const smoke = args.includes('--smoke');
 const listPhases = args.includes('--list-phases');
@@ -56,7 +71,7 @@ if (missing.length) {
   process.exit(2);
 }
 
-let failures = 0;
+const failed = [];
 let ran = 0;
 for (const lesson of lessons) {
   const tests = smoke ? (lesson.json.smoke ? {smoke: lesson.json.smoke} : {}) : lesson.json.tests || {};
@@ -69,11 +84,12 @@ for (const lesson of lessons) {
     const res = spawnSync(cmd, {cwd: lesson.dir, shell: true, stdio: 'inherit', env: {...process.env, PYTHONDONTWRITEBYTECODE: '1'}});
     ran += 1;
     if (res.status !== 0) {
-      failures += 1;
+      failed.push(`${lesson.json.id} [${lang}]`);
       console.error(`✖ ${lesson.json.id} [${lang}] exited with ${res.status}`);
     }
   }
 }
 
-console.log(`\n${ran - failures}/${ran} test command(s) passed across ${lessons.length} lesson(s)`);
-process.exit(failures ? 1 : 0);
+console.log(`\n${ran - failed.length}/${ran} test command(s) passed across ${lessons.length} lesson(s)`);
+if (failed.length) console.log(`failed:\n${failed.map((f) => `  ${f}`).join('\n')}`);
+process.exit(failed.length ? 1 : 0);

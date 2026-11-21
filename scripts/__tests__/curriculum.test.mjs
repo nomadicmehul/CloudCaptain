@@ -253,3 +253,24 @@ test('the model counts capstones separately and carries their milestones', () =>
   const entry = tutorIndex(model).lessons.find((l) => l.id === `capstones/${TEST_CAPSTONE}`);
   assert.match(entry.grader, new RegExp(`16-capstones/${path.basename(created)}/grader/grade\\.sh$`));
 });
+
+const cli = (script, ...args) => spawnSync(process.execPath, [path.join(repoRoot, 'scripts', script), ...args], {encoding: 'utf8'});
+
+test('--help prints the usage from the script header and exits 0', () => {
+  for (const script of ['build-curriculum.mjs', 'run-lesson-tests.mjs']) {
+    const res = cli(script, '--help');
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, new RegExp(`node scripts/${script.replace('.', '\\.')} --help`));
+  }
+});
+
+test('unknown flags exit 2 with the usage text', () => {
+  const build = cli('build-curriculum.mjs', '--chek');
+  assert.equal(build.status, 2);
+  assert.match(build.stderr, /unknown flag\(s\): --chek\n/);
+  assert.match(build.stderr, /node scripts\/build-curriculum\.mjs --check/);
+  const tests = cli('run-lesson-tests.mjs', '--list-phases', '--smok');
+  assert.equal(tests.status, 2);
+  assert.match(tests.stderr, /unknown flag\(s\): --smok\n/);
+  assert.match(tests.stderr, /node scripts\/run-lesson-tests\.mjs --list-phases --smoke/);
+});
