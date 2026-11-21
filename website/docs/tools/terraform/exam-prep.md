@@ -2,6 +2,7 @@
 title: Terraform Certification Prep
 sidebar_label: Exam Prep
 sidebar_position: 4
+description: "Study guide for the HashiCorp Terraform Associate (004) exam: the eight official objectives, key concepts and 20 practice questions."
 ---
 
 # Terraform Certification Prep
@@ -18,19 +19,22 @@ Comprehensive guide for the HashiCorp Certified: Terraform Associate (004) exam.
 - **Format**: Online proctored
 - **Prerequisites**: None (recommended: hands-on experience)
 
-## 9 Exam Domains and Weights
+## 8 Exam Objectives
 
-1. **Understand IaC Concepts** (20%)
-2. **Understand Terraform's Purpose** (17%)
-3. **Understand Terraform Basics** (13%)
-4. **Use Terraform Outside of Core Workflow** (8%)
-5. **Interact with Terraform Modules** (12%)
-6. **Manage Terraform State** (15%)
-7. **Understand Terraform Cloud/Enterprise** (8%)
-8. **Read, Generate, and Modify Configurations** (15%)
-9. **Understand Terraform Security** (12%)
+The exam covers eight objectives, as published in HashiCorp's [Terraform Associate (004) exam content list](https://developer.hashicorp.com/terraform/tutorials/certification-004/associate-review-004). HashiCorp does not publish per-objective weights, so none are listed here.
 
-## Domain 1: Understand IaC Concepts (20%)
+1. **Infrastructure as Code (IaC) with Terraform**
+2. **Terraform fundamentals**
+3. **Core Terraform workflow**
+4. **Terraform configuration**
+5. **Terraform modules**
+6. **Terraform state management**
+7. **Maintain infrastructure with Terraform**
+8. **HCP Terraform (formerly Terraform Cloud)**
+
+The 004 exam tests Terraform 1.12 and includes HCP Terraform content. The sections below are study notes grouped by topic; each heading names the objective it supports.
+
+## Objective 1: Infrastructure as Code (IaC) Concepts
 
 ### Key Concepts
 
@@ -63,7 +67,7 @@ Comprehensive guide for the HashiCorp Certified: Terraform Associate (004) exam.
 
 ---
 
-## Domain 2: Understand Terraform's Purpose (17%)
+## Objective 1 (continued): Terraform's Purpose and Use Cases
 
 ### When to Use Terraform
 
@@ -87,12 +91,12 @@ Comprehensive guide for the HashiCorp Certified: Terraform Associate (004) exam.
 - **AWS/Azure/GCP multi-cloud**: Terraform excels
 - **Immutable infrastructure**: Terraform + Packer
 - **Complex dependencies**: Terraform's dependency graph
-- **Team environments**: Terraform Cloud for collaboration
+- **Team environments**: HCP Terraform for collaboration
 - **Legacy systems**: Terraform import for existing resources
 
 ---
 
-## Domain 3: Understand Terraform Basics (13%)
+## Objectives 2 and 3: Terraform Fundamentals and Core Workflow
 
 ### Terraform Workflow (Core Workflow)
 
@@ -156,7 +160,7 @@ provider "aws" {
 
 ---
 
-## Domain 4: Use Terraform Outside of Core Workflow (8%)
+## Objectives 3 and 7: Commands Beyond the Core Workflow
 
 ### terraform console
 
@@ -217,7 +221,7 @@ terraform validate -json
 
 ---
 
-## Domain 5: Interact with Terraform Modules (12%)
+## Objective 5: Terraform Modules
 
 ### Module Basics
 
@@ -301,7 +305,7 @@ module "vpc" {
 
 ---
 
-## Domain 6: Manage Terraform State (15%)
+## Objective 6: Terraform State Management
 
 ### State File Purpose
 
@@ -313,7 +317,7 @@ module "vpc" {
 ### Local vs Remote State
 
 - **Local**: Development only (risky for teams)
-- **Remote**: Production standard (S3, Terraform Cloud, etc.)
+- **Remote**: Production standard (S3, HCP Terraform, etc.)
 
 ### Remote State Backends
 
@@ -389,9 +393,9 @@ output "connection_string" {
 
 ---
 
-## Domain 7: Understand Terraform Cloud/Enterprise (8%)
+## Objective 8: HCP Terraform
 
-### Terraform Cloud
+### HCP Terraform
 
 SaaS platform for Terraform teams.
 
@@ -421,8 +425,8 @@ terraform {
 
 ### Workflows
 
-1. **VCS-driven**: Push to Git → Terraform Cloud triggers plan
-2. **CLI-driven**: `terraform apply` from CLI → runs in Terraform Cloud
+1. **VCS-driven**: Push to Git → HCP Terraform triggers plan
+2. **CLI-driven**: `terraform apply` from CLI → runs in HCP Terraform
 3. **API-driven**: REST API for programmatic runs
 
 ### Sentinel Policy as Code
@@ -448,11 +452,11 @@ main = rule {
 
 ### Terraform Enterprise
 
-Self-hosted version of Terraform Cloud for on-premises deployments.
+Self-hosted version of HCP Terraform for on-premises deployments.
 
 ---
 
-## Domain 8: Read, Generate, and Modify Configurations (15%)
+## Objective 4: Terraform Configuration
 
 ### Dependency Management
 
@@ -542,11 +546,11 @@ aws_instance.web[*].public_ip    # [ip1, ip2, ip3]
 
 ---
 
-## Domain 9: Understand Terraform Security (12%)
+## Objective 4h: Sensitive Data and Security
 
 ### State Security
 
-- Store remotely (S3, Terraform Cloud)
+- Store remotely (S3, HCP Terraform)
 - Enable encryption at rest and in transit
 - Restrict access via IAM
 - Enable versioning and MFA delete
@@ -584,7 +588,7 @@ provider "aws" {
 }
 ```
 
-### Terraform Cloud Security
+### HCP Terraform Security
 
 - Team members and permissions
 - API tokens scoped to organizations
@@ -632,7 +636,7 @@ resource "aws_instance" "web" {
 ### Code Review and Approval
 
 - Require plan review before apply
-- Use Terraform Cloud run approvals
+- Use HCP Terraform run approvals
 - Code review via pull requests
 - Automated compliance checks
 
@@ -684,7 +688,7 @@ D) `output.vpc.vpc_id`
 Which backend provides state locking via DynamoDB?
 
 A) Local
-B) Terraform Cloud
+B) HCP Terraform
 C) S3 (with DynamoDB table)
 D) Git
 
@@ -751,21 +755,21 @@ D) Use `-protect` flag
 **Answer: A** - The `prevent_destroy` lifecycle argument blocks deletion.
 
 ### Question 12
-What is Terraform Cloud?
+What is HCP Terraform?
 
 A) AWS's infrastructure service
 B) HashiCorp's SaaS platform for Terraform collaboration
 C) A free hosting service for state files
 D) A Terraform plugin marketplace
 
-**Answer: B** - Terraform Cloud is HashiCorp's managed platform.
+**Answer: B** - HCP Terraform (formerly Terraform Cloud) is HashiCorp's managed platform.
 
 ### Question 13
 Which statement about modules is true?
 
 A) Modules cannot have outputs
 B) Modules can be nested
-C) Modules require Terraform Cloud
+C) Modules require HCP Terraform
 D) Modules are only from the registry
 
 **Answer: B** - Modules can be nested and combined hierarchically.
@@ -821,7 +825,7 @@ D) `terraform init --format`
 **Answer: B** - The `-recursive` flag formats all files in subdirectories.
 
 ### Question 19
-What does Sentinel policy as code do in Terraform Cloud?
+What does Sentinel policy as code do in HCP Terraform?
 
 A) Encrypts state files
 B) Enforces governance and compliance policies
@@ -852,7 +856,7 @@ D) Only explicit `depends_on` works
 6. **Security Focus**: Understand secrets, sensitive data, and access control
 7. **Compare Tools**: Know Terraform vs CloudFormation vs Pulumi
 8. **Take Practice Tests**: Use HashiCorp's official practice exams
-9. **Review Exam Objectives**: Spend extra time on high-weight domains
+9. **Review Exam Objectives**: Spend extra time on the objectives you find hardest
 10. **Time Management**: 60 minutes for 57 questions = ~1 minute per question
 
 ---
@@ -862,6 +866,6 @@ D) Only explicit `depends_on` works
 - [HashiCorp Terraform Docs](https://www.terraform.io/docs)
 - [Terraform Associate Exam Guide](https://www.hashicorp.com/certification/terraform-associate)
 - [Terraform Registry](https://registry.terraform.io)
-- [Terraform Cloud Documentation](https://developer.hashicorp.com/terraform/cloud-docs)
+- [HCP Terraform Documentation](https://developer.hashicorp.com/terraform/cloud-docs)
 
 Good luck on your exam!

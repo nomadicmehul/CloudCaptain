@@ -2,6 +2,7 @@
 title: Terraform Interview Questions
 sidebar_label: Interview Questions
 sidebar_position: 5
+description: "Terraform interview questions and answers from beginner to advanced: state, modules, workspaces, security, CI/CD and troubleshooting."
 ---
 
 # Terraform Interview Questions
@@ -391,7 +392,7 @@ resource "aws_security_group" "web" {
 
 | Aspect | Local | Remote |
 |--------|-------|--------|
-| **Storage** | `.tfstate` file on disk | S3, Terraform Cloud, etc. |
+| **Storage** | `.tfstate` file on disk | S3, HCP Terraform (formerly HCP Terraform), etc. |
 | **Locking** | None | Supported (DynamoDB, etc.) |
 | **Sharing** | Manual (email, repos) | Built-in (team access) |
 | **Security** | Risk (in Git, on disk) | Encrypted, access controlled |
@@ -627,7 +628,7 @@ module "vpc" {
 **Recommendations:**
 - Use workspaces for similar environments
 - Use separate directories for drastically different setups
-- Terraform Cloud for team-based environment management
+- HCP Terraform for team-based environment management
 
 ---
 
@@ -1199,7 +1200,7 @@ terraform apply
 - Use IAM roles instead of keys
 - Rotate secrets regularly
 - Audit access to state files
-- Use Terraform Cloud for secret management
+- Use HCP Terraform for secret management
 
 ---
 
@@ -1392,7 +1393,7 @@ func TestTerraformExample(t *testing.T) {
 **Compliance testing:**
 
 ```hcl
-# policy.sentinel (Terraform Cloud policy)
+# policy.sentinel (HCP Terraform policy)
 import "tfplan/v2" as tfplan
 
 # Enforce encryption
@@ -1868,7 +1869,7 @@ terraform apply -var-file="${terraform.workspace}.tfvars"
 - Team collaboration complex
 - Limited RBAC
 
-**Better alternative: Terraform Cloud workspaces** (different concept):
+**Better alternative: HCP Terraform workspaces** (different concept):
 
 ```hcl
 terraform {

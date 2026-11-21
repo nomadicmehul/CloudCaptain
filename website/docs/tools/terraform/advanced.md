@@ -2,6 +2,7 @@
 title: Terraform Advanced
 sidebar_label: Advanced Topics
 sidebar_position: 2
+description: "Advanced Terraform patterns: modules, remote state, dynamic blocks, lifecycle rules, testing and HCP Terraform for production teams."
 ---
 
 # Terraform Advanced Topics
@@ -579,9 +580,9 @@ resource "aws_instance" "web" {
 }
 ```
 
-## Terraform Cloud/Enterprise
+## HCP Terraform/Enterprise
 
-Terraform Cloud is a SaaS platform for team collaboration.
+HCP Terraform (formerly HCP Terraform) is a SaaS platform for team collaboration.
 
 ```hcl
 terraform {
