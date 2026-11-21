@@ -29,6 +29,10 @@ Whether you're a **complete beginner** entering the cloud industry or an **exper
 | Want to go deep | [SRE & Platform Engineering](/docs/learning-paths/sre) |
 | Preparing for interviews | [Interview Prep](/docs/interview-prep/devops) |
 
+## Learn from scratch
+
+Prefer to build things yourself? The [CloudCaptain curriculum](/learn) teaches each topic from first principles: every lesson has a hands-on build, tests and a quiz. Use these reference docs alongside it, or pick a track: [DevOps](/learn/paths/devops), [SRE](/learn/paths/sre), [DevSecOps](/learn/paths/devsecops), [AIOps](/learn/paths/aiops) or [AI Platform](/learn/paths/ai-platform).
+
 ## How to Contribute
 
 CloudCaptain is **100% open source** and community-driven. Every contribution matters — from fixing a typo to adding an entire learning path.

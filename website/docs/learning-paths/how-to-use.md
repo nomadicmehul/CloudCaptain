@@ -19,6 +19,10 @@ Deep dives into specific technologies. Each section includes concepts, commands,
 ### Cloud Providers
 Provider-specific guides for AWS, Azure, GCP, and. Includes architecture guides, exam prep, and best practices.
 
+## Learn from scratch
+
+Prefer to build things yourself? The [CloudCaptain curriculum](/learn) teaches each topic from first principles: every lesson has a hands-on build, tests and a quiz. Use these reference docs alongside it, or pick a track: [DevOps](/learn/paths/devops), [SRE](/learn/paths/sre), [DevSecOps](/learn/paths/devsecops), [AIOps](/learn/paths/aiops) or [AI Platform](/learn/paths/ai-platform).
+
 ## Recommended Approach
 
 1. **Pick a Learning Path** that matches your goals
@@ -44,5 +48,5 @@ Provider-specific guides for AWS, Azure, GCP, and. Includes architecture guides,
 | [KodeKloud Engineer](https://www.kodekloud-engineer.com/) | Real tasks in a fictional organization |
 | [Play with Docker](https://labs.play-with-docker.com/) | Free Docker playground |
 | [Play with Kubernetes](https://labs.play-with-k8s.com/) | Free Kubernetes playground |
-| [QWIKLABS](https://www.qwiklabs.com) | AWS, GCP hands-on labs |
+| [Google Cloud Skills Boost](https://www.cloudskillsboost.google/) | Google Cloud hands-on labs (formerly Qwiklabs, GCP only) |
 | [LabEx](https://labex.io) | Linux, Docker, Kubernetes Labs |
