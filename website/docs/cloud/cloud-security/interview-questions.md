@@ -449,8 +449,8 @@ jobs:
       - name: SonarQube Analysis
         uses: SonarSource/sonarqube-scan-action@v8
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # SONAR_HOST_URL is also required for a self-hosted SonarQube server
 
       # 3. Dependency Scanning
       - name: Dependency Check
