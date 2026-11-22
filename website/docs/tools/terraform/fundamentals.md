@@ -2,6 +2,7 @@
 title: Terraform Fundamentals
 sidebar_label: Fundamentals
 sidebar_position: 1
+description: "Learn Terraform fundamentals: providers, resources, variables, outputs, state and the core init, plan and apply workflow, with practical examples."
 ---
 
 # Terraform Fundamentals
@@ -326,7 +327,7 @@ graph TD
 
 **State Best Practices:**
 - **Never commit to Git**: Add `terraform.tfstate*` to `.gitignore`
-- **Use remote state**: Store in S3, Terraform Cloud, or backends
+- **Use remote state**: Store in S3, HCP Terraform (formerly HCP Terraform), or backends
 - **Enable locking**: Prevent concurrent modifications
 - **Backup regularly**: Enable versioning on backend storage
 - **Restrict access**: Limit who can read state (contains secrets)

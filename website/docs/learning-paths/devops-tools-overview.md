@@ -240,7 +240,7 @@ Plan → Code → Build → Test → Release → Deploy → Operate → Monitor 
 | **IaC Scanning** | Terrascan, Checkov, KICS | Policy validation for IaC |
 | **SAST** | SonarQube, Checkmarx, Veracode | Code-level vulnerability detection |
 | **DAST** | OWASP ZAP, Burp Suite | Runtime vulnerability testing |
-| **Compliance** | Terraform Cloud, CloudGuard, Bridgecrew | Policy enforcement as code |
+| **Compliance** | HCP Terraform (formerly Terraform Cloud), CloudGuard, Bridgecrew | Policy enforcement as code |
 
 **Best Practice**: Integrate security checks into CI/CD pipeline (shift-left).
 
@@ -357,7 +357,7 @@ Create a comparison matrix:
 - **Monitoring**: Datadog / Splunk / New Relic
 - **On-Call**: PagerDuty + custom automation
 - **Secrets**: HashiCorp Vault + cloud provider secrets
-- **Compliance**: Terraform Cloud / CloudGuard / Bridgecrew
+- **Compliance**: HCP Terraform / CloudGuard / Bridgecrew
 
 **Cost**: $10,000+/month
 
