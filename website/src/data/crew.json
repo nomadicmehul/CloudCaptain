@@ -1,0 +1,36 @@
+{
+  "repo": "nomadicmehul/CloudCaptain",
+  "siteUrl": "https://cloudcaptain.io",
+  "captain": {
+    "name": "Mehul Patel",
+    "github": "nomadicmehul",
+    "x": "nomadicmehul",
+    "linkedin": "Mehul Patel",
+    "bluesky": ""
+  },
+  "project": {
+    "name": "CloudCaptain",
+    "linkedin": "CloudCaptain",
+    "linkedinUrl": "https://www.linkedin.com/company/cloudcaptainhq",
+    "hashtags": ["CloudCaptain", "OpenSource", "DevOps"]
+  },
+  "ranks": [
+    {"min": 1, "title": "Deckhand", "emoji": "🪢"},
+    {"min": 2, "title": "Able Seaman", "emoji": "⚓"},
+    {"min": 4, "title": "Bosun", "emoji": "🧭"},
+    {"min": 7, "title": "Navigator", "emoji": "🗺️"},
+    {"min": 12, "title": "First Mate", "emoji": "🌊"}
+  ],
+  "ports": [
+    {"id": "lesson", "name": "Lesson Cove", "area": "new lessons", "labels": [ "new-lesson" ], "keywords": [ "new lesson", "capstone" ]},
+    {"id": "learn", "name": "Learn Harbor", "area": "the curriculum", "labels": [ "curriculum" ], "keywords": [ "curriculum", "lesson", "quiz", "smoke" ]},
+    {"id": "docs", "name": "Docs Bay", "area": "docs", "labels": [ "documentation", "content" ], "keywords": [ "docs", "doc ", "guide", "cheatsheet", "learning path" ]},
+    {"id": "fresh", "name": "Freshness Strait", "area": "doc updates", "labels": [ "outdated" ], "keywords": [ "outdated", "deprecated", "refresh", "rename", "pin " ]},
+    {"id": "ci", "name": "CI Lighthouse", "area": "CI", "labels": [ "ci" ], "keywords": [ "workflow", "ci ", "typecheck", "shellcheck", "link check" ]},
+    {"id": "tooling", "name": "Tooling Dock", "area": "dev tooling", "labels": [ "dx" ], "keywords": [ "test", "script", "--help", "flag" ]},
+    {"id": "a11y", "name": "Access Isle", "area": "accessibility", "labels": [ "accessibility" ], "keywords": [ "accessib", "a11y", "aria", "contrast" ]},
+    {"id": "i18n", "name": "Polyglot Port", "area": "translations", "labels": [ "translation" ], "keywords": [ "translat", "i18n" ]},
+    {"id": "speed", "name": "Speed Reef", "area": "site performance", "labels": [ "performance", "seo" ], "keywords": [ "performance", "seo", "lighthouse" ]},
+    {"id": "bugfix", "name": "Bugfix Shoals", "area": "bug fixes", "labels": [ "bug" ], "keywords": [ "fix" ]}
+  ]
+}

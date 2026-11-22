@@ -246,6 +246,7 @@ const config: Config = {
             {label: 'LinkedIn', href: 'https://www.linkedin.com/company/cloudcaptainhq'},
             {label: 'Twitter', href: 'https://twitter.com/nomadicmehul'},
             {label: 'Contributing Guide', to: '/contribute'},
+            {label: '🎫 Crew Cards', to: '/crew'},
           ],
         },
         {

@@ -1,0 +1,126 @@
+name: Crew Welcome
+
+# When a contributor's PR is merged: copy the area labels from the issues it
+# closes onto the PR (they become "ports" on the crew card), then comment with
+# their crew number, rank and a link to their card at /crew.
+#
+# pull_request_target is needed to comment on PRs from forks. This job only
+# checks out main (crew.json and crewCore.mjs) and never runs code from the PR.
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  welcome:
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.user.type != 'Bot' &&
+      github.event.pull_request.user.login != github.repository_owner
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          sparse-checkout: |
+            website/src/data/crew.json
+            website/src/components/Crew/crewCore.mjs
+          sparse-checkout-cone-mode: false
+
+      - name: Label the PR and welcome its author
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const {pathToFileURL} = require('url');
+            const root = process.env.GITHUB_WORKSPACE;
+            const config = JSON.parse(fs.readFileSync(path.join(root, 'website/src/data/crew.json'), 'utf8'));
+            const crew = await import(pathToFileURL(path.join(root, 'website/src/components/Crew/crewCore.mjs')).href);
+            const {owner, repo} = context.repo;
+            const pr = context.payload.pull_request;
+            const login = pr.user.login;
+            const MARKER = '<!-- crew-welcome -->';
+
+            // 1. Copy area labels from the issues this PR closes.
+            const areaLabels = new Set(config.ports.flatMap((p) => p.labels));
+            const linked = await github.graphql(
+              `query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $number) {
+                    closingIssuesReferences(first: 10) { nodes { labels(first: 20) { nodes { name } } } }
+                  }
+                }
+              }`,
+              {owner, repo, number: pr.number},
+            );
+            const fromIssues = linked.repository.pullRequest.closingIssuesReferences.nodes
+              .flatMap((i) => i.labels.nodes.map((l) => l.name))
+              .filter((name) => areaLabels.has(name));
+            const current = new Set(pr.labels.map((l) => l.name));
+            const toAdd = [...new Set(fromIssues)].filter((name) => !current.has(name));
+            if (toAdd.length) {
+              await github.rest.issues.addLabels({owner, repo, issue_number: pr.number, labels: toAdd});
+              core.info(`labelled #${pr.number}: ${toAdd.join(', ')}`);
+            }
+
+            // 2. Skip if this PR was already welcomed (e.g. a re-run).
+            const comments = await github.paginate(github.rest.issues.listComments, {owner, repo, issue_number: pr.number, per_page: 100});
+            if (comments.some((c) => c.body && c.body.includes(MARKER))) {
+              core.info('already welcomed');
+              return;
+            }
+
+            // 3. Work out crew number and rank from every merged PR.
+            const pulls = await github.paginate(github.rest.pulls.list, {owner, repo, state: 'closed', per_page: 100});
+            for (const p of pulls) {
+              if (p.number === pr.number) p.labels = [...p.labels, ...toAdd.map((name) => ({name}))];
+            }
+            const member = crew.buildRoster(pulls, config).get(login.toLowerCase());
+            if (!member) {
+              core.warning(`@${login} not found among merged PRs yet`);
+              return;
+            }
+            const count = member.voyages.length;
+            const rank = crew.rankFor(count, member.captain, config);
+            const promoted = config.ranks.some((r) => r.min === count);
+            const card = `${config.siteUrl}/crew?u=${encodeURIComponent(login)}`;
+            const xTag = config.captain.x ? `\`@${config.captain.x}\` on X, ` : '';
+
+            const lines = [MARKER];
+            if (count === 1) {
+              lines.push(
+                `### ⚓ Welcome aboard, @${login}!`,
+                '',
+                `Your first pull request is merged, which makes you **crew member #${member.number}** of ${config.project.name} with the rank **${rank.emoji} ${rank.title}**. Thank you!`,
+              );
+            } else {
+              lines.push(
+                `### ⚓ Another voyage logged, @${login}!`,
+                '',
+                promoted
+                  ? `That's merged PR number ${count}, and it earns you a promotion to **${rank.emoji} ${rank.title}**. 🎉`
+                  : `That's merged PR number ${count}. You're **crew member #${member.number}**, rank **${rank.emoji} ${rank.title}**.`,
+              );
+            }
+            lines.push(
+              '',
+              `🎫 **[Get your crew card and a ready-to-post Ship's Log →](${card})**`,
+              '',
+              `It makes a boarding-pass image for LinkedIn, X and Bluesky and writes the post for you. Sharing it is the best way to help more people find ${config.project.name}. If you post, tag ${xTag}${config.captain.name} and the [${config.project.name} page](${config.project.linkedinUrl}) on LinkedIn, so we can cheer you on.`,
+            );
+            if (rank.next) {
+              lines.push(
+                '',
+                `Next rank: **${rank.next.title}** after ${rank.next.needed} more merged PR${rank.next.needed === 1 ? '' : 's'}. The [contributor roadmap](https://github.com/${owner}/${repo}/issues/230) lists open issues.`,
+              );
+            }
+            await github.rest.issues.createComment({owner, repo, issue_number: pr.number, body: lines.join('\n')});
+            core.info(`welcomed @${login}: #${member.number}, ${rank.title}, ${count} PRs`);
