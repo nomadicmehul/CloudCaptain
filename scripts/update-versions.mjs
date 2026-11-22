@@ -27,6 +27,7 @@ async function getJson(apiPath) {
 async function latest(repo) {
   try {
     const rel = await getJson(`/repos/${repo}/releases/latest`);
+    if (!rel?.tag_name) throw new Error(`release missing tag_name for ${repo}`);
     return {version: rel.tag_name, publishedAt: String(rel.published_at || '').slice(0, 10)};
   } catch (e) {
     if (!String(e.message).startsWith('404')) throw e;
