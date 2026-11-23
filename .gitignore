@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build output
 build/
@@ -49,6 +48,24 @@ Desktop.ini
 
 # Testing
 coverage/
+
+# Python (lesson code)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# OpenTofu / Terraform (lesson labs)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# Kubeconfigs (kind clusters, lab credentials)
+kubeconfig
+*.kubeconfig
+kubeconfig.yaml
 
 # Misc
 *.pid
