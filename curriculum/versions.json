@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-16T16:18:50.617Z",
+  "updatedAt": "2026-11-23T18:40:28.975Z",
   "track": {
     "kubernetes": {
       "repo": "kubernetes/kubernetes",
@@ -92,8 +92,8 @@
       "publishedAt": "2026-11-13"
     },
     "docker-compose": {
-      "version": "v5.7.1",
-      "publishedAt": "2026-11-11"
+      "version": "v5.8.0",
+      "publishedAt": "2026-11-17"
     },
     "terraform": {
       "version": "v1.17.2",
@@ -124,12 +124,12 @@
       "publishedAt": "2026-11-02"
     },
     "cilium": {
-      "version": "v1.20.4",
-      "publishedAt": "2026-10-23"
+      "version": "v1.20.5",
+      "publishedAt": "2026-11-17"
     },
     "argo-cd": {
-      "version": "v3.6.1",
-      "publishedAt": "2026-11-04"
+      "version": "v3.6.2",
+      "publishedAt": "2026-11-18"
     },
     "prometheus": {
       "version": "v3.16.0",
@@ -140,8 +140,8 @@
       "publishedAt": "2026-11-06"
     },
     "vllm": {
-      "version": "v0.33.0rc3",
-      "publishedAt": "2026-11-02"
+      "version": "v0.34.0",
+      "publishedAt": "2026-11-16"
     },
     "kserve": {
       "version": "v0.21.0",
@@ -156,8 +156,8 @@
       "publishedAt": "2026-10-20"
     },
     "syft": {
-      "version": "v1.57.1",
-      "publishedAt": "2026-11-09"
+      "version": "v1.57.2",
+      "publishedAt": "2026-11-16"
     },
     "coredns": {
       "version": "v1.15.0",
