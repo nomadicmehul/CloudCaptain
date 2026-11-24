@@ -14,13 +14,13 @@ jobs:
     name: Validate + run every lesson's tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -41,7 +41,7 @@ jobs:
     name: Dead-link check (curriculum + reference docs)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Root-relative links (/docs/..., /learn/...) are Docusaurus routes, not files.
       # The site build checks them (onBrokenLinks: throw), so lychee maps them to a
@@ -124,7 +124,7 @@ jobs:
 
       - name: Open or update an issue on failure
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const title = 'Nightly link check found dead links';
