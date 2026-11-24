@@ -6,31 +6,51 @@
       "id": "pre-1",
       "stage": "pre",
       "prompt": "Why do the container lessons need a Linux kernel even if you have Docker Desktop on macOS or Windows?",
-      "choices": ["They do not; Docker is cross-platform", "Namespaces and cgroups are Linux kernel features; Docker Desktop runs them inside a hidden Linux VM", "Because of licensing", "Because bash is Linux-only"],
-      "answer": 1,
+      "choices": [
+        "They do not; Docker Desktop translates Linux system calls into native macOS or Windows ones",
+        "Only the images are Linux-based; the container runtime itself runs natively on every operating system",
+        "Namespaces and cgroups are Linux kernel features; Docker Desktop runs them inside a hidden Linux VM",
+        "Docker needs a Linux kernel only to pull images; running them uses the host kernel directly"
+      ],
+      "answer": 2,
       "explanation": "Containers are Linux processes with a restricted view. On macOS and Windows, Docker Desktop, Lima or WSL 2 provide the Linux kernel in a VM; lessons that call unshare(2) directly run inside that VM."
     },
     {
       "id": "check-1",
       "stage": "check",
       "prompt": "Why does the lab doctor take a `runner` argument instead of calling subprocess directly inside `probe()`?",
-      "choices": ["For speed", "So tests can inject fake tool output and run on any machine without the tools installed", "Because subprocess is deprecated", "To support Windows"],
-      "answer": 1,
+      "choices": [
+        "So tests can inject fake tool output and run on any machine without the tools installed",
+        "So the doctor can run several probes in parallel, which direct subprocess calls would block",
+        "Because subprocess is deprecated in recent Python versions and the runner wraps its replacement",
+        "So probes can reach tools on Windows, where subprocess cannot start external programs"
+      ],
+      "answer": 0,
       "explanation": "Injecting the side effect (running a command) keeps the logic pure and testable. The same pattern appears in every later lesson: the kernel call, the Docker call or the cloud API is the only thing that is not covered by unit tests."
     },
     {
       "id": "check-2",
       "stage": "check",
       "prompt": "The doctor reports `docker` as `ok` on a machine that only has Podman. Why is that correct?",
-      "choices": ["It is a bug", "Podman is listed as an alternative binary for the same job; both speak the OCI image and container formats", "Podman is Docker", "Because the version string matched"],
-      "answer": 1,
+      "choices": [
+        "It is a bug; the doctor should fail when the docker binary is not installed under that name",
+        "The doctor only checks that some container tool exists, and it ignores the version it prints",
+        "Podman ships a docker binary that is identical to Docker, so the version string matched",
+        "Podman is listed as an alternative binary for the same job; both speak the OCI image and container formats"
+      ],
+      "answer": 3,
       "explanation": "Requirements describe a capability (run OCI containers), not a brand. Podman, like OpenTofu for Terraform, satisfies the same lessons with the same commands."
     },
     {
       "id": "check-3",
       "stage": "check",
       "prompt": "What does `kind create cluster` actually create on your machine?",
-      "choices": ["Virtual machines", "One Docker container per node running kubelet and containerd, with the control plane inside", "A cloud account", "A systemd service"],
+      "choices": [
+        "One virtual machine per node, each running its own full operating system and kubelet",
+        "One Docker container per node running kubelet and containerd, with the control plane inside",
+        "A single local process that simulates the Kubernetes API without running any real nodes",
+        "One systemd service per node on the host, managed by the host's own init system"
+      ],
       "answer": 1,
       "explanation": "kind is \"Kubernetes in Docker\": each node is a container. That is why the orchestration lessons can create and destroy clusters in under a minute."
     },
@@ -38,16 +58,26 @@
       "id": "post-1",
       "stage": "post",
       "prompt": "A lesson's test passes but its Use It step fails with `permission denied` on `/var/run/docker.sock`. What is wrong?",
-      "choices": ["The lesson is broken", "Your user is not in the docker group (or the daemon is not running); the test never touched Docker, by design", "Python is too old", "kind is missing"],
-      "answer": 1,
+      "choices": [
+        "Your user is not in the docker group (or the daemon is not running); the test never touched Docker, by design",
+        "The lesson code is broken, because a passing test should guarantee that the Use It step works too",
+        "Python is too old for the Docker SDK that the Use It step imports at runtime, so it cannot connect",
+        "The kind cluster is missing, so Docker refuses every connection to its own socket until one exists"
+      ],
+      "answer": 0,
       "explanation": "Tests exercise the pure logic; Use It exercises the real tool. A permissions or daemon problem shows up only in the second, which is exactly why the lab doctor checks the tool and its version separately."
     },
     {
       "id": "post-2",
       "stage": "post",
       "prompt": "Why should the lab be disposable (recreatable from one command) rather than carefully hand-configured?",
-      "choices": ["Disk space", "Because every later lesson mutates it (kernel namespaces, clusters, state files) and a known-good reset is faster than debugging accumulated drift", "Because kind requires it", "It should not be"],
-      "answer": 1,
+      "choices": [
+        "To save disk space, because a lab that is rebuilt often never accumulates old images or logs",
+        "Because kind refuses to start on a machine that was configured by hand instead of by script",
+        "Every later lesson mutates it (namespaces, clusters, state files), and a known-good reset beats debugging drift",
+        "It should not be; a carefully hand-configured lab is more stable and therefore easier to debug"
+      ],
+      "answer": 2,
       "explanation": "The same reason production uses infrastructure as code: a reproducible environment turns \"it worked yesterday\" into a diff you can read."
     }
   ]
