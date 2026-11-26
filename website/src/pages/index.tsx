@@ -438,6 +438,9 @@ function ContributeSection() {
           <Link className="btn-secondary" to="/contribute">
             cat CONTRIBUTING.md
           </Link>
+          <Link className="btn-secondary" to="/crew">
+            ./crew --card 🎫
+          </Link>
           <Link className="btn-secondary" href="https://www.linkedin.com/company/cloudcaptainhq">
             follow --linkedin ↗
           </Link>

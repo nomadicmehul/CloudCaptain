@@ -1,0 +1,342 @@
+/* =========================================================================
+   /crew — crew cards and the Ship's Log composer
+   ========================================================================= */
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 2.5rem 0 1rem;
+}
+
+.lead {
+  color: var(--ifm-color-emphasis-700);
+  max-width: 70ch;
+}
+
+/* Hero ----------------------------------------------------------------- */
+.hero {
+  background: linear-gradient(135deg, rgba(30, 155, 215, 0.12), rgba(6, 182, 212, 0.06));
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+}
+
+.kicker {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+
+.subtitle {
+  color: var(--ifm-color-emphasis-800);
+  font-size: 1.05rem;
+  max-width: 72ch;
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  max-width: 620px;
+}
+
+.prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-color-emphasis-100);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.input {
+  flex: 1 1 180px;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 1rem;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+}
+
+.ranks {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.rankMin {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.8rem;
+}
+
+.status {
+  margin: 2rem 0;
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Card ----------------------------------------------------------------- */
+.cardWrap {
+  margin-top: 2rem;
+}
+
+.cardFrame {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(5, 13, 28, 0.35);
+  line-height: 0;
+}
+
+.cardFrame svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.note {
+  margin: 0.75rem 0 0;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.voyages {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Ship's Log ----------------------------------------------------------- */
+.styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.style,
+.styleOn {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.styleOn {
+  border-color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.channel {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 14px;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.channelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.channelName {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.count,
+.countOver {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.countOver {
+  color: var(--ifm-color-danger);
+  font-weight: 700;
+}
+
+.post {
+  width: 100%;
+  flex: 1;
+  resize: vertical;
+  padding: 0.7rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.channelActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.tip {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Roster --------------------------------------------------------------- */
+.roster {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+}
+
+.crew,
+.crewOn {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.crew:hover,
+.crewOn {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.crew:hover {
+  transform: translateY(-1px);
+}
+
+.crew img,
+.crewOn img {
+  border-radius: 50%;
+  flex: none;
+}
+
+.crewText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.crewLogin {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crewMeta {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Empty state and joining ---------------------------------------------- */
+.empty {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px dashed var(--ifm-color-emphasis-400);
+  border-radius: 14px;
+}
+
+.empty .sectionTitle {
+  margin-top: 0;
+}
+
+.join {
+  margin-top: 1rem;
+}
+
+.steps {
+  padding-left: 1.3rem;
+}
+
+.steps li {
+  margin-bottom: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crew,
+  .crewOn {
+    transition: none;
+  }
+  .crew:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .prefix {
+    display: none;
+  }
+}

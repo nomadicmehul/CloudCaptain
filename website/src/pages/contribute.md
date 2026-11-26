@@ -66,6 +66,17 @@ Use imperative mood in commit messages:
 - `Update: Kubernetes resources with latest links`
 - `Fix: Broken link in AWS section`
 
+## After Your PR Is Merged: Get Your Crew Card 🎫
+
+Every merged pull request puts you on the CloudCaptain crew manifest. Go to **[Crew Cards](/crew)** and enter your GitHub username to get:
+
+- a **boarding-pass crew card** (1200×630, ready for LinkedIn and X) with your crew number, rank and the "ports" (areas of the repo) you've worked on
+- a **ready-to-post Ship's Log** for LinkedIn, X and Bluesky in three styles, tagging Mehul Patel (`@nomadicmehul` on X) and the CloudCaptain page
+
+You also get a welcome comment on your PR with the link. Ranks go up as you contribute: 🪢 Deckhand → ⚓ Able Seaman (2 PRs) → 🧭 Bosun (4) → 🗺️ Navigator (7) → 🌊 First Mate (12).
+
+Sharing your card is the best way to help more people find the project, so please post it!
+
 ## Code of Conduct
 
 We are committed to providing a welcoming and inclusive experience for everyone. Please read our [Code of Conduct](https://github.com/nomadicmehul/CloudCaptain/blob/main/CODE_OF_CONDUCT.md).

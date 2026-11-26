@@ -32,6 +32,12 @@ npm run curriculum:unit                          # generator unit tests
 
 Features built with Claude Code assistance:
 
+### feature/crew-cards (2026-11-22)
+- `/crew` page: a 1200×630 boarding-pass crew card per contributor (crew number, rank ladder, "ports visited" stamps from PR labels and titles), PNG download and copy, and a "Ship's Log" composer with ready-to-post LinkedIn, X and Bluesky text in three styles that tags `@nomadicmehul`
+- Shared rules in `website/src/components/Crew/crewCore.mjs`, editable handles/ranks/ports in `website/src/data/crew.json`, unit tests in `scripts/__tests__/crew.test.mjs`
+- `crew-welcome.yml`: on a merged contributor PR, copies area labels from the closed issues onto the PR and comments with the crew number, rank and card link
+- Footer link, homepage button, and a "Get your crew card" section in CONTRIBUTING.md and /contribute
+
 ### feature/lessons-progress-cleanup (2026-10-31)
 - Six new lessons (`setup/lab-doctor`, `linux/pid1-supervisor`, `containers/image-layers`, `containers/registry-pull`, `iac/state-reconciler`, `aiops/mcp-kubectl-server`) with tests, quizzes, artifacts and one `code/smoke.sh` each, run on Ubuntu + Docker + OpenTofu + kind by `lesson-smoke.yml`; new AIOps learning path
 - Lesson-aware Captain's Bridge (telemetry cell, Lesson rail tab, completion toast), `/progress` Curriculum section, "Build this from scratch" cards on reference docs, progress export v2, Commands-tab extractor fix
