@@ -93,6 +93,7 @@ jobs:
             const promoted = config.ranks.some((r) => r.min === count);
             const card = `${config.siteUrl}/crew?u=${encodeURIComponent(login)}`;
             const xTag = config.captain.x ? `\`@${config.captain.x}\` on X, ` : '';
+            const bskyTag = config.captain.bluesky ? `\`@${config.captain.bluesky}\` on Bluesky, ` : '';
 
             const lines = [MARKER];
             if (count === 1) {
@@ -114,7 +115,7 @@ jobs:
               '',
               `🎫 **[Get your crew card and a ready-to-post Ship's Log →](${card})**`,
               '',
-              `It makes a boarding-pass image for LinkedIn, X and Bluesky and writes the post for you. Sharing it is the best way to help more people find ${config.project.name}. If you post, tag ${xTag}${config.captain.name} and the [${config.project.name} page](${config.project.linkedinUrl}) on LinkedIn, so we can cheer you on.`,
+              `It makes a boarding-pass image for LinkedIn, X and Bluesky and writes the post for you. Sharing it is the best way to help more people find ${config.project.name}. If you post, tag ${xTag}${bskyTag}${config.captain.name} and the [${config.project.name} page](${config.project.linkedinUrl}) on LinkedIn, so we can cheer you on.`,
             );
             if (rank.next) {
               lines.push(

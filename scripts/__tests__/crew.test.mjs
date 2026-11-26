@@ -65,6 +65,7 @@ test('every post style fits each channel limit, even with a very long PR title',
     assert.ok(posts.linkedin.length <= 3000);
     assert.match(posts.x, /@nomadicmehul/);
     assert.match(posts.linkedin, /@Mehul Patel/);
+    assert.match(posts.bluesky, /@nomadicmehul\.bsky\.social/, 'Bluesky mentions need the full handle');
     assert.ok(posts.x.includes('https://cloudcaptain.io/crew?u=a-very-long-github-username'));
     assert.doesNotMatch(posts.linkedin, /\ba [AEIOU]/, 'uses "an" before a vowel');
   }
