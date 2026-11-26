@@ -21,3 +21,16 @@ indent_style = tab
 
 [*.go]
 indent_style = tab
+
+# Patches: single-space context lines are significant to `git apply`.
+[*.{patch,diff}]
+trim_trailing_whitespace = false
+
+# Lesson fixtures depend on exact bytes (CRLF, trailing tabs, patch context).
+[**/fixtures/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset

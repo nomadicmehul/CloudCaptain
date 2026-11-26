@@ -133,7 +133,7 @@ for key, entry in sorted(packages.items()):
     found.append(npm_package(name, str(entry["version"]), entry.get("license"), bool(entry.get("dev")), location))
 ```
 
-`name` inside an entry wins over the path because of aliases (`"node_modules/string-width-cjs": {"name": "string-width"}`). Version 1 lock files nest `dependencies` recursively and are walked the same way. The fixture app uses `npm-shrinkwrap.json`, the same format under the name npm uses when the lock must ship with a package, because this repository's `.gitignore` drops every `package-lock.json`. That is a small version of a real failure: a lock file ignored in Git never reaches the build context, so an SBOM made from the source tree has no npm section at all and nobody notices.
+`name` inside an entry wins over the path because of aliases (`"node_modules/string-width-cjs": {"name": "string-width"}`). Version 1 lock files nest `dependencies` recursively and are walked the same way. The fixture app uses `npm-shrinkwrap.json`, the same format under the name npm uses when the lock must ship with a package, so the scanner is exercised on both file names. Watch for a real failure here: a `.gitignore` that drops `package-lock.json` means the lock file never reaches the build context, so an SBOM made from the source tree has no npm section at all and nobody notices.
 
 ### Step 5: a purl is the identity both tools agree on
 
