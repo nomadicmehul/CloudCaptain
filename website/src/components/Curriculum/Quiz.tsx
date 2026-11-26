@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useLocation} from '@docusaurus/router';
 import {useLessonFrontMatter} from './useLesson';
 import {readQuizRecord, writeQuizRecord} from './storage';
+import {choiceOrder} from './shuffle';
 import type {QuizQuestion, QuizStage} from './types';
 import styles from './styles.module.css';
 
@@ -19,6 +20,13 @@ export default function Quiz({stage = 'check', questions: explicit}: Props): Rea
   const questions = useMemo(
     () => (explicit || quiz?.questions || []).filter((q) => q.stage === stage),
     [explicit, quiz, stage],
+  );
+  // Choices are shown shuffled, but every radio keeps its original index as
+  // its value, so scoring and saved answers are unaffected.
+  const seedBase = quiz?.lesson ?? pathname;
+  const orders = useMemo(
+    () => Object.fromEntries(questions.map((q) => [q.id, choiceOrder(q.choices, `${seedBase}:${q.id}`)])),
+    [questions, seedBase],
   );
   const [picked, setPicked] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -73,7 +81,8 @@ export default function Quiz({stage = 'check', questions: explicit}: Props): Rea
             <legend className={styles.prompt}>
               <span className={styles.qNumber}>{qi + 1}</span> {q.prompt}
             </legend>
-            {q.choices.map((choice, ci) => {
+            {orders[q.id].map((ci) => {
+              const choice = q.choices[ci];
               const state = !submitted ? '' : ci === q.answer ? 'right' : ci === chosen ? 'wrong' : '';
               return (
                 <label key={ci} className={styles.choice} data-state={state}>
