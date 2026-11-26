@@ -28,6 +28,7 @@ npm run curriculum:unit         # unit tests for the generator itself
 node ../scripts/build-curriculum.mjs --deprecations   # scan lessons + Reference docs for retired tech without a note
 node ../scripts/update-versions.mjs --check           # what the weekly version refresh would change
 node ../scripts/check-stats.mjs                       # README stats (all languages) + ROADMAP table match the generator (CI)
+node ../scripts/check-stats.mjs --fix                 # rewrite those numbers and the ROADMAP table in place
 npm start                       # dev server (runs the generator first)
 npm run build                   # production build; fails on broken links or invalid lessons
 npm run typecheck               # tsc
@@ -46,7 +47,7 @@ curriculum/
 scripts/
   build-curriculum.mjs validate + generate website/src/data/generated/curriculum.json (+ --scaffold, --roadmap, --json)
   run-lesson-tests.mjs run lesson tests by id or --all
-  check-stats.mjs      fail if README/i18n stats or the ROADMAP table drift from the generator
+  check-stats.mjs      fail if README/i18n stats or the ROADMAP table drift from the generator (--fix rewrites them)
   lib/, __tests__/     generator internals and its unit tests
 website/
   docusaurus.config.ts second docs instance (id: curriculum, routeBasePath: learn), front-matter hook

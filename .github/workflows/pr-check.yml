@@ -48,13 +48,15 @@ jobs:
       - name: Validate lessons
         run: node scripts/build-curriculum.mjs --check
 
-      # README stats (all languages) and the ROADMAP table must match the generator
-      - name: Check README and ROADMAP numbers
-        run: node scripts/check-stats.mjs
-
       - name: Generator unit tests
         run: node --test scripts/__tests__/*.test.mjs
 
       # Each lesson's code/tests, run from its own folder (python unittest, bash -n, ...)
       - name: Lesson tests
         run: node scripts/run-lesson-tests.mjs --all
+
+      # Last, so a stale number never hides the test results above.
+      # README stats (all languages) and the ROADMAP table must match the generator;
+      # `node scripts/check-stats.mjs --fix` updates them.
+      - name: Check README and ROADMAP numbers
+        run: node scripts/check-stats.mjs

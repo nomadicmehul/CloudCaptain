@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {parseNumber, formatNumber, parseStatsLine, checkReadme, checkRoadmap, checkStats, readmeFiles} from '../check-stats.mjs';
+import {parseNumber, formatNumber, parseStatsLine, checkReadme, fixReadme, checkRoadmap, checkStats, fixStats, readmeFiles} from '../check-stats.mjs';
 import {roadmapTable} from '../lib/emit.mjs';
 
 const stats = {lessons: 113, phasesLive: 17, hours: 196.2, tests: 3350};
@@ -26,6 +26,13 @@ test('parseNumber accepts comma and dot thousands separators', () => {
   assert.deepEqual(parseNumber('1,234,567'), {raw: '1,234,567', value: 1234567, sep: ','});
   assert.equal(parseNumber('196').value, 196);
   assert.equal(parseNumber('196.5').value, 196.5);
+});
+
+test('parseNumber accepts space, no-break space and apostrophe separators', () => {
+  assert.deepEqual(parseNumber('3 350'), {raw: '3 350', value: 3350, sep: ' '});
+  assert.deepEqual(parseNumber('3 350'), {raw: '3 350', value: 3350, sep: ' '});
+  assert.deepEqual(parseNumber('3 350'), {raw: '3 350', value: 3350, sep: ' '});
+  assert.deepEqual(parseNumber("3'350"), {raw: "3'350", value: 3350, sep: "'"});
 });
 
 test('formatNumber groups thousands with the given separator', () => {
@@ -60,6 +67,28 @@ test('checkReadme names the file, line and number to change', () => {
 test('checkReadme keeps the file\'s own thousands separator in the suggestion', () => {
   const problems = checkReadme('i18n/README.de.md', de, {...stats, tests: 3412});
   assert.deepEqual(problems, ['i18n/README.de.md:2: tests is "3.350" but the curriculum has 3412; change "3.350" to "3.412"']);
+});
+
+test('checkReadme reads space and apostrophe separated numbers whole and keeps the separator', () => {
+  for (const sep of [' ', ' ', ' ', "'"]) {
+    const text = en({tests: `3${sep}350`});
+    assert.deepEqual(parseStatsLine(text).numbers.map((n) => n.value), [113, 17, 196, 3350]);
+    assert.deepEqual(checkReadme('i18n/README.fr.md', text, stats), []);
+    assert.deepEqual(checkReadme('i18n/README.fr.md', text, {...stats, tests: 3412}), [
+      `i18n/README.fr.md:3: tests is "3${sep}350" but the curriculum has 3412; change "3${sep}350" to "3${sep}412"`,
+    ]);
+  }
+});
+
+test('fixReadme replaces only the stale numbers on the stats line', () => {
+  const fixed = fixReadme(en({lessons: '110', hours: '190', tests: '3,300'}), stats);
+  assert.equal(fixed, en());
+  assert.equal(fixReadme(en(), stats), en());
+  assert.equal(fixReadme(de, {...stats, lessons: 1000, tests: 3412}), de.replace('113 Lektionen', '1.000 Lektionen').replace('3.350', '3.412'));
+  assert.equal(fixReadme(en({tests: '3 350'}), {...stats, tests: 12345}), en({tests: '12 345'}));
+  const crlf = en({lessons: '99'}).replace(/\n/g, '\r\n');
+  assert.equal(fixReadme(crlf, stats), en().replace(/\n/g, '\r\n'));
+  assert.equal(fixReadme('# no stats here\n', stats), '# no stats here\n');
 });
 
 test('checkReadme compares hours rounded to a whole number', () => {
@@ -107,6 +136,26 @@ test('checkStats checks README.md, every i18n README and ROADMAP.md', () => {
     fs.writeFileSync(path.join(root, 'ROADMAP.md'), roadmap(roadmapTable(m)));
     assert.deepEqual(readmeFiles(root), ['README.md', 'i18n/README.de.md', 'i18n/README.ja.md']);
     assert.deepEqual(checkStats({root, model: m}), ['i18n/README.ja.md:2: tests is "3,349" but the curriculum has 3350; change "3,349" to "3,350"']);
+  } finally {
+    fs.rmSync(root, {recursive: true, force: true});
+  }
+});
+
+test('fixStats rewrites the stale READMEs and the ROADMAP table, then checkStats passes', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-fix-stats-'));
+  try {
+    const m = model();
+    fs.mkdirSync(path.join(root, 'i18n'));
+    fs.writeFileSync(path.join(root, 'README.md'), en({tests: '3,300'}));
+    fs.writeFileSync(path.join(root, 'i18n', 'README.de.md'), de);
+    fs.writeFileSync(path.join(root, 'i18n', 'README.ja.md'), ja.replace('113 レッスン', '112 レッスン'));
+    fs.writeFileSync(path.join(root, 'ROADMAP.md'), roadmap(roadmapTable(model([1, 7, 0]))));
+    assert.deepEqual(fixStats({root, model: m}), ['README.md', 'i18n/README.ja.md', 'ROADMAP.md']);
+    assert.deepEqual(checkStats({root, model: m}), []);
+    assert.equal(fs.readFileSync(path.join(root, 'README.md'), 'utf8'), en());
+    assert.equal(fs.readFileSync(path.join(root, 'i18n', 'README.de.md'), 'utf8'), de);
+    assert.equal(fs.readFileSync(path.join(root, 'ROADMAP.md'), 'utf8'), roadmap(roadmapTable(m)));
+    assert.deepEqual(fixStats({root, model: m}), []);
   } finally {
     fs.rmSync(root, {recursive: true, force: true});
   }
