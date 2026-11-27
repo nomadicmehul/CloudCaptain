@@ -68,6 +68,7 @@ All notable changes to CloudCaptain. The format follows [Keep a Changelog](https
 - `/progress` leads with the curriculum and shows reading counters only once there is something to count. The decorative "v3.0-oss" label under the navbar logo is removed.
 - Homepage hero button goes to `/learn`; category cards show real guide counts instead of "N+ resources"; footer Roadmap points at ROADMAP.md.
 - Navbar: the three Reference sidebars (Learning Paths, Tools & Tech, Cloud Providers) plus Career Paths and Interview Prep now live under one **Reference** dropdown next to **Learn**, so the row fits at 1280px and above.
+- Repo hygiene (#222): `.nvmrc` (Node 22) and `.editorconfig` at the root (lesson fixtures and patches are left byte-exact), and every workflow reads the Node version from `.nvmrc`; `.gitignore` no longer ignores `package-lock.json` (so a lesson's lockfile is committed) and ignores Python, OpenTofu/Terraform and kubeconfig artifacts. The stray empty root `package-lock.json`, the one-off `cleanup-pdfs.sh` and the PDF-only LFS `.gitattributes` are removed.
 - README rewritten around the curriculum: what you build in each live phase, how a lesson works, the learning paths, the tutor, the reference library and how CloudCaptain compares; the numbers match the generated curriculum stats. The social card (`website/static/img/cloudcaptain-social.jpg`) now shows the course: from scratch, 55 lessons, 1,429 tests.
 
 ## [2026-10-31]

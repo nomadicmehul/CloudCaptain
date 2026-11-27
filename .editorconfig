@@ -1,0 +1,36 @@
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.py]
+indent_size = 4
+
+[*.md]
+# Two trailing spaces are a hard line break in Markdown.
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+
+[*.go]
+indent_style = tab
+
+# Patches: single-space context lines are significant to `git apply`.
+[*.{patch,diff}]
+trim_trailing_whitespace = false
+
+# Lesson fixtures depend on exact bytes (CRLF, trailing tabs, patch context).
+[**/fixtures/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
