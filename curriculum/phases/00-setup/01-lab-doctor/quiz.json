@@ -33,7 +33,7 @@
       "stage": "check",
       "prompt": "The doctor reports `docker` as `ok` on a machine that only has Podman. Why is that correct?",
       "choices": [
-        "It is a bug; the doctor should fail when the docker binary is not installed under that name",
+        "It is a bug; the doctor should fail whenever no binary named docker is installed, whatever else is on the PATH",
         "The doctor only checks that some container tool exists, and it ignores the version it prints",
         "Podman ships a docker binary that is identical to Docker, so the version string matched",
         "Podman is listed as an alternative binary for the same job; both speak the OCI image and container formats"
@@ -46,7 +46,7 @@
       "stage": "check",
       "prompt": "What does `kind create cluster` actually create on your machine?",
       "choices": [
-        "One virtual machine per node, each running its own full operating system and kubelet",
+        "One virtual machine per node, each running its own full operating system, kubelet and containerd",
         "One Docker container per node running kubelet and containerd, with the control plane inside",
         "A single local process that simulates the Kubernetes API without running any real nodes",
         "One systemd service per node on the host, managed by the host's own init system"
@@ -60,7 +60,7 @@
       "prompt": "A lesson's test passes but its Use It step fails with `permission denied` on `/var/run/docker.sock`. What is wrong?",
       "choices": [
         "Your user is not in the docker group (or the daemon is not running); the test never touched Docker, by design",
-        "The lesson code is broken, because a passing test should guarantee that the Use It step works too",
+        "The lesson code is broken, because a passing test should guarantee that the Use It step works on every machine",
         "Python is too old for the Docker SDK that the Use It step imports at runtime, so it cannot connect",
         "The kind cluster is missing, so Docker refuses every connection to its own socket until one exists"
       ],
@@ -75,7 +75,7 @@
         "To save disk space, because a lab that is rebuilt often never accumulates old images or logs",
         "Because kind refuses to start on a machine that was configured by hand instead of by script",
         "Every later lesson mutates it (namespaces, clusters, state files), and a known-good reset beats debugging drift",
-        "It should not be; a carefully hand-configured lab is more stable and therefore easier to debug"
+        "It should not be; a carefully hand-configured lab is more stable over time and therefore easier to debug when it breaks"
       ],
       "answer": 2,
       "explanation": "The same reason production uses infrastructure as code: a reproducible environment turns \"it worked yesterday\" into a diff you can read."
