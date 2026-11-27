@@ -179,14 +179,19 @@ export function roadmapTable(model) {
   return ['| # | Phase | Lessons live | Status |', '|---|---|---|---|', ...rows].join('\n');
 }
 
-export function updateRoadmap(roadmapFile, model) {
+// ROADMAP.md text with the phase table between the markers regenerated from the model.
+export function renderRoadmap(text, model) {
   const start = '<!-- curriculum:start -->';
   const end = '<!-- curriculum:end -->';
-  const text = fs.readFileSync(roadmapFile, 'utf8');
   const a = text.indexOf(start);
   const b = text.indexOf(end);
   if (a === -1 || b === -1 || b < a) throw new Error(`ROADMAP.md needs ${start} and ${end} markers`);
-  const next = text.slice(0, a + start.length) + '\n' + roadmapTable(model) + '\n' + text.slice(b);
+  return text.slice(0, a + start.length) + '\n' + roadmapTable(model) + '\n' + text.slice(b);
+}
+
+export function updateRoadmap(roadmapFile, model) {
+  const text = fs.readFileSync(roadmapFile, 'utf8');
+  const next = renderRoadmap(text, model);
   fs.writeFileSync(roadmapFile, next);
   return next !== text;
 }
