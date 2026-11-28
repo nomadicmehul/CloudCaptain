@@ -1,0 +1,43 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "Update"
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /website
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "Update"
+    cooldown:
+      default-days: 7
+    # A dependency joins the first group it matches, so the catch-all comes last.
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+          - "@easyops-cn/docusaurus-search-local"
+      # React 19 refuses to run with mismatched react and react-dom versions.
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # TypeScript majors are upgraded by hand.
+      - dependency-name: typescript
+        update-types:
+          - "version-update:semver-major"
